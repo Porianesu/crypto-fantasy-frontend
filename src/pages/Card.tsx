@@ -1,10 +1,10 @@
-import React, { useRef } from 'react'
+import React, { type CSSProperties, useRef } from 'react'
 import { gsap } from 'gsap'
 import styles from './Card.module.css'
 import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect.tsx'
 
-const timeRate = 2
-const Card: React.FC = () => {
+const timeRate = 1
+const Card: React.FC<{ style: CSSProperties }> = ({ style }) => {
   const cardIsFlipped = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
@@ -128,6 +128,7 @@ const Card: React.FC = () => {
 
   return (
     <div
+      style={style}
       className={styles.card}
       ref={cardRef}
       onClick={flipCard}

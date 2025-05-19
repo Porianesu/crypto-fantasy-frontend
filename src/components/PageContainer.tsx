@@ -12,6 +12,7 @@ const PageContainer: React.FC<PropsWithChildren> = ({ children }) => {
         'flex-col',
         'items-center',
         'justify-center',
+        'bg-black',
       )}
     >
       {children}

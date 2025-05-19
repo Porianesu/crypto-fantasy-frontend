@@ -3,6 +3,7 @@
 .pageContainer {
 
 }
+
 .cardContainer {
-  @apply perspective-[1000px] flex items-center justify-center gap-x-4;
+    @apply perspective-[1000px] flex items-center justify-center;
 }

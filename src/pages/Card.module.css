@@ -33,11 +33,11 @@
 }
 
 .cardFront {
-    background-color: #fff;
+    background-color: #DDD;
 }
 
 .cardBack {
-    background-color: #f0f0f0;
+    background-color: #fff;
     transform: rotateY(180deg);
 }
 
