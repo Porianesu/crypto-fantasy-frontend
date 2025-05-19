@@ -1,8 +1,8 @@
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { gsap } from 'gsap'
 import styles from './Card.module.css'
 
-const Card = () => {
+const Card: React.FC = () => {
   const cardIsFlipped = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const timelineRef = useRef<gsap.core.Timeline>(null)
@@ -53,11 +53,9 @@ const Card = () => {
   }
 
   return (
-    <div className={styles.cardContainer} onClick={flipCard}>
-      <div className={styles.card} ref={cardRef}>
-        <div className={styles.cardFront}>正面内容</div>
-        <div className={styles.cardBack}>反面内容</div>
-      </div>
+    <div className={styles.card} ref={cardRef} onClick={flipCard}>
+      <div className={styles.cardFront}>正面内容</div>
+      <div className={styles.cardBack}>反面内容</div>
     </div>
   )
 }

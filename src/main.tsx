@@ -4,7 +4,7 @@ import App from './pages/App.tsx'
 import { StoreProvider } from '@/stores/StoreProvider.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ROOT_PATH } from '@/navigation/routes.tsx'
-import Card from '@/pages/Card.tsx'
+import PageContainer from '@/components/PageContainer.tsx'
 
 const router = createBrowserRouter([
   {
@@ -13,11 +13,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'home/',
-        element: <App></App>,
-      },
-      {
-        path: 'card/',
-        element: <Card></Card>,
+        element: (
+          <PageContainer>
+            <App></App>
+          </PageContainer>
+        ),
       },
     ],
   },
