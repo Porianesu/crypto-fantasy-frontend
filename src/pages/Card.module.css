@@ -8,7 +8,7 @@
 }
 
 .card {
-    @apply p-0;
+    @apply p-0 cursor-pointer;
     width: 200px;
     height: 300px;
     transform-style: preserve-3d;
