@@ -1,8 +1,8 @@
 import React, { type CSSProperties, useRef } from 'react'
 import { gsap } from 'gsap'
 import styles from './Card.module.css'
-import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect.tsx'
 import classNames from 'classnames'
+import { useGSAP } from '@gsap/react'
 
 const timeRate = 1
 export enum CARD_RARITY {
@@ -30,37 +30,42 @@ const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
 
-  useIsomorphicLayoutEffect(() => {
-    const ctx = gsap.context(() => {}, cardRef)
-    if (!flipAnimationTimelineRef.current) {
-      const tl = gsap.timeline({
-        onStart: () => {},
-        onComplete: () => {
-          console.log('onComplete')
-          cardIsFlipped.current = true
-        },
-      })
-      const targetRotation = RarityRotationMap[rarity]
-      targetRotation.forEach((duration, index) => {
-        tl.to(cardRef.current, {
-          duration: duration * timeRate,
-          rotationY: 90 * (index + 1),
-          ease: 'none', // 设置匀速缓动
-          onComplete:
-            index % 2 === 0
-              ? () => {
-                  // 翻转到90度时切换内容
-                  console.log('翻过了', gsap.getProperty(cardRef.current, 'rotationY'))
-                  cardRef.current?.classList.toggle(styles.isFlipped)
-                }
-              : undefined,
+  useGSAP(
+    () => {
+      if (!flipAnimationTimelineRef.current) {
+        const tl = gsap.timeline({
+          onStart: () => {},
+          onComplete: () => {
+            console.log('onComplete')
+            cardIsFlipped.current = true
+          },
         })
-      })
-      tl.pause()
-      flipAnimationTimelineRef.current = tl
-    }
-    return () => ctx.revert()
-  }, [])
+        const targetRotation = RarityRotationMap[rarity]
+        targetRotation.forEach((duration, index) => {
+          tl.to(cardRef.current, {
+            duration: duration * timeRate,
+            rotationY: 90 * (index + 1),
+            ease: 'none', // 设置匀速缓动
+            onComplete:
+              index % 2 === 0
+                ? () => {
+                    // 翻转到90度时切换内容
+                    console.log('翻过了', gsap.getProperty(cardRef.current, 'rotationY'))
+                    cardRef.current?.classList.toggle(styles.isFlipped)
+                  }
+                : undefined,
+          })
+        })
+        tl.reverse()
+        flipAnimationTimelineRef.current = tl
+      }
+    },
+    {
+      dependencies: [],
+      revertOnUpdate: true,
+      scope: cardRef,
+    },
+  )
 
   const flipCard = () => {
     if (!flipAnimationTimelineRef.current) return
@@ -70,7 +75,7 @@ const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
     if (cardIsFlipped.current) {
       return
     } else {
-      flipAnimationTimelineRef.current.play()
+      flipAnimationTimelineRef.current.reversed(!flipAnimationTimelineRef.current.reversed())
     }
   }
 

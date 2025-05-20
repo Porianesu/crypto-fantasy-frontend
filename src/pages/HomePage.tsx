@@ -1,10 +1,10 @@
-import './App.module.css'
 import { observer } from 'mobx-react-lite'
 import Card, { CARD_RARITY } from '@/components/Card.tsx'
-import styles from './App.module.css'
+import styles from './HomePage.module.css'
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import Text from '@/components/Text.tsx'
+import classNames from 'classnames'
 
 const getRandomCard = () => {
   const CardRarityArray = Object.values(CARD_RARITY)
@@ -17,7 +17,7 @@ const getRandomCard = () => {
     rarity: cardRarity,
   }
 }
-function App() {
+function HomePage() {
   const [cards] = useState<
     Array<{
       id: number
@@ -26,9 +26,12 @@ function App() {
   >(Array.from({ length: 5 }, getRandomCard))
   return (
     <div
-      className={
-        'flex flex-col items-center w-full h-full pt-64 bg-black overflow-x-hidden overflow-y-auto'
-      }
+      className={classNames(
+        'flex flex-col items-center w-full h-full pt-64 bg-black overflow-x-hidden overflow-y-auto',
+        'grow',
+        'shrink',
+        'basis-0',
+      )}
     >
       <div className={styles.cardWrapper}>
         <div className={styles.cardContainer}>
@@ -54,4 +57,4 @@ function App() {
   )
 }
 
-export default observer(App)
+export default observer(HomePage)
