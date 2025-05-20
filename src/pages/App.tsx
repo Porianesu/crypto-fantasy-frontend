@@ -25,7 +25,11 @@ function App() {
     }>
   >(Array.from({ length: 5 }, getRandomCard))
   return (
-    <>
+    <div
+      className={
+        'flex flex-col items-center w-full h-full pt-64 bg-black overflow-x-hidden overflow-y-auto'
+      }
+    >
       <div className={styles.cardWrapper}>
         <div className={styles.cardContainer}>
           {cards.map((card, index) => (
@@ -46,7 +50,7 @@ function App() {
           'I am happy to join with you today in what will go down in history as the greatest demonstration for freedom in the history of our nation.Five score years ago a great American in whose symbolic shadow we stand today signed the\n Emancipation Proclamation. This momentous decree is a great beacon light of hope to millions of Negro slaves who had been seared in the flames of withering injustice. It came as a joyous daybreak to end the long night of their captivity. But 100 years later the Negro still is not free. One hundred years later the life of the Negro is still badly crippled by the manacles of segregation and the chains of discrimination. One hundred years later the Negro lives on a lonely island of poverty in the midst of a vast ocean of material prosperity. One hundred years later the Negro is still languished in the corners of American society and finds himself in exile in his own land. So we’ve come here today to dramatize a shameful condition.'
         }
       ></Text>
-    </>
+    </div>
   )
 }
 
