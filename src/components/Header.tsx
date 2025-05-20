@@ -7,7 +7,7 @@ import { getHomePath, getLoadingPath, getLoginPath } from '@/navigation/routes.t
 const Header: React.FC = () => {
   const navigate = useNavigate()
   return (
-    <div className={classNames('shrink')}>
+    <div className={classNames('shrink', 'text-white', 'flex', 'items-center', 'gap-x-4', 'p-2')}>
       <button
         onClick={() => {
           navigate(getHomePath())

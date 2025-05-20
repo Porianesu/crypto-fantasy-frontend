@@ -4,7 +4,16 @@ import classNames from 'classnames'
 
 const PageContainer: React.FC<PropsWithChildren> = ({ children }) => {
   return (
-    <div className={classNames('h-screen', 'w-screen', 'flex', 'flex-col', 'items-stretch')}>
+    <div
+      className={classNames(
+        'h-screen',
+        'w-screen',
+        'flex',
+        'flex-col',
+        'items-stretch',
+        'bg-black',
+      )}
+    >
       {children}
     </div>
   )
