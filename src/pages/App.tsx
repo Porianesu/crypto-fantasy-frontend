@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import Card, { CARD_RARITY } from '@/pages/Card.tsx'
 import styles from './App.module.css'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 
 const getRandomCard = () => {
   const CardRarityArray = Object.values(CARD_RARITY)
@@ -11,12 +12,14 @@ const getRandomCard = () => {
   const cardRarity =
     Object.values(CARD_RARITY)[Math.floor(Math.random() * Object.values(CARD_RARITY).length)]
   return {
+    id: dayjs().valueOf(),
     rarity: cardRarity,
   }
 }
 function App() {
   const [cards] = useState<
     Array<{
+      id: number
       rarity: CARD_RARITY
     }>
   >(Array.from({ length: 5 }, getRandomCard))
@@ -30,7 +33,7 @@ function App() {
               zIndex: 5 - Math.abs(index - 2), // 中间的卡片在最前面
             }}
             rarity={card.rarity}
-            key={index}
+            key={card.id}
           ></Card>
         ))}
       </div>
