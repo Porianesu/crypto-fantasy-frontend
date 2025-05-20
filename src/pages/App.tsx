@@ -1,9 +1,10 @@
 import './App.module.css'
 import { observer } from 'mobx-react-lite'
-import Card, { CARD_RARITY } from '@/pages/Card.tsx'
+import Card, { CARD_RARITY } from '@/components/Card.tsx'
 import styles from './App.module.css'
 import { useState } from 'react'
 import dayjs from 'dayjs'
+import Text from '@/components/Text.tsx'
 
 const getRandomCard = () => {
   const CardRarityArray = Object.values(CARD_RARITY)
@@ -24,21 +25,24 @@ function App() {
     }>
   >(Array.from({ length: 5 }, getRandomCard))
   return (
-    <div className={styles.cardWrapper}>
-      <div className={styles.cardContainer}>
-        {cards.map((card, index) => (
-          <Card
-            style={{
-              transform: `translateY(${Math.abs(index - 2) * -30}px) translateZ(${(2 - Math.abs(index - 2)) * 100}px)`,
-              zIndex: 5 - Math.abs(index - 2), // 中间的卡片在最前面
-            }}
-            rarity={card.rarity}
-            key={card.id}
-          ></Card>
-        ))}
+    <>
+      <div className={styles.cardWrapper}>
+        <div className={styles.cardContainer}>
+          {cards.map((card, index) => (
+            <Card
+              style={{
+                transform: `translateY(${Math.abs(index - 2) * -30}px) translateZ(${(2 - Math.abs(index - 2)) * 100}px)`,
+                zIndex: 5 - Math.abs(index - 2), // 中间的卡片在最前面
+              }}
+              rarity={card.rarity}
+              key={card.id}
+            ></Card>
+          ))}
+        </div>
+        <div className={styles.cardFloor}></div>
       </div>
-      <div className={styles.cardFloor}></div>
-    </div>
+      <Text></Text>
+    </>
   )
 }
 

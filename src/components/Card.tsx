@@ -75,6 +75,7 @@ const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
   }
 
   const handleMouseOver = () => {
+    // 放大效果
     gsap.to(cardRef.current, {
       duration: 0.3,
       scale: 1.05,
@@ -82,6 +83,7 @@ const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
   }
 
   const handleMouseLeave = () => {
+    // 恢复缩放
     gsap.to(cardRef.current, {
       duration: 0.3,
       scale: 1,
