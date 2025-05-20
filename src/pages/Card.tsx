@@ -2,9 +2,30 @@ import React, { type CSSProperties, useRef } from 'react'
 import { gsap } from 'gsap'
 import styles from './Card.module.css'
 import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect.tsx'
+import classNames from 'classnames'
 
 const timeRate = 1
-const Card: React.FC<{ style: CSSProperties }> = ({ style }) => {
+export enum CARD_RARITY {
+  NORMAL = 'Normal',
+  RARE = 'Rare',
+  EPIC = 'Epic',
+  LEGENDARY = 'Legendary',
+}
+export interface ICardProps {
+  style?: CSSProperties
+  rarity?: CARD_RARITY
+}
+
+const CardRotation_Once = [0.15, 0.25]
+const CardRotation_ThreeTimes = [0.1, 0.1, 0.2, 0.2, 0.2, 0.3]
+const CardRotation_FiveTimes = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.15, 0.25, 0.25, 0.3]
+const RarityRotationMap = {
+  [CARD_RARITY.NORMAL]: CardRotation_Once,
+  [CARD_RARITY.RARE]: CardRotation_Once,
+  [CARD_RARITY.EPIC]: CardRotation_ThreeTimes,
+  [CARD_RARITY.LEGENDARY]: CardRotation_FiveTimes,
+}
+const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
   const cardIsFlipped = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
@@ -18,81 +39,23 @@ const Card: React.FC<{ style: CSSProperties }> = ({ style }) => {
           console.log('onComplete')
           cardIsFlipped.current = true
         },
-        onReverseComplete: () => {
-          console.log('onReverseComplete')
-          cardIsFlipped.current = false
-        },
       })
-      tl.to(cardRef.current, {
-        duration: 0.1 * timeRate,
-        rotationY: 90,
-        ease: 'none', // 设置匀速缓动
-        onComplete: () => {
-          // 翻转到90度时切换内容
-          console.log('正面翻转结束')
-          cardRef.current?.classList.toggle(styles.isFlipped)
-        },
+      const targetRotation = RarityRotationMap[rarity]
+      targetRotation.forEach((duration, index) => {
+        tl.to(cardRef.current, {
+          duration: duration * timeRate,
+          rotationY: 90 * (index + 1),
+          ease: 'none', // 设置匀速缓动
+          onComplete:
+            index % 2 === 0
+              ? () => {
+                  // 翻转到90度时切换内容
+                  console.log('翻过了', gsap.getProperty(cardRef.current, 'rotationY'))
+                  cardRef.current?.classList.toggle(styles.isFlipped)
+                }
+              : undefined,
+        })
       })
-        .to(cardRef.current, {
-          duration: 0.1 * timeRate,
-          rotationY: 180,
-          ease: 'none', // 设置匀速缓动
-          onReverseComplete: () => {
-            // 翻转到90度时切换内容
-            console.log('反面反向翻转结束')
-            cardRef.current?.classList.toggle(styles.isFlipped)
-          },
-        })
-        .to(cardRef.current, {
-          duration: 0.1 * timeRate,
-          rotationY: 270,
-          ease: 'none', // 设置匀速缓动
-          onComplete: () => {
-            // 翻转到90度时切换内容
-            console.log('正面翻转结束')
-            cardRef.current?.classList.toggle(styles.isFlipped)
-          },
-          onReverseComplete: () => {
-            // 翻转到90度时切换内容
-            console.log('反面反向翻转结束')
-            cardRef.current?.classList.toggle(styles.isFlipped)
-          },
-        })
-        .to(cardRef.current, {
-          duration: 0.1 * timeRate,
-          rotationY: 360,
-          ease: 'none', // 设置匀速缓动
-          onReverseComplete: () => {
-            // 翻转到90度时切换内容
-            console.log('反面反向翻转结束')
-            cardRef.current?.classList.toggle(styles.isFlipped)
-          },
-        })
-        .to(cardRef.current, {
-          duration: 0.2 * timeRate,
-          rotationY: 450,
-          ease: 'none', // 设置匀速缓动
-          onComplete: () => {
-            // 翻转到90度时切换内容
-            console.log('正面翻转结束')
-            cardRef.current?.classList.toggle(styles.isFlipped)
-          },
-          onReverseComplete: () => {
-            // 翻转到90度时切换内容
-            console.log('反面反向翻转结束')
-            cardRef.current?.classList.toggle(styles.isFlipped)
-          },
-        })
-        .to(cardRef.current, {
-          duration: 0.4 * timeRate,
-          rotationY: 540,
-          ease: 'none', // 设置匀速缓动
-          onReverseComplete: () => {
-            // 翻转到90度时切换内容
-            console.log('反面反向翻转结束')
-            cardRef.current?.classList.toggle(styles.isFlipped)
-          },
-        })
       tl.pause()
       flipAnimationTimelineRef.current = tl
     }
@@ -126,6 +89,7 @@ const Card: React.FC<{ style: CSSProperties }> = ({ style }) => {
     flipCard()
   }
 
+  console.log('CardRarity', rarity)
   return (
     <div
       style={style}
@@ -135,8 +99,10 @@ const Card: React.FC<{ style: CSSProperties }> = ({ style }) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
     >
-      <div className={styles.cardFront}>正面内容</div>
-      <div className={styles.cardBack}>反面内容</div>
+      <div className={styles.cardFront}>卡牌背面</div>
+      <div className={classNames(styles.cardBack, styles[`card${rarity}`])}>
+        <div>{rarity}</div>
+      </div>
     </div>
   )
 }
