@@ -86,6 +86,7 @@ export default class StoresStore {
   };
 
   *initData() {
+    if (!this.isAppLoading) return
     this.isAppLoading = true
     try {
       yield this.loadCreateJS()

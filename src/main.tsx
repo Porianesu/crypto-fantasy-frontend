@@ -3,7 +3,13 @@ import './index.css'
 import App from './pages/HomePage.tsx'
 import { StoreProvider } from '@/stores/StoreProvider.tsx'
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom'
-import { HOME_PATH, LOADING_PATH, LOGIN_PATH, ROOT_PATH } from '@/navigation/routes.tsx'
+import {
+  HOME_PATH,
+  homePageLoader,
+  LOADING_PATH,
+  LOGIN_PATH,
+  ROOT_PATH,
+} from '@/navigation/routes.tsx'
 import PageContainer from '@/components/PageContainer.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import TransitionComponent from '@/components/Transition.tsx'
@@ -34,6 +40,7 @@ const router = createBrowserRouter([
       },
       {
         path: HOME_PATH,
+        loader: homePageLoader,
         element: (
           <TransitionComponent>
             <App></App>

@@ -6,21 +6,21 @@ import dayjs from 'dayjs'
 import Text from '@/components/Text.tsx'
 import classNames from 'classnames'
 
-const getRandomCard = () => {
+const getRandomCard = (_: any, index: number) => {
   const CardRarityArray = Object.values(CARD_RARITY)
   const randomNumber = Math.floor(Math.random() * CardRarityArray.length)
   console.log('CardRarity', randomNumber)
   const cardRarity =
     Object.values(CARD_RARITY)[Math.floor(Math.random() * Object.values(CARD_RARITY).length)]
   return {
-    id: dayjs().valueOf(),
+    id: `${dayjs().valueOf()}-${index}`,
     rarity: cardRarity,
   }
 }
 function HomePage() {
   const [cards] = useState<
     Array<{
-      id: number
+      id: string
       rarity: CARD_RARITY
     }>
   >(Array.from({ length: 5 }, getRandomCard))
