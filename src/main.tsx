@@ -1,18 +1,14 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './pages/HomePage.tsx'
-import { gsap } from 'gsap'
 import { StoreProvider } from '@/stores/StoreProvider.tsx'
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom'
 import { HOME_PATH, LOADING_PATH, LOGIN_PATH, ROOT_PATH } from '@/navigation/routes.tsx'
 import PageContainer from '@/components/PageContainer.tsx'
-import { SplitText } from 'gsap/SplitText'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import TransitionComponent from '@/components/Transition.tsx'
-import Header from '@/components/Header.tsx'
 import LoginPage from '@/pages/LoginPage.tsx'
 import LoadingPage from '@/pages/LoadingPage.tsx'
-gsap.registerPlugin(SplitText)
 
 const router = createBrowserRouter([
   {
@@ -20,11 +16,22 @@ const router = createBrowserRouter([
     errorElement: null,
     element: (
       <PageContainer>
-        <Header></Header>
         <Outlet></Outlet>
       </PageContainer>
     ),
     children: [
+      {
+        index: true,
+        element: <Navigate to={LOADING_PATH}></Navigate>,
+      },
+      {
+        path: LOADING_PATH,
+        element: (
+          <TransitionComponent>
+            <LoadingPage></LoadingPage>
+          </TransitionComponent>
+        ),
+      },
       {
         path: HOME_PATH,
         element: (
@@ -42,12 +49,8 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: LOADING_PATH,
-        element: (
-          <TransitionComponent>
-            <LoadingPage></LoadingPage>
-          </TransitionComponent>
-        ),
+        path: '*', // 捕获所有未匹配的路由
+        element: <Navigate to={LOADING_PATH} replace />,
       },
     ],
   },

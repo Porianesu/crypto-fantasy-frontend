@@ -1,22 +1,84 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import styles from './LoadingPage.module.css'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import classNames from 'classnames'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { useNavigate } from 'react-router-dom'
+import { getHomePath } from '@/navigation/routes.tsx'
 
 const LoadingPage: React.FC = () => {
+  const {
+    appStore: { initData, preloadProgress },
+  } = useMobxStore()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const progressBarContainerRef = useRef<HTMLDivElement>(null)
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  const startButtonRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    initData()
+  }, [])
+
+  useGSAP(
+    () => {
+      gsap.killTweensOf(progressBarRef.current)
+      gsap.to(progressBarRef.current, {
+        width: `${preloadProgress * 100}%`,
+        duration: 0.1,
+        ease: 'power2.out',
+      })
+      if (preloadProgress === 1) {
+        const tl = gsap.timeline()
+        tl.to(progressBarContainerRef.current, {
+          opacity: 0,
+          duration: 0.5,
+        })
+          .to(startButtonRef.current, {
+            opacity: 1,
+            duration: 0.5,
+            onComplete: () => {
+              gsap.set(progressBarContainerRef.current, {
+                zIndex: -1,
+              })
+            },
+          })
+          .to(startButtonRef.current, {
+            scale: 1.1,
+            duration: 1,
+            yoyo: true,
+            repeat: -1,
+            ease: 'power1.inOut',
+          })
+      }
+    },
+    {
+      dependencies: [preloadProgress],
+      scope: containerRef,
+    },
+  )
+
+  const handleStartButtonClick = () => {
+    navigate(getHomePath())
+  }
+
   return (
-    <div
-      className={classNames(
-        'flex',
-        'items-center',
-        'justify-center',
-        'shrink',
-        'basis-0',
-        'grow',
-        'bg-blue-500',
-        'text-yellow-500',
-      )}
-    >
-      Loading...
+    <div className={styles.pageContainer} ref={containerRef}>
+      <div className={styles.title}>Crypto Fantasy</div>
+      <div className={styles.loadingPart}>
+        <div className={styles.progressBarContainer} ref={progressBarContainerRef}>
+          <div ref={progressBarRef} className={styles.progressBar} />
+        </div>
+        <div
+          ref={startButtonRef}
+          className={classNames(styles.startButton)}
+          onClick={handleStartButtonClick}
+        >
+          {'Start the game'}
+        </div>
+      </div>
     </div>
   )
 }

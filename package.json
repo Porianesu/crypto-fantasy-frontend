@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@types/createjs": "^0.0.32",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@types/react-transition-group": "^4.4.12",
