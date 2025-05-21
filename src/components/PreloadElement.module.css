@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-.imageContainer {
-    @apply w-10 h-10;
+.contentContainer {
+    @apply w-96 h-96;
 
     & > img {
         @apply w-full h-full object-cover;
