@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef } from 'react'
-import styles from './LoadingPage.module.css'
+import styles from './EntrancePage.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
@@ -8,7 +8,7 @@ import gsap from 'gsap'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath } from '@/navigation/routes.tsx'
 
-const LoadingPage: React.FC = () => {
+const EntrancePage: React.FC = () => {
   const {
     appStore: { initData, preloadProgress },
   } = useMobxStore()
@@ -82,4 +82,4 @@ const LoadingPage: React.FC = () => {
     </div>
   )
 }
-export default observer(LoadingPage)
+export default observer(EntrancePage)

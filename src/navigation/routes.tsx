@@ -3,19 +3,14 @@ import { initializeStore } from '@/stores/StoreProvider.tsx'
 
 export const ROOT_PATH = '/'
 export const HOME_PATH = '/home'
-export const LOGIN_PATH = '/login'
-export const LOADING_PATH = '/loading'
+export const ENTRANCE_PATH = '/entrance'
 
 export const getHomePath = () => {
   return generatePath(HOME_PATH)
 }
 
-export const getLoginPath = () => {
-  return generatePath(LOGIN_PATH)
-}
-
-export const getLoadingPath = () => {
-  return generatePath(LOADING_PATH)
+export const getEntrancePath = () => {
+  return generatePath(ENTRANCE_PATH)
 }
 
 export const homePageLoader = () => {
@@ -25,7 +20,7 @@ export const homePageLoader = () => {
       appStore: { isAppLoading },
     } = Store
     if (isAppLoading) {
-      return redirect(getLoadingPath())
+      return redirect(getEntrancePath())
     }
   }
   return null
