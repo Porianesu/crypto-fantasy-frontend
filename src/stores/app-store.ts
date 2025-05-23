@@ -1,8 +1,8 @@
 import type { Store } from '@/stores/index.ts'
 import { action, flow, makeAutoObservable, observable } from 'mobx'
 import preloadManifest from '@/stores/preloadManifest.ts'
-import { preloadPages } from '@/main.tsx'
 import { BigNumber } from 'bignumber.js'
+import { preloadPages } from '@/navigation/routes.tsx'
 
 interface PreloadProgressEvent {
   loaded: number

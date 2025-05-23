@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useRef } from 'react'
+import React, { Suspense, useEffect, useRef } from 'react'
 import styles from './EntrancePage.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import classNames from 'classnames'
@@ -7,10 +7,13 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath } from '@/navigation/routes.tsx'
+import { checkIsAuth } from '@/utils/common.ts'
+const LoginModal = React.lazy(() => import('@/components/LoginModal.tsx'))
 
 const EntrancePage: React.FC = () => {
   const {
     appStore: { initData, preloadProgress },
+    modalStore: { changeLoginModalVisible },
   } = useMobxStore()
   const containerRef = useRef<HTMLDivElement>(null)
   const progressBarContainerRef = useRef<HTMLDivElement>(null)
@@ -61,7 +64,10 @@ const EntrancePage: React.FC = () => {
   )
 
   const handleStartButtonClick = () => {
-    navigate(getHomePath())
+    if (checkIsAuth()) {
+      return navigate(getHomePath())
+    }
+    changeLoginModalVisible(true)
   }
 
   return (
@@ -79,6 +85,9 @@ const EntrancePage: React.FC = () => {
           {'Start the game'}
         </div>
       </div>
+      <Suspense fallback={null}>
+        <LoginModal></LoginModal>
+      </Suspense>
     </div>
   )
 }

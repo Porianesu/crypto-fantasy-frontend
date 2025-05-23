@@ -29,7 +29,14 @@ export function initializeStore(initialData = null): Store {
   return _store
 }
 
-export const StoreProvider: React.FC<PropsWithChildren<{ initialState: null }>> = ({ children, initialState: initialData }) => {
+export const getStoreRef = () => {
+  return store
+}
+
+export const StoreProvider: React.FC<PropsWithChildren<{ initialState: null }>> = ({
+  children,
+  initialState: initialData,
+}) => {
   const store = initializeStore(initialData)
 
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
