@@ -1,13 +1,35 @@
+import React, { type PropsWithChildren, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './pages/HomePage.tsx'
 import { StoreProvider } from '@/stores/StoreProvider.tsx'
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom'
-import { HOME_PATH, homePageLoader, ENTRANCE_PATH, ROOT_PATH } from '@/navigation/routes.tsx'
+import {
+  HOME_PATH,
+  homePageLoader,
+  ENTRANCE_PATH,
+  ROOT_PATH,
+  CARD_PATH,
+  cardPageLoader,
+} from '@/navigation/routes.tsx'
 import PageContainer from '@/components/PageContainer.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import TransitionComponent from '@/components/Transition.tsx'
 import LoadingPage from '@/pages/EntrancePage.tsx'
+const CardPage = React.lazy(() => import('@/pages/CardPage.tsx'))
+const HomePage = React.lazy(() => import('@/pages/HomePage.tsx'))
+
+export const preloadPages = async () => {
+  try {
+    await import('@/pages/CardPage.tsx')
+    await import('@/pages/HomePage.tsx')
+  } catch (e) {
+    console.error('Error preloading CardPage:', e)
+  }
+}
+
+const CommonPageSuspense: React.FC<PropsWithChildren> = ({ children }) => {
+  return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+}
 
 const router = createBrowserRouter([
   {
@@ -36,7 +58,20 @@ const router = createBrowserRouter([
         loader: homePageLoader,
         element: (
           <TransitionComponent>
-            <App></App>
+            <CommonPageSuspense>
+              <HomePage></HomePage>
+            </CommonPageSuspense>
+          </TransitionComponent>
+        ),
+      },
+      {
+        path: CARD_PATH,
+        loader: cardPageLoader,
+        element: (
+          <TransitionComponent>
+            <CommonPageSuspense>
+              <CardPage></CardPage>
+            </CommonPageSuspense>
           </TransitionComponent>
         ),
       },

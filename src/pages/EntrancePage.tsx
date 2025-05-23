@@ -33,11 +33,11 @@ const EntrancePage: React.FC = () => {
       if (preloadProgress === 1) {
         const tl = gsap.timeline()
         tl.to(progressBarContainerRef.current, {
-          opacity: 0,
+          autoAlpha: 0,
           duration: 0.5,
         })
           .to(startButtonRef.current, {
-            opacity: 1,
+            autoAlpha: 1,
             duration: 0.5,
             onComplete: () => {
               gsap.set(progressBarContainerRef.current, {

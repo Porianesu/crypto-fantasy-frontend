@@ -1,6 +1,8 @@
 import type { Store } from '@/stores/index.ts'
 import { action, flow, makeAutoObservable, observable } from 'mobx'
 import preloadManifest from '@/stores/preloadManifest.ts'
+import { preloadPages } from '@/main.tsx'
+import { BigNumber } from 'bignumber.js'
 
 interface PreloadProgressEvent {
   loaded: number
@@ -47,7 +49,10 @@ export default class StoresStore {
   }
 
   handlePreloadProgress = (event: object) => {
-    this.preloadProgress = (event as unknown as PreloadProgressEvent).progress
+    this.preloadProgress = new BigNumber(0.2)
+      .plus(new BigNumber((event as unknown as PreloadProgressEvent).progress).times(0.8))
+      .decimalPlaces(2)
+      .toNumber()
   }
 
   preloadAssets = () => {
@@ -74,6 +79,9 @@ export default class StoresStore {
     this.isAppLoading = true
     try {
       yield this.loadCreateJS()
+      this.preloadProgress += 0.1
+      yield preloadPages()
+      this.preloadProgress += 0.1
       yield this.preloadAssets()
     } catch (e) {
       console.log('Error preloading assets:', e)
