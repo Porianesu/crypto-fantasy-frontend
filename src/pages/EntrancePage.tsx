@@ -6,8 +6,8 @@ import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { useNavigate } from 'react-router-dom'
-import { getHomePath } from '@/navigation/routes.tsx'
-import { checkIsAuth } from '@/utils/common.ts'
+import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
+import { checkHasAlreadyReadGuide, checkIsAuth } from '@/utils/common.ts'
 const LoginModal = React.lazy(() => import('@/components/LoginModal.tsx'))
 
 const EntrancePage: React.FC = () => {
@@ -65,7 +65,12 @@ const EntrancePage: React.FC = () => {
 
   const handleStartButtonClick = () => {
     if (checkIsAuth()) {
-      return navigate(getHomePath())
+      const checkResult = checkHasAlreadyReadGuide()
+      if (checkResult) {
+        return navigate(getHomePath())
+      } else {
+        return navigate(getIntroductionPath())
+      }
     }
     changeLoginModalVisible(true)
   }

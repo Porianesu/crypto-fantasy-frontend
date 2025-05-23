@@ -18,6 +18,7 @@ const PageContainer: React.FC<PropsWithChildren> = ({ children }) => {
         'flex-col',
         'items-stretch',
         'bg-black',
+        'overflow-hidden',
       )}
     >
       {children}

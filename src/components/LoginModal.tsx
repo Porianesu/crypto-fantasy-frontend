@@ -14,7 +14,7 @@ import styles from './LoginModal.module.css'
 import classNames from 'classnames'
 import { checkHasAlreadyReadGuide, setStorageUserInfo } from '@/utils/common.ts'
 import { useNavigate } from 'react-router-dom'
-import { getCardPath, getIntroductionPath } from '@/navigation/routes.tsx'
+import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
 
 const LoginModal: React.FC = () => {
   const {
@@ -32,8 +32,9 @@ const LoginModal: React.FC = () => {
       email: email as string,
     })
     changeLoginModalVisible(false)
-    if (checkHasAlreadyReadGuide()) {
-      return navigate(getCardPath())
+    const checkResult = checkHasAlreadyReadGuide()
+    if (checkResult) {
+      return navigate(getHomePath())
     } else {
       return navigate(getIntroductionPath())
     }

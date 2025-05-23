@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+.pageContainer {
+    @apply shrink grow basis-0 overflow-hidden flex flex-col items-center relative px-12 py-8;
+
+    .textContainer {
+        @apply max-w-[1200px] shrink grow basis-0 flex flex-col overflow-x-hidden overflow-y-auto;
+
+        &::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .introduction {
+            @apply text-3xl whitespace-pre-wrap text-yellow-200 drop-shadow-lg;
+            font-size: 44px;
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 16px #fffbe6, 0 0 32px #ffe066, 0 0 64px #fffbe6;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+        }
+    }
+
+    .skipButton {
+        @apply bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300 absolute right-8 bottom-8;
+    }
+}
