@@ -37,9 +37,6 @@ const Text: React.FC<PropsWithChildren<ITextProps>> = ({ children, className, st
               'translate3d(-20px, 80px, 0px) rotateX(-60deg) rotateY(-20deg) rotateZ(-10deg)',
             duration: 1,
             stagger: 0.1,
-            onUpdate: (...args) => {
-              console.log('on Update', args)
-            },
             onComplete: () => self.revert(), // <-- restores original innerHTML
           })
         },
