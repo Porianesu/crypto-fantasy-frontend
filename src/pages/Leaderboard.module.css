@@ -43,8 +43,13 @@
 }
 
 .leaderboardRankIcon {
-    @apply absolute left-1/2 -top-2 -translate-x-1/2 w-6 h-6;
-    pointer-events: none;
+    @apply absolute left-1/2 -top-4 -translate-x-1/2 w-9 h-9 rounded-full shadow-lg z-20;
+    background: white;
+    border: 2px solid #facc15; /* 金色边框 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 让图标更突出 */
 }
 
 .leaderboardRankText {
@@ -56,8 +61,24 @@
 }
 
 .leaderboardInfo {
-    @apply flex-1 flex items-center px-4 py-2 bg-white text-gray-800;
-    /* 右侧内容背景色可根据需要调整 */
+    @apply flex-1 flex flex-row items-center px-4 py-2 bg-white text-gray-800;
+}
+
+.leaderboardAvatar {
+    @apply w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3 overflow-hidden;
+    /* 可放置图片或首字母 */
+}
+
+.leaderboardUserInfo {
+    @apply flex flex-col justify-center;
+}
+
+.leaderboardUserName {
+    @apply font-semibold text-base text-gray-800 leading-tight;
+}
+
+.leaderboardUserScore {
+    @apply text-sm text-gray-500 mt-1 leading-tight;
 }
 
 .leaderboardLoading {
