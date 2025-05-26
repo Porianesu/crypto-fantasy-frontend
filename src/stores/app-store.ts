@@ -1,8 +1,10 @@
 import type { Store } from '@/stores/index.ts'
-import { action, flow, makeAutoObservable, observable } from 'mobx'
+import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import preloadManifest from '@/stores/preloadManifest.ts'
 import { BigNumber } from 'bignumber.js'
 import { preloadPages } from '@/navigation/routes.tsx'
+import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
+import { getStorageItem } from '@/utils/common.ts'
 
 interface PreloadProgressEvent {
   loaded: number
@@ -16,19 +18,38 @@ export default class StoresStore {
 
   preloadQueue: createjs.LoadQueue | undefined = undefined
 
-  preloadProgress: number = 0
+  preloadResult = {
+    assetPreloadProgress: 0,
+    pagesPreloadProgress: 0,
+    networkPreloadProgress: 0,
+  }
+
+  userInfo: UserStorageInfo | undefined = undefined
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
       rootStoreRef: observable,
       isAppLoading: observable,
-      preloadProgress: observable,
+      preloadResult: observable,
+      preloadProgress: computed,
       handlePreloadProgress: action,
       setIsAppLoading: action,
+      initNetwork: flow.bound,
       initData: flow.bound,
       resetStore: action,
     })
+  }
+
+  resetStore = () => {
+    this.isAppLoading = true
+    this.preloadQueue = undefined
+    this.preloadResult = {
+      assetPreloadProgress: 0,
+      pagesPreloadProgress: 0,
+      networkPreloadProgress: 0,
+    }
+    this.userInfo = undefined
   }
 
   loadCreateJS = (): Promise<void> => {
@@ -49,10 +70,7 @@ export default class StoresStore {
   }
 
   handlePreloadProgress = (event: object) => {
-    this.preloadProgress = new BigNumber(0.2)
-      .plus(new BigNumber((event as unknown as PreloadProgressEvent).progress).times(0.8))
-      .decimalPlaces(2)
-      .toNumber()
+    this.preloadResult.assetPreloadProgress = (event as unknown as PreloadProgressEvent).progress
   }
 
   preloadAssets = () => {
@@ -74,15 +92,34 @@ export default class StoresStore {
     })
   };
 
+  *initNetwork() {
+    try {
+      // Simulate network initialization
+      const result: UserStorageInfo = yield new Promise((resolve) =>
+        setTimeout(() => {
+          const storageUserInfo = getStorageItem(USER_INFO_STORAGE_KEY)
+          resolve(storageUserInfo)
+        }, 1000),
+      )
+      console.log('Network initialized with user info:', result)
+      this.userInfo = result
+      this.preloadResult.networkPreloadProgress = 1
+    } catch (e) {
+      console.log('Error initializing network:', e)
+    }
+  }
+
   *initData() {
     if (!this.isAppLoading) return
     this.isAppLoading = true
     try {
-      yield this.loadCreateJS()
-      this.preloadProgress += 0.1
-      yield preloadPages()
-      this.preloadProgress += 0.1
-      yield this.preloadAssets()
+      preloadPages().then(() => {
+        this.preloadResult.pagesPreloadProgress = 1
+      })
+      this.loadCreateJS().then(() => {
+        this.preloadAssets()
+      })
+      this.initNetwork()
     } catch (e) {
       console.log('Error preloading assets:', e)
     }
@@ -93,5 +130,12 @@ export default class StoresStore {
     this.isAppLoading = newValue
   }
 
-  resetStore = () => {}
+  get preloadProgress() {
+    return new BigNumber(this.preloadResult.assetPreloadProgress)
+      .plus(this.preloadResult.pagesPreloadProgress)
+      .plus(this.preloadResult.networkPreloadProgress)
+      .dividedBy(3)
+      .decimalPlaces(2)
+      .toNumber()
+  }
 }
