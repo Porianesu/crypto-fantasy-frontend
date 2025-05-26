@@ -1,16 +1,24 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './IntroductionPage.module.css'
 import Text from '@/components/Text.tsx'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath } from '@/navigation/routes.tsx'
+import { setStorageUserInfo } from '@/utils/common.ts'
 
 const IntroductionPage: React.FC = () => {
   const navigate = useNavigate()
   const handleSkipButtonClick = () => {
     navigate(getHomePath())
   }
+
+  useEffect(() => {
+    setStorageUserInfo({
+      hasAlreadyReadGuide: true,
+    })
+  }, [])
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.textContainer}>
