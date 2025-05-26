@@ -40,14 +40,14 @@ const CardPage: React.FC = () => {
       <div className={styles.cardWrapper}>
         <div className={styles.cardContainer}>
           {cards.map((card, index) => (
-            <Card
+            <div
               style={{
                 transform: `translateY(${Math.abs(index - 2) * -30}px) translateZ(${(2 - Math.abs(index - 2)) * 100}px)`,
                 zIndex: 5 - Math.abs(index - 2), // 中间的卡片在最前面
               }}
-              rarity={card.rarity}
-              key={card.id}
-            ></Card>
+            >
+              <Card rarity={card.rarity} key={card.id}></Card>
+            </div>
           ))}
         </div>
         <div className={styles.cardFloor}></div>
