@@ -6,6 +6,11 @@ import Card, { CARD_RARITY } from '@/components/Card.tsx'
 import dayjs from 'dayjs'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
+// import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
+// import { MotionPathHelper } from 'gsap/MotionPathHelper'
+//
+// gsap.registerPlugin(MotionPathPlugin)
+// gsap.registerPlugin(MotionPathHelper)
 
 const getRandomCard = (_: any, index: number) => {
   const cardRarity =
@@ -32,15 +37,53 @@ const CardPage: React.FC = () => {
 
   useGSAP(
     () => {
-      console.log('cardsRef', cardsRef.current)
       gsap.set(cardsRef.current, {
         zIndex: (index) => 5 - Math.abs(index - 2), // 中间的卡片在最前面
       })
+      const getYOffset = (index: number) => Math.abs(index - 2) * -30
       gsap.to(cardsRef.current, {
         z: (index) => (2 - Math.abs(index - 2)) * 100,
-        y: (index) => Math.abs(index - 2) * -30,
+        y: (index) => getYOffset(index),
         duration: 1,
       })
+      // gsap.to(cardsRef.current[0], {
+      //   motionPath: {
+      //     path: [
+      //       {
+      //         x: -500,
+      //         y: -200 + getYOffset(0),
+      //       },
+      //       {
+      //         x: -200,
+      //         y: -200 + getYOffset(0),
+      //       },
+      //       {
+      //         x: -200,
+      //         y: -200 + getYOffset(0),
+      //       },
+      //       {
+      //         x: -200,
+      //         y: -150 + getYOffset(0),
+      //       },
+      //       {
+      //         x: -100,
+      //         y: -100 + getYOffset(0),
+      //       },
+      //       {
+      //         x: 0,
+      //         y: -100 + getYOffset(0),
+      //       },
+      //       {
+      //         x: 0,
+      //         y: getYOffset(0),
+      //       },
+      //     ],
+      //     autoRotate: true,
+      //     fromCurrent: false,
+      //   },
+      //   duration: 5,
+      // })
+      // MotionPathHelper.create(cardsRef.current[0])
     },
     {
       dependencies: [],
