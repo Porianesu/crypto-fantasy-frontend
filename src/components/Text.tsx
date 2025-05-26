@@ -15,9 +15,9 @@ const Text: React.FC<PropsWithChildren<ITextProps>> = ({ children, className, st
   useGSAP(
     () => {
       SplitText.create(textRef.current, {
-        type: 'words, lines',
+        type: 'words',
         autoSplit: true,
-        mask: 'lines',
+        // mask: 'lines',
         wordsClass: 'word',
         linesClass: 'line',
         reduceWhiteSpace: false,
