@@ -4,7 +4,7 @@
     @apply shrink grow basis-0 overflow-hidden flex flex-col items-center relative px-12 py-8;
 
     .textContainer {
-        @apply max-w-[1200px] shrink grow basis-0 flex flex-col overflow-x-hidden overflow-y-auto;
+        @apply max-w-[1200px] shrink grow basis-0 flex flex-col overflow-x-hidden overflow-y-auto px-4;
 
         &::-webkit-scrollbar {
             display: none; /* Chrome, Safari, Opera */
