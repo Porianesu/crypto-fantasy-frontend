@@ -15,7 +15,7 @@ const Text: React.FC<PropsWithChildren<ITextProps>> = ({ children, className, st
   useGSAP(
     () => {
       SplitText.create(textRef.current, {
-        type: 'words',
+        type: 'chars',
         autoSplit: true,
         // mask: 'lines',
         wordsClass: 'word',
@@ -31,13 +31,20 @@ const Text: React.FC<PropsWithChildren<ITextProps>> = ({ children, className, st
           //   ease: 'power3.out',
           //   onComplete: () => self.revert(), // <-- restores original innerHTML
           // })
-          return gsap.from(self.words, {
+          // return gsap.from(self.words, {
+          //   opacity: 0,
+          //   transform:
+          //     'translate3d(-20px, 80px, 0px) rotateX(-60deg) rotateY(-20deg) rotateZ(-10deg)',
+          //   duration: 1,
+          //   stagger: 0.1,
+          //   onComplete: () => self.revert(), // <-- restores original innerHTML
+          // })
+          return gsap.from(self.chars, {
             opacity: 0,
-            transform:
-              'translate3d(-20px, 80px, 0px) rotateX(-60deg) rotateY(-20deg) rotateZ(-10deg)',
-            duration: 1,
-            stagger: 0.1,
-            onComplete: () => self.revert(), // <-- restores original innerHTML
+            y: 10,
+            duration: 0.05,
+            stagger: 0.04,
+            ease: 'power1.out',
           })
         },
       })

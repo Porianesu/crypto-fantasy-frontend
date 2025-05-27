@@ -9,7 +9,7 @@ import { setStorageUserInfo } from '@/utils/common.ts'
 
 const IntroductionPage: React.FC = () => {
   const navigate = useNavigate()
-  const handleSkipButtonClick = () => {
+  const handleStartButtonClick = () => {
     navigate(getHomePath())
   }
 
@@ -40,8 +40,8 @@ const IntroductionPage: React.FC = () => {
           }
         </Text>
       </div>
-      <button className={styles.skipButton} onClick={handleSkipButtonClick}>
-        Skip
+      <button className={styles.skipButton} onClick={handleStartButtonClick}>
+        Start Adventure
       </button>
     </div>
   )
