@@ -1,7 +1,5 @@
 import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
-import { useNavigate } from 'react-router-dom'
-import { getCardPath } from '@/navigation/routes.tsx'
 import {
   EnvelopeIcon,
   Cog6ToothIcon,
@@ -19,19 +17,58 @@ import {
 } from '@heroicons/react/24/outline'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/Leaderboard.tsx'
+import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
+import { useRef } from 'react'
+import { gsap } from 'gsap'
+import { useGSAP } from '@gsap/react'
 
 function HomePage() {
-  const navigate = useNavigate()
   const {
     appStore: { userInfo },
   } = useMobxStore()
-  const handleOpenPackage = () => {
-    navigate(getCardPath())
-  }
+  const pageContainerRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<IPreloadElementHandle>(null)
   // mock数据
   const avatarUrl = 'https://via.placeholder.com/40'
   const assetAmount = 12345
   const expPercent = 68 // mock经验百分比
+
+  useGSAP(() => {}, {
+    dependencies: [],
+    scope: pageContainerRef,
+  })
+
+  const handleOpenPackage = () => {
+    if (videoRef.current) {
+      const containerWidth = gsap.getProperty(pageContainerRef.current, 'width')
+      const containerHeight = gsap.getProperty(pageContainerRef.current, 'height')
+      gsap.set(videoRef.current.getContainer(), {
+        zIndex: 10,
+        width: containerWidth,
+        height: containerHeight,
+      })
+      gsap.to(videoRef.current.getContainer(), {
+        autoAlpha: 1,
+        duration: 0.3,
+        onStart: () => {
+          const videoEl = videoRef.current!.getElement() as HTMLVideoElement
+          videoEl.loop = false
+          videoEl.onended = () => {
+            // 这里处理播放完成后的逻辑
+            console.log('视频播放完成')
+            gsap.to(videoRef.current!.getContainer(), {
+              autoAlpha: 0,
+              duration: 0.3,
+              onComplete: () => {
+                gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
+              },
+            })
+          }
+          videoEl.play()
+        },
+      })
+    }
+  }
 
   const handleMailClick = () => {
     alert('打开通知')
@@ -87,7 +124,12 @@ function HomePage() {
   ]
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={styles.pageContainer} ref={pageContainerRef}>
+      <PreloadElement
+        ref={videoRef}
+        id={'remoteVideo'}
+        className={styles.videoContainer}
+      ></PreloadElement>
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <img src={avatarUrl} alt="avatar" className={styles.avatar} />

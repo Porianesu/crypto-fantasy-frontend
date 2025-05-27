@@ -5,6 +5,7 @@ import styles from './PreloadElement.module.css'
 import classNames from 'classnames'
 
 export interface IPreloadElementHandle {
+  getContainer: () => HTMLDivElement | null
   getElement: () => HTMLElement | null
 }
 interface IPreloadElementProps {
@@ -34,6 +35,7 @@ const PreloadElement = React.forwardRef<IPreloadElementHandle, IPreloadElementPr
     useImperativeHandle(
       ref,
       () => ({
+        getContainer: () => containerRef.current,
         getElement: () => elementRef.current,
       }),
       [],

@@ -51,7 +51,7 @@ export const introductionPageLoader = () => {
 export const preloadPages = async () => {
   try {
     await import('@/pages/CardPage.tsx')
-    await import('@/pages/HomePage.tsx')
+    await import('@/pages/HomePage/HomePage.tsx')
     await import('@/pages/IntroductionPage/IntroductionPage.tsx')
   } catch (e) {
     console.error('Error preloading CardPage:', e)

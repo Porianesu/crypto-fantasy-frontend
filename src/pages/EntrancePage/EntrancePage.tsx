@@ -8,7 +8,7 @@ import gsap from 'gsap'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
 import { checkHasAlreadyReadGuide, checkIsAuth } from '@/utils/common.ts'
-const LoginModal = React.lazy(() => import('@/components/LoginModal.tsx'))
+const LoginModal = React.lazy(() => import('@/pages/EntrancePage/LoginModal.tsx'))
 
 const EntrancePage: React.FC = () => {
   const {

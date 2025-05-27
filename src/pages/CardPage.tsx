@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite'
 import React, { useRef, useState } from 'react'
-import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
 import styles from '@/pages/CardPage.module.css'
 import Card, { CARD_RARITY } from '@/components/Card.tsx'
 import dayjs from 'dayjs'
@@ -28,7 +27,6 @@ const CardPage: React.FC = () => {
       rarity: CARD_RARITY
     }>
   >(Array.from({ length: 5 }, getRandomCard))
-  const videoRef = useRef<IPreloadElementHandle>(null)
   const cardsRef = useRef<Array<HTMLDivElement | null>>([])
   const cardsContainerRef = useRef<HTMLDivElement>(null)
   const addCard = (ref: HTMLDivElement | null, index: number) => {
@@ -93,19 +91,6 @@ const CardPage: React.FC = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <div>
-        <button
-          className={'text-white'}
-          onClick={() => {
-            if (videoRef.current) {
-              ;(videoRef.current.getElement() as HTMLVideoElement).play()
-            }
-          }}
-        >
-          Play
-        </button>
-        <PreloadElement ref={videoRef} id={'remoteVideo'}></PreloadElement>
-      </div>
       <div className={styles.cardWrapper}>
         <div className={styles.cardContainer} ref={cardsContainerRef}>
           {cards.map((card, index) => (

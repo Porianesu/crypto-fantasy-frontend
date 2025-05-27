@@ -17,7 +17,7 @@ import React, { type PropsWithChildren, Suspense } from 'react'
 import PageContainer from '@/components/PageContainer.tsx'
 import TransitionComponent from '@/components/Transition.tsx'
 import LoadingPage from '@/pages/EntrancePage/EntrancePage.tsx'
-import HomePage from '@/pages/HomePage.tsx'
+import HomePage from '@/pages/HomePage/HomePage.tsx'
 import CardPage from '@/pages/CardPage.tsx'
 import IntroductionPage from '@/pages/IntroductionPage/IntroductionPage.tsx'
 
