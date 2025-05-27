@@ -11,6 +11,9 @@ interface PreloadProgressEvent {
   progress: number
   total: number
 }
+interface UserInfo extends UserStorageInfo {
+  cardsScore: number
+}
 export default class StoresStore {
   rootStoreRef: Store
 
@@ -24,7 +27,7 @@ export default class StoresStore {
     networkPreloadProgress: 0,
   }
 
-  userInfo: UserStorageInfo | undefined = undefined
+  userInfo: UserInfo | undefined = undefined
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
@@ -102,7 +105,10 @@ export default class StoresStore {
         }, 1000),
       )
       console.log('Network initialized with user info:', result)
-      this.userInfo = result
+      this.userInfo = {
+        ...result,
+        cardsScore: 5000,
+      }
       this.preloadResult.networkPreloadProgress = 1
     } catch (e) {
       console.log('Error initializing network:', e)

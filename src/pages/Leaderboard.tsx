@@ -1,26 +1,45 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import styles from '@/pages/Leaderboard.module.css'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { StarIcon, SparklesIcon, FireIcon } from '@heroicons/react/24/solid'
+import { useQuery } from '@tanstack/react-query'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
+
+// mock异步获取排行榜数据
+const fetchLeaderboard = async () => {
+  const originalData = Array.from({ length: 20 }).map((_, i) => ({
+    name: `用户${i + 1}`,
+    score: Math.floor(Math.random() * 10000),
+  }))
+  return new Promise<Array<{ name: string; score: number }>>((resolve) => {
+    setTimeout(() => {
+      resolve(originalData)
+    }, 1000)
+  })
+}
 
 const Leaderboard: React.FC = () => {
-  // 排行榜加载态
-  const [leaderboardLoading, setLeaderboardLoading] = useState(true)
-  useEffect(() => {
-    const timer = setTimeout(() => setLeaderboardLoading(false), 1500)
-    return () => clearTimeout(timer)
-  }, [])
+  const {
+    appStore: { userInfo },
+  } = useMobxStore()
+  const { data, isLoading: leaderboardLoading } = useQuery({
+    queryKey: ['leaderboard'],
+    queryFn: fetchLeaderboard,
+    refetchInterval: 10000, // 5分钟
+    refetchOnWindowFocus: false,
+  })
 
-  // mock排行榜数据（按分数降序排序）
-  const leaderboardData = Array.from({ length: 20 })
-    .map((_, i) => ({
-      rank: i + 1,
-      name: `用户${i + 1}`,
-      score: Math.floor(Math.random() * 10000),
-    }))
-    .sort((a, b) => b.score - a.score)
-    .map((item, idx) => ({ ...item, rank: idx + 1 }))
+  const leaderboardData = useMemo(() => {
+    if (!data || !userInfo) return []
+    const finalData = data.concat({
+      name: userInfo.email,
+      score: userInfo.cardsScore,
+    })
+    return finalData
+      .sort((a, b) => b.score - a.score)
+      .map((item, idx) => ({ ...item, rank: idx + 1 }))
+  }, [data, userInfo])
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center">
@@ -33,7 +52,7 @@ const Leaderboard: React.FC = () => {
           </div>
         ) : (
           <div className={styles.leaderboardContent}>
-            {leaderboardData.map((item) => {
+            {leaderboardData?.map((item) => {
               let rankClass = styles.leaderboardRankNormal
               let icon = null
               if (item.rank === 1) {
