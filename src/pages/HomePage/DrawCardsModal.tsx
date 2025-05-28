@@ -21,15 +21,26 @@ const CardsPart: React.FC<IDrawCardsModalProps> = ({ cards }) => {
 
   useGSAP(
     () => {
-      gsap.set(cardsRef.current, {
-        zIndex: (index) => 5 - Math.abs(index - 2), // 中间的卡片在最前面
-      })
-      const getYOffset = (index: number) => Math.abs(index - 2) * -30
-      gsap.to(cardsRef.current, {
-        z: (index) => (2 - Math.abs(index - 2)) * 100,
-        y: (index) => getYOffset(index),
-        duration: 1,
-      })
+      const getYOffset = (index: number) => (index % 2 === 0 ? '-15%' : '15%')
+      gsap.fromTo(
+        cardsRef.current,
+        {
+          autoAlpha: 0,
+          y: '100%',
+        },
+        {
+          autoAlpha: 1,
+          y: (index) => getYOffset(index),
+          stagger: {
+            // amount: cards.length * 0.1,
+            each: 0.4,
+            from: 'start',
+            grid: [1, cards.length],
+            axis: 'x',
+          },
+          duration: 0.6,
+        },
+      )
     },
     {
       dependencies: [],
@@ -40,12 +51,15 @@ const CardsPart: React.FC<IDrawCardsModalProps> = ({ cards }) => {
     <div className={styles.cardWrapper}>
       <div className={styles.cardContainer} ref={cardsContainerRef}>
         {cards.map((card, index) => (
-          <div ref={(node) => addCard(node, index)} key={card.id}>
+          <div
+            className={'will-change-transform'}
+            ref={(node) => addCard(node, index)}
+            key={card.id}
+          >
             <Card rarity={card.rarity}></Card>
           </div>
         ))}
       </div>
-      <div className={styles.cardFloor}></div>
     </div>
   )
 }
@@ -66,7 +80,10 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
           <Title></Title>
           <Description></Description>
           <Content className={styles.modalContent}>
+            <div>Congratulations</div>
             <CardsPart cards={cards}></CardsPart>
+            <div>Click to flip open your card.</div>
+            <div>Click blank to close</div>
           </Content>
         </DialogOverlay>
       </Portal>

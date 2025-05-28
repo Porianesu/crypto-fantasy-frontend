@@ -5,7 +5,7 @@
 }
 
 .modalContent {
-    @apply max-w-full top-1/2 left-1/2 absolute;
+    @apply max-w-full top-1/2 left-1/2 absolute flex flex-col items-center justify-center;
     transform: translate(-50%, -50%);
 }
 
@@ -14,12 +14,5 @@
 }
 
 .cardContainer {
-    @apply flex items-center justify-center perspective-[1000px];
-    transform: rotate3d(1, 0, 0, -15deg);
-    z-index: 1;
-}
-
-.cardFloor {
-    @apply w-[1200px] -mt-[240px] h-[440px] bg-amber-300;
-    transform: rotate3d(1, 0, 0, 65deg);
+    @apply flex items-center justify-center perspective-[1000px] gap-x-8;
 }
