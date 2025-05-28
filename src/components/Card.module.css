@@ -1,11 +1,5 @@
 @import "tailwindcss";
 
-.cardContainer {
-    @apply flex items-center justify-center;
-    width: 100vw;
-    height: 100vh;
-    perspective: 1000px;
-}
 
 .card {
     @apply p-0 cursor-pointer will-change-transform;
@@ -17,57 +11,41 @@
     box-sizing: border-box;
 }
 
-.cardNormal {
+.card0 {
     @apply bg-gray-400;
 }
 
-.cardRare {
+.card1 {
     @apply bg-blue-400;
 }
 
-.cardEpic {
+.card2 {
     @apply bg-purple-400;
 }
 
-.cardLegendary {
+.card3 {
     @apply bg-red-400;
 }
 
 .cardFront,
 .cardBack {
-    @apply flex flex-col items-center justify-center absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    font-size: 24px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    @apply flex w-full h-full absolute backface-hidden text-2xl  rounded-lg;
     box-sizing: border-box;
+
+    .cardContent {
+        @apply w-full h-full rounded-lg overflow-hidden;
+
+        & > img {
+            @apply w-full h-full object-cover ;
+        }
+    }
 }
 
 .cardFront {
-    background-color: #DDD;
+    @apply border border-[#ccc] bg-[#DDD];
 }
 
 .cardBack {
+    @apply p-0.5;
     transform: rotateY(180deg);
-}
-
-.isFlipped {
-    .card-front {
-        display: none;
-    }
-
-    .cardBack {
-        display: flex;
-    }
-}
-
-.particleCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
 }

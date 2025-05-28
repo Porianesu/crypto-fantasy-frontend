@@ -79,8 +79,8 @@ export default class StoresStore {
   preloadAssets = () => {
     if (!window.createjs?.PreloadJS) return
     return new Promise<object>((resolve, reject) => {
-      const queue = new createjs.LoadQueue(true)
-      queue.installPlugin(createjs.Sound)
+      const queue = new window.createjs.LoadQueue(true)
+      queue.installPlugin(window.createjs.Sound)
       queue.on(
         'complete',
         (event) => {

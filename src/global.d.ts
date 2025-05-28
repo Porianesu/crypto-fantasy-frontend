@@ -2,5 +2,5 @@
 import 'createjs'
 
 declare global {
-  const createjs: typeof import('createjs')
+  const createjs: typeof import('createjs') | undefined
 }

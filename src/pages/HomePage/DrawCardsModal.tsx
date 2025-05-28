@@ -54,9 +54,9 @@ const CardsPart: React.FC<IDrawCardsModalProps> = ({ cards }) => {
           <div
             className={'will-change-transform'}
             ref={(node) => addCard(node, index)}
-            key={card.id}
+            key={`${card.id}-${index}`}
           >
-            <Card rarity={card.rarity}></Card>
+            <Card card={card}></Card>
           </div>
         ))}
       </div>

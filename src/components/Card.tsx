@@ -6,18 +6,22 @@ import { useGSAP } from '@gsap/react'
 
 const timeRate = 1
 export enum CARD_RARITY {
-  NORMAL = 'Normal',
-  RARE = 'Rare',
-  EPIC = 'Epic',
-  LEGENDARY = 'Legendary',
+  NORMAL = 0,
+  RARE = 1,
+  EPIC = 2,
+  LEGENDARY = 3,
 }
 export interface ICardData {
-  id: string
+  name: string
+  id: number
+  description: string
+  imageUrl: string
   rarity: CARD_RARITY
+  score: number
 }
 export interface ICardProps {
   style?: CSSProperties
-  rarity?: CARD_RARITY
+  card: ICardData
 }
 
 const CardRotation_Once = [0.15, 0.25]
@@ -29,7 +33,7 @@ const RarityRotationMap = {
   [CARD_RARITY.EPIC]: CardRotation_ThreeTimes,
   [CARD_RARITY.LEGENDARY]: CardRotation_FiveTimes,
 }
-const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
+const Card: React.FC<ICardProps> = ({ style, card }) => {
   const cardIsFlipped = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
@@ -44,20 +48,12 @@ const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
             cardIsFlipped.current = true
           },
         })
-        const targetRotation = RarityRotationMap[rarity]
+        const targetRotation = RarityRotationMap[card.rarity]
         targetRotation.forEach((duration, index) => {
           tl.to(cardRef.current, {
             duration: duration * timeRate,
             rotationY: 90 * (index + 1),
             ease: 'none', // 设置匀速缓动
-            onComplete:
-              index % 2 === 0
-                ? () => {
-                    // 翻转到90度时切换内容
-                    console.log('翻过了', gsap.getProperty(cardRef.current, 'rotationY'))
-                    cardRef.current?.classList.toggle(styles.isFlipped)
-                  }
-                : undefined,
           })
         })
         tl.reverse()
@@ -97,10 +93,8 @@ const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
       duration: 0.3,
       scale: 1,
     })
-    flipCard()
   }
 
-  console.log('CardRarity', rarity)
   return (
     <div
       style={style}
@@ -111,8 +105,10 @@ const Card: React.FC<ICardProps> = ({ style, rarity = CARD_RARITY.NORMAL }) => {
       onMouseLeave={handleMouseLeave}
     >
       <div className={styles.cardFront}>卡牌背面</div>
-      <div className={classNames(styles.cardBack, styles[`card${rarity}`])}>
-        <div>{rarity}</div>
+      <div className={classNames(styles.cardBack, styles[`card${card.rarity}`])}>
+        <div className={styles.cardContent}>
+          <img alt={`${card.name}-${card.rarity}-image`} src={card.imageUrl}></img>
+        </div>
       </div>
     </div>
   )

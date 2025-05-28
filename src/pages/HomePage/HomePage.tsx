@@ -21,21 +21,11 @@ import PreloadElement, { type IPreloadElementHandle } from '@/components/Preload
 import { useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
-import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
-import dayjs from 'dayjs'
-
-const getRandomCard = (_: any, index: number) => {
-  const cardRarity =
-    Object.values(CARD_RARITY)[Math.floor(Math.random() * Object.values(CARD_RARITY).length)]
-  return {
-    id: `${dayjs().valueOf()}-${index}`,
-    rarity: cardRarity,
-  }
-}
+import { type ICardData } from '@/components/Card.tsx'
 
 function HomePage() {
   const {
-    appStore: { userInfo },
+    appStore: { userInfo, preloadQueue },
     modalStore: { changeDrawCardsModalVisible },
   } = useMobxStore()
   const [cards, setCards] = useState<Array<ICardData>>([])
@@ -46,10 +36,39 @@ function HomePage() {
   const assetAmount = 12345
   const expPercent = 68 // mock经验百分比
 
+  const getRandomCards = () => {
+    const cardsData = preloadQueue?.getResult('cardsData') as Array<ICardData>
+    if (!cardsData) alert('请先加载卡片数据')
+    return new Promise<Array<ICardData>>((resolve, reject) => {
+      const resultCards = Array.from({ length: 5 }, () => {
+        const randomIndex = Math.floor(Math.random() * cardsData.length)
+        return cardsData[randomIndex]
+      })
+      const cardsImagesPreloadQueue = new window.createjs.LoadQueue(true)
+      cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
+      cardsImagesPreloadQueue.on('complete', () => {
+        console.debug('当次抽卡卡片图片预加载完成')
+        resolve(resultCards)
+      })
+      cardsImagesPreloadQueue.on('error', reject)
+      cardsImagesPreloadQueue.loadManifest(
+        resultCards.map((item) => {
+          return {
+            id: `${item.id}-${item.rarity}`,
+            src: item.imageUrl,
+          }
+        }),
+      )
+    })
+  }
+
   const handleOpenPackage = () => {
     if (videoRef.current) {
       // 模拟获取5张随机卡片
-      setCards(Array.from({ length: 5 }, getRandomCard))
+      getRandomCards().then((cards) => {
+        console.debug('获取到的随机卡片:', cards)
+        setCards(cards)
+      })
       const containerWidth = gsap.getProperty(pageContainerRef.current, 'width')
       const containerHeight = gsap.getProperty(pageContainerRef.current, 'height')
       gsap.set(videoRef.current.getContainer(), {

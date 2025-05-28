@@ -1,0 +1,34 @@
+[
+  {
+    "name": "My Test Normal Card",
+    "id": 0,
+    "description": "This is a test normal card",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTI0dGR4NjBvbjJmNDNsNnBxOTJlb2NxNnFsNXdpbnB6Z2gxbWl5eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7rdlZedQWnO2k/giphy.gif",
+    "rarity": 0,
+    "score": 1000
+  },
+  {
+    "name": "My Test Rare Card",
+    "id": 1,
+    "description": "This is a test rare card",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnRpZ2xtN2NuMG9tNjN4NmVhcGJ6dXk2c3gyamx6YTV0anRwZWJxdSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/GS9pfaxQj5hPKFGGp8/giphy.gif",
+    "rarity": 1,
+    "score": 2000
+  },
+  {
+    "name": "My Test Epic Card",
+    "id": 2,
+    "description": "This is a test epic card",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/8Qpxs1yXhoS5KtFqJJ/giphy.gif",
+    "rarity": 2,
+    "score": 3000
+  },
+  {
+    "name": "My Test Legendary Card",
+    "id": 3,
+    "description": "This is a test legendary card",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/h06qlhGBIYvTQY4oPw/giphy.gif",
+    "rarity": 3,
+    "score": 4000
+  }
+]

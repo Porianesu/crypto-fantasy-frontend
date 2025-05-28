@@ -5,7 +5,7 @@
 }
 
 .modalContent {
-    @apply max-w-full top-1/2 left-1/2 absolute flex flex-col items-center justify-center;
+    @apply max-w-full top-1/2 left-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none;
     transform: translate(-50%, -50%);
 }
 
