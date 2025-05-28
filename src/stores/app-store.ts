@@ -5,6 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import { preloadPages } from '@/navigation/routes.tsx'
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
 import { getStorageItem } from '@/utils/common.ts'
+import type { ICardData } from '@/components/Card.tsx'
 
 interface PreloadProgressEvent {
   loaded: number
@@ -12,8 +13,9 @@ interface PreloadProgressEvent {
   total: number
 }
 interface UserInfo extends UserStorageInfo {
-  cardsScore: number
+  test?: string
 }
+
 export default class StoresStore {
   rootStoreRef: Store
 
@@ -29,6 +31,8 @@ export default class StoresStore {
 
   userInfo: UserInfo | undefined = undefined
 
+  cardsFormation: Array<ICardData> = []
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
@@ -38,6 +42,9 @@ export default class StoresStore {
       preloadProgress: computed,
       handlePreloadProgress: action,
       setIsAppLoading: action,
+      userInfo: observable,
+      cardsFormation: observable,
+      userCardsFormationScore: computed,
       initNetwork: flow.bound,
       initData: flow.bound,
       resetStore: action,
@@ -107,8 +114,8 @@ export default class StoresStore {
       console.log('Network initialized with user info:', result)
       this.userInfo = {
         ...result,
-        cardsScore: 5000,
       }
+      this.cardsFormation = []
       this.preloadResult.networkPreloadProgress = 1
     } catch (e) {
       console.log('Error initializing network:', e)
@@ -143,5 +150,11 @@ export default class StoresStore {
       .dividedBy(3)
       .decimalPlaces(2)
       .toNumber()
+  }
+
+  get userCardsFormationScore() {
+    return this.cardsFormation.reduce((total, card) => {
+      return total + card.score
+    }, 0)
   }
 }
