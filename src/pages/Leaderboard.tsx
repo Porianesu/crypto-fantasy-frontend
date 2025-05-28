@@ -21,7 +21,7 @@ const fetchLeaderboard = async () => {
 
 const Leaderboard: React.FC = () => {
   const {
-    appStore: { userInfo },
+    appStore: { userInfo, userCardsFormationScore },
   } = useMobxStore()
   const { data, isLoading: leaderboardLoading } = useQuery({
     queryKey: ['leaderboard'],
@@ -34,12 +34,12 @@ const Leaderboard: React.FC = () => {
     if (!data || !userInfo) return []
     const finalData = data.concat({
       name: userInfo.email,
-      score: userInfo.cardsScore,
+      score: userCardsFormationScore,
     })
     return finalData
       .sort((a, b) => b.score - a.score)
       .map((item, idx) => ({ ...item, rank: idx + 1 }))
-  }, [data, userInfo])
+  }, [data, userCardsFormationScore, userInfo])
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center">
