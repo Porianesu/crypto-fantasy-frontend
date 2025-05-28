@@ -18,14 +18,27 @@ import {
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/Leaderboard.tsx'
 import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { gsap } from 'gsap'
-import { useGSAP } from '@gsap/react'
+import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
+import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
+import dayjs from 'dayjs'
+
+const getRandomCard = (_: any, index: number) => {
+  const cardRarity =
+    Object.values(CARD_RARITY)[Math.floor(Math.random() * Object.values(CARD_RARITY).length)]
+  return {
+    id: `${dayjs().valueOf()}-${index}`,
+    rarity: cardRarity,
+  }
+}
 
 function HomePage() {
   const {
     appStore: { userInfo },
+    modalStore: { changeDrawCardsModalVisible },
   } = useMobxStore()
+  const [cards, setCards] = useState<Array<ICardData>>([])
   const pageContainerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<IPreloadElementHandle>(null)
   // mock数据
@@ -33,13 +46,10 @@ function HomePage() {
   const assetAmount = 12345
   const expPercent = 68 // mock经验百分比
 
-  useGSAP(() => {}, {
-    dependencies: [],
-    scope: pageContainerRef,
-  })
-
   const handleOpenPackage = () => {
     if (videoRef.current) {
+      // 模拟获取5张随机卡片
+      setCards(Array.from({ length: 5 }, getRandomCard))
       const containerWidth = gsap.getProperty(pageContainerRef.current, 'width')
       const containerHeight = gsap.getProperty(pageContainerRef.current, 'height')
       gsap.set(videoRef.current.getContainer(), {
@@ -61,6 +71,7 @@ function HomePage() {
               duration: 0.3,
               onComplete: () => {
                 gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
+                changeDrawCardsModalVisible(true)
               },
             })
           }
@@ -210,6 +221,7 @@ function HomePage() {
           ))}
         </div>
       </div>
+      {cards.length ? <DrawCardsModal cards={cards}></DrawCardsModal> : null}
     </div>
   )
 }

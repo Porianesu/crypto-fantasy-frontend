@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+.overlay {
+    @apply fixed inset-0 z-50 backdrop-blur-md;
+}
+
+.modalContent {
+    @apply max-w-full top-1/2 left-1/2 absolute;
+    transform: translate(-50%, -50%);
+}
+
+.cardWrapper {
+    @apply flex flex-col items-stretch perspective-[1000px] focus-visible:outline-none;
+}
+
+.cardContainer {
+    @apply flex items-center justify-center perspective-[1000px];
+    transform: rotate3d(1, 0, 0, -15deg);
+    z-index: 1;
+}
+
+.cardFloor {
+    @apply w-[1200px] -mt-[240px] h-[440px] bg-amber-300;
+    transform: rotate3d(1, 0, 0, 65deg);
+}

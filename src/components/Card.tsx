@@ -11,6 +11,10 @@ export enum CARD_RARITY {
   EPIC = 'Epic',
   LEGENDARY = 'Legendary',
 }
+export interface ICardData {
+  id: string
+  rarity: CARD_RARITY
+}
 export interface ICardProps {
   style?: CSSProperties
   rarity?: CARD_RARITY

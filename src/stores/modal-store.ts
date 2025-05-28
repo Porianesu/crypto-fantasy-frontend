@@ -6,12 +6,16 @@ export default class ModalStore {
 
   loginModalVisible = false
 
+  drawCardsModalVisible = false
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeObservable(this, {
       resetStore: action,
       loginModalVisible: observable,
       changeLoginModalVisible: action,
+      drawCardsModalVisible: observable,
+      changeDrawCardsModalVisible: action,
     })
   }
 
@@ -21,5 +25,9 @@ export default class ModalStore {
 
   changeLoginModalVisible = (newValue: boolean) => {
     this.loginModalVisible = newValue
+  }
+
+  changeDrawCardsModalVisible = (newValue: boolean) => {
+    this.drawCardsModalVisible = newValue
   }
 }
