@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+.overlay {
+    @apply fixed inset-0 z-50 backdrop-blur-md;
+}
+
+.modalContent {
+    @apply transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 absolute flex flex-col items-stretch focus-visible:outline-none bg-white rounded-xl shadow-lg p-6 w-3xl h-[80vh] mx-auto;
+
+    .header {
+        @apply shrink-0 relative flex items-center justify-center mb-6 min-h-[2.5rem];
+
+        .title {
+            @apply flex-1 text-center text-xl font-bold text-gray-800 select-none;
+        }
+
+        .closeBtn {
+            @apply p-2 rounded-full hover:bg-gray-100 transition-colors absolute right-0 top-1/2 -translate-y-1/2 mr-2;
+            @apply leading-none text-[#888] z-10;
+
+            &:hover {
+                @apply text-[#222];
+            }
+        }
+
+        .closeIcon {
+            @apply size-6;
+        }
+    }
+
+    .contentBody {
+        @apply grow shrink basis-0 overflow-hidden flex flex-row items-stretch;
+
+        .sidebar {
+            @apply shrink-0 flex flex-col gap-4 items-center py-4 px-2 bg-gray-50 rounded-lg mr-6 w-28;
+
+            .sidebarBtn {
+                @apply w-full py-2 px-0 rounded-lg text-base font-medium text-gray-500 transition-colors duration-150 hover:bg-gray-200 hover:text-gray-800 disabled:opacity-60 disabled:cursor-not-allowed;
+            }
+
+            .active {
+                @apply bg-blue-500 text-white shadow font-bold;
+            }
+        }
+
+        .mainContent {
+            @apply grow shrink basis-0 overflow-hidden bg-white rounded-lg p-4 flex flex-col items-stretch;
+
+            .cardsHeader {
+                @apply shrink-0 flex items-center mb-4 gap-4;
+
+                .searchBox {
+                    @apply flex items-center bg-gray-100 rounded-lg px-3 py-2 w-64;
+
+                    .searchIcon {
+                        @apply w-5 h-5 text-gray-400 mr-2;
+                    }
+
+                    .searchInput {
+                        @apply bg-transparent outline-none border-none w-full text-base text-gray-800 placeholder-gray-400;
+                    }
+                }
+
+                .raritySelect {
+                    @apply ml-auto px-3 py-2 rounded-lg bg-gray-100 text-base text-gray-700 border-none focus:ring-2 focus:ring-blue-300;
+                }
+            }
+
+            .cardsList {
+                @apply grow shrink basis-0 flex flex-col overflow-y-auto;
+
+                .emptyTip {
+                    @apply shrink grow basis-0 flex items-center justify-center text-gray-500 text-lg font-medium;
+                }
+
+                .cardsGrid {
+                    @apply grid grid-cols-3 gap-6 w-full;
+                }
+                .cardItem {
+                    @apply relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-[3/4] shadow-md;
+                    @apply transition-transform duration-150;
+                }
+                .cardImage {
+                    @apply w-full h-full object-cover pointer-events-none select-none;
+                }
+                .cardCount {
+                    @apply absolute right-2 bottom-2 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded-md pointer-events-none;
+                }
+                .rarity_NORMAL {
+                    @apply bg-gray-100;
+                }
+                .rarity_RARE {
+                    @apply bg-blue-100;
+                }
+                .rarity_EPIC {
+                    @apply bg-purple-200;
+                }
+                .rarity_LEGENDARY {
+                    @apply bg-yellow-200;
+                }
+            }
+        }
+    }
+}

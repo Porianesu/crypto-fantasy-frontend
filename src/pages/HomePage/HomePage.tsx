@@ -18,15 +18,16 @@ import {
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/Leaderboard.tsx'
 import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
-import { useRef, useState } from 'react'
+import React, { Suspense, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
 import { type ICardData } from '@/components/Card.tsx'
+const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
 function HomePage() {
   const {
     appStore: { userInfo, preloadQueue, addCardsToBag },
-    modalStore: { changeDrawCardsModalVisible },
+    modalStore: { changeDrawCardsModalVisible, changeCardsBagModalVisible },
   } = useMobxStore()
   const [cards, setCards] = useState<Array<ICardData>>([])
   const pageContainerRef = useRef<HTMLDivElement>(null)
@@ -145,7 +146,7 @@ function HomePage() {
       key: 'bag',
       label: 'Bag',
       icon: <ShoppingBagIcon className={styles.footerBtnIcon} />,
-      onClick: () => alert('进入背包'),
+      onClick: () => changeCardsBagModalVisible(true),
     },
     {
       key: 'shop',
@@ -255,6 +256,9 @@ function HomePage() {
         </div>
       </div>
       {cards.length ? <DrawCardsModal cards={cards}></DrawCardsModal> : null}
+      <Suspense fallback={null}>
+        <CardsBagModal></CardsBagModal>
+      </Suspense>
     </div>
   )
 }

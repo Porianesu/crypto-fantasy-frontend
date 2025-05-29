@@ -16,10 +16,6 @@ interface UserInfo extends UserStorageInfo {
   test?: string
 }
 
-interface IBagCardData extends ICardData {
-  count: number
-}
-
 export default class StoresStore {
   rootStoreRef: Store
 
@@ -37,7 +33,7 @@ export default class StoresStore {
 
   cardsFormation: Array<ICardData> = []
 
-  cardsBag: Array<IBagCardData> = []
+  cardsBag: Array<ICardData> = []
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
@@ -170,13 +166,6 @@ export default class StoresStore {
   }
 
   addCardsToBag = (cards: Array<ICardData>) => {
-    cards.forEach((card) => {
-      const existedCardIndex = this.cardsBag.findIndex((bagCard) => bagCard.id === card.id)
-      if (existedCardIndex !== -1) {
-        this.cardsBag[existedCardIndex].count += 1
-      } else {
-        this.cardsBag.push({ ...card, count: 1 })
-      }
-    })
+    this.cardsBag = this.cardsBag.concat(cards)
   }
 }
