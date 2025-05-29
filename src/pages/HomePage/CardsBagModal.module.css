@@ -44,7 +44,7 @@
         }
 
         .mainContent {
-            @apply grow shrink basis-0 overflow-hidden bg-white rounded-lg p-4 flex flex-col items-stretch;
+            @apply grow shrink basis-0 overflow-hidden bg-white rounded-lg p-4 flex flex-col items-stretch relative;
 
             .cardsHeader {
                 @apply shrink-0 flex items-center mb-4 gap-4;
@@ -77,7 +77,7 @@
                     @apply grid grid-cols-3 gap-6 w-full;
                 }
                 .cardItem {
-                    @apply relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-[3/4] shadow-md;
+                    @apply cursor-pointer relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-[3/4] shadow-md;
                     @apply transition-transform duration-150;
                 }
                 .cardImage {
@@ -85,6 +85,13 @@
                 }
                 .cardCount {
                     @apply absolute right-2 bottom-2 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded-md pointer-events-none;
+                }
+                .selectBtn {
+                    @apply absolute right-2 top-2 w-7 h-7 flex items-center justify-center rounded-full border-2 border-white bg-white/80 text-gray-400 text-lg font-bold shadow-md transition-all duration-150 z-10;
+                    @apply hover:bg-blue-100 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-60 disabled:cursor-not-allowed;
+                }
+                .selectedBtn {
+                    @apply bg-blue-500 text-white border-blue-500 shadow-lg;
                 }
                 .rarity_NORMAL {
                     @apply bg-gray-100;
@@ -97,6 +104,13 @@
                 }
                 .rarity_LEGENDARY {
                     @apply bg-yellow-200;
+                }
+            }
+
+            .footerBar {
+                @apply absolute left-0 right-0 bottom-0 flex justify-center pb-4 pointer-events-none;
+                .confirmBtn {
+                    @apply cursor-pointer pointer-events-auto px-8 py-2 rounded-lg bg-blue-500 text-white font-bold shadow-lg text-base transition-all duration-150 hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed;
                 }
             }
         }

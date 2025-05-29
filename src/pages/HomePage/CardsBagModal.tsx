@@ -14,6 +14,7 @@ import styles from './CardsBagModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
+import { ICardsBagModalType } from '@/stores/modal-store.ts'
 
 interface IBagCardData extends ICardData {
   count: number
@@ -29,8 +30,8 @@ const RarityOptions = [
 
 const CardsBagModal: React.FC = () => {
   const {
-    appStore: { cardsBag },
-    modalStore: { cardsBagModalVisible, changeCardsBagModalVisible, cardsBagModalType },
+    appStore: { cardsBag, cardsFormation, changeCardsFormation },
+    modalStore: { changeCardsBagModalData, cardsBagModalData },
   } = useMobxStore()
   const formattedCardsBag = useMemo<Array<IBagCardData>>(() => {
     // 格式化卡牌背包数据，统计每张卡牌的数量
@@ -47,6 +48,23 @@ const CardsBagModal: React.FC = () => {
 
   const [search, setSearch] = React.useState('')
   const [rarity, setRarity] = React.useState<CARD_RARITY | 'all'>('all')
+  const [selectedIds, setSelectedIds] = React.useState<number[]>(
+    cardsFormation.map((card) => card.id),
+  )
+  const isEdit = useMemo(
+    () => cardsBagModalData.type === ICardsBagModalType.EDIT,
+    [cardsBagModalData.type],
+  )
+
+  const handleSelect = (id: number) => {
+    if (!isEdit) return
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((sid) => sid !== id))
+    } else if (selectedIds.length < 5) {
+      setSelectedIds([...selectedIds, id])
+    }
+  }
+
   // 卡牌过滤（暂时只做空和全部展示）
   const filteredCards = useMemo(
     () =>
@@ -58,8 +76,34 @@ const CardsBagModal: React.FC = () => {
     [formattedCardsBag, rarity, search],
   )
 
+  const handleCardClick = (card: IBagCardData, selected?: boolean) => {
+    if (isEdit) {
+      if (!selected && selectedIds.length >= 5) {
+        return
+      }
+      handleSelect(card.id)
+    }
+  }
+
+  const handleConfirmButtonClick = () => {
+    if (isEdit) {
+      // 确认编辑，更新卡牌阵容
+      const selectedCards = formattedCardsBag.filter((card) => selectedIds.includes(card.id))
+      changeCardsFormation(selectedCards)
+    }
+    changeCardsBagModalData({ visible: false, type: ICardsBagModalType.VIEW })
+  }
+
   return (
-    <Dialog open={cardsBagModalVisible} onOpenChange={changeCardsBagModalVisible}>
+    <Dialog
+      open={cardsBagModalData.visible}
+      onOpenChange={(visible) => {
+        changeCardsBagModalData({
+          visible,
+          type: ICardsBagModalType.VIEW, // 关闭时重置为查看模式
+        })
+      }}
+    >
       <Portal>
         <DialogOverlay
           className={classNames(
@@ -123,18 +167,43 @@ const CardsBagModal: React.FC = () => {
                     <div className={styles.emptyTip}>no cards</div>
                   ) : (
                     <div className={styles.cardsGrid}>
-                      {filteredCards.map((card) => (
-                        <div
-                          key={card.id}
-                          className={classNames(styles.cardItem, styles[`rarity_${card.rarity}`])}
-                        >
-                          <img src={card.imageUrl} alt={card.name} className={styles.cardImage} />
-                          <div className={styles.cardCount}>x{card.count}</div>
-                        </div>
-                      ))}
+                      {filteredCards.map((card) => {
+                        const selected = selectedIds.includes(card.id)
+                        return (
+                          <div
+                            key={card.id}
+                            className={classNames(
+                              styles.cardItem,
+                              styles[`rarity_${card.rarity}`],
+                              isEdit && selected && styles.selectedCard,
+                            )}
+                            onClick={() => handleCardClick(card, selected)}
+                          >
+                            {isEdit && (
+                              <button
+                                className={classNames(styles.selectBtn, {
+                                  [styles.selectedBtn]: selected,
+                                })}
+                                type="button"
+                              >
+                                {selected ? '✓' : ''}
+                              </button>
+                            )}
+                            <img src={card.imageUrl} alt={card.name} className={styles.cardImage} />
+                            <div className={styles.cardCount}>x{card.count}</div>
+                          </div>
+                        )
+                      })}
                     </div>
                   )}
                 </div>
+                {isEdit && (
+                  <div className={styles.footerBar}>
+                    <button className={styles.confirmBtn} onClick={handleConfirmButtonClick}>
+                      Confirm
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </Content>

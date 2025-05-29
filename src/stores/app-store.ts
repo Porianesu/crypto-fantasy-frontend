@@ -46,6 +46,7 @@ export default class StoresStore {
       setIsAppLoading: action,
       userInfo: observable,
       cardsFormation: observable,
+      changeCardsFormation: action,
       userCardsFormationScore: computed,
       cardsBag: observable,
       addCardsToBag: action,
@@ -157,6 +158,10 @@ export default class StoresStore {
       .dividedBy(3)
       .decimalPlaces(2)
       .toNumber()
+  }
+
+  changeCardsFormation = (cards: Array<ICardData>) => {
+    this.cardsFormation = cards
   }
 
   get userCardsFormationScore() {

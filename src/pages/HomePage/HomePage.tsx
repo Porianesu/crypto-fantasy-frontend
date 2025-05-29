@@ -1,19 +1,19 @@
 import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
 import {
-  EnvelopeIcon,
-  Cog6ToothIcon,
-  BanknotesIcon,
-  PlusCircleIcon,
-  ShoppingBagIcon,
-  GiftIcon,
-  TrophyIcon,
-  ShoppingCartIcon,
-  CurrencyDollarIcon,
-  UsersIcon,
-  BookOpenIcon,
   ArrowRightCircleIcon,
   ArrowTopRightOnSquareIcon,
+  BanknotesIcon,
+  BookOpenIcon,
+  Cog6ToothIcon,
+  CurrencyDollarIcon,
+  EnvelopeIcon,
+  GiftIcon,
+  PlusCircleIcon,
+  ShoppingBagIcon,
+  ShoppingCartIcon,
+  TrophyIcon,
+  UsersIcon,
 } from '@heroicons/react/24/outline'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/Leaderboard.tsx'
@@ -22,12 +22,14 @@ import React, { Suspense, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
 import { type ICardData } from '@/components/Card.tsx'
+import { ICardsBagModalType } from '@/stores/modal-store.ts'
+
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
 function HomePage() {
   const {
     appStore: { userInfo, preloadQueue, addCardsToBag },
-    modalStore: { changeDrawCardsModalVisible, changeCardsBagModalVisible },
+    modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
   } = useMobxStore()
   const [cards, setCards] = useState<Array<ICardData>>([])
   const pageContainerRef = useRef<HTMLDivElement>(null)
@@ -125,7 +127,10 @@ function HomePage() {
     alert('充值入口')
   }
   const handleRightEntryClick = () => {
-    alert('跳转到另一个页面')
+    changeCardsBagModalData({
+      visible: true,
+      type: ICardsBagModalType.EDIT,
+    })
   }
 
   // footer按钮配置
@@ -146,7 +151,11 @@ function HomePage() {
       key: 'bag',
       label: 'Bag',
       icon: <ShoppingBagIcon className={styles.footerBtnIcon} />,
-      onClick: () => changeCardsBagModalVisible(true),
+      onClick: () =>
+        changeCardsBagModalData({
+          visible: true,
+          type: ICardsBagModalType.VIEW,
+        }),
     },
     {
       key: 'shop',
