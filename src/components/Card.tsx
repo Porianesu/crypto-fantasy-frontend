@@ -107,7 +107,7 @@ const Card: React.FC<ICardProps> = ({ style, card }) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
     >
-      <div className={styles.cardFront}>卡牌背面</div>
+      <div className={classNames(styles.cardFront)}>卡牌背面</div>
       <div className={classNames(styles.cardBack, styles[`card${card.rarity}`])}>
         <div className={styles.cardContent}>
           <img alt={`${card.name}-${card.rarity}-image`} src={card.imageUrl}></img>

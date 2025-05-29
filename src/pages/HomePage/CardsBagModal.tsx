@@ -15,6 +15,7 @@ import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
+import StaticCard from '@/components/StaticCard.tsx'
 
 interface IBagCardData extends ICardData {
   count: number
@@ -174,7 +175,6 @@ const CardsBagModal: React.FC = () => {
                             key={card.id}
                             className={classNames(
                               styles.cardItem,
-                              styles[`rarity_${card.rarity}`],
                               isEdit && selected && styles.selectedCard,
                             )}
                             onClick={() => handleCardClick(card, selected)}
@@ -189,7 +189,7 @@ const CardsBagModal: React.FC = () => {
                                 {selected ? '✓' : ''}
                               </button>
                             )}
-                            <img src={card.imageUrl} alt={card.name} className={styles.cardImage} />
+                            <StaticCard card={card}></StaticCard>
                             <div className={styles.cardCount}>x{card.count}</div>
                           </div>
                         )

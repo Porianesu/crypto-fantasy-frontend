@@ -8,6 +8,10 @@
 }
 
 @theme {
+    --color-rarity-normal: oklch(70.7% 0.022 261.325);
+    --color-rarity-rare: oklch(70.7% 0.165 254.624);
+    --color-rarity-epic: oklch(71.4% 0.203 305.504);
+    --color-rarity-legendary: oklch(70.4% 0.191 22.216);
     --font-duvall: "Duvall", "sans-serif";
     --animate-wiggle: wiggle 1s ease-in-out infinite;
     @keyframes wiggle {

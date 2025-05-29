@@ -23,12 +23,14 @@ import { gsap } from 'gsap'
 import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
 import { type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
+import classNames from 'classnames'
+import StaticCard from '@/components/StaticCard.tsx'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
 function HomePage() {
   const {
-    appStore: { userInfo, preloadQueue, addCardsToBag },
+    appStore: { userInfo, preloadQueue, addCardsToBag, cardsFormation },
     modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
   } = useMobxStore()
   const [cards, setCards] = useState<Array<ICardData>>([])
@@ -236,13 +238,25 @@ function HomePage() {
           </div>
           {/* 右侧入口展示 */}
           <div className="flex-1 flex flex-col items-center justify-center">
-            <button
-              className="w-4/5 h-3/4 bg-white/70 rounded-xl shadow flex flex-col items-center justify-center hover:bg-yellow-50 transition"
-              onClick={handleRightEntryClick}
-            >
-              <ArrowTopRightOnSquareIcon className="w-12 h-12 text-yellow-500 mb-2" />
-              <span className="text-gray-700 font-medium">另一个页面入口</span>
-            </button>
+            <div className={styles.formationSquare}>
+              {[0, 1, 2, 3, 4].map((idx) => {
+                const card = cardsFormation[idx]
+                return (
+                  <div
+                    key={idx}
+                    className={classNames(styles.formationCard, {
+                      [styles.emptyCard]: !card,
+                    })}
+                  >
+                    {card ? (
+                      <StaticCard card={card}></StaticCard>
+                    ) : (
+                      <span className={styles.addIcon}>+</span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>

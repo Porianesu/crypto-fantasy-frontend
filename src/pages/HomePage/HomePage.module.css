@@ -96,20 +96,62 @@
 
 .footer {
     @apply shrink-0 h-20 flex items-center justify-between px-8 bg-transparent;
+
+    .footerBtnGroup {
+        @apply flex flex-row space-x-6;
+    }
+
+    .footerBtn {
+        @apply flex flex-col items-center justify-center w-14 h-14 rounded-full bg-white/80 hover:bg-white shadow transition;
+    }
+
+    .footerBtnIcon {
+        @apply w-7 h-7 mb-1 text-yellow-600;
+    }
+
+    .footerBtnText {
+        @apply text-xs text-gray-800 font-medium;
+    }
 }
 
-.footerBtnGroup {
-    @apply flex flex-row space-x-6;
+.formationSquare {
+    @apply relative size-[400px] bg-white/80 rounded-2xl shadow-lg flex items-center justify-center;
+
+    .formationCard {
+        @apply absolute w-20 h-20 rounded-xl flex items-center justify-center overflow-hidden shadow-md transition-all duration-150;
+    }
+
+    .formationCardImg {
+        @apply w-full h-full object-cover pointer-events-none select-none rounded-xl;
+    }
+
+    .emptyCard {
+        @apply bg-gray-100 border-2 border-dashed border-gray-300 text-gray-400;
+    }
+
+    .addIcon {
+        @apply text-3xl font-bold text-gray-400 select-none;
+    }
 }
 
-.footerBtn {
-    @apply flex flex-col items-center justify-center w-14 h-14 rounded-full bg-white/80 hover:bg-white shadow transition;
+/* 五角星五角定位，顺时针从顶部开始 */
+.formationCard:nth-child(1) {
+    @apply left-1/2 -translate-x-1/2 top-2;
 }
 
-.footerBtnIcon {
-    @apply w-7 h-7 mb-1 text-yellow-600;
+.formationCard:nth-child(2) {
+    @apply right-2 top-12;
 }
 
-.footerBtnText {
-    @apply text-xs text-gray-800 font-medium;
+.formationCard:nth-child(3) {
+    @apply right-10 bottom-4;
 }
+
+.formationCard:nth-child(4) {
+    @apply left-10 bottom-4;
+}
+
+.formationCard:nth-child(5) {
+    @apply left-2 top-12;
+}
+

@@ -80,9 +80,6 @@
                     @apply cursor-pointer relative flex flex-col items-center justify-center rounded-xl overflow-hidden aspect-[3/4] shadow-md;
                     @apply transition-transform duration-150;
                 }
-                .cardImage {
-                    @apply w-full h-full object-cover pointer-events-none select-none;
-                }
                 .cardCount {
                     @apply absolute right-2 bottom-2 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded-md pointer-events-none;
                 }
@@ -92,18 +89,6 @@
                 }
                 .selectedBtn {
                     @apply bg-blue-500 text-white border-blue-500 shadow-lg;
-                }
-                .rarity_NORMAL {
-                    @apply bg-gray-100;
-                }
-                .rarity_RARE {
-                    @apply bg-blue-100;
-                }
-                .rarity_EPIC {
-                    @apply bg-purple-200;
-                }
-                .rarity_LEGENDARY {
-                    @apply bg-yellow-200;
                 }
             }
 

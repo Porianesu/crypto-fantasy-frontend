@@ -12,19 +12,19 @@
 }
 
 .card0 {
-    @apply bg-gray-400;
+    @apply bg-[var(--color-rarity-normal)];
 }
 
 .card1 {
-    @apply bg-blue-400;
+    @apply bg-[var(--color-rarity-rare)];
 }
 
 .card2 {
-    @apply bg-purple-400;
+    @apply bg-[var(--color-rarity-epic)];
 }
 
 .card3 {
-    @apply bg-red-400;
+    @apply bg-[var(--color-rarity-legendary)];
 }
 
 .cardFront,
