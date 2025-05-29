@@ -41,8 +41,21 @@ function HomePage() {
     if (!cardsData) alert('请先加载卡片数据')
     return new Promise<Array<ICardData>>((resolve, reject) => {
       const resultCards = Array.from({ length: 5 }, () => {
-        const randomIndex = Math.floor(Math.random() * cardsData.length)
-        return cardsData[randomIndex]
+        const cardTypeIndex = Math.floor(Math.random() * (cardsData.length / 4))
+        const cardRaritySeed = Math.random()
+        if (cardRaritySeed >= 0.995) {
+          // 0.5%概率抽到SSR
+          return cardsData[cardTypeIndex + 3]
+        } else if (cardRaritySeed >= 0.95) {
+          // 4.5%概率抽到SR
+          return cardsData[cardTypeIndex + 2]
+        } else if (cardRaritySeed >= 0.75) {
+          // 20%概率抽到R
+          return cardsData[cardTypeIndex + 1]
+        } else {
+          // 75%概率抽到N
+          return cardsData[cardTypeIndex]
+        }
       })
       const cardsImagesPreloadQueue = new window.createjs.LoadQueue(true)
       cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
