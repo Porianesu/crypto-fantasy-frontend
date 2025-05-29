@@ -1,6 +1,14 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: 'Duvall';
+    src: url('./assets/fonts/Duvall.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @theme {
+    --font-duvall: "Duvall", "sans-serif";
     --animate-wiggle: wiggle 1s ease-in-out infinite;
     @keyframes wiggle {
         0%,
@@ -31,6 +39,10 @@
             opacity: 0;
         }
     }
+}
+
+html {
+    @apply font-duvall tracking-wider;
 }
 
 :root {
