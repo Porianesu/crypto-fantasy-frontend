@@ -25,7 +25,7 @@ import { type ICardData } from '@/components/Card.tsx'
 
 function HomePage() {
   const {
-    appStore: { userInfo, preloadQueue },
+    appStore: { userInfo, preloadQueue, addCardsToBag },
     modalStore: { changeDrawCardsModalVisible },
   } = useMobxStore()
   const [cards, setCards] = useState<Array<ICardData>>([])
@@ -81,6 +81,7 @@ function HomePage() {
       getRandomCards().then((cards) => {
         console.debug('获取到的随机卡片:', cards)
         setCards(cards)
+        addCardsToBag(cards)
       })
       const containerWidth = gsap.getProperty(pageContainerRef.current, 'width')
       const containerHeight = gsap.getProperty(pageContainerRef.current, 'height')

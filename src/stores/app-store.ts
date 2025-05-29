@@ -16,6 +16,10 @@ interface UserInfo extends UserStorageInfo {
   test?: string
 }
 
+interface IBagCardData extends ICardData {
+  count: number
+}
+
 export default class StoresStore {
   rootStoreRef: Store
 
@@ -33,6 +37,8 @@ export default class StoresStore {
 
   cardsFormation: Array<ICardData> = []
 
+  cardsBag: Array<IBagCardData> = []
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
@@ -45,6 +51,8 @@ export default class StoresStore {
       userInfo: observable,
       cardsFormation: observable,
       userCardsFormationScore: computed,
+      cardsBag: observable,
+      addCardsToBag: action,
       initNetwork: flow.bound,
       initData: flow.bound,
       resetStore: action,
@@ -60,6 +68,8 @@ export default class StoresStore {
       networkPreloadProgress: 0,
     }
     this.userInfo = undefined
+    this.cardsFormation = []
+    this.cardsBag = []
   }
 
   loadCreateJS = (): Promise<void> => {
@@ -116,6 +126,7 @@ export default class StoresStore {
         ...result,
       }
       this.cardsFormation = []
+      this.cardsBag = []
       this.preloadResult.networkPreloadProgress = 1
     } catch (e) {
       console.log('Error initializing network:', e)
@@ -156,5 +167,16 @@ export default class StoresStore {
     return this.cardsFormation.reduce((total, card) => {
       return total + card.score
     }, 0)
+  }
+
+  addCardsToBag = (cards: Array<ICardData>) => {
+    cards.forEach((card) => {
+      const existedCardIndex = this.cardsBag.findIndex((bagCard) => bagCard.id === card.id)
+      if (existedCardIndex !== -1) {
+        this.cardsBag[existedCardIndex].count += 1
+      } else {
+        this.cardsBag.push({ ...card, count: 1 })
+      }
+    })
   }
 }
