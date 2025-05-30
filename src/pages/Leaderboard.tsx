@@ -100,6 +100,27 @@ const Leaderboard: React.FC = () => {
             })}
           </div>
         )}
+        {/* 当前用户信息绝对定位覆盖底部 */}
+        {userInfo && (
+          <div className={styles.leaderboardCurrentUserBar}>
+            <div className={styles.leaderboardCurrentUserAvatar}>
+              {/* 真实头像可替换此处 */}
+              <span className="text-lg text-gray-400">{userInfo.email?.[2] || 'U'}</span>
+            </div>
+            <div className={styles.leaderboardCurrentUserInfo}>
+              <div className={styles.leaderboardCurrentUserName}>{userInfo.email}</div>
+              <div className={styles.leaderboardCurrentUserScore}>
+                Score: <span className="text-yellow-600 font-bold">{userCardsFormationScore}</span>
+              </div>
+            </div>
+            <div className={styles.leaderboardCurrentUserRank}>
+              Rank:
+              <span className="text-yellow-600 font-bold">
+                {leaderboardData.find((item) => item.name === userInfo.email)?.rank || '-'}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

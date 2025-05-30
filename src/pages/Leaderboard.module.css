@@ -2,97 +2,134 @@
 
 .leaderboardWrapper {
     @apply w-3/5 h-3/4 bg-white/70 rounded-xl shadow flex flex-col items-center pt-8 relative;
-}
 
-.leaderboardTitle {
-    @apply absolute left-1/2 -top-5 -translate-x-1/2 bg-yellow-400 text-white px-6 py-2 rounded-xl shadow font-bold text-base border-4 border-white;
-    /* 让标签一半悬浮在外部框上方 */
-}
+    .leaderboardTitle {
+        @apply absolute left-1/2 -top-5 -translate-x-1/2 bg-yellow-400 text-white px-6 py-2 rounded-xl shadow font-bold text-base border-4 border-white;
+        /* 让标签一半悬浮在外部框上方 */
+    }
 
-.leaderboardContent {
-    @apply flex-1 w-full flex flex-col items-center justify-start text-gray-400 text-lg overflow-y-auto py-2;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE 10+ */
-}
+    .leaderboardContent {
+        @apply flex-1 w-full flex flex-col items-center justify-start text-gray-400 text-lg overflow-y-auto py-2;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+    }
 
-.leaderboardContent::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
-}
+    .leaderboardContent::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
 
-.leaderboardItem {
-    @apply w-11/12 flex flex-row items-stretch mb-3 rounded-xl overflow-hidden shadow bg-white;
-    min-height: 3.5rem;
-}
+    .leaderboardItem {
+        @apply w-11/12 flex flex-row items-stretch mb-3 rounded-xl overflow-hidden shadow bg-white;
+        min-height: 3.5rem;
 
-.leaderboardRank {
-    @apply flex items-center justify-center text-xl font-bold bg-yellow-300 text-yellow-900;
-    min-width: 3.5rem;
-    height: 100%;
-}
+        .leaderboardRank {
+            @apply flex items-center justify-center text-xl font-bold bg-yellow-300 text-yellow-900;
+            min-width: 3.5rem;
+            height: 100%;
 
-.leaderboardRankTop1 {
-    @apply bg-gradient-to-b from-yellow-400 to-yellow-200 text-white relative;
-}
+            &.leaderboardRankTop1 {
+                @apply bg-gradient-to-b from-yellow-400 to-yellow-200 text-white relative;
+            }
 
-.leaderboardRankTop2 {
-    @apply bg-gradient-to-b from-gray-400 to-gray-200 text-white relative;
-}
+            &.leaderboardRankTop2 {
+                @apply bg-gradient-to-b from-gray-400 to-gray-200 text-white relative;
+            }
 
-.leaderboardRankTop3 {
-    @apply bg-gradient-to-b from-orange-400 to-orange-200 text-white relative;
-}
+            &.leaderboardRankTop3 {
+                @apply bg-gradient-to-b from-orange-400 to-orange-200 text-white relative;
+            }
 
-.leaderboardRankIcon {
-    @apply absolute left-1/2 -top-4 -translate-x-1/2 w-9 h-9 rounded-full shadow-lg z-20;
-    background: white;
-    border: 2px solid #facc15; /* 金色边框 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* 让图标更突出 */
-}
+            &.leaderboardRankNormal {
+                @apply bg-yellow-300 text-yellow-900;
+            }
 
-.leaderboardRankText {
-    @apply relative z-10;
-}
+            .leaderboardRankIcon {
+                @apply absolute left-1/2 -top-4 -translate-x-1/2 w-9 h-9 rounded-full shadow-lg z-20;
+                background: white;
+                border: 2px solid #facc15; /* 金色边框 */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                /* 让图标更突出 */
+            }
 
-.leaderboardRankNormal {
-    @apply bg-yellow-300 text-yellow-900;
-}
+            .leaderboardRankText {
+                @apply relative z-10;
+            }
+        }
 
-.leaderboardInfo {
-    @apply flex-1 flex flex-row items-center px-4 py-2 bg-white text-gray-800;
-}
+        .leaderboardInfo {
+            @apply flex-1 flex flex-row items-center px-4 py-2 bg-white text-gray-800;
 
-.leaderboardAvatar {
-    @apply w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3 overflow-hidden;
-    /* 可放置图片或首字母 */
-}
+            .leaderboardAvatar {
+                @apply w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3 overflow-hidden;
+                /* 可放置图片或首字母 */
+            }
 
-.leaderboardUserInfo {
-    @apply flex flex-col justify-center;
-}
+            .leaderboardUserInfo {
+                @apply flex flex-col justify-center;
 
-.leaderboardUserName {
-    @apply font-semibold text-base text-gray-800 leading-tight;
-}
+                .leaderboardUserName {
+                    @apply font-semibold text-base text-gray-800 leading-tight;
+                }
 
-.leaderboardUserScore {
-    @apply text-sm text-gray-500 mt-1 leading-tight;
-}
+                .leaderboardUserScore {
+                    @apply text-sm text-gray-500 mt-1 leading-tight;
+                }
+            }
+        }
+    }
 
-.leaderboardLoading {
-    @apply flex-1 w-full flex flex-col items-center justify-center;
-    /* 半透明遮罩感 */
-    background: linear-gradient(135deg, #fffbe6 60%, #fef9c3 100%);
-    opacity: 0.85;
-    border-radius: 0.75rem;
-    position: relative;
-}
+    .leaderboardCurrentUserBar {
+        @apply flex flex-row items-center justify-between px-6 py-3 border border-yellow-200 shadow rounded-xl;
+        @apply bg-yellow-50/90;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        min-height: 4.5rem;
+        z-index: 10;
+        box-shadow: 0 4px 24px 0 rgba(251, 191, 36, 0.12);
+        /* 更明显的浮层感和底色 */
 
-.loadingSpinner {
-    @apply w-12 h-12 text-yellow-400;
-    animation: leaderboard-spin 1s linear infinite;
+        .leaderboardCurrentUserAvatar {
+            @apply w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mr-4 overflow-hidden;
+        }
+
+        .leaderboardCurrentUserInfo {
+            @apply flex flex-col justify-center flex-1;
+        }
+
+        .leaderboardCurrentUserName {
+            @apply font-semibold text-base text-gray-800 leading-tight;
+        }
+
+        .leaderboardCurrentUserScore {
+            @apply text-sm text-gray-500 mt-1 leading-tight;
+        }
+
+        .leaderboardCurrentUserRank {
+            @apply text-lg font-bold text-yellow-700 ml-6;
+        }
+    }
+
+    .leaderboardLoading {
+        @apply flex-1 w-full flex flex-col items-center justify-center;
+        /* 半透明遮罩感 */
+        background: linear-gradient(135deg, #fffbe6 60%, #fef9c3 100%);
+        opacity: 0.85;
+        border-radius: 0.75rem;
+        position: relative;
+
+        .loadingSpinner {
+            @apply w-12 h-12 text-yellow-400;
+            animation: leaderboard-spin 1s linear infinite;
+        }
+
+        .loadingText {
+            @apply mt-4 text-base text-yellow-700 font-semibold;
+        }
+    }
 }
 
 @keyframes leaderboard-spin {
@@ -101,6 +138,3 @@
     }
 }
 
-.loadingText {
-    @apply mt-4 text-base text-yellow-700 font-semibold;
-}
