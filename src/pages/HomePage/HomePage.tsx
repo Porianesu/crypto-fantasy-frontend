@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
 import {
   ArrowRightCircleIcon,
-  ArrowTopRightOnSquareIcon,
   BanknotesIcon,
   BookOpenIcon,
   Cog6ToothIcon,
@@ -23,14 +22,13 @@ import { gsap } from 'gsap'
 import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
 import { type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
-import classNames from 'classnames'
-import StaticCard from '@/components/StaticCard.tsx'
+import CardFormation from '@/pages/HomePage/CardFormation.tsx'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
 function HomePage() {
   const {
-    appStore: { userInfo, preloadQueue, addCardsToBag, cardsFormation },
+    appStore: { userInfo, preloadQueue, addCardsToBag },
     modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
   } = useMobxStore()
   const [cards, setCards] = useState<Array<ICardData>>([])
@@ -127,12 +125,6 @@ function HomePage() {
   }
   const handleRechargeClick = () => {
     alert('充值入口')
-  }
-  const handleRightEntryClick = () => {
-    changeCardsBagModalData({
-      visible: true,
-      type: ICardsBagModalType.EDIT,
-    })
   }
 
   // footer按钮配置
@@ -236,28 +228,8 @@ function HomePage() {
               <ArrowRightCircleIcon className="w-6 h-6 ml-2" />
             </button>
           </div>
-          {/* 右侧入口展示 */}
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className={styles.formationSquare}>
-              {[0, 1, 2, 3, 4].map((idx) => {
-                const card = cardsFormation[idx]
-                return (
-                  <div
-                    key={idx}
-                    className={classNames(styles.formationCard, {
-                      [styles.emptyCard]: !card,
-                    })}
-                  >
-                    {card ? (
-                      <StaticCard card={card}></StaticCard>
-                    ) : (
-                      <span className={styles.addIcon}>+</span>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
+          {/* 右侧卡组展示 */}
+          <CardFormation></CardFormation>
         </div>
       </div>
       <div className={styles.footer}>

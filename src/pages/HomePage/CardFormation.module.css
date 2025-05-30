@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+.formationContainer {
+    @apply flex-1 flex flex-col items-center justify-center;
+
+    .formationSquare {
+        @apply relative size-[500px] bg-white/80 rounded-2xl shadow-lg flex items-center justify-center;
+
+        .formationCard {
+            @apply cursor-pointer absolute w-[198px] h-[264px] rounded-xl flex items-center justify-center overflow-hidden shadow-md transition-all duration-150;
+            @apply left-1/2 top-1/2;
+        }
+
+        .formationCardImg {
+            @apply w-full h-full object-cover pointer-events-none select-none rounded-xl;
+        }
+
+        .emptyCard {
+            @apply bg-gray-100 border-2 border-dashed border-gray-300 text-gray-400;
+        }
+
+        .addIcon {
+            @apply text-3xl font-bold text-gray-400 select-none;
+        }
+
+        /* 五角星五角定位，顺时针从顶部开始，且卡片始终与屏幕x轴垂直 */
+        .formationCard:nth-child(1) {
+            @apply rotate-0;
+            transform: translate(-50%, -50%) rotate(0deg) translateY(-238px) rotate(-0deg);
+        }
+
+        .formationCard:nth-child(2) {
+            @apply rotate-0;
+            transform: translate(-50%, -50%) rotate(72deg) translateY(-238px) rotate(-72deg);
+        }
+
+        .formationCard:nth-child(3) {
+            @apply rotate-0;
+            transform: translate(-50%, -50%) rotate(144deg) translateY(-238px) rotate(-144deg);
+        }
+
+        .formationCard:nth-child(4) {
+            @apply rotate-0;
+            transform: translate(-50%, -50%) rotate(216deg) translateY(-238px) rotate(-216deg);
+        }
+
+        .formationCard:nth-child(5) {
+            @apply rotate-0;
+            transform: translate(-50%, -50%) rotate(288deg) translateY(-232px) rotate(-288deg);
+        }
+    }
+}
