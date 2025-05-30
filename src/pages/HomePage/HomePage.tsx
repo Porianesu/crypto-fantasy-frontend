@@ -23,6 +23,8 @@ import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
 import { type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardFormation from '@/pages/HomePage/CardFormation.tsx'
+import { useNavigate } from 'react-router-dom'
+import { getGalleryPath } from '@/navigation/routes.tsx'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
@@ -31,6 +33,7 @@ function HomePage() {
     appStore: { userInfo, preloadQueue, addCardsToBag },
     modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
   } = useMobxStore()
+  const navigate = useNavigate()
   const [cards, setCards] = useState<Array<ICardData>>([])
   const pageContainerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<IPreloadElementHandle>(null)
@@ -136,10 +139,10 @@ function HomePage() {
       onClick: () => alert('进入市场'),
     },
     {
-      key: 'arch',
-      label: 'Arch',
+      key: 'gallery',
+      label: 'Gallery',
       icon: <TrophyIcon className={styles.footerBtnIcon} />,
-      onClick: () => alert('进入成就'),
+      onClick: () => navigate(getGalleryPath()),
     },
     {
       key: 'bag',

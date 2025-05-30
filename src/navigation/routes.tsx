@@ -4,7 +4,7 @@ import { getStoreRef } from '@/stores/StoreProvider.tsx'
 export const ROOT_PATH = '/'
 export const HOME_PATH = '/home'
 export const ENTRANCE_PATH = '/entrance'
-export const GALLERY_PATH = '/gallery/:cardId'
+export const GALLERY_PATH = '/gallery/:cardId?'
 export const INTRODUCTION_PATH = '/introduction'
 
 export const getHomePath = () => {
