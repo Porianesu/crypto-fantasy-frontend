@@ -13,7 +13,9 @@ interface PreloadProgressEvent {
   total: number
 }
 interface UserInfo extends UserStorageInfo {
-  test?: string
+  avatarUrl: string
+  assetAmount: number
+  expPercent: number
 }
 
 export default class StoresStore {
@@ -121,6 +123,9 @@ export default class StoresStore {
       console.log('Network initialized with user info:', result)
       this.userInfo = {
         ...result,
+        avatarUrl: 'https://via.placeholder.com/40',
+        assetAmount: 12345,
+        expPercent: 68,
       }
       this.cardsFormation = []
       this.cardsBag = []

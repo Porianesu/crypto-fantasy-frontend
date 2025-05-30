@@ -87,6 +87,7 @@ const CardsBagModal: React.FC = () => {
       }
       handleSelect(card.id)
     } else {
+      changeCardsBagModalData({ visible: false, type: ICardsBagModalType.VIEW })
       navigate(getGalleryPath(card.id))
     }
   }

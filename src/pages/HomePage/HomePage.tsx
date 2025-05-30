@@ -37,10 +37,6 @@ function HomePage() {
   const [cards, setCards] = useState<Array<ICardData>>([])
   const pageContainerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<IPreloadElementHandle>(null)
-  // mock数据
-  const avatarUrl = 'https://via.placeholder.com/40'
-  const assetAmount = 12345
-  const expPercent = 68 // mock经验百分比
 
   const getRandomCards = () => {
     return new Promise<Array<ICardData>>((resolve, reject) => {
@@ -181,39 +177,41 @@ function HomePage() {
         id={'remoteVideo'}
         className={styles.videoContainer}
       ></PreloadElement>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <img src={avatarUrl} alt="avatar" className={styles.avatar} />
-          <div>
-            <span className={styles.username}>{userInfo?.email}</span>
-            {/* 经验进度条 */}
-            <div className={styles.expBarWrapper}>
-              <div className={styles.expBarBg}>
-                <div className={styles.expBarFill} style={{ width: `${expPercent}%` }} />
+      {userInfo ? (
+        <div className={styles.header}>
+          <div className={styles.headerLeft}>
+            <img src={userInfo.avatarUrl} alt="avatar" className={styles.avatar} />
+            <div>
+              <span className={styles.username}>{userInfo?.email}</span>
+              {/* 经验进度条 */}
+              <div className={styles.expBarWrapper}>
+                <div className={styles.expBarBg}>
+                  <div className={styles.expBarFill} style={{ width: `${userInfo.expPercent}%` }} />
+                </div>
+                <span className={styles.expBarText}>{userInfo.expPercent}%</span>
               </div>
-              <span className={styles.expBarText}>{expPercent}%</span>
-            </div>
-            {/* 图标按钮 */}
-            <div className={styles.iconBtnRow}>
-              <button className={styles.iconBtn} onClick={handleMailClick} aria-label="通知">
-                <EnvelopeIcon className={styles.iconSvg + ' text-blue-500'} />
-              </button>
-              <button className={styles.iconBtn} onClick={handleSettingClick} aria-label="设置">
-                <Cog6ToothIcon className={styles.iconSvg + ' text-gray-500'} />
-              </button>
+              {/* 图标按钮 */}
+              <div className={styles.iconBtnRow}>
+                <button className={styles.iconBtn} onClick={handleMailClick} aria-label="通知">
+                  <EnvelopeIcon className={styles.iconSvg + ' text-blue-500'} />
+                </button>
+                <button className={styles.iconBtn} onClick={handleSettingClick} aria-label="设置">
+                  <Cog6ToothIcon className={styles.iconSvg + ' text-gray-500'} />
+                </button>
+              </div>
             </div>
           </div>
+          <div className={styles.headerRightBox}>
+            <span className={styles.assetIcon}>
+              <BanknotesIcon className={styles.assetSvg + ' text-yellow-500'} />
+            </span>
+            <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
+            <button className={styles.rechargeBtn} onClick={handleRechargeClick} aria-label="充值">
+              <PlusCircleIcon className={styles.rechargeSvg + ' text-yellow-600'} />
+            </button>
+          </div>
         </div>
-        <div className={styles.headerRightBox}>
-          <span className={styles.assetIcon}>
-            <BanknotesIcon className={styles.assetSvg + ' text-yellow-500'} />
-          </span>
-          <span className={styles.assetAmount}>{assetAmount}</span>
-          <button className={styles.rechargeBtn} onClick={handleRechargeClick} aria-label="充值">
-            <PlusCircleIcon className={styles.rechargeSvg + ' text-yellow-600'} />
-          </button>
-        </div>
-      </div>
+      ) : null}
       <div className={styles.body}>
         <div className="w-full h-full flex flex-1 flex-row items-stretch justify-between">
           {/* 左侧列表/排行榜 */}
