@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import React, { useMemo } from 'react'
-import styles from '@/pages/Leaderboard.module.css'
+import styles from '@/pages/HomePage/Leaderboard.module.css'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { StarIcon, SparklesIcon, FireIcon } from '@heroicons/react/24/solid'
 import { useQuery } from '@tanstack/react-query'

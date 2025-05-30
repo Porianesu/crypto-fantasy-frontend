@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite'
 import React from 'react'
-import styles from '@/pages/CardPage.module.css'
+import styles from './GalleryPage.module.css'
 
-const CardPage: React.FC = () => {
+const GalleryPage: React.FC = () => {
   return <div className={styles.pageContainer}></div>
 }
-export default observer(CardPage)
+export default observer(GalleryPage)

@@ -3,8 +3,8 @@ import './index.css'
 import { StoreProvider } from '@/stores/StoreProvider.tsx'
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom'
 import {
-  CARD_PATH,
-  cardPageLoader,
+  GALLERY_PATH,
+  galleryPageLoader,
   ENTRANCE_PATH,
   HOME_PATH,
   homePageLoader,
@@ -18,7 +18,7 @@ import PageContainer from '@/components/PageContainer.tsx'
 import TransitionComponent from '@/components/Transition.tsx'
 import EntrancePage from '@/pages/EntrancePage/EntrancePage.tsx'
 const HomePage = React.lazy(() => import('@/pages/HomePage/HomePage.tsx'))
-const CardPage = React.lazy(() => import('@/pages/CardPage.tsx'))
+const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx'))
 const IntroductionPage = React.lazy(() => import('@/pages/IntroductionPage/IntroductionPage.tsx'))
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
@@ -62,12 +62,12 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: CARD_PATH,
-        loader: cardPageLoader,
+        path: GALLERY_PATH,
+        loader: galleryPageLoader,
         element: (
           <TransitionComponent>
             <CommonPageSuspense>
-              <CardPage></CardPage>
+              <GalleryPage></GalleryPage>
             </CommonPageSuspense>
           </TransitionComponent>
         ),

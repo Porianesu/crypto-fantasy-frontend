@@ -15,7 +15,7 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import Leaderboard from '@/pages/Leaderboard.tsx'
+import Leaderboard from '@/pages/HomePage/Leaderboard.tsx'
 import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
 import React, { Suspense, useRef, useState } from 'react'
 import { gsap } from 'gsap'

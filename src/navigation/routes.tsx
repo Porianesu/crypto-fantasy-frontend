@@ -4,7 +4,7 @@ import { getStoreRef } from '@/stores/StoreProvider.tsx'
 export const ROOT_PATH = '/'
 export const HOME_PATH = '/home'
 export const ENTRANCE_PATH = '/entrance'
-export const CARD_PATH = '/card'
+export const GALLERY_PATH = '/gallery/:cardId'
 export const INTRODUCTION_PATH = '/introduction'
 
 export const getHomePath = () => {
@@ -15,8 +15,8 @@ export const getEntrancePath = () => {
   return generatePath(ENTRANCE_PATH)
 }
 
-export const getCardPath = () => {
-  return generatePath(CARD_PATH)
+export const getGalleryPath = (cardId?: string) => {
+  return generatePath(GALLERY_PATH, { cardId: cardId || null })
 }
 
 export const getIntroductionPath = () => {
@@ -34,7 +34,7 @@ export const homePageLoader = () => {
   return null
 }
 
-export const cardPageLoader = () => {
+export const galleryPageLoader = () => {
   if (checkIsAppLoading()) {
     return redirect(getEntrancePath())
   }
@@ -50,7 +50,7 @@ export const introductionPageLoader = () => {
 
 export const preloadPages = async () => {
   try {
-    await import('@/pages/CardPage.tsx')
+    await import('@/pages/GalleryPage/GalleryPage.tsx')
     await import('@/pages/HomePage/HomePage.tsx')
     await import('@/pages/IntroductionPage/IntroductionPage.tsx')
   } catch (e) {
