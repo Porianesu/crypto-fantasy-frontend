@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .cardContainer {
-    @apply w-full h-full aspect-[3/4] p-1;
+    @apply w-full h-full aspect-[3/4] p-1 rounded-lg;
 
     .cardImage {
         @apply w-full h-full object-cover pointer-events-none select-none rounded-lg;

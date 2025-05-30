@@ -1,13 +1,80 @@
 @import "tailwindcss";
 
 .pageContainer {
-    @apply flex flex-col items-center w-full h-full pt-64 bg-black overflow-x-hidden overflow-y-auto grow shrink basis-0;
+    @apply grow shrink basis-0 overflow-hidden flex flex-col items-stretch;
+    @apply bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300;
+    /* 柔和的淡黄渐变背景 */
+
     .pageHeader {
+        @apply shrink-0 flex items-center justify-between px-6 py-4 bg-white/80 shadow rounded-b-2xl relative z-10;
+        @apply min-h-16;
 
+        .backButton {
+            @apply flex items-center justify-center w-10 h-10 rounded-full hover:bg-yellow-100 transition-colors mr-2;
+
+            .backIcon {
+                @apply w-6 h-6 text-yellow-600;
+            }
+        }
+
+        .headerTitle {
+            @apply text-2xl font-bold text-gray-800 flex-1 text-center select-none tracking-wide;
+        }
     }
-    .pageBody {
 
+    .pageBody {
+        @apply grow shrink basis-0 overflow-hidden flex items-stretch;
+
+        .cardsPart {
+            @apply grow shrink basis-0 overflow-hidden flex flex-col items-stretch bg-white/70 rounded-2xl shadow-lg m-4;
+
+            .toolContainer {
+                @apply flex flex-row items-center justify-between px-6 py-4 gap-4 shrink-0 border-b border-purple-100 bg-transparent;
+
+                .searchBoxWrapper {
+                    @apply flex flex-row items-center bg-gray-100 rounded-lg px-3 py-2 w-64 shadow-sm;
+
+                    .searchIcon {
+                        @apply mr-2 flex items-center;
+                    }
+
+                    .searchInput {
+                        @apply bg-transparent outline-none border-none w-full text-base text-gray-700 placeholder-gray-400;
+                    }
+                }
+
+                .raritySelect {
+                    @apply bg-gray-100 rounded-lg px-4 py-2 text-base text-gray-700 border-none shadow-sm focus:ring-2 focus:ring-yellow-300 transition;
+                }
+            }
+
+            .cardListWrapper {
+                @apply grow shrink basis-0 overflow-hidden px-6 py-4 flex items-stretch justify-center;
+
+                .loadingWrapper {
+                    @apply w-full flex items-center justify-center text-lg text-yellow-600;
+                }
+
+                .cardListContainer {
+                    @apply max-w-[1440px] shrink grow basis-0 overflow-y-auto overflow-x-hidden flex flex-wrap gap-4 content-start justify-start;
+
+                    .cardItem {
+                        @apply flex flex-col items-center bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer border border-transparent hover:border-yellow-300 w-[270px] h-[360px] p-2.5;
+                    }
+                }
+            }
+        }
+
+        .detailPartWrapper {
+            @apply shrink-0 flex flex-col items-stretch bg-white/90 rounded-2xl shadow-lg m-4 transition-all duration-300 w-[500px] overflow-hidden;
+
+            .detailImagePart {
+                @apply shrink-0 flex flex-col items-stretch bg-gray-50;
+            }
+
+            .detailInfoPart {
+                @apply grow shrink basis-0 overflow-x-hidden overflow-y-hidden flex flex-col justify-center px-8 py-8;
+            }
+        }
     }
 }
-
-
