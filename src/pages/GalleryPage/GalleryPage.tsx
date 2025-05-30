@@ -6,8 +6,11 @@ import { useParams } from 'react-router-dom'
 const GalleryPage: React.FC = () => {
   const { cardId } = useParams()
 
-  console.log('GalleryPage cardId:', cardId)
-
-  return <div className={styles.pageContainer}></div>
+  return (
+    <div className={styles.pageContainer}>
+      <div className={styles.pageHeader}></div>
+      <div className={styles.pageBody}></div>
+    </div>
+  )
 }
 export default observer(GalleryPage)

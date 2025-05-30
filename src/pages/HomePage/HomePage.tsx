@@ -43,11 +43,11 @@ function HomePage() {
   const expPercent = 68 // mock经验百分比
 
   const getRandomCards = () => {
-    const cardsData = preloadQueue?.getResult('cardsData') as Array<ICardData>
-    if (!cardsData) alert('请先加载卡片数据')
     return new Promise<Array<ICardData>>((resolve, reject) => {
+      const cardsData = preloadQueue?.getResult('cardsData') as Array<ICardData>
+      if (!cardsData) reject(new Error('未找到卡片数据'))
       const resultCards = Array.from({ length: 5 }, () => {
-        const cardTypeIndex = Math.floor(Math.random() * (cardsData.length / 4))
+        const cardTypeIndex = Math.floor(Math.random() * (cardsData.length / 4)) * 4
         const cardRaritySeed = Math.random()
         if (cardRaritySeed >= 0.995) {
           // 0.5%概率抽到SSR

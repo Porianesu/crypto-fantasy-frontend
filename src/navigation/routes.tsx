@@ -15,8 +15,8 @@ export const getEntrancePath = () => {
   return generatePath(ENTRANCE_PATH)
 }
 
-export const getGalleryPath = (cardId?: string) => {
-  return generatePath(GALLERY_PATH, { cardId: cardId || null })
+export const getGalleryPath = (cardId?: number) => {
+  return generatePath(GALLERY_PATH, { cardId: `${cardId}` || null })
 }
 
 export const getIntroductionPath = () => {

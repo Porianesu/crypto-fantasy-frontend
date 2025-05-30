@@ -5,26 +5,18 @@ import classNames from 'classnames'
 import StaticCard from '@/components/StaticCard.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import type { ICardData } from '@/components/Card.tsx'
-import { useNavigate } from 'react-router-dom'
-import { getGalleryPath } from '@/navigation/routes.tsx'
 
 const CardFormation: React.FC = () => {
   const {
     appStore: { cardsFormation },
     modalStore: { changeCardsBagModalData },
   } = useMobxStore()
-  const navigate = useNavigate()
 
-  const handleCardClick = (card?: ICardData) => {
-    if (card) {
-      navigate(getGalleryPath(`${card.id}`))
-    } else {
-      changeCardsBagModalData({
-        visible: true,
-        type: ICardsBagModalType.EDIT,
-      })
-    }
+  const handleCardClick = () => {
+    changeCardsBagModalData({
+      visible: true,
+      type: ICardsBagModalType.EDIT,
+    })
   }
 
   return (
@@ -38,7 +30,7 @@ const CardFormation: React.FC = () => {
               className={classNames(styles.formationCard, {
                 [styles.emptyCard]: !card,
               })}
-              onClick={() => handleCardClick(card)}
+              onClick={handleCardClick}
             >
               {card ? (
                 <StaticCard card={card}></StaticCard>

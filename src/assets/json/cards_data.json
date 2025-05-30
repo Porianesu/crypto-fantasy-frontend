@@ -2,7 +2,7 @@
   {
     "name": "Michael Scott",
     "id": 0,
-    "description": "This is a test normal card",
+    "description": "This is a test normal card of Michael Scott",
     "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTI0dGR4NjBvbjJmNDNsNnBxOTJlb2NxNnFsNXdpbnB6Z2gxbWl5eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7rdlZedQWnO2k/giphy.gif",
     "rarity": 0,
     "score": 1000,
@@ -11,9 +11,53 @@
     "avg_duration": 97210000
   },
   {
-    "name": "Dwight Schrute",
+    "name": "Michael Scott",
     "id": 1,
-    "description": "This is a test rare card",
+    "description": "This is a test rare card of Michael Scott",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTI0dGR4NjBvbjJmNDNsNnBxOTJlb2NxNnFsNXdpbnB6Z2gxbWl5eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7rdlZedQWnO2k/giphy.gif",
+    "rarity": 1,
+    "score": 2000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Michael Scott",
+    "id": 2,
+    "description": "This is a test epic card of Michael Scott",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTI0dGR4NjBvbjJmNDNsNnBxOTJlb2NxNnFsNXdpbnB6Z2gxbWl5eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7rdlZedQWnO2k/giphy.gif",
+    "rarity": 2,
+    "score": 3000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Michael Scott",
+    "id": 3,
+    "description": "This is a test legendary card of Michael Scott",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTI0dGR4NjBvbjJmNDNsNnBxOTJlb2NxNnFsNXdpbnB6Z2gxbWl5eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7rdlZedQWnO2k/giphy.gif",
+    "rarity": 3,
+    "score": 4000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Dwight Schrute",
+    "id": 4,
+    "description": "This is a test normal card of Dwight Schrute",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnRpZ2xtN2NuMG9tNjN4NmVhcGJ6dXk2c3gyamx6YTV0anRwZWJxdSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/GS9pfaxQj5hPKFGGp8/giphy.gif",
+    "rarity": 0,
+    "score": 1000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Dwight Schrute",
+    "id": 5,
+    "description": "This is a test rare card of Dwight Schrute",
     "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnRpZ2xtN2NuMG9tNjN4NmVhcGJ6dXk2c3gyamx6YTV0anRwZWJxdSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/GS9pfaxQj5hPKFGGp8/giphy.gif",
     "rarity": 1,
     "score": 2000,
@@ -22,9 +66,53 @@
     "avg_duration": 97210000
   },
   {
+    "name": "Dwight Schrute",
+    "id": 6,
+    "description": "This is a test epic card of Dwight Schrute",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnRpZ2xtN2NuMG9tNjN4NmVhcGJ6dXk2c3gyamx6YTV0anRwZWJxdSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/GS9pfaxQj5hPKFGGp8/giphy.gif",
+    "rarity": 2,
+    "score": 3000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Dwight Schrute",
+    "id": 7,
+    "description": "This is a test legendary card of Dwight Schrute",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnRpZ2xtN2NuMG9tNjN4NmVhcGJ6dXk2c3gyamx6YTV0anRwZWJxdSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/GS9pfaxQj5hPKFGGp8/giphy.gif",
+    "rarity": 3,
+    "score": 4000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
     "name": "Pam Beesly",
-    "id": 2,
-    "description": "This is a test epic card",
+    "id": 8,
+    "description": "This is a test normal card of Pam Beesly",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/8Qpxs1yXhoS5KtFqJJ/giphy.gif",
+    "rarity": 0,
+    "score": 1000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Pam Beesly",
+    "id": 9,
+    "description": "This is a test rare card of Pam Beesly",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/8Qpxs1yXhoS5KtFqJJ/giphy.gif",
+    "rarity": 1,
+    "score": 2000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Pam Beesly",
+    "id": 10,
+    "description": "This is a test epic card of Pam Beesly",
     "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/8Qpxs1yXhoS5KtFqJJ/giphy.gif",
     "rarity": 2,
     "score": 3000,
@@ -33,9 +121,53 @@
     "avg_duration": 97210000
   },
   {
+    "name": "Pam Beesly",
+    "id": 11,
+    "description": "This is a test legendary card of Pam Beesly",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/8Qpxs1yXhoS5KtFqJJ/giphy.gif",
+    "rarity": 3,
+    "score": 4000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
     "name": "Jim Halpert",
-    "id": 3,
-    "description": "This is a test legendary card",
+    "id": 12,
+    "description": "This is a test normal card of Jim Halpert",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/h06qlhGBIYvTQY4oPw/giphy.gif",
+    "rarity": 0,
+    "score": 1000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Jim Halpert",
+    "id": 13,
+    "description": "This is a test rare card of Jim Halpert",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/h06qlhGBIYvTQY4oPw/giphy.gif",
+    "rarity": 1,
+    "score": 2000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Jim Halpert",
+    "id": 14,
+    "description": "This is a test epic card of Jim Halpert",
+    "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/h06qlhGBIYvTQY4oPw/giphy.gif",
+    "rarity": 2,
+    "score": 3000,
+    "30_pnl": 0.6236,
+    "30_win_rate": 0.6909,
+    "avg_duration": 97210000
+  },
+  {
+    "name": "Jim Halpert",
+    "id": 15,
+    "description": "This is a test legendary card of Jim Halpert",
     "imageUrl": "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzE2am82cWNuNDhkaGFqbHd6dTJ4YXFpenNuaXFsaHIyYTNmaDJxcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/h06qlhGBIYvTQY4oPw/giphy.gif",
     "rarity": 3,
     "score": 4000,

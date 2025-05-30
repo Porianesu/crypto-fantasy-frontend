@@ -16,6 +16,8 @@ import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import StaticCard from '@/components/StaticCard.tsx'
+import { useNavigate } from 'react-router-dom'
+import { getGalleryPath } from '@/navigation/routes.tsx'
 
 interface IBagCardData extends ICardData {
   count: number
@@ -34,6 +36,7 @@ const CardsBagModal: React.FC = () => {
     appStore: { cardsBag, cardsFormation, changeCardsFormation },
     modalStore: { changeCardsBagModalData, cardsBagModalData },
   } = useMobxStore()
+  const navigate = useNavigate()
   const formattedCardsBag = useMemo<Array<IBagCardData>>(() => {
     // 格式化卡牌背包数据，统计每张卡牌的数量
     const cardCountMap: Record<string, IBagCardData> = {}
@@ -83,6 +86,8 @@ const CardsBagModal: React.FC = () => {
         return
       }
       handleSelect(card.id)
+    } else {
+      navigate(getGalleryPath(card.id))
     }
   }
 

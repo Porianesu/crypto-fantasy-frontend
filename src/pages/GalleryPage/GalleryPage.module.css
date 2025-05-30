@@ -2,6 +2,12 @@
 
 .pageContainer {
     @apply flex flex-col items-center w-full h-full pt-64 bg-black overflow-x-hidden overflow-y-auto grow shrink basis-0;
+    .pageHeader {
+
+    }
+    .pageBody {
+
+    }
 }
 
 
