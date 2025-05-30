@@ -41,6 +41,7 @@ export default class StoresStore {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
       rootStoreRef: observable,
+      resetStore: action,
       isAppLoading: observable,
       preloadResult: observable,
       preloadProgress: computed,
@@ -54,7 +55,7 @@ export default class StoresStore {
       addCardsToBag: action,
       initNetwork: flow.bound,
       initData: flow.bound,
-      resetStore: action,
+      drawCards: action,
     })
   }
 
@@ -177,5 +178,47 @@ export default class StoresStore {
 
   addCardsToBag = (cards: Array<ICardData>) => {
     this.cardsBag = this.cardsBag.concat(cards)
+  }
+
+  drawCards = () => {
+    return new Promise<Array<ICardData>>((resolve, reject) => {
+      if (!this.userInfo || this.userInfo.assetAmount <= 1000)
+        return alert('Out of assets, please recharge first.')
+      const cardsData = this.preloadQueue?.getResult('cardsData') as Array<ICardData>
+      if (!cardsData) reject(new Error('未找到卡片数据'))
+      const resultCards = Array.from({ length: 5 }, () => {
+        const cardTypeIndex = Math.floor(Math.random() * (cardsData.length / 4)) * 4
+        const cardRaritySeed = Math.random()
+        if (cardRaritySeed >= 0.995) {
+          // 0.5%概率抽到SSR
+          return cardsData[cardTypeIndex + 3]
+        } else if (cardRaritySeed >= 0.95) {
+          // 4.5%概率抽到SR
+          return cardsData[cardTypeIndex + 2]
+        } else if (cardRaritySeed >= 0.75) {
+          // 20%概率抽到R
+          return cardsData[cardTypeIndex + 1]
+        } else {
+          // 75%概率抽到N
+          return cardsData[cardTypeIndex]
+        }
+      })
+      const cardsImagesPreloadQueue = new window.createjs.LoadQueue(true)
+      cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
+      cardsImagesPreloadQueue.on('complete', () => {
+        console.debug('当次抽卡卡片图片预加载完成')
+        this.userInfo!.assetAmount -= 1000
+        resolve(resultCards)
+      })
+      cardsImagesPreloadQueue.on('error', reject)
+      cardsImagesPreloadQueue.loadManifest(
+        resultCards.map((item) => {
+          return {
+            id: `${item.id}-${item.rarity}`,
+            src: item.imageUrl,
+          }
+        }),
+      )
+    })
   }
 }

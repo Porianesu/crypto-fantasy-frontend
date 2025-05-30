@@ -30,7 +30,7 @@ const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.ts
 
 function HomePage() {
   const {
-    appStore: { userInfo, preloadQueue, addCardsToBag },
+    appStore: { userInfo, drawCards, addCardsToBag },
     modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
   } = useMobxStore()
   const navigate = useNavigate()
@@ -38,49 +38,10 @@ function HomePage() {
   const pageContainerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<IPreloadElementHandle>(null)
 
-  const getRandomCards = () => {
-    return new Promise<Array<ICardData>>((resolve, reject) => {
-      const cardsData = preloadQueue?.getResult('cardsData') as Array<ICardData>
-      if (!cardsData) reject(new Error('未找到卡片数据'))
-      const resultCards = Array.from({ length: 5 }, () => {
-        const cardTypeIndex = Math.floor(Math.random() * (cardsData.length / 4)) * 4
-        const cardRaritySeed = Math.random()
-        if (cardRaritySeed >= 0.995) {
-          // 0.5%概率抽到SSR
-          return cardsData[cardTypeIndex + 3]
-        } else if (cardRaritySeed >= 0.95) {
-          // 4.5%概率抽到SR
-          return cardsData[cardTypeIndex + 2]
-        } else if (cardRaritySeed >= 0.75) {
-          // 20%概率抽到R
-          return cardsData[cardTypeIndex + 1]
-        } else {
-          // 75%概率抽到N
-          return cardsData[cardTypeIndex]
-        }
-      })
-      const cardsImagesPreloadQueue = new window.createjs.LoadQueue(true)
-      cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
-      cardsImagesPreloadQueue.on('complete', () => {
-        console.debug('当次抽卡卡片图片预加载完成')
-        resolve(resultCards)
-      })
-      cardsImagesPreloadQueue.on('error', reject)
-      cardsImagesPreloadQueue.loadManifest(
-        resultCards.map((item) => {
-          return {
-            id: `${item.id}-${item.rarity}`,
-            src: item.imageUrl,
-          }
-        }),
-      )
-    })
-  }
-
   const handleOpenPackage = () => {
     if (videoRef.current) {
       // 模拟获取5张随机卡片
-      getRandomCards().then((cards) => {
+      drawCards().then((cards) => {
         console.debug('获取到的随机卡片:', cards)
         setCards(cards)
         addCardsToBag(cards)
