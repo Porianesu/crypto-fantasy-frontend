@@ -4,7 +4,7 @@ import preloadManifest from '@/stores/preloadManifest.ts'
 import { BigNumber } from 'bignumber.js'
 import { preloadPages } from '@/navigation/routes.tsx'
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
-import { getStorageItem } from '@/utils/common.ts'
+import { getDefaultAvatar, getStorageItem } from '@/utils/common.ts'
 import type { ICardData } from '@/components/Card.tsx'
 
 interface PreloadProgressEvent {
@@ -124,7 +124,7 @@ export default class StoresStore {
       console.log('Network initialized with user info:', result)
       this.userInfo = {
         ...result,
-        avatarUrl: 'https://via.placeholder.com/40',
+        avatarUrl: getDefaultAvatar(),
         assetAmount: 12345,
         expPercent: 68,
       }

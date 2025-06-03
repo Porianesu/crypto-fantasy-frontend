@@ -1,5 +1,9 @@
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
 
+export const getDefaultAvatar = (index?: number) => {
+  return '/src/assets/images/avatars/avatar_' + (index ? `0${index % 5}` : '00') + '.png'
+}
+
 export const setStorageItem = (key: string, value: any) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value))

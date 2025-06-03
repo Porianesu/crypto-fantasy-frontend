@@ -5,14 +5,16 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { StarIcon, SparklesIcon, FireIcon } from '@heroicons/react/24/solid'
 import { useQuery } from '@tanstack/react-query'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import { getDefaultAvatar } from '@/utils/common.ts'
 
 // mock异步获取排行榜数据
 const fetchLeaderboard = async () => {
   const originalData = Array.from({ length: 20 }).map((_, i) => ({
     name: `用户${i + 1}`,
     score: Math.floor(Math.random() * 10000),
+    avatar: getDefaultAvatar(i),
   }))
-  return new Promise<Array<{ name: string; score: number }>>((resolve) => {
+  return new Promise<Array<{ name: string; score: number; avatar: string }>>((resolve) => {
     setTimeout(() => {
       resolve(originalData)
     }, 1000)
@@ -35,6 +37,7 @@ const Leaderboard: React.FC = () => {
     const finalData = data.concat({
       name: userInfo.email,
       score: userCardsFormationScore,
+      avatar: userInfo.avatarUrl,
     })
     return finalData
       .sort((a, b) => b.score - a.score)
@@ -84,10 +87,11 @@ const Leaderboard: React.FC = () => {
                     <span className={styles.leaderboardRankText}>{item.rank}</span>
                   </div>
                   <div className={styles.leaderboardInfo}>
-                    <div className={styles.leaderboardAvatar}>
-                      {/* 这里可替换为真实头像 */}
-                      <span className="text-lg text-gray-400">{item.name[2] || 'U'}</span>
-                    </div>
+                    <img
+                      alt={'user_avatar'}
+                      src={item.avatar}
+                      className={styles.leaderboardAvatar}
+                    ></img>
                     <div className={styles.leaderboardUserInfo}>
                       <div className={styles.leaderboardUserName}>{item.name}</div>
                       <div className={styles.leaderboardUserScore}>
@@ -103,10 +107,11 @@ const Leaderboard: React.FC = () => {
         {/* 当前用户信息绝对定位覆盖底部 */}
         {userInfo && (
           <div className={styles.leaderboardCurrentUserBar}>
-            <div className={styles.leaderboardCurrentUserAvatar}>
-              {/* 真实头像可替换此处 */}
-              <span className="text-lg text-gray-400">{userInfo.email?.[2] || 'U'}</span>
-            </div>
+            <img
+              alt={'user_avatar'}
+              src={userInfo.avatarUrl}
+              className={styles.leaderboardCurrentUserAvatar}
+            ></img>
             <div className={styles.leaderboardCurrentUserInfo}>
               <div className={styles.leaderboardCurrentUserName}>{userInfo.email}</div>
               <div className={styles.leaderboardCurrentUserScore}>

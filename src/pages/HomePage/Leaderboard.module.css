@@ -93,7 +93,7 @@
         /* 更明显的浮层感和底色 */
 
         .leaderboardCurrentUserAvatar {
-            @apply w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mr-4 overflow-hidden;
+            @apply shrink-0 w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mr-4 overflow-hidden;
         }
 
         .leaderboardCurrentUserInfo {

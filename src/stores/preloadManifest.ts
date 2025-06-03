@@ -13,4 +13,19 @@ export default [
   {
     src: '/src/assets/images/introduction_page/start_button_background.png',
   },
+  {
+    src: '/src/assets/images/avatars/avatar_00.png',
+  },
+  {
+    src: '/src/assets/images/avatars/avatar_01.png',
+  },
+  {
+    src: '/src/assets/images/avatars/avatar_02.png',
+  },
+  {
+    src: '/src/assets/images/avatars/avatar_03.png',
+  },
+  {
+    src: '/src/assets/images/avatars/avatar_04.png',
+  },
 ]
