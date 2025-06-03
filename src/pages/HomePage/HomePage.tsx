@@ -4,9 +4,7 @@ import {
   ArrowRightCircleIcon,
   BanknotesIcon,
   BookOpenIcon,
-  Cog6ToothIcon,
   CurrencyDollarIcon,
-  EnvelopeIcon,
   GiftIcon,
   PlusCircleIcon,
   ShoppingBagIcon,
@@ -25,6 +23,7 @@ import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardFormation from '@/pages/HomePage/CardFormation.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
+import classNames from 'classnames'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
@@ -141,24 +140,25 @@ function HomePage() {
       {userInfo ? (
         <div className={styles.header}>
           <div className={styles.headerLeft}>
-            <img src={userInfo.avatarUrl} alt="avatar" className={styles.avatar} />
+            <div className={styles.avatarContainer}>
+              <img src={userInfo.avatarUrl} alt="avatar" className={styles.avatar} />
+            </div>
             <div>
-              <span className={styles.username}>{userInfo?.email}</span>
+              <div className={styles.username}>{userInfo?.email}</div>
               {/* 经验进度条 */}
-              <div className={styles.expBarWrapper}>
-                <div className={styles.expBarBg}>
-                  <div className={styles.expBarFill} style={{ width: `${userInfo.expPercent}%` }} />
-                </div>
-                <span className={styles.expBarText}>{userInfo.expPercent}%</span>
+              <div className={styles.expBarBg}>
+                <div className={styles.expBarFill} style={{ width: `${userInfo.expPercent}%` }} />
               </div>
               {/* 图标按钮 */}
               <div className={styles.iconBtnRow}>
-                <button className={styles.iconBtn} onClick={handleMailClick} aria-label="通知">
-                  <EnvelopeIcon className={styles.iconSvg + ' text-blue-500'} />
-                </button>
-                <button className={styles.iconBtn} onClick={handleSettingClick} aria-label="设置">
-                  <Cog6ToothIcon className={styles.iconSvg + ' text-gray-500'} />
-                </button>
+                <div
+                  className={classNames(styles.iconBtn, styles.notificationBtn)}
+                  onClick={handleMailClick}
+                ></div>
+                <div
+                  className={classNames(styles.iconBtn, styles.settingBtn)}
+                  onClick={handleSettingClick}
+                ></div>
               </div>
             </div>
           </div>

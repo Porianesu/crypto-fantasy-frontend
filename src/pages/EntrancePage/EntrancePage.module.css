@@ -13,7 +13,7 @@
 
 .pageContainer {
     @apply flex items-start justify-center shrink basis-0 grow bg-black text-yellow-500 relative;
-    @apply bg-[url('/src/assets/images/entrance_page/background.png')] bg-contain bg-center bg-no-repeat;
+    @apply bg-[url('/src/assets/images/entrance_page/background.png')] bg-cover bg-center bg-no-repeat;
 
     .title {
         @apply w-[760px] h-[384px] mt-[106px];
