@@ -49,7 +49,7 @@ const EntrancePage: React.FC = () => {
             },
           })
           .to(startButtonRef.current, {
-            scale: 1.1,
+            scale: 1.2,
             duration: 1,
             yoyo: true,
             repeat: -1,

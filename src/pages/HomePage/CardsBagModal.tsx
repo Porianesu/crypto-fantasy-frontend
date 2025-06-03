@@ -195,7 +195,7 @@ const CardsBagModal: React.FC = () => {
                                 {selected ? '✓' : ''}
                               </button>
                             )}
-                            <StaticCard card={card}></StaticCard>
+                            <StaticCard width={300} card={card}></StaticCard>
                             <div className={styles.cardCount}>x{card.count}</div>
                           </div>
                         )

@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 .leaderboardWrapper {
-    @apply w-3/5 h-3/4 bg-white/70 rounded-xl shadow flex flex-col items-center pt-8 relative;
+    @apply w-[413px] h-[558px] flex flex-col items-center pt-20 px-[22px] pb-[22px] relative;
+    @apply bg-[url('/src/assets/images/home_page/leaderboard_background.png')] bg-contain bg-top-left bg-no-repeat;
 
     .leaderboardTitle {
-        @apply absolute left-1/2 -top-5 -translate-x-1/2 bg-yellow-400 text-white px-6 py-2 rounded-xl shadow font-bold text-base border-4 border-white;
-        /* 让标签一半悬浮在外部框上方 */
+        @apply absolute left-1/2 top-5 -translate-x-1/2 text-white text-[23px] font-normal;
     }
 
     .leaderboardContent {
-        @apply flex-1 w-full flex flex-col items-center justify-start text-gray-400 text-lg overflow-y-auto py-2;
+        @apply flex-1 w-full flex flex-col items-stretch justify-start overflow-y-auto pb-16 gap-y-[14px];
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
     }
@@ -19,62 +19,46 @@
     }
 
     .leaderboardItem {
-        @apply w-11/12 flex flex-row items-stretch mb-3 rounded-xl overflow-hidden shadow bg-white;
-        min-height: 3.5rem;
+        @apply flex flex-row items-center rounded-2xl overflow-hidden h-20 shrink-0 pl-4.5 gap-x-10;
+        @apply bg-[url('/src/assets/images/home_page/leaderboard_item_background.png')] bg-contain bg-top-left bg-no-repeat;
 
-        .leaderboardRank {
-            @apply flex items-center justify-center text-xl font-bold bg-yellow-300 text-yellow-900;
-            min-width: 3.5rem;
-            height: 100%;
+        .leaderboardRankContainer {
+            @apply size-14 flex items-center justify-center text-[#2D1813] font-normal text-[42px] shrink-0;
 
-            &.leaderboardRankTop1 {
-                @apply bg-gradient-to-b from-yellow-400 to-yellow-200 text-white relative;
+            .rankContent {
+                @apply w-14 h-9 bg-contain bg-top-left bg-no-repeat;
             }
 
-            &.leaderboardRankTop2 {
-                @apply bg-gradient-to-b from-gray-400 to-gray-200 text-white relative;
+            .rank1 {
+                @apply bg-[url('/src/assets/images/home_page/rank_icon_1.png')];
             }
 
-            &.leaderboardRankTop3 {
-                @apply bg-gradient-to-b from-orange-400 to-orange-200 text-white relative;
+            .rank2 {
+                @apply bg-[url('/src/assets/images/home_page/rank_icon_2.png')];
             }
 
-            &.leaderboardRankNormal {
-                @apply bg-yellow-300 text-yellow-900;
-            }
-
-            .leaderboardRankIcon {
-                @apply absolute left-1/2 -top-4 -translate-x-1/2 w-9 h-9 rounded-full shadow-lg z-20;
-                background: white;
-                border: 2px solid #facc15; /* 金色边框 */
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                /* 让图标更突出 */
-            }
-
-            .leaderboardRankText {
-                @apply relative z-10;
+            .rank3 {
+                @apply bg-[url('/src/assets/images/home_page/rank_icon_3.png')];
             }
         }
 
         .leaderboardInfo {
-            @apply flex-1 flex flex-row items-center px-4 py-2 bg-white text-gray-800;
+            @apply grow shrink basis-0 overflow-hidden self-stretch flex flex-row items-center;
 
             .leaderboardAvatar {
-                @apply w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3 overflow-hidden;
-                /* 可放置图片或首字母 */
+                @apply size-14 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden -mr-6 z-[1];
             }
 
             .leaderboardUserInfo {
-                @apply flex flex-col justify-center;
+                @apply flex flex-col justify-center text-[17px] font-normal z-0;
 
                 .leaderboardUserName {
-                    @apply font-semibold text-base text-gray-800 leading-tight;
+                    @apply text-white pl-[46px];
+                    background: linear-gradient(90deg, #e6c9a0 0%, transparent 100%);
                 }
 
                 .leaderboardUserScore {
-                    @apply text-sm text-gray-500 mt-1 leading-tight;
+                    @apply text-[#774400] pl-[46px];
                 }
             }
         }
@@ -115,11 +99,6 @@
 
     .leaderboardLoading {
         @apply flex-1 w-full flex flex-col items-center justify-center;
-        /* 半透明遮罩感 */
-        background: linear-gradient(135deg, #fffbe6 60%, #fef9c3 100%);
-        opacity: 0.85;
-        border-radius: 0.75rem;
-        position: relative;
 
         .loadingSpinner {
             @apply w-12 h-12 text-yellow-400;

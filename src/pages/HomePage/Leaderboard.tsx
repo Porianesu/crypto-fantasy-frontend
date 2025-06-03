@@ -2,10 +2,10 @@ import { observer } from 'mobx-react-lite'
 import React, { useMemo } from 'react'
 import styles from '@/pages/HomePage/Leaderboard.module.css'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { StarIcon, SparklesIcon, FireIcon } from '@heroicons/react/24/solid'
 import { useQuery } from '@tanstack/react-query'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { generateFantasyEnglishName, getDefaultAvatar } from '@/utils/common.ts'
+import classNames from 'classnames'
 
 // mock异步获取排行榜数据
 const fetchLeaderboard = async () => {
@@ -56,35 +56,19 @@ const Leaderboard: React.FC = () => {
         ) : (
           <div className={styles.leaderboardContent}>
             {leaderboardData?.map((item) => {
-              let rankClass = styles.leaderboardRankNormal
-              let icon = null
-              if (item.rank === 1) {
-                rankClass = styles.leaderboardRankTop1
-                icon = (
-                  <span className={styles.leaderboardRankIcon}>
-                    <StarIcon className="w-6 h-6 text-yellow-400" />
-                  </span>
+              const rankClass = styles.leaderboardRankNormal
+              let rankContent: React.ReactNode
+              if (item.rank <= 3) {
+                rankContent = (
+                  <div className={classNames(styles.rankContent, styles[`rank${item.rank}`])}></div>
                 )
-              } else if (item.rank === 2) {
-                rankClass = styles.leaderboardRankTop2
-                icon = (
-                  <span className={styles.leaderboardRankIcon}>
-                    <SparklesIcon className="w-6 h-6 text-gray-400" />
-                  </span>
-                )
-              } else if (item.rank === 3) {
-                rankClass = styles.leaderboardRankTop3
-                icon = (
-                  <span className={styles.leaderboardRankIcon}>
-                    <FireIcon className="w-6 h-6 text-orange-400" />
-                  </span>
-                )
+              } else {
+                rankContent = item.rank
               }
               return (
                 <div key={item.rank} className={styles.leaderboardItem}>
-                  <div className={`${styles.leaderboardRank} ${rankClass} relative`}>
-                    {icon}
-                    <span className={styles.leaderboardRankText}>{item.rank}</span>
+                  <div className={`${styles.leaderboardRankContainer} ${rankClass} relative`}>
+                    {rankContent}
                   </div>
                   <div className={styles.leaderboardInfo}>
                     <img
@@ -95,7 +79,7 @@ const Leaderboard: React.FC = () => {
                     <div className={styles.leaderboardUserInfo}>
                       <div className={styles.leaderboardUserName}>{item.name}</div>
                       <div className={styles.leaderboardUserScore}>
-                        Score: <span className="text-yellow-600 font-bold">{item.score}</span>
+                        Score: <span className="text-[#B80001]">{item.score}</span>
                       </div>
                     </div>
                   </div>

@@ -119,7 +119,7 @@ const GalleryPage: React.FC = () => {
                     className={styles.cardItem}
                     onClick={() => setSelectedCard(card)}
                   >
-                    <StaticCard card={card}></StaticCard>
+                    <StaticCard width={300} card={card}></StaticCard>
                   </div>
                 ))}
               </div>
@@ -130,7 +130,7 @@ const GalleryPage: React.FC = () => {
           {selectedCard && (
             <>
               <div className={styles.detailImagePart}>
-                <StaticCard card={selectedCard}></StaticCard>
+                <StaticCard width={300} card={selectedCard}></StaticCard>
               </div>
               <div className={styles.detailInfoPart}>
                 <div className={styles.detailName}>{selectedCard.name}</div>
