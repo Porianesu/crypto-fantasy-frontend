@@ -107,6 +107,7 @@ const Card: React.FC<ICardProps> = ({ style, card }) => {
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
     >
+      <div className={classNames(styles.glow, styles[`glowRarity${card.rarity}`])} />
       <div className={classNames(styles.cardFront)}>卡牌背面</div>
       <div className={classNames(styles.cardBack, styles[`card${card.rarity}`])}>
         <div className={styles.cardContent}>

@@ -49,3 +49,40 @@
     @apply p-0.5;
     transform: rotateY(180deg);
 }
+
+.glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    height: 90%;
+    transform: translate(-50%, -50%) scale(0.85);
+    pointer-events: none;
+    border-radius: 18px;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: -1;
+}
+
+.glowRarity1 {box-shadow: 0 0 32px 12px #5fd6ff, 0 0 64px 24px #a0e8ff;
+    background: radial-gradient(circle, rgba(95,214,255,0.35) 0%, rgba(160,232,255,0.18) 60%, rgba(255,255,255,0) 100%);
+}
+
+.glowRarity2 {
+    box-shadow: 0 0 32px 12px #7f5fff, 0 0 64px 24px #aab6ff;
+    background: radial-gradient(circle, rgba(127,95,255,0.35) 0%, rgba(170,182,255,0.18) 60%, rgba(255,255,255,0) 100%);
+}
+
+.glowRarity3 {
+    box-shadow: 0 0 32px 12px #ffd86b, 0 0 64px 24px #fff2a0;
+    background: radial-gradient(circle, rgba(255,216,107,0.35) 0%, rgba(255,242,160,0.18) 60%, rgba(255,255,255,0) 100%);
+}
+
+.card:hover {
+    .glow {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.08);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+}
+
