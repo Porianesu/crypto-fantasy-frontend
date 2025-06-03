@@ -16,7 +16,7 @@ const EntrancePage: React.FC = () => {
     modalStore: { changeLoginModalVisible },
   } = useMobxStore()
   const containerRef = useRef<HTMLDivElement>(null)
-  const progressBarContainerRef = useRef<HTMLDivElement>(null)
+  const progressBarWrapperRef = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const startButtonRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
@@ -29,13 +29,13 @@ const EntrancePage: React.FC = () => {
     () => {
       gsap.killTweensOf(progressBarRef.current)
       gsap.to(progressBarRef.current, {
-        width: `${preloadProgress * 100}%`,
+        x: `${(preloadProgress - 1) * 100}%`,
         duration: 0.1,
         ease: 'power2.out',
       })
       if (preloadProgress === 1) {
         const tl = gsap.timeline()
-        tl.to(progressBarContainerRef.current, {
+        tl.to(progressBarWrapperRef.current, {
           autoAlpha: 0,
           duration: 0.5,
         })
@@ -43,7 +43,7 @@ const EntrancePage: React.FC = () => {
             autoAlpha: 1,
             duration: 0.5,
             onComplete: () => {
-              gsap.set(progressBarContainerRef.current, {
+              gsap.set(progressBarWrapperRef.current, {
                 zIndex: -1,
               })
             },
@@ -77,18 +77,18 @@ const EntrancePage: React.FC = () => {
 
   return (
     <div className={styles.pageContainer} ref={containerRef}>
-      <div className={styles.title}>Crypto Fantasy</div>
+      <div className={styles.title}></div>
       <div className={styles.loadingPart}>
-        <div className={styles.progressBarContainer} ref={progressBarContainerRef}>
-          <div ref={progressBarRef} className={styles.progressBar} />
+        <div className={styles.progressBarWrapper} ref={progressBarWrapperRef}>
+          <div className={styles.progressBarContainer}>
+            <div ref={progressBarRef} className={styles.progressBar} />
+          </div>
         </div>
         <div
           ref={startButtonRef}
           className={classNames(styles.startButton)}
           onClick={handleStartButtonClick}
-        >
-          {'Start the game'}
-        </div>
+        ></div>
       </div>
       <Suspense fallback={null}>
         <LoginModal></LoginModal>
