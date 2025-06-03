@@ -1,26 +1,24 @@
 @import "tailwindcss";
 
 .pageContainer {
-    @apply shrink grow basis-0 overflow-hidden flex flex-col items-center relative px-12 py-8;
+    @apply shrink grow basis-0 overflow-hidden flex flex-col items-center justify-center relative px-12 py-8 bg-black;
+    @apply bg-[url('/src/assets/images/introduction_page/background.png')] bg-contain bg-center bg-no-repeat;
 
     .textContainer {
-        @apply max-w-[1200px] shrink grow basis-0 flex flex-col overflow-x-hidden overflow-y-auto px-4;
+        @apply w-[1270px];
 
         &::-webkit-scrollbar {
             display: none; /* Chrome, Safari, Opera */
         }
 
         .introduction {
-            @apply text-3xl whitespace-pre-wrap text-yellow-200 drop-shadow-lg;
-            font-size: 44px;
-            letter-spacing: 0.08em;
-            text-shadow: 0 0 16px #fffbe6, 0 0 32px #ffe066, 0 0 64px #fffbe6;
-            font-family: 'Times New Roman', serif;
-            font-weight: bold;
+            @apply text-[26px] whitespace-pre-wrap text-[#2A1914] font-normal leading-10;
         }
     }
 
     .skipButton {
-        @apply bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300 absolute right-8 bottom-8;
+        @apply w-[449px] h-[100px] cursor-pointer hover:opacity-80 transition duration-300 absolute right-[222px] bottom-[98px];
+        @apply text-[36px] font-normal text-[#2A1914];
+        @apply bg-[url('/src/assets/images/introduction_page/start_button_background.png')] bg-contain bg-center bg-no-repeat;
     }
 }
