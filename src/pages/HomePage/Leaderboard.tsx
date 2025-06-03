@@ -5,12 +5,12 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { StarIcon, SparklesIcon, FireIcon } from '@heroicons/react/24/solid'
 import { useQuery } from '@tanstack/react-query'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { getDefaultAvatar } from '@/utils/common.ts'
+import { generateFantasyEnglishName, getDefaultAvatar } from '@/utils/common.ts'
 
 // mock异步获取排行榜数据
 const fetchLeaderboard = async () => {
   const originalData = Array.from({ length: 20 }).map((_, i) => ({
-    name: `用户${i + 1}`,
+    name: generateFantasyEnglishName(),
     score: Math.floor(Math.random() * 10000),
     avatar: getDefaultAvatar(i),
   }))
