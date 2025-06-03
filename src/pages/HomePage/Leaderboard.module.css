@@ -46,14 +46,14 @@
             @apply grow shrink basis-0 overflow-hidden self-stretch flex flex-row items-center;
 
             .leaderboardAvatar {
-                @apply size-14 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden -mr-6 z-[1];
+                @apply shrink-0 size-14 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden -mr-6 z-[1];
             }
 
             .leaderboardUserInfo {
-                @apply flex flex-col justify-center text-[17px] font-normal z-0;
+                @apply grow shrink basis-0 overflow-hidden flex flex-col justify-center text-[17px] font-normal z-0;
 
                 .leaderboardUserName {
-                    @apply text-white pl-[46px];
+                    @apply text-white pl-[46px] whitespace-nowrap overflow-hidden text-ellipsis;
                     background: linear-gradient(90deg, #e6c9a0 0%, transparent 100%);
                 }
 
