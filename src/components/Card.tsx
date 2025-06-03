@@ -108,11 +108,22 @@ const Card: React.FC<ICardProps> = ({ style, card }) => {
       onMouseLeave={handleMouseLeave}
     >
       <div className={classNames(styles.glow, styles[`glowRarity${card.rarity}`])} />
-      <div className={classNames(styles.cardFront)}>卡牌背面</div>
-      <div className={classNames(styles.cardBack, styles[`card${card.rarity}`])}>
-        <div className={styles.cardContent}>
-          <img alt={`${card.name}-${card.rarity}-image`} src={card.imageUrl}></img>
+      <div className={classNames(styles.cardFront)}></div>
+      <div className={classNames(styles.cardBack)}>
+        <div
+          className={classNames(styles.cardBackBorder, styles[`cardBackRarity${card.rarity}`])}
+        ></div>
+        <div className={classNames(styles.cardContent, styles[`cardContentRarity${card.rarity}`])}>
+          <div className={styles.cardName}>{card.name}</div>
+          <div className={styles.cardNickname}>{card.name}</div>
+          <div className={styles.cardScore}>99</div>
         </div>
+        <div
+          className={styles.cardImage}
+          style={{
+            backgroundImage: `url(${card.imageUrl})`,
+          }}
+        ></div>
       </div>
     </div>
   )

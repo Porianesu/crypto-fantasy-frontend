@@ -28,4 +28,19 @@ export default [
   {
     src: '/src/assets/images/avatars/avatar_04.png',
   },
+  {
+    src: '/src/assets/images/cards/card_background.png',
+  },
+  {
+    src: '/src/assets/images/cards/card_border_0.png',
+  },
+  {
+    src: '/src/assets/images/cards/card_border_1.png',
+  },
+  {
+    src: '/src/assets/images/cards/card_border_2.png',
+  },
+  {
+    src: '/src/assets/images/cards/card_border_3.png',
+  },
 ]

@@ -3,51 +3,121 @@
 
 .card {
     @apply p-0 cursor-pointer will-change-transform;
-    width: 200px;
-    height: 300px;
+    @apply w-[283px] h-[413px];
     transform-style: preserve-3d;
     transform-origin: center;
     position: relative;
     box-sizing: border-box;
 }
 
-.card0 {
-    @apply bg-[var(--color-rarity-normal)];
-}
-
-.card1 {
-    @apply bg-[var(--color-rarity-rare)];
-}
-
-.card2 {
-    @apply bg-[var(--color-rarity-epic)];
-}
-
-.card3 {
-    @apply bg-[var(--color-rarity-legendary)];
-}
-
 .cardFront,
 .cardBack {
-    @apply flex w-full h-full absolute backface-hidden text-2xl  rounded-lg;
-    box-sizing: border-box;
-
-    .cardContent {
-        @apply w-full h-full rounded-lg overflow-hidden;
-
-        & > img {
-            @apply w-full h-full object-cover ;
-        }
-    }
+    @apply w-full h-full absolute backface-hidden box-border;
 }
 
 .cardFront {
-    @apply border border-[#ccc] bg-[#DDD];
+    @apply bg-[url('/src/assets/images/cards/card_background.png')] bg-contain bg-center bg-no-repeat;
 }
 
 .cardBack {
-    @apply p-0.5;
     transform: rotateY(180deg);
+
+    .cardBackBorder {
+        @apply absolute top-0 left-0 w-full h-full bg-contain bg-center bg-no-repeat z-[1];
+    }
+
+    .cardBackRarity0 {
+        @apply bg-[url('/src/assets/images/cards/card_border_0.png')];
+    }
+
+    .cardBackRarity1 {
+        @apply bg-[url('/src/assets/images/cards/card_border_1.png')];
+    }
+
+    .cardBackRarity2 {
+        @apply bg-[url('/src/assets/images/cards/card_border_2.png')];
+    }
+
+    .cardBackRarity3 {
+        @apply bg-[url('/src/assets/images/cards/card_border_3.png')];
+    }
+
+    .cardContent {
+        @apply absolute w-full h-full rounded-lg overflow-hidden z-[2];
+
+        .cardName {
+            @apply absolute w-[156px] text-2xl font-normal whitespace-pre overflow-hidden;
+        }
+
+        .cardNickname {
+            @apply absolute w-[160px] text-[#F3E838] text-2xl font-normal whitespace-pre overflow-hidden;
+        }
+
+        .cardScore {
+            @apply absolute text-white text-[30px] font-black text-shadow-teal-400 italic;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+    }
+
+    .cardContentRarity0 {
+        .cardScore {
+            @apply top-[44px] left-[14px]
+        }
+
+        .cardName {
+            @apply text-[#030202] top-[44px] left-[70px];
+        }
+
+        .cardNickname {
+            @apply top-[280px] left-[54px]
+        }
+    }
+
+    .cardContentRarity1 {
+        .cardScore {
+            @apply top-[50px] left-[18px]
+        }
+
+        .cardName {
+            @apply text-[#12468D] top-[48px] left-[78px];
+        }
+
+        .cardNickname {
+            @apply top-[280px] left-[54px]
+        }
+    }
+
+    .cardContentRarity2 {
+        .cardScore {
+            @apply top-[48px] left-[16px]
+        }
+
+        .cardName {
+            @apply text-[#661483] top-[44px] left-[78px];
+        }
+
+        .cardNickname {
+            @apply top-[278px] left-[54px]
+        }
+    }
+
+    .cardContentRarity3 {
+        .cardScore {
+            @apply top-[56px] left-[14px]
+        }
+
+        .cardName {
+            @apply text-[#73502A] top-[54px] left-[70px];
+        }
+
+        .cardNickname {
+            @apply top-[288px] left-[54px]
+        }
+    }
+
+    .cardImage {
+        @apply absolute top-[80px] left-[40px] w-7/10 h-7/10 z-0 bg-no-repeat bg-contain bg-center;
+    }
 }
 
 .glow {
@@ -64,24 +134,22 @@
     z-index: -1;
 }
 
-.glowRarity1 {box-shadow: 0 0 32px 12px #5fd6ff, 0 0 64px 24px #a0e8ff;
-    background: radial-gradient(circle, rgba(95,214,255,0.35) 0%, rgba(160,232,255,0.18) 60%, rgba(255,255,255,0) 100%);
+.glowRarity1 {
+    box-shadow: 0 0 32px 12px #5fd6ff, 0 0 64px 24px #a0e8ff;
 }
 
 .glowRarity2 {
     box-shadow: 0 0 32px 12px #7f5fff, 0 0 64px 24px #aab6ff;
-    background: radial-gradient(circle, rgba(127,95,255,0.35) 0%, rgba(170,182,255,0.18) 60%, rgba(255,255,255,0) 100%);
 }
 
 .glowRarity3 {
     box-shadow: 0 0 32px 12px #ffd86b, 0 0 64px 24px #fff2a0;
-    background: radial-gradient(circle, rgba(255,216,107,0.35) 0%, rgba(255,242,160,0.18) 60%, rgba(255,255,255,0) 100%);
 }
 
 .card:hover {
     .glow {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(1.08);
+        transform: translate(-50%, -50%) scale(0.9);
         transition: opacity 0.3s, transform 0.3s;
     }
 }
