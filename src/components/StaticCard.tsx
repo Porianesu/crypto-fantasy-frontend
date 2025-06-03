@@ -1,16 +1,28 @@
-import React from 'react'
-import type { ICardData } from '@/components/Card.tsx'
-import styles from './StaticCard.module.css'
-import classNames from 'classnames'
+import React, { useMemo } from 'react'
+import Card, { type ICardData } from '@/components/Card.tsx'
 
 interface IStaticCardProps {
   card: ICardData
+  width: number
 }
 
-const StaticCard: React.FC<IStaticCardProps> = ({ card }) => {
+const aspectRatio = 285 / 413
+
+const StaticCard: React.FC<IStaticCardProps> = ({ card, width }) => {
+  const height = useMemo(() => Math.round(width / aspectRatio), [width])
+  const scale = useMemo(() => width / 285, [width])
   return (
-    <div className={classNames(styles.cardContainer, styles[`rarity_${card.rarity}`])}>
-      <img src={card.imageUrl} alt={card.name} className={styles.cardImage} />
+    <div
+      className={'flex items-center justify-center'}
+      style={{ width: `${width}px`, height: `${height}px` }}
+    >
+      <Card
+        style={{
+          transform: `scale(${scale})`,
+        }}
+        type={'static'}
+        card={card}
+      ></Card>
     </div>
   )
 }

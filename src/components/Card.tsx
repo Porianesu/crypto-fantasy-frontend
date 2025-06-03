@@ -1,4 +1,4 @@
-import React, { type CSSProperties, useRef } from 'react'
+import React, { type CSSProperties, useMemo, useRef } from 'react'
 import { gsap } from 'gsap'
 import styles from './Card.module.css'
 import classNames from 'classnames'
@@ -25,6 +25,7 @@ export interface ICardData {
 export interface ICardProps {
   style?: CSSProperties
   card: ICardData
+  type?: 'static' | 'animate' // 是否静态卡片
 }
 
 const CardRotation_Once = [0.15, 0.25]
@@ -36,14 +37,21 @@ const RarityRotationMap = {
   [CARD_RARITY.EPIC]: CardRotation_ThreeTimes,
   [CARD_RARITY.LEGENDARY]: CardRotation_FiveTimes,
 }
-const Card: React.FC<ICardProps> = ({ style, card }) => {
+const Card: React.FC<ICardProps> = ({ style, card, type = 'animate' }) => {
   const cardIsFlipped = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
+  const isStatic = useMemo(() => type === 'static', [type])
 
   useGSAP(
     () => {
       if (!flipAnimationTimelineRef.current) {
+        if (isStatic) {
+          gsap.set(cardRef.current, {
+            rotationY: 180,
+          })
+          return
+        }
         const tl = gsap.timeline({
           onStart: () => {},
           onComplete: () => {
@@ -103,12 +111,12 @@ const Card: React.FC<ICardProps> = ({ style, card }) => {
       style={style}
       className={styles.card}
       ref={cardRef}
-      onClick={flipCard}
-      onMouseOver={handleMouseOver}
-      onMouseLeave={handleMouseLeave}
+      onClick={isStatic ? undefined : flipCard}
+      onMouseOver={isStatic ? undefined : handleMouseOver}
+      onMouseLeave={isStatic ? undefined : handleMouseLeave}
     >
       <div className={classNames(styles.glow, styles[`glowRarity${card.rarity}`])} />
-      <div className={classNames(styles.cardFront)}></div>
+      {isStatic ? null : <div className={classNames(styles.cardFront)}></div>}
       <div className={classNames(styles.cardBack)}>
         <div
           className={classNames(styles.cardBackBorder, styles[`cardBackRarity${card.rarity}`])}

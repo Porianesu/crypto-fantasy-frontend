@@ -33,7 +33,7 @@ const CardFormation: React.FC = () => {
               onClick={handleCardClick}
             >
               {card ? (
-                <StaticCard card={card}></StaticCard>
+                <StaticCard width={198} card={card}></StaticCard>
               ) : (
                 <span className={styles.addIcon}>+</span>
               )}

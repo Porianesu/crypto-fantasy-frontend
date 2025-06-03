@@ -2,8 +2,8 @@
 
 
 .card {
-    @apply p-0 cursor-pointer will-change-transform;
-    @apply w-[283px] h-[413px];
+    @apply p-0 cursor-pointer will-change-transform shrink-0;
+    @apply w-[285px] h-[413px];
     transform-style: preserve-3d;
     transform-origin: center;
     position: relative;
