@@ -61,27 +61,36 @@
 }
 
 .headerRight {
-    @apply flex items-center text-base;
-}
+    @apply flex items-center gap-x-2.5;
 
-.headerRightBox {
-    @apply flex items-center bg-white rounded-xl px-4 py-2 shadow space-x-2;
-}
+    .assetContainer {
+        @apply flex items-center justify-between w-[270px] h-[64px] pl-[28px] pr-[10px];
+        @apply bg-[url('/src/assets/images/home_page/asset_background.png')] bg-contain bg-top-left bg-no-repeat;
 
-.assetIcon {
-    @apply flex items-center justify-center mr-2;
-}
+        .assetIconContainer {
+            @apply size-11 flex items-center justify-center;
 
-.assetSvg {
-    @apply w-6 h-6 text-yellow-500;
-}
+            .assetIcon1 {
+                @apply size-11;
+                @apply bg-[url('/src/assets/images/home_page/asset_icon_1.png')] bg-contain bg-top-left bg-no-repeat;
+            }
 
-.assetLabel {
-    @apply text-gray-500 mr-2;
-}
+            .assetIcon2 {
+                @apply w-[33px] h-[42px];
+                @apply bg-[url('/src/assets/images/home_page/asset_icon_2.png')] bg-contain bg-top-left bg-no-repeat;
+            }
+        }
 
-.assetAmount {
-    @apply font-bold text-gray-900 text-base;
+
+        .assetAmount {
+            @apply text-white font-black text-[30px] italic;
+        }
+
+        .assetPlusButton {
+            @apply size-[52px] cursor-pointer active:scale-95 transition-transform;
+            @apply bg-[url('/src/assets/images/home_page/asset_plus_button.png')] bg-contain bg-top-left bg-no-repeat;
+        }
+    }
 }
 
 .rechargeBtn {

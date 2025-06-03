@@ -2,11 +2,9 @@ import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
 import {
   ArrowRightCircleIcon,
-  BanknotesIcon,
   BookOpenIcon,
   CurrencyDollarIcon,
   GiftIcon,
-  PlusCircleIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
   TrophyIcon,
@@ -162,14 +160,29 @@ function HomePage() {
               </div>
             </div>
           </div>
-          <div className={styles.headerRightBox}>
-            <span className={styles.assetIcon}>
-              <BanknotesIcon className={styles.assetSvg + ' text-yellow-500'} />
-            </span>
-            <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
-            <button className={styles.rechargeBtn} onClick={handleRechargeClick} aria-label="充值">
-              <PlusCircleIcon className={styles.rechargeSvg + ' text-yellow-600'} />
-            </button>
+          <div className={styles.headerRight}>
+            <div className={styles.assetContainer}>
+              <div className={styles.assetIconContainer}>
+                <div className={styles.assetIcon1}></div>
+              </div>
+              <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
+              <div
+                className={styles.assetPlusButton}
+                onClick={handleRechargeClick}
+                aria-label="充值"
+              ></div>
+            </div>
+            <div className={styles.assetContainer}>
+              <div className={styles.assetIconContainer}>
+                <div className={styles.assetIcon2}></div>
+              </div>
+              <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
+              <div
+                className={styles.assetPlusButton}
+                onClick={handleRechargeClick}
+                aria-label="充值"
+              ></div>
+            </div>
           </div>
         </div>
       ) : null}
