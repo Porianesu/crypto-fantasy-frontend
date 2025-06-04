@@ -203,22 +203,37 @@ export default class StoresStore {
           return cardsData[cardTypeIndex]
         }
       })
-      const cardsImagesPreloadQueue = new window.createjs.LoadQueue(true)
-      cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
-      cardsImagesPreloadQueue.on('complete', () => {
-        console.debug('当次抽卡卡片图片预加载完成')
+      const preloadImageList = resultCards.reduce<Array<{ id: string; src: string }>>(
+        (previousValue, currentValue) => {
+          if (currentValue.imageUrl) {
+            previousValue.push({
+              id: `cardImage${currentValue.id}${currentValue.rarity}`,
+              src: currentValue.imageUrl,
+            })
+          }
+          return previousValue
+        },
+        [],
+      )
+      if (preloadImageList.length) {
+        const cardsImagesPreloadQueue = new window.createjs.LoadQueue(true)
+        cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
+        cardsImagesPreloadQueue.on('complete', () => {
+          console.debug('当次抽卡卡片图片预加载完成')
+          this.userInfo!.assetAmount -= 1000
+          resolve(resultCards)
+        })
+        cardsImagesPreloadQueue.on('error', () => {
+          console.error('当次抽卡卡片图片预加载失败')
+          this.userInfo!.assetAmount -= 1000
+          resolve(resultCards)
+        })
+        cardsImagesPreloadQueue.loadManifest(preloadImageList)
+      } else {
+        console.debug('当次抽卡卡片图片预加载列表为空，直接返回结果')
         this.userInfo!.assetAmount -= 1000
         resolve(resultCards)
-      })
-      cardsImagesPreloadQueue.on('error', reject)
-      cardsImagesPreloadQueue.loadManifest(
-        resultCards.map((item) => {
-          return {
-            id: `${item.id}-${item.rarity}`,
-            src: item.imageUrl,
-          }
-        }),
-      )
+      }
     })
   }
 }

@@ -46,11 +46,11 @@
         @apply absolute w-full h-full rounded-lg overflow-hidden z-[2];
 
         .cardName {
-            @apply absolute w-[156px] text-2xl font-normal whitespace-pre overflow-hidden;
+            @apply absolute w-[156px] text-2xl font-normal whitespace-pre overflow-hidden text-center;
         }
 
         .cardNickname {
-            @apply absolute w-[160px] text-[#F3E838] text-2xl font-normal whitespace-pre overflow-hidden;
+            @apply absolute w-[160px] text-[#F3E838] text-2xl font-normal whitespace-pre overflow-hidden text-center;
         }
 
         .cardScore {
