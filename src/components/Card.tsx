@@ -43,6 +43,13 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) =>
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
   const isStatic = useMemo(() => type === 'static', [type])
+  const { cardName, cardNickname } = useMemo(() => {
+    const splitResult = card.name.split(' · ')
+    return {
+      cardName: splitResult[0],
+      cardNickname: splitResult[1] || '',
+    }
+  }, [card.name])
 
   useGSAP(
     () => {
@@ -124,8 +131,8 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) =>
           className={classNames(styles.cardBackBorder, styles[`cardBackRarity${card.rarity}`])}
         ></div>
         <div className={classNames(styles.cardContent, styles[`cardContentRarity${card.rarity}`])}>
-          <div className={styles.cardName}>{card.name}</div>
-          <div className={styles.cardNickname}>{card.name}</div>
+          <div className={styles.cardName}>{cardName}</div>
+          <div className={styles.cardNickname}>{cardNickname}</div>
           <div className={styles.cardScore}>99</div>
         </div>
         <div
