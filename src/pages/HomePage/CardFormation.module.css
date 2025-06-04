@@ -8,7 +8,7 @@
         @apply bg-[url('/src/assets/images/home_page/card_formation_background.png')] bg-contain bg-top-left bg-no-repeat;
 
         .formationCard {
-            @apply cursor-pointer absolute rounded-xl overflow-hidden left-1/2 top-1/2;
+            @apply cursor-pointer absolute rounded-xl left-1/2 top-1/2;
         }
 
         .emptyCard {

@@ -26,6 +26,7 @@ export interface ICardProps {
   style?: CSSProperties
   card: ICardData
   type?: 'static' | 'animate' // 是否静态卡片
+  scale?: number // 缩放比例
 }
 
 const CardRotation_Once = [0.15, 0.25]
@@ -37,7 +38,7 @@ const RarityRotationMap = {
   [CARD_RARITY.EPIC]: CardRotation_ThreeTimes,
   [CARD_RARITY.LEGENDARY]: CardRotation_FiveTimes,
 }
-const Card: React.FC<ICardProps> = ({ style, card, type = 'animate' }) => {
+const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) => {
   const cardIsFlipped = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
@@ -48,6 +49,7 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate' }) => {
       if (!flipAnimationTimelineRef.current) {
         if (isStatic) {
           gsap.set(cardRef.current, {
+            scale: scale || 1,
             rotationY: 180,
           })
           return
@@ -72,7 +74,7 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate' }) => {
       }
     },
     {
-      dependencies: [],
+      dependencies: [scale],
       revertOnUpdate: true,
       scope: cardRef,
     },
@@ -116,7 +118,7 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate' }) => {
       onMouseLeave={isStatic ? undefined : handleMouseLeave}
     >
       <div className={classNames(styles.glow, styles[`glowRarity${card.rarity}`])} />
-      {isStatic ? null : <div className={classNames(styles.cardFront)}></div>}
+      <div className={classNames(styles.cardFront)}></div>
       <div className={classNames(styles.cardBack)}>
         <div
           className={classNames(styles.cardBackBorder, styles[`cardBackRarity${card.rarity}`])}

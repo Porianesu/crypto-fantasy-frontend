@@ -24,13 +24,7 @@ const StaticCard: React.FC<IStaticCardProps> = ({
       style={{ width: `${width}px`, height: `${height}px`, ...style }}
       {...otherProps}
     >
-      <Card
-        style={{
-          transform: `scale(${scale})`,
-        }}
-        type={'static'}
-        card={card}
-      ></Card>
+      <Card type={'static'} card={card} scale={scale}></Card>
     </div>
   )
 }

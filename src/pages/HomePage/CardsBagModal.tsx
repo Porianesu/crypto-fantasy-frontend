@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import {
   Content,
   Description,
@@ -12,12 +12,14 @@ import {
 import classNames from 'classnames'
 import styles from './CardsBagModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import StaticCard from '@/components/StaticCard.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
+import { gsap } from 'gsap'
+import { useGSAP } from '@gsap/react'
 
 interface IBagCardData extends ICardData {
   count: number
@@ -31,7 +33,7 @@ const RarityOptions = [
   { value: CARD_RARITY.LEGENDARY, label: 'Legendary' },
 ]
 
-const CardsBagModal: React.FC = () => {
+const CardsBagContent: React.FC = observer(() => {
   const {
     appStore: { cardsBag, cardsFormation, changeCardsFormation },
     modalStore: { changeCardsBagModalData, cardsBagModalData },
@@ -49,15 +51,30 @@ const CardsBagModal: React.FC = () => {
     })
     return Object.values(cardCountMap)
   }, [cardsBag])
-
-  const [search, setSearch] = React.useState('')
-  const [rarity, setRarity] = React.useState<CARD_RARITY | 'all'>('all')
-  const [selectedIds, setSelectedIds] = React.useState<number[]>(
-    cardsFormation.map((card) => card.id),
-  )
+  const [cardWidth, setCardWidth] = useState(300)
+  const cardsListRef = useRef<HTMLDivElement>(null)
+  const cardsGridRef = useRef<HTMLDivElement>(null)
+  const [search, setSearch] = useState('')
+  const [rarity, setRarity] = useState<CARD_RARITY | 'all'>('all')
+  const [selectedIds, setSelectedIds] = useState<number[]>(cardsFormation.map((card) => card.id))
   const isEdit = useMemo(
     () => cardsBagModalData.type === ICardsBagModalType.EDIT,
     [cardsBagModalData.type],
+  )
+
+  useGSAP(
+    () => {
+      if (!cardsGridRef.current) return
+      const width = gsap.getProperty(cardsGridRef.current, 'width')
+      if (!width) return
+      const cardWidth = Math.floor((Number(width) - 184) / 5)
+      console.log('cardWidth', cardWidth)
+      setCardWidth(cardWidth)
+    },
+    {
+      dependencies: [],
+      scope: cardsListRef,
+    },
   )
 
   const handleSelect = (id: number) => {
@@ -102,6 +119,107 @@ const CardsBagModal: React.FC = () => {
   }
 
   return (
+    <Content className={styles.modalContent}>
+      <Title className={styles.title}>Bags</Title>
+      <Close asChild>
+        <div className={styles.closeBtn} aria-label="Close"></div>
+      </Close>
+      <div className={styles.contentBody}>
+        <div className={styles.sidebar}>
+          <button className={classNames(styles.sidebarBtn, styles.active)}>Cards</button>
+          <button className={styles.sidebarBtn} disabled>
+            Item
+          </button>
+          <button className={styles.sidebarBtn} disabled>
+            Materials
+          </button>
+        </div>
+        <div className={styles.mainContent}>
+          <div className={styles.cardsHeader}>
+            <div className={styles.searchBox}>
+              <MagnifyingGlassIcon className={styles.searchIcon} />
+              <input
+                className={styles.searchInput}
+                type="text"
+                placeholder="search for cards"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <div className={styles.raritySelectWrapper}>
+              <select
+                className={styles.raritySelect}
+                value={rarity}
+                onChange={(e) => {
+                  const value = e.target.value
+                  if (value === 'all') {
+                    setRarity('all')
+                  } else {
+                    setRarity(Number(value))
+                  }
+                }}
+              >
+                {RarityOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+              <div className={styles.raritySelectIcon}></div>
+            </div>
+          </div>
+          <div className={styles.cardsList} ref={cardsListRef}>
+            {filteredCards.length === 0 ? (
+              <div className={styles.emptyTip}>no cards</div>
+            ) : (
+              <div className={styles.cardsGrid} ref={cardsGridRef}>
+                {filteredCards.map((card) => {
+                  const selected = selectedIds.includes(card.id)
+                  return (
+                    <div
+                      key={card.id}
+                      className={classNames(
+                        styles.cardItem,
+                        isEdit && selected && styles.selectedCard,
+                      )}
+                      onClick={() => handleCardClick(card, selected)}
+                    >
+                      {isEdit && (
+                        <button
+                          className={classNames(styles.selectBtn, {
+                            [styles.selectedBtn]: selected,
+                          })}
+                          type="button"
+                        >
+                          {selected ? '✓' : ''}
+                        </button>
+                      )}
+                      <StaticCard width={cardWidth} card={card}></StaticCard>
+                      <div className={styles.cardCount}>x{card.count}</div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+          {isEdit && (
+            <div className={styles.footerBar}>
+              <button className={styles.confirmBtn} onClick={handleConfirmButtonClick}>
+                Confirm
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </Content>
+  )
+})
+
+const CardsBagModal = () => {
+  const {
+    modalStore: { cardsBagModalData, changeCardsBagModalData },
+  } = useMobxStore()
+  return (
     <Dialog
       open={cardsBagModalData.visible}
       onOpenChange={(visible) => {
@@ -119,100 +237,7 @@ const CardsBagModal: React.FC = () => {
           )}
         >
           <Description></Description>
-          <Content className={styles.modalContent}>
-            <div className={styles.header}>
-              <Title className={styles.title}>Bag</Title>
-              <Close asChild>
-                <button className={styles.closeBtn} aria-label="Close">
-                  <XMarkIcon className={styles.closeIcon} />
-                </button>
-              </Close>
-            </div>
-            <div className={styles.contentBody}>
-              <div className={styles.sidebar}>
-                <button className={classNames(styles.sidebarBtn, styles.active)}>Cards</button>
-                <button className={styles.sidebarBtn} disabled>
-                  Item
-                </button>
-                <button className={styles.sidebarBtn} disabled>
-                  Materials
-                </button>
-              </div>
-              <div className={styles.mainContent}>
-                <div className={styles.cardsHeader}>
-                  <div className={styles.searchBox}>
-                    <MagnifyingGlassIcon className={styles.searchIcon} />
-                    <input
-                      className={styles.searchInput}
-                      type="text"
-                      placeholder="search for cards"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </div>
-                  <select
-                    className={styles.raritySelect}
-                    value={rarity}
-                    onChange={(e) => {
-                      const value = e.target.value
-                      if (value === 'all') {
-                        setRarity('all')
-                      } else {
-                        setRarity(Number(value))
-                      }
-                    }}
-                  >
-                    {RarityOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className={styles.cardsList}>
-                  {filteredCards.length === 0 ? (
-                    <div className={styles.emptyTip}>no cards</div>
-                  ) : (
-                    <div className={styles.cardsGrid}>
-                      {filteredCards.map((card) => {
-                        const selected = selectedIds.includes(card.id)
-                        return (
-                          <div
-                            key={card.id}
-                            className={classNames(
-                              styles.cardItem,
-                              isEdit && selected && styles.selectedCard,
-                            )}
-                            onClick={() => handleCardClick(card, selected)}
-                          >
-                            {isEdit && (
-                              <button
-                                className={classNames(styles.selectBtn, {
-                                  [styles.selectedBtn]: selected,
-                                })}
-                                type="button"
-                              >
-                                {selected ? '✓' : ''}
-                              </button>
-                            )}
-                            <StaticCard width={300} card={card}></StaticCard>
-                            <div className={styles.cardCount}>x{card.count}</div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-                {isEdit && (
-                  <div className={styles.footerBar}>
-                    <button className={styles.confirmBtn} onClick={handleConfirmButtonClick}>
-                      Confirm
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </Content>
+          <CardsBagContent></CardsBagContent>
         </DialogOverlay>
       </Portal>
     </Dialog>
