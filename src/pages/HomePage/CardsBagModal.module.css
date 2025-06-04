@@ -87,6 +87,11 @@
                 &::-webkit-scrollbar-track {
                     background: transparent;
                 }
+                &::-webkit-scrollbar-button {
+                    display: none;
+                    height: 0;
+                    width: 0;
+                }
 
                 .emptyTip {
                     @apply shrink grow basis-0 flex items-center justify-center text-gray-500 text-lg font-medium pl-11 pr-6;

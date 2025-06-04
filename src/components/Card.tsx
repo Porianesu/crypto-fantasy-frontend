@@ -21,6 +21,10 @@ export interface ICardData {
   '30_pnl': number
   '30_win_rate': number
   avg_duration: number
+  faction: string
+  tag: string
+  quote: string
+  backstory: string
 }
 export interface ICardProps {
   style?: CSSProperties

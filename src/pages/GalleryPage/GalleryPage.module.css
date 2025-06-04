@@ -2,79 +2,165 @@
 
 .pageContainer {
     @apply grow shrink basis-0 overflow-hidden flex flex-col items-stretch;
-    @apply bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300;
-    /* 柔和的淡黄渐变背景 */
+    @apply bg-[url('/src/assets/images/gallery_page/background.png')] bg-cover bg-top-left bg-no-repeat;
 
     .pageHeader {
-        @apply shrink-0 flex items-center justify-between px-6 py-4 bg-white/80 shadow rounded-b-2xl relative z-10;
-        @apply min-h-16;
+        @apply shrink-0 flex items-center justify-between pl-[70px] pr-[74px] pt-[20px] pb-[30px];
 
         .backButton {
-            @apply flex items-center justify-center w-10 h-10 rounded-full hover:bg-yellow-100 transition-colors mr-2;
-
-            .backIcon {
-                @apply w-6 h-6 text-yellow-600;
-            }
+            @apply cursor-pointer size-16 active:scale-95 transition;
+            @apply bg-[url('/src/assets/images/gallery_page/close_icon.png')] bg-cover bg-top-left bg-no-repeat;
         }
 
         .headerTitle {
-            @apply text-2xl font-bold text-gray-800 flex-1 text-center select-none tracking-wide;
+            @apply text-[42px] font-normal leading-[40px] ;
+            background: linear-gradient(to bottom, #FFAF00, #F3C358);
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .searchBox {
+            @apply text-white text-[24px] font-normal leading-[40px] ;
+            @apply w-[502px] h-[72px] flex items-center bg-[#251812] rounded-2xl px-4 border-[2px] border-[#54382F];
+
+            .searchIcon {
+                @apply size-8 mr-4;
+                @apply bg-[url('/src/assets/images/home_page/cards_bag_modal/magnifier.png')] bg-contain bg-top-left bg-no-repeat;
+            }
+
+            .searchInput {
+                @apply bg-transparent outline-none border-none w-full text-white placeholder-[#62463B];
+            }
         }
     }
 
     .pageBody {
-        @apply grow shrink basis-0 overflow-hidden flex items-stretch;
+        @apply grow shrink basis-0 overflow-hidden flex items-stretch pb-10;
 
-        .cardsPart {
-            @apply grow shrink basis-0 overflow-hidden flex flex-col items-stretch bg-white/70 rounded-2xl shadow-lg m-4;
+        .toolContainer {
+            @apply shrink-0 flex flex-col items-end pl-[70px] pt-3 gap-y-5 text-[#C8C3B7] text-[24px] font-normal leading-[40px];
 
-            .toolContainer {
-                @apply flex flex-row items-center justify-between px-6 py-4 gap-4 shrink-0 border-b border-purple-100 bg-transparent;
-
-                .searchBoxWrapper {
-                    @apply flex flex-row items-center bg-gray-100 rounded-lg px-3 py-2 w-64 shadow-sm;
-
-                    .searchIcon {
-                        @apply mr-2 flex items-center;
-                    }
-
-                    .searchInput {
-                        @apply bg-transparent outline-none border-none w-full text-base text-gray-700 placeholder-gray-400;
-                    }
-                }
-
-                .raritySelect {
-                    @apply bg-gray-100 rounded-lg px-4 py-2 text-base text-gray-700 border-none shadow-sm focus:ring-2 focus:ring-yellow-300 transition;
-                }
+            & > div {
+                @apply cursor-pointer flex items-center justify-center rounded-md bg-[#47413C];
             }
 
-            .cardListWrapper {
-                @apply grow shrink basis-0 overflow-hidden px-6 py-4 flex items-stretch justify-center;
+            .season {
+                @apply w-[226px] h-[102px];
+            }
 
-                .loadingWrapper {
-                    @apply w-full flex items-center justify-center text-lg text-yellow-600;
-                }
+            .raritySelect {
+                @apply w-[204px] h-[80px];
+            }
 
-                .cardListContainer {
-                    @apply max-w-[1440px] shrink grow basis-0 overflow-y-auto overflow-x-hidden flex flex-wrap gap-4 content-start justify-start;
+            .raritySelected {
+                @apply border-r-[8px] border-white text-[#030201];
+                background: linear-gradient(to right, #F79F00, #FFC512);
+            }
+        }
 
-                    .cardItem {
-                        @apply flex flex-col items-center bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer border border-transparent hover:border-yellow-300 w-[270px] h-[360px] p-2.5;
-                    }
-                }
+        .cardsPart {
+            @apply grow shrink basis-0 flex flex-col items-stretch overflow-y-auto overflow-x-hidden mr-[34px];
+            /* 自定义滚动条样式 */
+            scrollbar-width: thin;
+            scrollbar-color: #7D6F53 transparent;
+
+            &::-webkit-scrollbar {
+                width: 11px;
+                height: 262px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #7D6F53;
+                border-radius: 8px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            &::-webkit-scrollbar-button {
+                display: none;
+                height: 0;
+                width: 0;
+            }
+
+            .loadingWrapper {
+                @apply w-full flex items-center justify-center text-lg text-yellow-600;
+            }
+
+            .cardListContainer {
+                @apply grid grid-cols-3 gap-x-16 gap-y-11 pt-11 pb-4 pl-[68px] pr-[68px];
             }
         }
 
         .detailPartWrapper {
-            @apply shrink-0 flex flex-col items-stretch bg-white/90 rounded-2xl shadow-lg m-4 transition-all duration-300 w-[500px] overflow-hidden;
+            @apply shrink-0 flex flex-col items-center transition-all duration-300 w-[500px] overflow-hidden;
+            @apply bg-[url('/src/assets/images/gallery_page/detail_background.png')] bg-cover bg-top-left bg-no-repeat;
 
-            .detailImagePart {
-                @apply shrink-0 flex flex-col items-stretch bg-gray-50;
+            .detailTitle {
+                @apply shrink-0 w-[400px] h-[55px] text-[#64401E] text-[32px] font-normal leading-[40px] flex items-center justify-center mb-3;
+                @apply bg-[url('/src/assets/images/gallery_page/detail_title_background.png')] bg-contain bg-top-left bg-no-repeat;
             }
 
-            .detailInfoPart {
-                @apply grow shrink basis-0 overflow-x-hidden overflow-y-hidden flex flex-col justify-center px-8 py-8;
+            .detailImagePart {
+                @apply shrink-0 w-[348px] h-[305px] mb-2 bg-gray-500 rounded-2xl;
+            }
+
+            .detailName {
+                @apply shrink-0 text-[#292522] text-[22px] font-normal leading-[40px] -mb-1;
             }
         }
     }
 }
+
+.detailInfoPart {
+    @apply leading-6 grow shrink basis-0 self-stretch px-10 text-[20px] font-normal flex flex-col items-stretch overflow-x-hidden overflow-y-auto mb-4;
+
+    & > div {
+        @apply flex items-start;
+
+        & > div:first-child {
+            @apply w-[122px] text-[#AD613F] shrink;
+        }
+
+        & > div:last-child {
+            @apply grow shrink basis-0 overflow-hidden text-[#64401E] whitespace-pre-wrap;
+        }
+    }
+}
+
+.scorePart {
+    @apply shrink-0 self-stretch mx-8 text-[22px] font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-[2px] border-[#64401E];
+
+    & > div {
+        @apply flex items-center;
+
+        & > div:first-child {
+            @apply w-[122px] text-[#AD613F] flex-1 flex items-center justify-end mr-2;
+        }
+
+        & > div:last-child {
+            @apply flex-1 text-[#64401E];
+        }
+    }
+}
+
+.viewDetailButton {
+    @apply shrink-0 cursor-pointer w-[348px] h-[68px] flex items-center justify-center text-[27px] font-normal leading-[40px] mb-4 active:scale-95 transition;
+    @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background.png')] bg-contain bg-top-left bg-no-repeat;
+
+    .viewDetailText {
+        background: linear-gradient(to bottom, #FEB109, #F2C661);
+        color: transparent;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}
+
+.cardBlackWhite {
+    filter: grayscale(1) contrast(0.8);
+}
+
