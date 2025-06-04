@@ -68,6 +68,18 @@ export default [
     src: '/src/assets/images/home_page/card_formation_plus_icon.png',
   },
   {
+    src: '/src/assets/images/home_page/cards_bag_modal/background.png',
+  },
+  {
+    src: '/src/assets/images/home_page/cards_bag_modal/close_icon.png',
+  },
+  {
+    src: '/src/assets/images/home_page/cards_bag_modal/down_arrow.png',
+  },
+  {
+    src: '/src/assets/images/home_page/cards_bag_modal/magnifier.png',
+  },
+  {
     src: '/src/assets/images/home_page/draw_cards_modal_close_button.png',
   },
   {
