@@ -7,10 +7,24 @@
 .modalContent {
     @apply max-w-full top-1/2 left-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none;
     transform: translate(-50%, -50%);
+
+    .title {
+        @apply w-[716px] h-[200px] mb-[104px];
+        @apply bg-[url('/src/assets/images/home_page/draw_cards_modal_title.png')] bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .description {
+        @apply text-[#FFFFE4] text-[40px] font-normal mb-9;
+    }
+
+    .closeBtn {
+        @apply w-[653px] h-[40px] cursor-pointer active:scale-95 transition-transform;
+        @apply bg-[url('/src/assets/images/home_page/draw_cards_modal_close_button.png')] bg-contain bg-top-left bg-no-repeat;
+    }
 }
 
 .cardWrapper {
-    @apply flex flex-col items-stretch perspective-[1000px] focus-visible:outline-none;
+    @apply flex flex-col items-stretch perspective-[1000px] focus-visible:outline-none mb-[84px];
 }
 
 .cardContainer {

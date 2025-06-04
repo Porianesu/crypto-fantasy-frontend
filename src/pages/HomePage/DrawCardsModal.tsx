@@ -68,6 +68,10 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
     modalStore: { drawCardsModalVisible, changeDrawCardsModalVisible },
   } = useMobxStore()
 
+  const handleClose = () => {
+    changeDrawCardsModalVisible(false)
+  }
+
   return (
     <Dialog open={drawCardsModalVisible} onOpenChange={changeDrawCardsModalVisible}>
       <Portal>
@@ -80,10 +84,10 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
           <Title></Title>
           <Description></Description>
           <Content className={styles.modalContent}>
-            <div>Congratulations</div>
+            <div className={styles.title}></div>
             <CardsPart cards={cards}></CardsPart>
-            <div>Click to flip open your card.</div>
-            <div>Click blank to close</div>
+            <div className={styles.description}>Click to flip open your card.</div>
+            <div className={styles.closeBtn} onClick={handleClose}></div>
           </Content>
         </DialogOverlay>
       </Portal>
