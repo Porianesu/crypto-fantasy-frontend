@@ -106,22 +106,15 @@
 }
 
 .footer {
-    @apply shrink-0 h-20 flex items-center justify-between px-8 bg-transparent;
+    @apply shrink-0 flex items-center justify-between px-[56px] bg-transparent;
 
     .footerBtnGroup {
-        @apply flex flex-row space-x-6;
+        @apply flex flex-row gap-x-8;
     }
 
     .footerBtn {
-        @apply flex flex-col items-center justify-center w-14 h-14 rounded-full bg-white/80 hover:bg-white shadow transition;
-    }
-
-    .footerBtnIcon {
-        @apply w-7 h-7 mb-1 text-yellow-600;
-    }
-
-    .footerBtnText {
-        @apply text-xs text-gray-800 font-medium;
+        @apply cursor-pointer active:scale-95 transition-transform;
+        @apply bg-contain bg-top-left bg-no-repeat;
     }
 }
 

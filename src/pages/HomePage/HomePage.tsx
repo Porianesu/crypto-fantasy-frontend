@@ -1,15 +1,5 @@
 import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
-import {
-  ArrowRightCircleIcon,
-  BookOpenIcon,
-  CurrencyDollarIcon,
-  GiftIcon,
-  ShoppingBagIcon,
-  ShoppingCartIcon,
-  TrophyIcon,
-  UsersIcon,
-} from '@heroicons/react/24/outline'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/HomePage/Leaderboard.tsx'
 import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
@@ -74,34 +64,28 @@ function HomePage() {
     }
   }
 
-  const handleMailClick = () => {
-    alert('打开通知')
-  }
-  const handleSettingClick = () => {
-    alert('打开设置')
-  }
-  const handleRechargeClick = () => {
-    alert('充值入口')
+  const commingSoon = () => {
+    alert('功能即将上线，敬请期待！')
   }
 
   // footer按钮配置
   const footerButtons = [
     {
-      key: 'market',
-      label: 'Market',
-      icon: <ShoppingCartIcon className={styles.footerBtnIcon} />,
-      onClick: () => alert('进入市场'),
+      key: 'fusion',
+      icon: '/src/assets/images/home_page/footer_button_fusion.png',
+      className: 'w-[173px] h-[177px]',
+      onClick: commingSoon,
     },
     {
       key: 'gallery',
-      label: 'Gallery',
-      icon: <TrophyIcon className={styles.footerBtnIcon} />,
+      icon: '/src/assets/images/home_page/footer_button_achs.png',
+      className: 'w-[173px] h-[175px]',
       onClick: () => navigate(getGalleryPath()),
     },
     {
       key: 'bag',
-      label: 'Bag',
-      icon: <ShoppingBagIcon className={styles.footerBtnIcon} />,
+      icon: '/src/assets/images/home_page/footer_button_bag.png',
+      className: 'w-[174px] h-[174px]',
       onClick: () =>
         changeCardsBagModalData({
           visible: true,
@@ -109,22 +93,22 @@ function HomePage() {
         }),
     },
     {
-      key: 'shop',
-      label: 'Shop',
-      icon: <CurrencyDollarIcon className={styles.footerBtnIcon} />,
-      onClick: () => alert('进入商店'),
+      key: 'battle',
+      icon: '/src/assets/images/home_page/footer_button_battle.png',
+      className: 'w-[173px] h-[164px]',
+      onClick: commingSoon,
     },
     {
       key: 'reward',
-      label: 'Reward',
-      icon: <GiftIcon className={styles.footerBtnIcon} />,
-      onClick: () => alert('进入奖励'),
+      icon: '/src/assets/images/home_page/footer_button_reward.png',
+      className: 'w-[177px] h-[165px]',
+      onClick: commingSoon,
     },
     {
-      key: 'referral',
-      label: 'Referral',
-      icon: <UsersIcon className={styles.footerBtnIcon} />,
-      onClick: () => alert('进入礼盒'),
+      key: 'shop',
+      icon: '/src/assets/images/home_page/footer_button_shop.png',
+      className: 'w-[173px] h-[175px]',
+      onClick: commingSoon,
     },
   ]
 
@@ -143,19 +127,17 @@ function HomePage() {
             </div>
             <div>
               <div className={styles.username}>{userInfo?.email}</div>
-              {/* 经验进度条 */}
               <div className={styles.expBarBg}>
                 <div className={styles.expBarFill} style={{ width: `${userInfo.expPercent}%` }} />
               </div>
-              {/* 图标按钮 */}
               <div className={styles.iconBtnRow}>
                 <div
                   className={classNames(styles.iconBtn, styles.notificationBtn)}
-                  onClick={handleMailClick}
+                  onClick={commingSoon}
                 ></div>
                 <div
                   className={classNames(styles.iconBtn, styles.settingBtn)}
-                  onClick={handleSettingClick}
+                  onClick={commingSoon}
                 ></div>
               </div>
             </div>
@@ -166,22 +148,14 @@ function HomePage() {
                 <div className={styles.assetIcon1}></div>
               </div>
               <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
-              <div
-                className={styles.assetPlusButton}
-                onClick={handleRechargeClick}
-                aria-label="充值"
-              ></div>
+              <div className={styles.assetPlusButton} onClick={commingSoon}></div>
             </div>
             <div className={styles.assetContainer}>
               <div className={styles.assetIconContainer}>
                 <div className={styles.assetIcon2}></div>
               </div>
               <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
-              <div
-                className={styles.assetPlusButton}
-                onClick={handleRechargeClick}
-                aria-label="充值"
-              ></div>
+              <div className={styles.assetPlusButton} onClick={commingSoon}></div>
             </div>
           </div>
         </div>
@@ -192,16 +166,13 @@ function HomePage() {
           <Leaderboard></Leaderboard>
           {/* 中间抽卡/书本图示 */}
           <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="w-32 h-32 rounded-full bg-white shadow flex items-center justify-center mb-6">
-              <BookOpenIcon className="w-20 h-20 text-yellow-600" />
-            </div>
-            <button
-              className="flex items-center px-6 py-2 rounded-full bg-yellow-500 text-white font-bold shadow hover:bg-yellow-600 transition"
+            <div className="w-[491px] h-[430px] bg-[url(/src/assets/images/home_page/open_package.png)] bg-contain bg-center bg-no-repeat mb-7"></div>
+            <div
+              className="cursor-pointer active:scale-90 flex items-center justify-center w-[340px] h-[102px] transition bg-[url(/src/assets/images/home_page/open_package_button_background.png)] bg-contain bg-center bg-no-repeat text-[36px] font-normal text-[#2A1914]"
               onClick={handleOpenPackage}
             >
               Open Pack
-              <ArrowRightCircleIcon className="w-6 h-6 ml-2" />
-            </button>
+            </div>
           </div>
           {/* 右侧卡组展示 */}
           <CardFormation></CardFormation>
@@ -210,18 +181,26 @@ function HomePage() {
       <div className={styles.footer}>
         <div className={styles.footerBtnGroup}>
           {footerButtons.slice(0, 3).map((btn) => (
-            <button key={btn.key} className={styles.footerBtn} onClick={btn.onClick}>
-              {btn.icon}
-              <span className={styles.footerBtnText}>{btn.label}</span>
-            </button>
+            <div
+              key={btn.key}
+              className={classNames(styles.footerBtn, btn.className)}
+              style={{
+                backgroundImage: `url(${btn.icon})`,
+              }}
+              onClick={btn.onClick}
+            ></div>
           ))}
         </div>
         <div className={styles.footerBtnGroup}>
           {footerButtons.slice(3).map((btn) => (
-            <button key={btn.key} className={styles.footerBtn} onClick={btn.onClick}>
-              {btn.icon}
-              <span className={styles.footerBtnText}>{btn.label}</span>
-            </button>
+            <div
+              key={btn.key}
+              className={classNames(styles.footerBtn, btn.className)}
+              style={{
+                backgroundImage: `url(${btn.icon})`,
+              }}
+              onClick={btn.onClick}
+            ></div>
           ))}
         </div>
       </div>

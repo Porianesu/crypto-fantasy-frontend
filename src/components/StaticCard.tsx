@@ -1,20 +1,28 @@
-import React, { useMemo } from 'react'
+import React, { type HTMLAttributes, useMemo } from 'react'
 import Card, { type ICardData } from '@/components/Card.tsx'
+import classNames from 'classnames'
 
-interface IStaticCardProps {
+interface IStaticCardProps extends HTMLAttributes<HTMLDivElement> {
   card: ICardData
   width: number
 }
 
 const aspectRatio = 285 / 413
 
-const StaticCard: React.FC<IStaticCardProps> = ({ card, width }) => {
+const StaticCard: React.FC<IStaticCardProps> = ({
+  card,
+  width,
+  className,
+  style,
+  ...otherProps
+}) => {
   const height = useMemo(() => Math.round(width / aspectRatio), [width])
   const scale = useMemo(() => width / 285, [width])
   return (
     <div
-      className={'flex items-center justify-center'}
-      style={{ width: `${width}px`, height: `${height}px` }}
+      className={classNames('flex items-center justify-center', className)}
+      style={{ width: `${width}px`, height: `${height}px`, ...style }}
+      {...otherProps}
     >
       <Card
         style={{

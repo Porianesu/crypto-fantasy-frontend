@@ -24,20 +24,20 @@ const CardFormation: React.FC = () => {
       <div className={styles.formationSquare}>
         {[0, 1, 2, 3, 4].map((idx) => {
           const card = cardsFormation[idx]
-          return (
+          return card ? (
+            <StaticCard
+              key={idx}
+              className={styles.formationCard}
+              width={142}
+              card={card}
+              onClick={handleCardClick}
+            ></StaticCard>
+          ) : (
             <div
               key={idx}
-              className={classNames(styles.formationCard, {
-                [styles.emptyCard]: !card,
-              })}
+              className={classNames(styles.formationCard, styles.emptyCard)}
               onClick={handleCardClick}
-            >
-              {card ? (
-                <StaticCard width={198} card={card}></StaticCard>
-              ) : (
-                <span className={styles.addIcon}>+</span>
-              )}
-            </div>
+            ></div>
           )
         })}
       </div>
