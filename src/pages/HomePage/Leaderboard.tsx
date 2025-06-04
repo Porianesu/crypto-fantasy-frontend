@@ -44,6 +44,34 @@ const Leaderboard: React.FC = () => {
       .map((item, idx) => ({ ...item, rank: idx + 1 }))
   }, [data, userCardsFormationScore, userInfo])
 
+  const renderCurrentUserRank = () => {
+    if (!userInfo) return null
+    const item = leaderboardData.find((item) => item.name === userInfo.email)
+    if (!item) return null
+    let rankContent: React.ReactNode
+    if (item.rank <= 3) {
+      rankContent = (
+        <div className={classNames(styles.rankContent, styles[`rank${item.rank}`])}></div>
+      )
+    } else {
+      rankContent = item.rank
+    }
+    return (
+      <div className={classNames(styles.leaderboardCurrentUserBar)}>
+        <div className={styles.leaderboardRankContainer}>{rankContent}</div>
+        <div className={styles.leaderboardInfo}>
+          <img alt={'user_avatar'} src={item.avatar} className={styles.leaderboardAvatar}></img>
+          <div className={styles.leaderboardUserInfo}>
+            <div className={styles.leaderboardUserName}>{item.name}</div>
+            <div className={styles.leaderboardUserScore}>
+              Score: <span className="text-[#B80001]">{item.score}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center">
       <div className={styles.leaderboardWrapper}>
@@ -56,7 +84,6 @@ const Leaderboard: React.FC = () => {
         ) : (
           <div className={styles.leaderboardContent}>
             {leaderboardData?.map((item) => {
-              const rankClass = styles.leaderboardRankNormal
               let rankContent: React.ReactNode
               if (item.rank <= 3) {
                 rankContent = (
@@ -67,9 +94,7 @@ const Leaderboard: React.FC = () => {
               }
               return (
                 <div key={item.rank} className={styles.leaderboardItem}>
-                  <div className={`${styles.leaderboardRankContainer} ${rankClass} relative`}>
-                    {rankContent}
-                  </div>
+                  <div className={styles.leaderboardRankContainer}>{rankContent}</div>
                   <div className={styles.leaderboardInfo}>
                     <img
                       alt={'user_avatar'}
@@ -88,28 +113,7 @@ const Leaderboard: React.FC = () => {
             })}
           </div>
         )}
-        {/* 当前用户信息绝对定位覆盖底部 */}
-        {userInfo && (
-          <div className={styles.leaderboardCurrentUserBar}>
-            <img
-              alt={'user_avatar'}
-              src={userInfo.avatarUrl}
-              className={styles.leaderboardCurrentUserAvatar}
-            ></img>
-            <div className={styles.leaderboardCurrentUserInfo}>
-              <div className={styles.leaderboardCurrentUserName}>{userInfo.email}</div>
-              <div className={styles.leaderboardCurrentUserScore}>
-                Score: <span className="text-yellow-600 font-bold">{userCardsFormationScore}</span>
-              </div>
-            </div>
-            <div className={styles.leaderboardCurrentUserRank}>
-              Rank:
-              <span className="text-yellow-600 font-bold">
-                {leaderboardData.find((item) => item.name === userInfo.email)?.rank || '-'}
-              </span>
-            </div>
-          </div>
-        )}
+        {renderCurrentUserRank()}
       </div>
     </div>
   )
