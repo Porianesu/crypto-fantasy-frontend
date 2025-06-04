@@ -9,17 +9,30 @@
     transform: translate(-50%, -50%);
 
     .title {
-        @apply w-[716px] h-[200px] mb-[104px];
+        @apply w-[716px] h-[200px] mb-[84px];
         @apply bg-[url('/src/assets/images/home_page/draw_cards_modal_title.png')] bg-contain bg-top-left bg-no-repeat;
     }
 
     .description {
-        @apply text-[#FFFFE4] text-[40px] font-normal mb-9;
+        @apply text-[#FFFFE4] text-[40px] font-normal mb-4;
     }
 
     .closeBtn {
         @apply w-[653px] h-[40px] cursor-pointer active:scale-95 transition-transform;
         @apply bg-[url('/src/assets/images/home_page/draw_cards_modal_close_button.png')] bg-contain bg-top-left bg-no-repeat;
+        animation: closeBtnBreath 1.8s ease-in-out infinite;
+    }
+}
+
+@keyframes closeBtnBreath {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+    100% {
+        transform: scale(1);
     }
 }
 
