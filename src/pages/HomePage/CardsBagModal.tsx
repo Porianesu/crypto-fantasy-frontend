@@ -202,10 +202,10 @@ const CardsBagContent: React.FC = observer(() => {
               </div>
             )}
           </div>
-          {isEdit && (
+          {isEdit && cardsBag.length && (
             <div className={styles.footerBar}>
               <button className={styles.confirmBtn} onClick={handleConfirmButtonClick}>
-                Confirm
+                <div className={styles.confirmBtnText}>Confirm</div>
               </button>
             </div>
           )}
