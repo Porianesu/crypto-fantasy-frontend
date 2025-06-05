@@ -6,6 +6,7 @@ import { preloadPages } from '@/navigation/routes.tsx'
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
 import { getDefaultAvatar, getStorageItem } from '@/utils/common.ts'
 import type { ICardData } from '@/components/Card.tsx'
+import { toast } from 'react-toast'
 
 interface PreloadProgressEvent {
   loaded: number
@@ -183,7 +184,7 @@ export default class StoresStore {
   drawCards = () => {
     return new Promise<Array<ICardData>>((resolve, reject) => {
       if (!this.userInfo || this.userInfo.assetAmount <= 1000)
-        return alert('Out of assets, please recharge first.')
+        return toast.warn('Out of assets, please recharge first.')
       const cardsData = this.preloadQueue?.getResult('cardsData') as Array<ICardData>
       if (!cardsData) reject(new Error('未找到卡片数据'))
       const resultCards = Array.from({ length: 5 }, () => {

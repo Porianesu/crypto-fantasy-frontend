@@ -12,6 +12,7 @@ import CardFormation from '@/pages/HomePage/CardFormation.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
+import { toast } from 'react-toast'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
@@ -64,8 +65,8 @@ function HomePage() {
     }
   }
 
-  const commingSoon = () => {
-    alert('功能即将上线，敬请期待！')
+  const comingSoon = () => {
+    toast.info('Coming Soon!')
   }
 
   // footer按钮配置
@@ -74,7 +75,7 @@ function HomePage() {
       key: 'fusion',
       icon: '/src/assets/images/home_page/footer_button_fusion.png',
       className: 'w-[173px] h-[177px]',
-      onClick: commingSoon,
+      onClick: comingSoon,
     },
     {
       key: 'gallery',
@@ -96,19 +97,19 @@ function HomePage() {
       key: 'battle',
       icon: '/src/assets/images/home_page/footer_button_battle.png',
       className: 'w-[173px] h-[164px]',
-      onClick: commingSoon,
+      onClick: comingSoon,
     },
     {
       key: 'reward',
       icon: '/src/assets/images/home_page/footer_button_reward.png',
       className: 'w-[177px] h-[165px]',
-      onClick: commingSoon,
+      onClick: comingSoon,
     },
     {
       key: 'shop',
       icon: '/src/assets/images/home_page/footer_button_shop.png',
       className: 'w-[173px] h-[175px]',
-      onClick: commingSoon,
+      onClick: comingSoon,
     },
   ]
 
@@ -142,11 +143,11 @@ function HomePage() {
               <div className={styles.iconBtnRow}>
                 <div
                   className={classNames(styles.iconBtn, styles.notificationBtn)}
-                  onClick={commingSoon}
+                  onClick={comingSoon}
                 ></div>
                 <div
                   className={classNames(styles.iconBtn, styles.settingBtn)}
-                  onClick={commingSoon}
+                  onClick={comingSoon}
                 ></div>
               </div>
             </div>
@@ -157,14 +158,14 @@ function HomePage() {
                 <div className={styles.assetIcon1}></div>
               </div>
               <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
-              <div className={styles.assetPlusButton} onClick={commingSoon}></div>
+              <div className={styles.assetPlusButton} onClick={comingSoon}></div>
             </div>
             <div className={styles.assetContainer}>
               <div className={styles.assetIconContainer}>
                 <div className={styles.assetIcon2}></div>
               </div>
               <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
-              <div className={styles.assetPlusButton} onClick={commingSoon}></div>
+              <div className={styles.assetPlusButton} onClick={comingSoon}></div>
             </div>
           </div>
         </div>
