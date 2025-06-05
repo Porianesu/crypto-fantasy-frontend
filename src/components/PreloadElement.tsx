@@ -28,7 +28,6 @@ const PreloadElement = React.forwardRef<IPreloadElementHandle, IPreloadElementPr
         elementRef.current = preloadedElement
         // 将预加载的 HTMLElement 直接添加到容器中
         containerRef.current.appendChild(preloadedElement)
-        console.log('preloadedElement', preloadedElement.tagName)
       }
     }, [id, preloadQueue])
 

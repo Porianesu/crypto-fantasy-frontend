@@ -52,8 +52,9 @@ function HomePage() {
             gsap.to(videoRef.current!.getContainer(), {
               autoAlpha: 0,
               duration: 0.3,
-              onComplete: () => {
-                gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
+              zIndex: -1,
+              onStart: () => {
+                // gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
                 changeDrawCardsModalVisible(true)
               },
             })
@@ -114,9 +115,18 @@ function HomePage() {
 
   return (
     <div className={styles.pageContainer} ref={pageContainerRef}>
+      <div className={styles.drawCardsEntranceContainer}>
+        <div className="w-[491px] h-[430px] bg-[url(/src/assets/images/home_page/open_package.png)] bg-contain bg-center bg-no-repeat mb-7"></div>
+        <div
+          className="cursor-pointer active:scale-90 flex items-center justify-center w-[340px] h-[102px] transition bg-[url(/src/assets/images/home_page/open_package_button_background.png)] bg-contain bg-center bg-no-repeat text-[36px] font-normal text-[#2A1914]"
+          onClick={handleOpenPackage}
+        >
+          Open Pack
+        </div>
+      </div>
       <PreloadElement
         ref={videoRef}
-        id={'remoteVideo'}
+        id={'openPackVideo'}
         className={styles.videoContainer}
       ></PreloadElement>
       {userInfo ? (
@@ -161,22 +171,12 @@ function HomePage() {
         </div>
       ) : null}
       <div className={styles.body}>
-        <div className="w-full h-full flex flex-1 flex-row items-stretch justify-between">
-          {/* 左侧列表/排行榜 */}
-          <Leaderboard></Leaderboard>
-          {/* 中间抽卡/书本图示 */}
-          <div className="flex-1 flex flex-col items-center justify-center">
-            <div className="w-[491px] h-[430px] bg-[url(/src/assets/images/home_page/open_package.png)] bg-contain bg-center bg-no-repeat mb-7"></div>
-            <div
-              className="cursor-pointer active:scale-90 flex items-center justify-center w-[340px] h-[102px] transition bg-[url(/src/assets/images/home_page/open_package_button_background.png)] bg-contain bg-center bg-no-repeat text-[36px] font-normal text-[#2A1914]"
-              onClick={handleOpenPackage}
-            >
-              Open Pack
-            </div>
-          </div>
-          {/* 右侧卡组展示 */}
-          <CardFormation></CardFormation>
-        </div>
+        {/* 左侧列表/排行榜 */}
+        <Leaderboard></Leaderboard>
+        {/* 中间抽卡/书本图示 */}
+        <div className="flex-1"></div>
+        {/* 右侧卡组展示 */}
+        <CardFormation></CardFormation>
       </div>
       <div className={styles.footer}>
         <div className={styles.footerBtnGroup}>

@@ -76,10 +76,7 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
     <Dialog open={drawCardsModalVisible} onOpenChange={changeDrawCardsModalVisible}>
       <Portal>
         <DialogOverlay
-          className={classNames(
-            'data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out',
-            styles.overlay,
-          )}
+          className={classNames('data-[state=closed]:animate-fade-out', styles.overlay)}
         >
           <Title></Title>
           <Description></Description>

@@ -4,8 +4,9 @@ export default [
     src: '/src/assets/json/cards_data.json',
   },
   {
-    id: 'remoteVideo',
-    src: 'https://cdn.coverr.co/videos/user-ai-generation-YKAem45Y8p/720p.mp4',
+    id: 'openPackVideo',
+    src: '/src/assets/video/open_pack.webm',
+    type: 'video',
   },
   {
     src: '/src/assets/images/introduction_page/background.png',
@@ -135,5 +136,20 @@ export default [
   },
   {
     src: '/src/assets/images/home_page/setting_icon.png',
+  },
+  {
+    src: '/src/assets/images/gallery_page/background.png',
+  },
+  {
+    src: '/src/assets/images/gallery_page/close_icon.png',
+  },
+  {
+    src: '/src/assets/images/gallery_page/detail_background.png',
+  },
+  {
+    src: '/src/assets/images/gallery_page/detail_title_background.png',
+  },
+  {
+    src: '/src/assets/images/gallery_page/view_detail_button_background.png',
   },
 ]
