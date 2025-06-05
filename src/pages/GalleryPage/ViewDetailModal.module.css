@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+.modalContent {
+    @apply w-[974px] h-[788px] flex flex-col items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-[56px] pl-[56px] pr-[66px] focus-visible:outline-none;
+    @apply bg-[url('/src/assets/images/gallery_page/view_detail_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
+
+    .title {
+        @apply shrink-0 w-[470px] h-[64px] text-[#64401E] text-[36px] font-normal leading-[24px] flex items-center justify-center mb-[44px];
+        @apply bg-[url('/src/assets/images/gallery_page/detail_title_background.png')] bg-cover bg-top-left bg-no-repeat;
+    }
+
+    .content {
+        @apply self-stretch grow shrink basis-0 overflow-x-hidden overflow-y-auto text-[#64401E] text-[20px] font-normal leading-[24px];
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+
+        &::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+    }
+
+    .line {
+        @apply self-stretch h-[6px] mb-[42px];
+        @apply bg-[url('/src/assets/images/gallery_page/divide_line.png')] bg-cover bg-top-left bg-no-repeat;
+    }
+
+    .button{
+        @apply mb-[52px] shrink-0 cursor-pointer w-[348px] h-[68px] flex items-center justify-center text-[27px] font-normal leading-[40px] active:scale-95 transition;
+        @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background.png')] bg-contain bg-top-left bg-no-repeat;
+        .buttonText {
+            background: linear-gradient(to bottom, #FEB109, #F2C661);
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    }
+}

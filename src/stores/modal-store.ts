@@ -1,5 +1,6 @@
 import { Store } from '@/stores/index'
 import { action, makeObservable, observable } from 'mobx'
+import type { ICardData } from '@/components/Card.tsx'
 
 export enum ICardsBagModalType {
   EDIT = 'edit',
@@ -22,6 +23,8 @@ export default class ModalStore {
     type: ICardsBagModalType.VIEW,
   }
 
+  viewDetailModalData: ICardData | undefined = undefined
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeObservable(this, {
@@ -32,6 +35,8 @@ export default class ModalStore {
       changeDrawCardsModalVisible: action,
       cardsBagModalData: observable,
       changeCardsBagModalData: action,
+      viewDetailModalData: observable,
+      changeViewDetailModalData: action,
     })
   }
 
@@ -42,6 +47,7 @@ export default class ModalStore {
       visible: false,
       type: ICardsBagModalType.VIEW,
     }
+    this.viewDetailModalData = undefined
   }
 
   changeLoginModalVisible = (newValue: boolean) => {
@@ -57,5 +63,9 @@ export default class ModalStore {
       ...this.cardsBagModalData,
       ...newData,
     }
+  }
+
+  changeViewDetailModalData = (newValue: ICardData | undefined) => {
+    this.viewDetailModalData = newValue
   }
 }

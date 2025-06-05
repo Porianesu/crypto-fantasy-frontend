@@ -137,7 +137,7 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) =>
         <div className={classNames(styles.cardContent, styles[`cardContentRarity${card.rarity}`])}>
           <div className={styles.cardName}>{cardName}</div>
           <div className={styles.cardNickname}>{cardNickname}</div>
-          <div className={styles.cardScore}>99</div>
+          <div className={styles.cardScore}>{card.score}</div>
         </div>
         <div
           className={styles.cardImage}

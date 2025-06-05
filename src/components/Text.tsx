@@ -18,6 +18,7 @@ const Text: React.FC<PropsWithChildren<ITextProps>> = ({ children, className, st
         type: 'chars',
         autoSplit: true,
         // mask: 'lines',
+        smartWrap: true,
         wordsClass: 'word',
         linesClass: 'line',
         reduceWhiteSpace: false,

@@ -11,7 +11,7 @@ import classNames from 'classnames'
 const fetchLeaderboard = async () => {
   const originalData = Array.from({ length: 20 }).map((_, i) => ({
     name: generateFantasyEnglishName(),
-    score: Math.floor(Math.random() * 10000),
+    score: Math.floor(Math.random() * 450),
     avatar: getDefaultAvatar(i),
   }))
   return new Promise<Array<{ name: string; score: number; avatar: string }>>((resolve) => {

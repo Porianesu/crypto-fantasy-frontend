@@ -152,4 +152,7 @@ export default [
   {
     src: '/src/assets/images/gallery_page/view_detail_button_background.png',
   },
+  {
+    src: '/src/assets/images/gallery_page/view_detail_modal_background.png',
+  },
 ]

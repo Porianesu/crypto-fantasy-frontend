@@ -10,6 +10,7 @@ import StaticCard from '@/components/StaticCard.tsx'
 import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
+import ViewDetailModal from '@/pages/GalleryPage/ViewDetailModal.tsx'
 
 interface FormattedCardData extends ICardData {
   processed: boolean
@@ -20,6 +21,7 @@ const GalleryPage: React.FC = () => {
   const navigate = useNavigate()
   const {
     appStore: { preloadQueue, cardsBag },
+    modalStore: { changeViewDetailModalData },
   } = useMobxStore()
   const [selectedCard, setSelectedCard] = useState<ICardData>()
   const [searchText, setSearchText] = useState('')
@@ -64,11 +66,17 @@ const GalleryPage: React.FC = () => {
 
   const filteredCards = useMemo(() => {
     if (!cardData) return []
-    return cardData.filter((card) => {
-      const matchesSearch = card.name.toLowerCase().includes(searchText.toLowerCase())
-      const matchesRarity = rarityFilter ? card.rarity === rarityFilter : true
-      return matchesSearch && matchesRarity
-    })
+    return cardData
+      .filter((card) => {
+        const matchesSearch = card.name.toLowerCase().includes(searchText.toLowerCase())
+        const matchesRarity = rarityFilter ? card.rarity === rarityFilter : true
+        return matchesSearch && matchesRarity
+      })
+      .sort((a, b) => {
+        if (a.processed && !b.processed) return -1
+        if (!a.processed && b.processed) return 1
+        return a.id - b.id
+      })
   }, [cardData, searchText, rarityFilter])
 
   useEffect(() => {
@@ -192,13 +200,19 @@ const GalleryPage: React.FC = () => {
                   <div>{selectedCard.avg_duration}</div>
                 </div>
               </div>
-              <div className={styles.viewDetailButton}>
+              <div
+                className={styles.viewDetailButton}
+                onClick={() => {
+                  changeViewDetailModalData(selectedCard)
+                }}
+              >
                 <div className={styles.viewDetailText}>View Details</div>
               </div>
             </>
           )}
         </div>
       </div>
+      <ViewDetailModal></ViewDetailModal>
     </div>
   )
 }
