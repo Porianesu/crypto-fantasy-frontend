@@ -25,6 +25,8 @@ export default class ModalStore {
 
   viewDetailModalData: ICardData | undefined = undefined
 
+  viewDetailModalVisible = false
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeObservable(this, {
@@ -37,6 +39,8 @@ export default class ModalStore {
       changeCardsBagModalData: action,
       viewDetailModalData: observable,
       changeViewDetailModalData: action,
+      viewDetailModalVisible: observable,
+      changeViewDetailModalVisible: action,
     })
   }
 
@@ -48,6 +52,7 @@ export default class ModalStore {
       type: ICardsBagModalType.VIEW,
     }
     this.viewDetailModalData = undefined
+    this.viewDetailModalVisible = false
   }
 
   changeLoginModalVisible = (newValue: boolean) => {
@@ -67,5 +72,9 @@ export default class ModalStore {
 
   changeViewDetailModalData = (newValue: ICardData | undefined) => {
     this.viewDetailModalData = newValue
+  }
+
+  changeViewDetailModalVisible = (newValue: boolean) => {
+    this.viewDetailModalVisible = newValue
   }
 }

@@ -8,15 +8,15 @@ import Text from '@/components/Text.tsx'
 
 const ViewDetailModal: React.FC = () => {
   const {
-    modalStore: { viewDetailModalData, changeViewDetailModalData },
+    modalStore: {
+      viewDetailModalData,
+      changeViewDetailModalData,
+      viewDetailModalVisible,
+      changeViewDetailModalVisible,
+    },
   } = useMobxStore()
   return (
-    <Dialog
-      open={Boolean(viewDetailModalData)}
-      onOpenChange={(visible) => {
-        changeViewDetailModalData(visible ? viewDetailModalData : undefined)
-      }}
-    >
+    <Dialog open={viewDetailModalVisible} onOpenChange={changeViewDetailModalVisible}>
       <Portal>
         <DialogOverlay
           className={classNames('data-[state=closed]:animate-fade-out', styles.overlay)}
@@ -28,7 +28,13 @@ const ViewDetailModal: React.FC = () => {
               <Text>{viewDetailModalData?.backstory}</Text>
             </div>
             <div className={styles.line}></div>
-            <div className={styles.button} onClick={() => changeViewDetailModalData(undefined)}>
+            <div
+              className={styles.button}
+              onClick={() => {
+                changeViewDetailModalData(undefined)
+                changeViewDetailModalVisible(false)
+              }}
+            >
               <div className={styles.buttonText}>OK</div>
             </div>
           </Content>

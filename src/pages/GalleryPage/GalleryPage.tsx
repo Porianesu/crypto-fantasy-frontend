@@ -21,7 +21,7 @@ const GalleryPage: React.FC = () => {
   const navigate = useNavigate()
   const {
     appStore: { preloadQueue, cardsBag },
-    modalStore: { changeViewDetailModalData },
+    modalStore: { changeViewDetailModalVisible, changeViewDetailModalData },
   } = useMobxStore()
   const [selectedCard, setSelectedCard] = useState<ICardData>()
   const [searchText, setSearchText] = useState('')
@@ -203,6 +203,7 @@ const GalleryPage: React.FC = () => {
               <div
                 className={styles.viewDetailButton}
                 onClick={() => {
+                  changeViewDetailModalVisible(true)
                   changeViewDetailModalData(selectedCard)
                 }}
               >
