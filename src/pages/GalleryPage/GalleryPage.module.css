@@ -105,7 +105,7 @@
             }
 
             .detailImagePart {
-                @apply shrink-0 w-[348px] h-[305px] mb-2 bg-gray-500 rounded-2xl;
+                @apply shrink-0 w-[348px] h-[305px] mb-2 bg-gray-500 rounded-2xl object-cover object-left-top;
             }
 
             .detailName {
