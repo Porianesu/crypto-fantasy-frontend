@@ -52,9 +52,8 @@ function HomePage() {
             gsap.to(videoRef.current!.getContainer(), {
               autoAlpha: 0,
               duration: 0.3,
-              zIndex: -1,
               onStart: () => {
-                // gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
+                gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
                 changeDrawCardsModalVisible(true)
               },
             })
