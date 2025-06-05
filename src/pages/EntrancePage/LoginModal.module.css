@@ -5,7 +5,7 @@
 }
 
 .modalContent {
-    @apply w-[703px] h-[616px] flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-[26px] px-[100px] leading-[40px] ;
+    @apply w-[703px] h-[616px] flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-[26px] px-[100px] leading-[40px] focus-visible:outline-none;
     @apply bg-[url('/src/assets/images/entrance_page/login_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
 }
 

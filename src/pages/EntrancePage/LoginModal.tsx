@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import { checkHasAlreadyReadGuide, setStorageUserInfo } from '@/utils/common.ts'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
+import { toast } from 'react-toast'
 
 const LoginModal: React.FC = () => {
   const {
@@ -18,7 +19,9 @@ const LoginModal: React.FC = () => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email')
+    if (!email) return toast.warn('Please enter your email.')
     const password = formData.get('password')
+    if (!password) return toast.warn('Please enter your password.')
     console.log('邮箱:', email, '密码:', password)
     setStorageUserInfo({
       email: email as string,

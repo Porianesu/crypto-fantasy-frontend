@@ -52,3 +52,7 @@ html {
 :root {
     @apply: p-0;
 }
+
+.toastContainer {
+    z-index: 999;
+}
