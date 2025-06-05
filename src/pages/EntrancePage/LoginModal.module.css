@@ -5,11 +5,8 @@
 }
 
 .modalContent {
-    @apply bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto flex flex-col gap-6 relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    position: absolute;
+    @apply w-[703px] h-[616px] flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-[26px] px-[100px] leading-[40px] ;
+    @apply bg-[url('/src/assets/images/entrance_page/login_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
 }
 
 .modalHeader {
@@ -17,18 +14,28 @@
 }
 
 .modalTitle {
-    @apply text-2xl font-bold text-gray-800;
+    @apply shrink-0 text-[42px] font-normal text-center mb-[62px];
+    background: linear-gradient(to bottom, #FEB109, #F2C661);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.closeButton {
-    @apply text-gray-400  transition-colors text-xl cursor-pointer;
-    outline: none;
+.inputGroup {
+    @apply shrink-0 flex flex-col items-stretch;
+
+    & > label {
+        @apply text-[#3A2400] text-[30px] font-normal mb-2.5;
+    }
 }
 
 .input {
-    @apply w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition;
+    @apply text-[24px] font-normal text-white bg-[#5C4010] self-stretch rounded-2xl h-[72px] px-5 focus-visible:outline-none placeholder-[#8F703D];
 }
 
 .submitButton {
-    @apply w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg mt-2 transition cursor-pointer;
+    @apply self-center shrink-0 cursor-pointer flex items-center justify-center text-white text-[35px] font-normal leading-[40px] mb-4 active:scale-95 transition;
+    @apply w-[406px] h-[100px] ;
+    @apply bg-[url('/src/assets/images/entrance_page/login_modal_confirm_button_background.png')] bg-contain bg-center bg-no-repeat;
 }

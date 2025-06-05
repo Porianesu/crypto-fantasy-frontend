@@ -1,15 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import {
-  Content,
-  Description,
-  Dialog,
-  Portal,
-  Title,
-  Close,
-  DialogOverlay,
-} from '@radix-ui/react-dialog'
+import { Content, Description, Dialog, Portal, Title, DialogOverlay } from '@radix-ui/react-dialog'
 import styles from './LoginModal.module.css'
 import classNames from 'classnames'
 import { checkHasAlreadyReadGuide, setStorageUserInfo } from '@/utils/common.ts'
@@ -50,24 +42,36 @@ const LoginModal: React.FC = () => {
           )}
         >
           <Content className={styles.modalContent}>
-            <div className={styles.modalHeader}>
-              <Title className={styles.modalTitle}>Login Modal</Title>
-              <Close className={'focus-visible:outline-none'}>
-                <div className={classNames(styles.closeButton)}>❌</div>
-              </Close>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <Description></Description>
-              <div className={styles.inputGroup}>
+            <Title className={styles.modalTitle}>Login</Title>
+            <Description></Description>
+            <form
+              onSubmit={handleSubmit}
+              className={
+                'grow shrink basis-0 overflow-hidden flex flex-col items-stretch self-stretch '
+              }
+            >
+              <div className={classNames(styles.inputGroup, 'mb-[30px]')}>
                 <label htmlFor="email">Email</label>
-                <input className={styles.input} type="text" id="email" name="email" />
+                <input
+                  className={styles.input}
+                  type="text"
+                  id="email"
+                  name="email"
+                  placeholder={'Please enter your account.'}
+                />
               </div>
-              <div className={styles.inputGroup}>
+              <div className={classNames(styles.inputGroup, 'mb-auto')}>
                 <label htmlFor="password">Password</label>
-                <input className={styles.input} type="password" id="password" name="password" />
+                <input
+                  className={styles.input}
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder={'Please enter your Password'}
+                />
               </div>
               <button className={styles.submitButton} type={'submit'}>
-                Login
+                Confirm
               </button>
             </form>
           </Content>

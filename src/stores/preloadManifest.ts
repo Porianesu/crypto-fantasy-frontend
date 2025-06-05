@@ -9,12 +9,6 @@ export default [
     type: 'video',
   },
   {
-    src: '/src/assets/images/introduction_page/background.png',
-  },
-  {
-    src: '/src/assets/images/introduction_page/start_button_background.png',
-  },
-  {
     src: '/src/assets/images/avatars/avatar_00.png',
   },
   {
@@ -43,6 +37,12 @@ export default [
   },
   {
     src: '/src/assets/images/cards/card_border_3.png',
+  },
+  {
+    src: '/src/assets/images/introduction_page/background.png',
+  },
+  {
+    src: '/src/assets/images/introduction_page/start_button_background.png',
   },
   {
     src: '/src/assets/images/home_page/asset_background.png',
