@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+.overlay {
+    @apply fixed inset-0 z-50 backdrop-blur-md;
+}
+
 .modalContent {
     @apply w-[974px] h-[788px] flex flex-col items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-[56px] pl-[56px] pr-[66px] focus-visible:outline-none;
     @apply bg-[url('/src/assets/images/gallery_page/view_detail_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
@@ -24,9 +28,10 @@
         @apply bg-[url('/src/assets/images/gallery_page/divide_line.png')] bg-cover bg-top-left bg-no-repeat;
     }
 
-    .button{
+    .button {
         @apply mb-[52px] shrink-0 cursor-pointer w-[348px] h-[68px] flex items-center justify-center text-[27px] font-normal leading-[40px] active:scale-95 transition;
         @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background.png')] bg-contain bg-top-left bg-no-repeat;
+
         .buttonText {
             background: linear-gradient(to bottom, #FEB109, #F2C661);
             color: transparent;

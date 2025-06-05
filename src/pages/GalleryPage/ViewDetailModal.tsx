@@ -20,7 +20,7 @@ const ViewDetailModal: React.FC = () => {
       <Portal>
         <DialogOverlay
           className={classNames(
-            'data-[state=closed]:animate-fade-out backdrop-blur-md',
+            'data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out',
             styles.overlay,
           )}
         >
