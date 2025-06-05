@@ -19,7 +19,10 @@ const ViewDetailModal: React.FC = () => {
     <Dialog open={viewDetailModalVisible} onOpenChange={changeViewDetailModalVisible}>
       <Portal>
         <DialogOverlay
-          className={classNames('data-[state=closed]:animate-fade-out', styles.overlay)}
+          className={classNames(
+            'data-[state=closed]:animate-fade-out backdrop-blur-md',
+            styles.overlay,
+          )}
         >
           <Content className={styles.modalContent} onInteractOutside={(e) => e.preventDefault()}>
             <Title className={styles.title}>Chainspirit Backstory</Title>
