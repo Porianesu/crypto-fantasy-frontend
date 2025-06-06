@@ -9,6 +9,10 @@ interface PreloadProgressEvent {
   total: number
 }
 
+export enum AudioInstanceId {
+  BGM = 'bgm',
+  DrawCardSound = 'drawCardSound',
+}
 export default class PreloadStore {
   rootStoreRef: Store
 
@@ -20,7 +24,7 @@ export default class PreloadStore {
     networkPreloadProgress: 0,
   }
 
-  audioInstanceMap = observable.map<string, createjs.AbstractSoundInstance>()
+  audioInstanceMap = observable.map<AudioInstanceId, createjs.AbstractSoundInstance>()
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
@@ -74,8 +78,14 @@ export default class PreloadStore {
 
   handleFilePreload = (event: object) => {
     const fileId = (event as unknown as { item: { id: string } }).item.id
-    if (['bgm', 'drawCardSound'].includes(fileId) && !this.audioInstanceMap.has(fileId)) {
-      this.audioInstanceMap.set(fileId, window.createjs.Sound.createInstance(fileId))
+    if (
+      Object.values(AudioInstanceId).includes(fileId as AudioInstanceId) &&
+      !this.audioInstanceMap.has(fileId as AudioInstanceId)
+    ) {
+      this.audioInstanceMap.set(
+        fileId as AudioInstanceId,
+        window.createjs.Sound.createInstance(fileId),
+      )
     }
   }
 

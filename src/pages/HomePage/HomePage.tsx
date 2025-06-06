@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toast'
+import { AudioInstanceId } from '@/stores/preload-store.ts'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
@@ -22,7 +23,7 @@ function HomePage() {
     appStore: { userInfo, drawCards, addCardsToBag },
     modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
   } = useMobxStore()
-  const drawCardSound = audioInstanceMap.get('drawCardSound')
+  const drawCardSound = audioInstanceMap.get(AudioInstanceId.DrawCardSound)
   const navigate = useNavigate()
   const [cards, setCards] = useState<Array<ICardData>>([])
   const pageContainerRef = useRef<HTMLDivElement>(null)

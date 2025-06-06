@@ -8,6 +8,7 @@ import gsap from 'gsap'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
 import { checkHasAlreadyReadGuide, checkIsAuth } from '@/utils/common.ts'
+import { AudioInstanceId } from '@/stores/preload-store.ts'
 const LoginModal = React.lazy(() => import('@/pages/EntrancePage/LoginModal.tsx'))
 
 const EntrancePage: React.FC = () => {
@@ -16,7 +17,7 @@ const EntrancePage: React.FC = () => {
     appStore: { initData },
     modalStore: { changeLoginModalVisible },
   } = useMobxStore()
-  const bgmInstance = audioInstanceMap.get('bgm')
+  const bgmInstance = audioInstanceMap.get(AudioInstanceId.BGM)
   const containerRef = useRef<HTMLDivElement>(null)
   const progressBarWrapperRef = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
