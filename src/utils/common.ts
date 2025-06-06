@@ -1,7 +1,17 @@
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
 
+const defaultAvatars = import.meta.glob('../assets/images/avatars/*.png', {
+  eager: true,
+  import: 'default',
+})
 export const getDefaultAvatar = (index?: number) => {
-  return '/src/assets/images/avatars/avatar_' + (index ? `0${index % 5}` : '00') + '.png'
+  const avatarKeys = Object.keys(defaultAvatars)
+  if (index !== undefined && index >= 0 && index < avatarKeys.length) {
+    return defaultAvatars[avatarKeys[index]]
+  }
+  // 随机返回一个默认头像
+  const randomIndex = Math.floor(Math.random() * avatarKeys.length)
+  return defaultAvatars[avatarKeys[randomIndex]]
 }
 
 export const generateFantasyEnglishName = () => {

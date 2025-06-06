@@ -2,7 +2,7 @@
   {
     "id": 0,
     "name": "Stealth Acolyte · GAKE",
-    "imageUrl": "/src/assets/images/cards/0.png",
+    "imageUrl": "/cards/0.png",
     "faction": "Turbulent Bear",
     "tag": "Calm Huntress, Precise & Ruthless Queen",
     "quote": "What I master isn’t just gains or losses — it’s emotions.",
@@ -16,7 +16,7 @@
   {
     "id": 1,
     "name": "Stealth Acolyte · GAKE",
-    "imageUrl": "/src/assets/images/cards/1.png",
+    "imageUrl": "/cards/1.png",
     "faction": "Turbulent Bear",
     "tag": "Calm Huntress, Precise & Ruthless Queen",
     "quote": "What I master isn’t just gains or losses — it’s emotions.",
@@ -30,7 +30,7 @@
   {
     "id": 2,
     "name": "Stealth Acolyte · GAKE",
-    "imageUrl": "/src/assets/images/cards/2.png",
+    "imageUrl": "/cards/2.png",
     "faction": "Turbulent Bear",
     "tag": "Calm Huntress, Precise & Ruthless Queen",
     "quote": "What I master isn’t just gains or losses — it’s emotions.",
@@ -44,7 +44,7 @@
   {
     "id": 3,
     "name": "Stealth Acolyte · GAKE",
-    "imageUrl": "/src/assets/images/cards/3.png",
+    "imageUrl": "/cards/3.png",
     "faction": "Turbulent Bear",
     "tag": "Calm Huntress, Precise & Ruthless Queen",
     "quote": "What I master isn’t just gains or losses — it’s emotions.",
@@ -58,7 +58,7 @@
   {
     "id": 4,
     "name": "Chart Surgeon · THE DOC",
-    "imageUrl": "/src/assets/images/cards/4.png",
+    "imageUrl": "/cards/4.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Operator, Data-Driven Hunter",
     "quote": "No chart is incurable — only traders too scared to cut.",
@@ -72,7 +72,7 @@
   {
     "id": 5,
     "name": "Chart Surgeon · THE DOC",
-    "imageUrl": "/src/assets/images/cards/5.png",
+    "imageUrl": "/cards/5.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Operator, Data-Driven Hunter",
     "quote": "No chart is incurable — only traders too scared to cut.",
@@ -86,7 +86,7 @@
   {
     "id": 6,
     "name": "Chart Surgeon · THE DOC",
-    "imageUrl": "/src/assets/images/cards/6.png",
+    "imageUrl": "/cards/6.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Operator, Data-Driven Hunter",
     "quote": "No chart is incurable — only traders too scared to cut.",
@@ -100,7 +100,7 @@
   {
     "id": 7,
     "name": "Chart Surgeon · THE DOC",
-    "imageUrl": "/src/assets/images/cards/7.png",
+    "imageUrl": "/cards/7.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Operator, Data-Driven Hunter",
     "quote": "No chart is incurable — only traders too scared to cut.",
@@ -114,7 +114,7 @@
   {
     "id": 8,
     "name": "Orderbook Eye · JIJO",
-    "imageUrl": "/src/assets/images/cards/8.png",
+    "imageUrl": "/cards/8.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Precision, Orderbook Master",
     "quote": "I only watch the orderbook — it’s always more honest than people.",
@@ -128,7 +128,7 @@
   {
     "id": 9,
     "name": "Orderbook Eye · JIJO",
-    "imageUrl": "/src/assets/images/cards/9.png",
+    "imageUrl": "/cards/9.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Precision, Orderbook Master",
     "quote": "I only watch the orderbook — it’s always more honest than people.",
@@ -142,7 +142,7 @@
   {
     "id": 10,
     "name": "Orderbook Eye · JIJO",
-    "imageUrl": "/src/assets/images/cards/10.png",
+    "imageUrl": "/cards/10.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Precision, Orderbook Master",
     "quote": "I only watch the orderbook — it’s always more honest than people.",
@@ -156,7 +156,7 @@
   {
     "id": 11,
     "name": "Orderbook Eye · JIJO",
-    "imageUrl": "/src/assets/images/cards/11.png",
+    "imageUrl": "/cards/11.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Precision, Orderbook Master",
     "quote": "I only watch the orderbook — it’s always more honest than people.",
@@ -170,7 +170,7 @@
   {
     "id": 12,
     "name": "Shadow Strategist · KREO",
-    "imageUrl": "/src/assets/images/cards/12.png",
+    "imageUrl": "/cards/12.png",
     "faction": "Turbulent Bear",
     "tag": "Meticulous Orderbook Schemer",
     "quote": "By the time you see the pump, my traps are already set.",
@@ -184,7 +184,7 @@
   {
     "id": 13,
     "name": "Shadow Strategist · KREO",
-    "imageUrl": "/src/assets/images/cards/13.png",
+    "imageUrl": "/cards/13.png",
     "faction": "Turbulent Bear",
     "tag": "Meticulous Orderbook Schemer",
     "quote": "By the time you see the pump, my traps are already set.",
@@ -198,7 +198,7 @@
   {
     "id": 14,
     "name": "Shadow Strategist · KREO",
-    "imageUrl": "/src/assets/images/cards/14.png",
+    "imageUrl": "/cards/14.png",
     "faction": "Turbulent Bear",
     "tag": "Meticulous Orderbook Schemer",
     "quote": "By the time you see the pump, my traps are already set.",
@@ -212,7 +212,7 @@
   {
     "id": 15,
     "name": "Shadow Strategist · KREO",
-    "imageUrl": "/src/assets/images/cards/15.png",
+    "imageUrl": "/cards/15.png",
     "faction": "Turbulent Bear",
     "tag": "Meticulous Orderbook Schemer",
     "quote": "By the time you see the pump, my traps are already set.",
@@ -226,7 +226,7 @@
   {
     "id": 16,
     "name": "Quant Trader · ORANGE",
-    "imageUrl": "/src/assets/images/cards/16.png",
+    "imageUrl": "/cards/16.png",
     "faction": "Flame Bull",
     "tag": "Data-Driven, AI Strategist",
     "quote": "Emotion is humanity’s trap — I write strategy with code.",
@@ -240,7 +240,7 @@
   {
     "id": 17,
     "name": "Quant Trader · ORANGE",
-    "imageUrl": "/src/assets/images/cards/17.png",
+    "imageUrl": "/cards/17.png",
     "faction": "Flame Bull",
     "tag": "Data-Driven, AI Strategist",
     "quote": "Emotion is humanity’s trap — I write strategy with code.",
@@ -254,7 +254,7 @@
   {
     "id": 18,
     "name": "Quant Trader · ORANGE",
-    "imageUrl": "/src/assets/images/cards/18.png",
+    "imageUrl": "/cards/18.png",
     "faction": "Flame Bull",
     "tag": "Data-Driven, AI Strategist",
     "quote": "Emotion is humanity’s trap — I write strategy with code.",
@@ -268,7 +268,7 @@
   {
     "id": 19,
     "name": "Quant Trader · ORANGE",
-    "imageUrl": "/src/assets/images/cards/19.png",
+    "imageUrl": "/cards/19.png",
     "faction": "Flame Bull",
     "tag": "Data-Driven, AI Strategist",
     "quote": "Emotion is humanity’s trap — I write strategy with code.",
@@ -282,7 +282,7 @@
   {
     "id": 20,
     "name": "Profit Edge Spirit · Money Cat",
-    "imageUrl": "/src/assets/images/cards/20.png",
+    "imageUrl": "/cards/20.png",
     "faction": "Turbulent Bear",
     "tag": "Fast-In-Fast-Out, Steady Profiteer",
     "quote": "Beyond profit and loss, only speed and judgment matter.",
@@ -296,7 +296,7 @@
   {
     "id": 21,
     "name": "Profit Edge Spirit · Money Cat",
-    "imageUrl": "/src/assets/images/cards/21.png",
+    "imageUrl": "/cards/21.png",
     "faction": "Turbulent Bear",
     "tag": "Fast-In-Fast-Out, Steady Profiteer",
     "quote": "Beyond profit and loss, only speed and judgment matter.",
@@ -310,7 +310,7 @@
   {
     "id": 22,
     "name": "Profit Edge Spirit · Money Cat",
-    "imageUrl": "/src/assets/images/cards/22.png",
+    "imageUrl": "/cards/22.png",
     "faction": "Turbulent Bear",
     "tag": "Fast-In-Fast-Out, Steady Profiteer",
     "quote": "Beyond profit and loss, only speed and judgment matter.",
@@ -324,7 +324,7 @@
   {
     "id": 23,
     "name": "Profit Edge Spirit · Money Cat",
-    "imageUrl": "/src/assets/images/cards/23.png",
+    "imageUrl": "/cards/23.png",
     "faction": "Turbulent Bear",
     "tag": "Fast-In-Fast-Out, Steady Profiteer",
     "quote": "Beyond profit and loss, only speed and judgment matter.",
@@ -338,7 +338,7 @@
   {
     "id": 24,
     "name": "Flow Sniper · GROOVY",
-    "imageUrl": "/src/assets/images/cards/24.png",
+    "imageUrl": "/cards/24.png",
     "faction": "Turbulent Bear",
     "tag": "Sniper-Type, Liquidity Catcher",
     "quote": "The market isn’t waiting for you to chase — it’s waiting for you to break through.",
@@ -352,7 +352,7 @@
   {
     "id": 25,
     "name": "Flow Sniper · GROOVY",
-    "imageUrl": "/src/assets/images/cards/25.png",
+    "imageUrl": "/cards/25.png",
     "faction": "Turbulent Bear",
     "tag": "Sniper-Type, Liquidity Catcher",
     "quote": "The market isn’t waiting for you to chase — it’s waiting for you to break through.",
@@ -366,7 +366,7 @@
   {
     "id": 26,
     "name": "Flow Sniper · GROOVY",
-    "imageUrl": "/src/assets/images/cards/26.png",
+    "imageUrl": "/cards/26.png",
     "faction": "Turbulent Bear",
     "tag": "Sniper-Type, Liquidity Catcher",
     "quote": "The market isn’t waiting for you to chase — it’s waiting for you to break through.",
@@ -380,7 +380,7 @@
   {
     "id": 27,
     "name": "Flow Sniper · GROOVY",
-    "imageUrl": "/src/assets/images/cards/27.png",
+    "imageUrl": "/cards/27.png",
     "faction": "Turbulent Bear",
     "tag": "Sniper-Type, Liquidity Catcher",
     "quote": "The market isn’t waiting for you to chase — it’s waiting for you to break through.",
@@ -394,7 +394,7 @@
   {
     "id": 28,
     "name": "Goldminer · 0XDAVID",
-    "imageUrl": "/src/assets/images/cards/28.png",
+    "imageUrl": "/cards/28.png",
     "faction": "Flame Bull",
     "tag": "Quant-Driven, Deep-Digging Specialist",
     "quote": "Wealth isn’t on the surface — it’s dug out, inch by inch, with your own hands.",
@@ -408,7 +408,7 @@
   {
     "id": 29,
     "name": "Goldminer · 0XDAVID",
-    "imageUrl": "/src/assets/images/cards/29.png",
+    "imageUrl": "/cards/29.png",
     "faction": "Flame Bull",
     "tag": "Quant-Driven, Deep-Digging Specialist",
     "quote": "Wealth isn’t on the surface — it’s dug out, inch by inch, with your own hands.",
@@ -422,7 +422,7 @@
   {
     "id": 30,
     "name": "Goldminer · 0XDAVID",
-    "imageUrl": "/src/assets/images/cards/30.png",
+    "imageUrl": "/cards/30.png",
     "faction": "Flame Bull",
     "tag": "Quant-Driven, Deep-Digging Specialist",
     "quote": "Wealth isn’t on the surface — it’s dug out, inch by inch, with your own hands.",
@@ -436,7 +436,7 @@
   {
     "id": 31,
     "name": "Goldminer · 0XDAVID",
-    "imageUrl": "/src/assets/images/cards/31.png",
+    "imageUrl": "/cards/31.png",
     "faction": "Flame Bull",
     "tag": "Quant-Driven, Deep-Digging Specialist",
     "quote": "Wealth isn’t on the surface — it’s dug out, inch by inch, with your own hands.",
@@ -450,7 +450,7 @@
   {
     "id": 32,
     "name": "Speed Gambler · 19yo Green Hat Kid",
-    "imageUrl": "/src/assets/images/cards/32.png",
+    "imageUrl": "/cards/32.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency, Extreme Gambler",
     "quote": "Those a split-second late — even fate won’t spare them.",
@@ -464,7 +464,7 @@
   {
     "id": 33,
     "name": "Speed Gambler · 19yo Green Hat Kid",
-    "imageUrl": "/src/assets/images/cards/33.png",
+    "imageUrl": "/cards/33.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency, Extreme Gambler",
     "quote": "Those a split-second late — even fate won’t spare them.",
@@ -478,7 +478,7 @@
   {
     "id": 34,
     "name": "Speed Gambler · 19yo Green Hat Kid",
-    "imageUrl": "/src/assets/images/cards/34.png",
+    "imageUrl": "/cards/34.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency, Extreme Gambler",
     "quote": "Those a split-second late — even fate won’t spare them.",
@@ -492,7 +492,7 @@
   {
     "id": 35,
     "name": "Speed Gambler · 19yo Green Hat Kid",
-    "imageUrl": "/src/assets/images/cards/35.png",
+    "imageUrl": "/cards/35.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency, Extreme Gambler",
     "quote": "Those a split-second late — even fate won’t spare them.",
@@ -506,7 +506,7 @@
   {
     "id": 36,
     "name": "Milkshake Sniper · Euris",
-    "imageUrl": "/src/assets/images/cards/36.png",
+    "imageUrl": "/cards/36.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency All-Rounder, Smart Money Hunter",
     "quote": "The shift from cold to hot takes only a blink — harvesting must be fast, ruthless, precise.",
@@ -520,7 +520,7 @@
   {
     "id": 37,
     "name": "Milkshake Sniper · Euris",
-    "imageUrl": "/src/assets/images/cards/37.png",
+    "imageUrl": "/cards/37.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency All-Rounder, Smart Money Hunter",
     "quote": "The shift from cold to hot takes only a blink — harvesting must be fast, ruthless, precise.",
@@ -534,7 +534,7 @@
   {
     "id": 38,
     "name": "Milkshake Sniper · Euris",
-    "imageUrl": "/src/assets/images/cards/38.png",
+    "imageUrl": "/cards/38.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency All-Rounder, Smart Money Hunter",
     "quote": "The shift from cold to hot takes only a blink — harvesting must be fast, ruthless, precise.",
@@ -548,7 +548,7 @@
   {
     "id": 39,
     "name": "Milkshake Sniper · Euris",
-    "imageUrl": "/src/assets/images/cards/39.png",
+    "imageUrl": "/cards/39.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency All-Rounder, Smart Money Hunter",
     "quote": "The shift from cold to hot takes only a blink — harvesting must be fast, ruthless, precise.",
@@ -562,7 +562,7 @@
   {
     "id": 40,
     "name": "Steady Builder · Cow",
-    "imageUrl": "/src/assets/images/cards/40.png",
+    "imageUrl": "/cards/40.png",
     "faction": "Flame Bull",
     "tag": "Stable Player, Winning Through Patience",
     "quote": "Only steady hands deserve to win the market.",
@@ -576,7 +576,7 @@
   {
     "id": 41,
     "name": "Steady Builder · Cow",
-    "imageUrl": "/src/assets/images/cards/41.png",
+    "imageUrl": "/cards/41.png",
     "faction": "Flame Bull",
     "tag": "Stable Player, Winning Through Patience",
     "quote": "Only steady hands deserve to win the market.",
@@ -590,7 +590,7 @@
   {
     "id": 42,
     "name": "Steady Builder · Cow",
-    "imageUrl": "/src/assets/images/cards/42.png",
+    "imageUrl": "/cards/42.png",
     "faction": "Flame Bull",
     "tag": "Stable Player, Winning Through Patience",
     "quote": "Only steady hands deserve to win the market.",
@@ -604,7 +604,7 @@
   {
     "id": 43,
     "name": "Steady Builder · Cow",
-    "imageUrl": "/src/assets/images/cards/43.png",
+    "imageUrl": "/cards/43.png",
     "faction": "Flame Bull",
     "tag": "Stable Player, Winning Through Patience",
     "quote": "Only steady hands deserve to win the market.",
@@ -618,7 +618,7 @@
   {
     "id": 44,
     "name": "Scalping Superman · CUPSEY",
-    "imageUrl": "/src/assets/images/cards/44.png",
+    "imageUrl": "/cards/44.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Striker, Short-Term Hunter",
     "quote": "I’m not betting — I’m slicing the market every second.",
@@ -632,7 +632,7 @@
   {
     "id": 45,
     "name": "Scalping Superman · CUPSEY",
-    "imageUrl": "/src/assets/images/cards/45.png",
+    "imageUrl": "/cards/45.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Striker, Short-Term Hunter",
     "quote": "I’m not betting — I’m slicing the market every second.",
@@ -646,7 +646,7 @@
   {
     "id": 46,
     "name": "Scalping Superman · CUPSEY",
-    "imageUrl": "/src/assets/images/cards/46.png",
+    "imageUrl": "/cards/46.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Striker, Short-Term Hunter",
     "quote": "I’m not betting — I’m slicing the market every second.",
@@ -660,7 +660,7 @@
   {
     "id": 47,
     "name": "Scalping Superman · CUPSEY",
-    "imageUrl": "/src/assets/images/cards/47.png",
+    "imageUrl": "/cards/47.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Striker, Short-Term Hunter",
     "quote": "I’m not betting — I’m slicing the market every second.",
@@ -674,7 +674,7 @@
   {
     "id": 48,
     "name": "Orderbook Cultivator · Yifan",
-    "imageUrl": "/src/assets/images/cards/48.png",
+    "imageUrl": "/cards/48.png",
     "faction": "Turbulent Bear",
     "tag": "Focused, Patient Practitioner",
     "quote": "If I cultivate long enough, the market will eventually place rewards in my hands.",
@@ -688,7 +688,7 @@
   {
     "id": 49,
     "name": "Orderbook Cultivator · Yifan",
-    "imageUrl": "/src/assets/images/cards/49.png",
+    "imageUrl": "/cards/49.png",
     "faction": "Turbulent Bear",
     "tag": "Focused, Patient Practitioner",
     "quote": "If I cultivate long enough, the market will eventually place rewards in my hands.",
@@ -702,7 +702,7 @@
   {
     "id": 50,
     "name": "Orderbook Cultivator · Yifan",
-    "imageUrl": "/src/assets/images/cards/50.png",
+    "imageUrl": "/cards/50.png",
     "faction": "Turbulent Bear",
     "tag": "Focused, Patient Practitioner",
     "quote": "If I cultivate long enough, the market will eventually place rewards in my hands.",
@@ -716,7 +716,7 @@
   {
     "id": 51,
     "name": "Orderbook Cultivator · Yifan",
-    "imageUrl": "/src/assets/images/cards/51.png",
+    "imageUrl": "/cards/51.png",
     "faction": "Turbulent Bear",
     "tag": "Focused, Patient Practitioner",
     "quote": "If I cultivate long enough, the market will eventually place rewards in my hands.",
@@ -730,7 +730,7 @@
   {
     "id": 52,
     "name": "Arbitrage Commander · CENTED",
-    "imageUrl": "/src/assets/images/cards/52.png",
+    "imageUrl": "/cards/52.png",
     "faction": "Flame Bull",
     "tag": "Chain Scanner, Arbitrage Operator",
     "quote": "As long as liquidity fluctuates, I have arbitrage opportunities.",
@@ -744,7 +744,7 @@
   {
     "id": 53,
     "name": "Arbitrage Commander · CENTED",
-    "imageUrl": "/src/assets/images/cards/53.png",
+    "imageUrl": "/cards/53.png",
     "faction": "Flame Bull",
     "tag": "Chain Scanner, Arbitrage Operator",
     "quote": "As long as liquidity fluctuates, I have arbitrage opportunities.",
@@ -758,7 +758,7 @@
   {
     "id": 54,
     "name": "Arbitrage Commander · CENTED",
-    "imageUrl": "/src/assets/images/cards/54.png",
+    "imageUrl": "/cards/54.png",
     "faction": "Flame Bull",
     "tag": "Chain Scanner, Arbitrage Operator",
     "quote": "As long as liquidity fluctuates, I have arbitrage opportunities.",
@@ -772,7 +772,7 @@
   {
     "id": 55,
     "name": "Arbitrage Commander · CENTED",
-    "imageUrl": "/src/assets/images/cards/55.png",
+    "imageUrl": "/cards/55.png",
     "faction": "Flame Bull",
     "tag": "Chain Scanner, Arbitrage Operator",
     "quote": "As long as liquidity fluctuates, I have arbitrage opportunities.",
@@ -786,7 +786,7 @@
   {
     "id": 56,
     "name": "Frontline Sprinter · WEST",
-    "imageUrl": "/src/assets/images/cards/56.png",
+    "imageUrl": "/cards/56.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Attacker, Jumpstart Player",
     "quote": "The victory in the first step often decides the whole game.",
@@ -800,7 +800,7 @@
   {
     "id": 57,
     "name": "Frontline Sprinter · WEST",
-    "imageUrl": "/src/assets/images/cards/57.png",
+    "imageUrl": "/cards/57.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Attacker, Jumpstart Player",
     "quote": "The victory in the first step often decides the whole game.",
@@ -814,7 +814,7 @@
   {
     "id": 58,
     "name": "Frontline Sprinter · WEST",
-    "imageUrl": "/src/assets/images/cards/58.png",
+    "imageUrl": "/cards/58.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Attacker, Jumpstart Player",
     "quote": "The victory in the first step often decides the whole game.",
@@ -828,7 +828,7 @@
   {
     "id": 59,
     "name": "Frontline Sprinter · WEST",
-    "imageUrl": "/src/assets/images/cards/59.png",
+    "imageUrl": "/cards/59.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Attacker, Jumpstart Player",
     "quote": "The victory in the first step often decides the whole game.",
@@ -842,7 +842,7 @@
   {
     "id": 60,
     "name": "Frog Reaper · MR.FROG",
-    "imageUrl": "/src/assets/images/cards/60.png",
+    "imageUrl": "/cards/60.png",
     "faction": "Turbulent Bear",
     "tag": "High-Win-Rate Cutter, Calm Orderbook Player",
     "quote": "I only take what others lose — never jump in for emotion.",
@@ -856,7 +856,7 @@
   {
     "id": 61,
     "name": "Frog Reaper · MR.FROG",
-    "imageUrl": "/src/assets/images/cards/61.png",
+    "imageUrl": "/cards/61.png",
     "faction": "Turbulent Bear",
     "tag": "High-Win-Rate Cutter, Calm Orderbook Player",
     "quote": "I only take what others lose — never jump in for emotion.",
@@ -870,7 +870,7 @@
   {
     "id": 62,
     "name": "Frog Reaper · MR.FROG",
-    "imageUrl": "/src/assets/images/cards/62.png",
+    "imageUrl": "/cards/62.png",
     "faction": "Turbulent Bear",
     "tag": "High-Win-Rate Cutter, Calm Orderbook Player",
     "quote": "I only take what others lose — never jump in for emotion.",
@@ -884,7 +884,7 @@
   {
     "id": 63,
     "name": "Frog Reaper · MR.FROG",
-    "imageUrl": "/src/assets/images/cards/63.png",
+    "imageUrl": "/cards/63.png",
     "faction": "Turbulent Bear",
     "tag": "High-Win-Rate Cutter, Calm Orderbook Player",
     "quote": "I only take what others lose — never jump in for emotion.",
@@ -898,7 +898,7 @@
   {
     "id": 64,
     "name": "Letter Bomber · LETTERBOMB",
-    "imageUrl": "/src/assets/images/cards/64.png",
+    "imageUrl": "/cards/64.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Signal, Mechanical Trader",
     "quote": "When I press the button, it’s not guessing — it’s execution.",
@@ -912,7 +912,7 @@
   {
     "id": 65,
     "name": "Letter Bomber · LETTERBOMB",
-    "imageUrl": "/src/assets/images/cards/65.png",
+    "imageUrl": "/cards/65.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Signal, Mechanical Trader",
     "quote": "When I press the button, it’s not guessing — it’s execution.",
@@ -926,7 +926,7 @@
   {
     "id": 66,
     "name": "Letter Bomber · LETTERBOMB",
-    "imageUrl": "/src/assets/images/cards/66.png",
+    "imageUrl": "/cards/66.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Signal, Mechanical Trader",
     "quote": "When I press the button, it’s not guessing — it’s execution.",
@@ -940,7 +940,7 @@
   {
     "id": 67,
     "name": "Letter Bomber · LETTERBOMB",
-    "imageUrl": "/src/assets/images/cards/67.png",
+    "imageUrl": "/cards/67.png",
     "faction": "Turbulent Bear",
     "tag": "High-Frequency Signal, Mechanical Trader",
     "quote": "When I press the button, it’s not guessing — it’s execution.",
@@ -954,7 +954,7 @@
   {
     "id": 68,
     "name": "Lone Fang Hunter · KILLWOLF",
-    "imageUrl": "/src/assets/images/cards/68.png",
+    "imageUrl": "/cards/68.png",
     "faction": "Flame Bull",
     "tag": "Aggressive Style, All-In Gambler",
     "quote": "I’m not betting on win rate — I’m betting on a comeback.",
@@ -968,7 +968,7 @@
   {
     "id": 69,
     "name": "Lone Fang Hunter · KILLWOLF",
-    "imageUrl": "/src/assets/images/cards/69.png",
+    "imageUrl": "/cards/69.png",
     "faction": "Flame Bull",
     "tag": "Aggressive Style, All-In Gambler",
     "quote": "I’m not betting on win rate — I’m betting on a comeback.",
@@ -982,7 +982,7 @@
   {
     "id": 70,
     "name": "Lone Fang Hunter · KILLWOLF",
-    "imageUrl": "/src/assets/images/cards/70.png",
+    "imageUrl": "/cards/70.png",
     "faction": "Flame Bull",
     "tag": "Aggressive Style, All-In Gambler",
     "quote": "I’m not betting on win rate — I’m betting on a comeback.",
@@ -996,7 +996,7 @@
   {
     "id": 71,
     "name": "Lone Fang Hunter · KILLWOLF",
-    "imageUrl": "/src/assets/images/cards/71.png",
+    "imageUrl": "/cards/71.png",
     "faction": "Flame Bull",
     "tag": "Aggressive Style, All-In Gambler",
     "quote": "I’m not betting on win rate — I’m betting on a comeback.",
@@ -1010,7 +1010,7 @@
   {
     "id": 72,
     "name": "Chip Strategist · MR_CASINO",
-    "imageUrl": "/src/assets/images/cards/72.png",
+    "imageUrl": "/cards/72.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Operator, Cost Calculator",
     "quote": "In the casino, the winner isn’t who plays the most — it’s who sees the clearest.",
@@ -1024,7 +1024,7 @@
   {
     "id": 73,
     "name": "Chip Strategist · MR_CASINO",
-    "imageUrl": "/src/assets/images/cards/73.png",
+    "imageUrl": "/cards/73.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Operator, Cost Calculator",
     "quote": "In the casino, the winner isn’t who plays the most — it’s who sees the clearest.",
@@ -1038,7 +1038,7 @@
   {
     "id": 74,
     "name": "Chip Strategist · MR_CASINO",
-    "imageUrl": "/src/assets/images/cards/74.png",
+    "imageUrl": "/cards/74.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Operator, Cost Calculator",
     "quote": "In the casino, the winner isn’t who plays the most — it’s who sees the clearest.",
@@ -1052,7 +1052,7 @@
   {
     "id": 75,
     "name": "Chip Strategist · MR_CASINO",
-    "imageUrl": "/src/assets/images/cards/75.png",
+    "imageUrl": "/cards/75.png",
     "faction": "Flame Bull",
     "tag": "High-Frequency Operator, Cost Calculator",
     "quote": "In the casino, the winner isn’t who plays the most — it’s who sees the clearest.",
@@ -1066,7 +1066,7 @@
   {
     "id": 76,
     "name": "Blitz King · DANNY",
-    "imageUrl": "/src/assets/images/cards/76.png",
+    "imageUrl": "/cards/76.png",
     "faction": "Flame Bull",
     "tag": "High-Leverage Attacker, Quick-Strike Player",
     "quote": "Those who calculate slow can’t beat the king who moves fast.",
@@ -1080,7 +1080,7 @@
   {
     "id": 77,
     "name": "Blitz King · DANNY",
-    "imageUrl": "/src/assets/images/cards/77.png",
+    "imageUrl": "/cards/77.png",
     "faction": "Flame Bull",
     "tag": "High-Leverage Attacker, Quick-Strike Player",
     "quote": "Those who calculate slow can’t beat the king who moves fast.",
@@ -1094,7 +1094,7 @@
   {
     "id": 78,
     "name": "Blitz King · DANNY",
-    "imageUrl": "/src/assets/images/cards/78.png",
+    "imageUrl": "/cards/78.png",
     "faction": "Flame Bull",
     "tag": "High-Leverage Attacker, Quick-Strike Player",
     "quote": "Those who calculate slow can’t beat the king who moves fast.",
@@ -1108,7 +1108,7 @@
   {
     "id": 79,
     "name": "Blitz King · DANNY",
-    "imageUrl": "/src/assets/images/cards/79.png",
+    "imageUrl": "/cards/79.png",
     "faction": "Flame Bull",
     "tag": "High-Leverage Attacker, Quick-Strike Player",
     "quote": "Those who calculate slow can’t beat the king who moves fast.",

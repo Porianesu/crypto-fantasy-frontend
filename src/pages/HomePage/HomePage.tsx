@@ -14,6 +14,12 @@ import { getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toast'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
+import fusionIcon from '/src/assets/images/home_page/footer_button_fusion.png'
+import galleryIcon from '/src/assets/images/home_page/footer_button_achs.png'
+import bagIcon from '/src/assets/images/home_page/footer_button_bag.png'
+import battleIcon from '/src/assets/images/home_page/footer_button_battle.png'
+import rewardIcon from '/src/assets/images/home_page/footer_button_reward.png'
+import shopIcon from '/src/assets/images/home_page/footer_button_shop.png'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
@@ -82,19 +88,19 @@ function HomePage() {
   const footerButtons = [
     {
       key: 'fusion',
-      icon: '/src/assets/images/home_page/footer_button_fusion.png',
+      icon: fusionIcon,
       className: 'w-[173px] h-[177px]',
       onClick: comingSoon,
     },
     {
       key: 'gallery',
-      icon: '/src/assets/images/home_page/footer_button_achs.png',
+      icon: galleryIcon,
       className: 'w-[173px] h-[175px]',
       onClick: () => navigate(getGalleryPath()),
     },
     {
       key: 'bag',
-      icon: '/src/assets/images/home_page/footer_button_bag.png',
+      icon: bagIcon,
       className: 'w-[174px] h-[174px]',
       onClick: () =>
         changeCardsBagModalData({
@@ -104,19 +110,19 @@ function HomePage() {
     },
     {
       key: 'battle',
-      icon: '/src/assets/images/home_page/footer_button_battle.png',
+      icon: battleIcon,
       className: 'w-[173px] h-[164px]',
       onClick: comingSoon,
     },
     {
       key: 'reward',
-      icon: '/src/assets/images/home_page/footer_button_reward.png',
+      icon: rewardIcon,
       className: 'w-[177px] h-[165px]',
       onClick: comingSoon,
     },
     {
       key: 'shop',
-      icon: '/src/assets/images/home_page/footer_button_shop.png',
+      icon: shopIcon,
       className: 'w-[173px] h-[175px]',
       onClick: comingSoon,
     },
