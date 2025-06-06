@@ -1,6 +1,6 @@
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
 
-const defaultAvatars = import.meta.glob('../assets/images/avatars/*.png', {
+const defaultAvatars = import.meta.glob<string>('../assets/images/avatars/*.png', {
   eager: true,
   import: 'default',
 })
