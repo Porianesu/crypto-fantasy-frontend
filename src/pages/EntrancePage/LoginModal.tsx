@@ -22,7 +22,8 @@ const LoginModal: React.FC = () => {
     if (!email) return toast.warn('Please enter your email.')
     const password = formData.get('password')
     if (!password) return toast.warn('Please enter your password.')
-    console.log('邮箱:', email, '密码:', password)
+    if (email !== 'fantasydemo') return toast.error('Wrong account!')
+    if (password !== 'fantasy666') return toast.error('Wrong password!')
     setStorageUserInfo({
       email: email as string,
     })
