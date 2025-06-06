@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useRef } from 'react'
 import { Content, Description, Dialog, DialogOverlay, Portal, Title } from '@radix-ui/react-dialog'
 import classNames from 'classnames'
 import styles from './ViewDetailModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import Text from '@/components/Text.tsx'
+import Text, { type ITextHandle } from '@/components/Text.tsx'
 
 const ViewDetailModal: React.FC = () => {
   const {
@@ -15,6 +15,12 @@ const ViewDetailModal: React.FC = () => {
       changeViewDetailModalVisible,
     },
   } = useMobxStore()
+  const textRef = useRef<ITextHandle>(null)
+
+  const handleTextContainerClick = () => {
+    textRef.current?.tweenRef.current?.revert()
+  }
+
   return (
     <Dialog open={viewDetailModalVisible} onOpenChange={changeViewDetailModalVisible}>
       <Portal>
@@ -27,8 +33,8 @@ const ViewDetailModal: React.FC = () => {
           <Content className={styles.modalContent} onInteractOutside={(e) => e.preventDefault()}>
             <Title className={styles.title}>Chainspirit Backstory</Title>
             <Description></Description>
-            <div className={styles.content}>
-              <Text>{viewDetailModalData?.backstory}</Text>
+            <div className={styles.content} onClick={handleTextContainerClick}>
+              <Text ref={textRef}>{viewDetailModalData?.backstory}</Text>
             </div>
             <div className={styles.line}></div>
             <div

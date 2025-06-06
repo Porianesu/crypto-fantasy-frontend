@@ -14,7 +14,7 @@
     }
 
     .content {
-        @apply self-stretch grow shrink basis-0 overflow-x-hidden overflow-y-auto text-[#64401E] text-[20px] font-normal leading-[24px];
+        @apply cursor-pointer self-stretch grow shrink basis-0 overflow-x-hidden overflow-y-auto text-[#64401E] text-[20px] font-normal leading-[24px];
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
 

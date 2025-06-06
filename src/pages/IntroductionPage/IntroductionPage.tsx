@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styles from './IntroductionPage.module.css'
-import Text from '@/components/Text.tsx'
+import Text, { type ITextHandle } from '@/components/Text.tsx'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath } from '@/navigation/routes.tsx'
@@ -9,6 +9,12 @@ import { setStorageUserInfo } from '@/utils/common.ts'
 
 const IntroductionPage: React.FC = () => {
   const navigate = useNavigate()
+  const textRef = useRef<ITextHandle>(null)
+
+  const handleTextContainerClick = () => {
+    textRef.current?.tweenRef.current?.revert()
+  }
+
   const handleStartButtonClick = () => {
     navigate(getHomePath())
   }
@@ -21,8 +27,14 @@ const IntroductionPage: React.FC = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <div className={styles.textContainer}>
-        <Text className={classNames(styles.introduction)}>
+      <div className={styles.textContainer} onClick={handleTextContainerClick}>
+        <Text
+          ref={textRef}
+          className={classNames(styles.introduction)}
+          splitTextVars={{
+            smartWrap: false,
+          }}
+        >
           {'Since the dawn of Bitcoin, the civilization of blockchain has rapidly \n' +
             "expanded. Satoshi's dream evolvedinto the Interchain Realms-a world \n" +
             'of countless projects coexisting. Each public chain is like acontinent, birthing \n' +
