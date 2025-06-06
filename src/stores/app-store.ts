@@ -5,6 +5,7 @@ import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts
 import { getDefaultAvatar, getStorageItem } from '@/utils/common.ts'
 import type { ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toast'
+import { BigNumber } from 'bignumber.js'
 
 interface UserInfo extends UserStorageInfo {
   avatarUrl: string
@@ -152,18 +153,18 @@ export default class StoresStore {
         cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
         cardsImagesPreloadQueue.on('complete', () => {
           console.debug('当次抽卡卡片图片预加载完成')
-          this.userInfo!.solAmount -= 0.1
+          this.userInfo!.solAmount = new BigNumber(this.userInfo!.solAmount).minus(0.1).toNumber()
           resolve(resultCards)
         })
         cardsImagesPreloadQueue.on('error', () => {
           console.error('当次抽卡卡片图片预加载失败')
-          this.userInfo!.solAmount -= 0.1
+          this.userInfo!.solAmount = new BigNumber(this.userInfo!.solAmount).minus(0.1).toNumber()
           resolve(resultCards)
         })
         cardsImagesPreloadQueue.loadManifest(preloadImageList)
       } else {
         console.debug('当次抽卡卡片图片预加载列表为空，直接返回结果')
-        this.userInfo!.solAmount -= 0.1
+        this.userInfo!.solAmount = new BigNumber(this.userInfo!.solAmount).minus(0.1).toNumber()
         resolve(resultCards)
       }
     })
