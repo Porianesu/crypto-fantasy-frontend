@@ -64,7 +64,7 @@ function HomePage() {
           }
           if (drawCardSound) {
             drawCardSound.play({
-              volume: 2,
+              volume: 1,
             })
           }
           videoEl.play()
