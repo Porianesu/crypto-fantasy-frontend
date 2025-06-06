@@ -96,9 +96,6 @@ export default [
     src: '/src/assets/images/home_page/draw_cards_modal_close_button.png',
   },
   {
-    src: '/src/assets/images/home_page/draw_cards_modal_title.png',
-  },
-  {
     src: '/src/assets/images/home_page/footer_button_achs.png',
   },
   {

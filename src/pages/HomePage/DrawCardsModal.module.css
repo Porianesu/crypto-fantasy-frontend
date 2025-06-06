@@ -8,11 +8,6 @@
     @apply max-w-full top-1/2 left-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none;
     transform: translate(-50%, -50%);
 
-    .title {
-        @apply w-[716px] h-[200px] mb-[84px];
-        @apply bg-[url('/src/assets/images/home_page/draw_cards_modal_title.png')] bg-contain bg-top-left bg-no-repeat;
-    }
-
     .description {
         @apply text-[#FFFFE4] text-[40px] font-normal mb-4;
     }
