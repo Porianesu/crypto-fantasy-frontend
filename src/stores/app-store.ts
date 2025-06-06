@@ -8,7 +8,8 @@ import { toast } from 'react-toast'
 
 interface UserInfo extends UserStorageInfo {
   avatarUrl: string
-  assetAmount: number
+  solAmount: number
+  dustAmount: number
   expPercent: number
 }
 
@@ -62,7 +63,8 @@ export default class StoresStore {
       this.userInfo = {
         ...result,
         avatarUrl: getDefaultAvatar(),
-        assetAmount: 12345,
+        solAmount: 100,
+        dustAmount: 0,
         expPercent: 68,
       }
       this.cardsFormation = []
@@ -110,8 +112,8 @@ export default class StoresStore {
 
   drawCards = () => {
     return new Promise<Array<ICardData>>((resolve, reject) => {
-      if (!this.userInfo || this.userInfo.assetAmount <= 1000)
-        return toast.warn('Out of assets, please recharge first.')
+      if (!this.userInfo || this.userInfo.solAmount <= 0.1)
+        return toast.warn('Insufficient Balance!')
       const cardsData = this.rootStoreRef.preloadStore.preloadQueue?.getResult(
         'cardsData',
       ) as Array<ICardData>
@@ -150,18 +152,18 @@ export default class StoresStore {
         cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
         cardsImagesPreloadQueue.on('complete', () => {
           console.debug('当次抽卡卡片图片预加载完成')
-          this.userInfo!.assetAmount -= 1000
+          this.userInfo!.solAmount -= 0.1
           resolve(resultCards)
         })
         cardsImagesPreloadQueue.on('error', () => {
           console.error('当次抽卡卡片图片预加载失败')
-          this.userInfo!.assetAmount -= 1000
+          this.userInfo!.solAmount -= 0.1
           resolve(resultCards)
         })
         cardsImagesPreloadQueue.loadManifest(preloadImageList)
       } else {
         console.debug('当次抽卡卡片图片预加载列表为空，直接返回结果')
-        this.userInfo!.assetAmount -= 1000
+        this.userInfo!.solAmount -= 0.1
         resolve(resultCards)
       }
     })

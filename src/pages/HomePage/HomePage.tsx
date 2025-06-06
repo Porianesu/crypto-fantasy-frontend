@@ -165,14 +165,14 @@ function HomePage() {
               <div className={styles.assetIconContainer}>
                 <div className={styles.assetIcon1}></div>
               </div>
-              <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
+              <span className={styles.assetAmount}>{userInfo.solAmount}</span>
               <div className={styles.assetPlusButton} onClick={comingSoon}></div>
             </div>
             <div className={styles.assetContainer}>
               <div className={styles.assetIconContainer}>
                 <div className={styles.assetIcon2}></div>
               </div>
-              <span className={styles.assetAmount}>{userInfo.assetAmount}</span>
+              <span className={styles.assetAmount}>{userInfo.dustAmount}</span>
               <div className={styles.assetPlusButton} onClick={comingSoon}></div>
             </div>
           </div>
