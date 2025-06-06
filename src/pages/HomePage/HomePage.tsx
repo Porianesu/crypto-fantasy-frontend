@@ -23,6 +23,7 @@ function HomePage() {
     appStore: { userInfo, drawCards, addCardsToBag },
     modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
   } = useMobxStore()
+  const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const drawCardSound = audioInstanceMap.get(AudioInstanceId.DrawCardSound)
   const navigate = useNavigate()
   const [cards, setCards] = useState<Array<ICardData>>([])
@@ -51,8 +52,7 @@ function HomePage() {
           const videoEl = videoRef.current!.getElement() as HTMLVideoElement
           videoEl.loop = false
           videoEl.onended = () => {
-            // 这里处理播放完成后的逻辑
-            console.log('视频播放完成')
+            bgmSound?.setVolume(0.5)
             gsap.to(videoRef.current!.getContainer(), {
               autoAlpha: 0,
               duration: 0.3,
@@ -62,6 +62,7 @@ function HomePage() {
               },
             })
           }
+          bgmSound?.setVolume(0.2)
           if (drawCardSound) {
             drawCardSound.play({
               volume: 1,
