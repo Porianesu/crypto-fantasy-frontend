@@ -45,12 +45,20 @@
     .cardContent {
         @apply absolute w-full h-full rounded-lg overflow-hidden z-[2];
 
+        .cardNameWrapper {
+            @apply absolute flex items-center justify-between h-9;
+        }
+
         .cardName {
-            @apply absolute w-[156px] text-2xl font-normal whitespace-pre overflow-hidden text-center;
+            @apply w-[156px] text-2xl font-normal whitespace-pre overflow-hidden text-center;
+        }
+
+        .cardNicknameWrapper {
+            @apply absolute flex items-center justify-between h-10;
         }
 
         .cardNickname {
-            @apply absolute w-[160px] text-[#F3E838] text-2xl font-normal whitespace-pre overflow-hidden text-center;
+            @apply w-[160px] text-[#F3E838] text-2xl font-normal whitespace-pre overflow-hidden text-center;
         }
 
         .cardScore {
@@ -64,11 +72,11 @@
             @apply top-[44px] left-[14px]
         }
 
-        .cardName {
+        .cardNameWrapper {
             @apply text-[#030202] top-[44px] left-[70px];
         }
 
-        .cardNickname {
+        .cardNicknameWrapper {
             @apply top-[280px] left-[54px]
         }
     }
@@ -78,11 +86,11 @@
             @apply top-[50px] left-[18px]
         }
 
-        .cardName {
+        .cardNameWrapper {
             @apply text-[#12468D] top-[48px] left-[78px];
         }
 
-        .cardNickname {
+        .cardNicknameWrapper {
             @apply top-[280px] left-[54px]
         }
     }
@@ -92,11 +100,11 @@
             @apply top-[48px] left-[16px]
         }
 
-        .cardName {
+        .cardNameWrapper {
             @apply text-[#661483] top-[44px] left-[78px];
         }
 
-        .cardNickname {
+        .cardNicknameWrapper {
             @apply top-[278px] left-[54px]
         }
     }
@@ -106,11 +114,11 @@
             @apply top-[56px] left-[14px]
         }
 
-        .cardName {
+        .cardNameWrapper {
             @apply text-[#73502A] top-[54px] left-[70px];
         }
 
-        .cardNickname {
+        .cardNicknameWrapper {
             @apply top-[288px] left-[54px]
         }
     }

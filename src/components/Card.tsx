@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import styles from './Card.module.css'
 import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
+import { Textfit } from 'react-textfit'
 
 const timeRate = 1
 export enum CARD_RARITY {
@@ -135,8 +136,16 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) =>
           className={classNames(styles.cardBackBorder, styles[`cardBackRarity${card.rarity}`])}
         ></div>
         <div className={classNames(styles.cardContent, styles[`cardContentRarity${card.rarity}`])}>
-          <div className={styles.cardName}>{cardName}</div>
-          <div className={styles.cardNickname}>{cardNickname}</div>
+          <div className={styles.cardNameWrapper}>
+            <div className={styles.cardName}>
+              <Textfit mode={'single'}>{cardName}</Textfit>
+            </div>
+          </div>
+          <div className={styles.cardNicknameWrapper}>
+            <div className={styles.cardNickname}>
+              <Textfit>{cardNickname}</Textfit>
+            </div>
+          </div>
           <div className={styles.cardScore}>{card.score}</div>
         </div>
         <div

@@ -24,6 +24,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.0",
     "react-router-dom": "^7.6.0",
+    "react-textfit": "^1.1.1",
     "react-toast": "^1.0.3",
     "react-transition-group": "^4.4.5",
     "tailwindcss": "^4.1.7"
@@ -33,6 +34,7 @@
     "@types/createjs": "^0.0.32",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "@types/react-textfit": "^1.1.4",
     "@types/react-transition-group": "^4.4.12",
     "@vitejs/plugin-react-swc": "^3.9.0",
     "eslint": "^9.25.0",
