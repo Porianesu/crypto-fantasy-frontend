@@ -18,15 +18,17 @@ const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.ts
 
 function HomePage() {
   const {
+    preloadStore: { audioInstanceMap },
     appStore: { userInfo, drawCards, addCardsToBag },
     modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
   } = useMobxStore()
+  const drawCardSound = audioInstanceMap.get('drawCardSound')
   const navigate = useNavigate()
   const [cards, setCards] = useState<Array<ICardData>>([])
   const pageContainerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<IPreloadElementHandle>(null)
 
-  const handleOpenPackage = () => {
+  const handleOpenPack = () => {
     if (videoRef.current) {
       // 模拟获取5张随机卡片
       drawCards().then((cards) => {
@@ -57,6 +59,11 @@ function HomePage() {
                 gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
                 changeDrawCardsModalVisible(true)
               },
+            })
+          }
+          if (drawCardSound) {
+            drawCardSound.play({
+              volume: 2,
             })
           }
           videoEl.play()
@@ -119,7 +126,7 @@ function HomePage() {
         <div className="w-[491px] h-[430px] bg-[url(/src/assets/images/home_page/open_package.png)] bg-contain bg-center bg-no-repeat mb-7"></div>
         <div
           className="cursor-pointer active:scale-90 flex items-center justify-center w-[340px] h-[102px] transition bg-[url(/src/assets/images/home_page/open_package_button_background.png)] bg-contain bg-center bg-no-repeat text-[36px] font-normal text-[#2A1914]"
-          onClick={handleOpenPackage}
+          onClick={handleOpenPack}
         >
           Open Pack
         </div>

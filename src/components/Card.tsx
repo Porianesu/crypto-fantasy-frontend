@@ -100,6 +100,9 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) =>
     if (cardIsFlipped.current) {
       return
     } else {
+      window.createjs.Sound.play('flipCardSound', {
+        volume: 1,
+      })
       flipAnimationTimelineRef.current.reversed(!flipAnimationTimelineRef.current.reversed())
     }
   }

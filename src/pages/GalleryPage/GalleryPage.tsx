@@ -20,7 +20,8 @@ const GalleryPage: React.FC = () => {
   const { cardId } = useParams()
   const navigate = useNavigate()
   const {
-    appStore: { preloadQueue, cardsBag },
+    preloadStore: { preloadQueue },
+    appStore: { cardsBag },
     modalStore: { changeViewDetailModalVisible, changeViewDetailModalData },
   } = useMobxStore()
   const [selectedCard, setSelectedCard] = useState<ICardData>()

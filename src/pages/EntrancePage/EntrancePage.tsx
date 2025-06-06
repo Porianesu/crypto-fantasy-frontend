@@ -12,9 +12,11 @@ const LoginModal = React.lazy(() => import('@/pages/EntrancePage/LoginModal.tsx'
 
 const EntrancePage: React.FC = () => {
   const {
-    appStore: { initData, preloadProgress },
+    preloadStore: { preloadProgress, audioInstanceMap },
+    appStore: { initData },
     modalStore: { changeLoginModalVisible },
   } = useMobxStore()
+  const bgmInstance = audioInstanceMap.get('bgm')
   const containerRef = useRef<HTMLDivElement>(null)
   const progressBarWrapperRef = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
@@ -64,6 +66,12 @@ const EntrancePage: React.FC = () => {
   )
 
   const handleStartButtonClick = () => {
+    if (bgmInstance) {
+      bgmInstance.play({
+        loop: -1,
+        volume: 0.3,
+      })
+    }
     if (checkIsAuth()) {
       const checkResult = checkHasAlreadyReadGuide()
       if (checkResult) {

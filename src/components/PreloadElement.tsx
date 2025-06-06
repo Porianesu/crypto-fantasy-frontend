@@ -17,7 +17,7 @@ interface IPreloadElementProps {
 const PreloadElement = React.forwardRef<IPreloadElementHandle, IPreloadElementProps>(
   ({ id, className, style }, ref) => {
     const {
-      appStore: { preloadQueue },
+      preloadStore: { preloadQueue },
     } = useMobxStore()
     const containerRef = useRef<HTMLDivElement>(null)
     const elementRef = useRef<HTMLElement>(null)

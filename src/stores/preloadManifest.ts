@@ -9,6 +9,18 @@ export default [
     type: 'video',
   },
   {
+    id: 'bgm',
+    src: '/src/assets/audio/background_music.mp3',
+  },
+  {
+    id: 'drawCardSound',
+    src: '/src/assets/audio/draw_card_final.mp3',
+  },
+  {
+    id: 'flipCardSound',
+    src: '/src/assets/audio/flip_card_final.mp3',
+  },
+  {
     src: '/src/assets/images/avatars/avatar_00.png',
   },
   {
