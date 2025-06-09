@@ -27,6 +27,8 @@ export default class ModalStore {
 
   viewDetailModalVisible = false
 
+  cardsFormationModalVisible = false
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeObservable(this, {
@@ -41,6 +43,8 @@ export default class ModalStore {
       changeViewDetailModalData: action,
       viewDetailModalVisible: observable,
       changeViewDetailModalVisible: action,
+      cardsFormationModalVisible: observable,
+      changeCardsFormationModalVisible: action,
     })
   }
 
@@ -76,5 +80,9 @@ export default class ModalStore {
 
   changeViewDetailModalVisible = (newValue: boolean) => {
     this.viewDetailModalVisible = newValue
+  }
+
+  changeCardsFormationModalVisible = (newValue: boolean) => {
+    this.cardsFormationModalVisible = newValue
   }
 }

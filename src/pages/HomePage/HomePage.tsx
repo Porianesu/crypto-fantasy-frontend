@@ -8,7 +8,7 @@ import { gsap } from 'gsap'
 import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
 import { type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
-import CardFormation from '@/pages/HomePage/CardFormation.tsx'
+import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
@@ -22,6 +22,7 @@ import rewardIcon from '../../../src/assets/images/home_page/footer_button_rewar
 import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.png'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
+const CardsFormationModal = React.lazy(() => import('@/pages/HomePage/CardsFormationModal.tsx'))
 
 function HomePage() {
   const {
@@ -191,7 +192,7 @@ function HomePage() {
         {/* 中间抽卡/书本图示 */}
         <div className="flex-1"></div>
         {/* 右侧卡组展示 */}
-        <CardFormation></CardFormation>
+        <CardsFormation></CardsFormation>
       </div>
       <div className={styles.footer}>
         <div className={styles.footerBtnGroup}>
@@ -222,6 +223,9 @@ function HomePage() {
       {cards.length ? <DrawCardsModal cards={cards}></DrawCardsModal> : null}
       <Suspense fallback={null}>
         <CardsBagModal></CardsBagModal>
+      </Suspense>
+      <Suspense fallback={null}>
+        <CardsFormationModal></CardsFormationModal>
       </Suspense>
     </div>
   )

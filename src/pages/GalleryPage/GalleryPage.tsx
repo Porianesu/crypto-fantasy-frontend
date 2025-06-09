@@ -54,7 +54,6 @@ const GalleryPage: React.FC = () => {
     return new Promise<Array<FormattedCardData>>((resolve, reject) => {
       if (!preloadQueue) reject(new Error('No preload queue'))
       const cardDatabase = preloadQueue!.getResult('cardsData') as Array<ICardData>
-      console.log('cardDatabase', cardDatabase)
       const formattedCards = cardDatabase.map((card) => {
         return {
           ...card,

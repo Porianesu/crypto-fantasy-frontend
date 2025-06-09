@@ -1,22 +1,18 @@
 import { observer } from 'mobx-react-lite'
 import React from 'react'
-import styles from './CardFormation.module.css'
+import styles from './CardsFormation.module.css'
 import classNames from 'classnames'
 import StaticCard from '@/components/StaticCard.tsx'
-import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 
-const CardFormation: React.FC = () => {
+const CardsFormation: React.FC = () => {
   const {
     appStore: { cardsFormation },
-    modalStore: { changeCardsBagModalData },
+    modalStore: { changeCardsFormationModalVisible },
   } = useMobxStore()
 
   const handleCardClick = () => {
-    changeCardsBagModalData({
-      visible: true,
-      type: ICardsBagModalType.EDIT,
-    })
+    changeCardsFormationModalVisible(true)
   }
 
   return (
@@ -44,4 +40,4 @@ const CardFormation: React.FC = () => {
     </div>
   )
 }
-export default observer(CardFormation)
+export default observer(CardsFormation)

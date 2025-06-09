@@ -68,7 +68,7 @@ const CardsBagContent: React.FC = observer(() => {
       const width = gsap.getProperty(cardsGridRef.current, 'width')
       if (!width) return
       const cardWidth = Math.floor((Number(width) - 184) / 5)
-      console.log('cardWidth', cardWidth)
+      console.debug('cardWidth', cardWidth)
       setCardWidth(cardWidth)
     },
     {

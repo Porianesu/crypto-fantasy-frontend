@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@keyframes __slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes __slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+.overlay {
+    @apply fixed inset-0 z-50;
+
+    &[data-state='open'] {
+        animation: __slideInLeft 0.3s ease-in-out forwards;
+    }
+
+    &[data-state='closed'] {
+        animation: __slideOutLeft 0.3s ease-out forwards;
+    }
+}
+
+.modalContent {
+    @apply h-[96vh] w-[800px] absolute bottom-0 left-0 focus-visible:outline-none flex flex-col items-stretch px-[60px] py-[44px];
+    @apply bg-[url('/src/assets/images/home_page/cards_formation_modal/background.png')] bg-top-left bg-no-repeat;
+    background-size: 100% 100%;
+
+    .closeBtn {
+        @apply cursor-pointer size-[108px] absolute -right-[36px] -top-[34px];
+        @apply bg-[url('/src/assets/images/home_page/cards_bag_modal/close_icon.png')] bg-contain bg-top-left bg-no-repeat;
+    }
+}
