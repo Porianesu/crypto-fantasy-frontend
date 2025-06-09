@@ -12,7 +12,6 @@ import {
 import classNames from 'classnames'
 import styles from './CardsBagModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import StaticCard from '@/components/StaticCard.tsx'
@@ -20,18 +19,11 @@ import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
+import { RARITY_OPTIONS } from '@/utils/constant.ts'
 
-interface IBagCardData extends ICardData {
+export interface IBagCardData extends ICardData {
   count: number
 }
-// 稀有度选项
-const RarityOptions = [
-  { value: 'all', label: 'All' },
-  { value: CARD_RARITY.NORMAL, label: 'Common' },
-  { value: CARD_RARITY.RARE, label: 'Rare' },
-  { value: CARD_RARITY.EPIC, label: 'Epic' },
-  { value: CARD_RARITY.LEGENDARY, label: 'Legendary' },
-]
 
 const CardsBagContent: React.FC = observer(() => {
   const {
@@ -137,7 +129,7 @@ const CardsBagContent: React.FC = observer(() => {
         <div className={styles.mainContent}>
           <div className={styles.cardsHeader}>
             <div className={styles.searchBox}>
-              <MagnifyingGlassIcon className={styles.searchIcon} />
+              <div className={styles.searchIcon} />
               <input
                 className={styles.searchInput}
                 type="text"
@@ -159,7 +151,7 @@ const CardsBagContent: React.FC = observer(() => {
                   }
                 }}
               >
-                {RarityOptions.map((opt) => (
+                {RARITY_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
                     {opt.label}
                   </option>

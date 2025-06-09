@@ -14,6 +14,7 @@ import ViewDetailModal from '@/pages/GalleryPage/ViewDetailModal.tsx'
 import { getCardImageById } from '@/utils/common.ts'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import { RARITY_OPTIONS } from '@/utils/constant.ts'
 
 dayjs.extend(duration)
 
@@ -31,7 +32,7 @@ const GalleryPage: React.FC = () => {
   } = useMobxStore()
   const [selectedCard, setSelectedCard] = useState<ICardData>()
   const [searchText, setSearchText] = useState('')
-  const [rarityFilter, setRarityFilter] = useState<CARD_RARITY | ''>('')
+  const [rarityFilter, setRarityFilter] = useState<CARD_RARITY | 'all'>('all')
   const [cardWidth, setCardWidth] = useState(300)
   const pageBodyRef = useRef<HTMLDivElement>(null)
   const cardsPartRef = useRef<HTMLDivElement>(null)
@@ -75,7 +76,7 @@ const GalleryPage: React.FC = () => {
     return cardData
       .filter((card) => {
         const matchesSearch = card.name.toLowerCase().includes(searchText.toLowerCase())
-        const matchesRarity = rarityFilter === '' ? true : card.rarity === rarityFilter
+        const matchesRarity = rarityFilter === 'all' ? true : card.rarity === rarityFilter
         return matchesSearch && matchesRarity
       })
       .sort((a, b) => {
@@ -139,25 +140,7 @@ const GalleryPage: React.FC = () => {
       <div className={styles.pageBody} ref={pageBodyRef}>
         <div className={styles.toolContainer}>
           <div className={styles.season}>Season 1</div>
-          {[
-            { label: 'All', value: '' },
-            {
-              label: 'Legendary',
-              value: CARD_RARITY.LEGENDARY,
-            },
-            {
-              label: 'Epic',
-              value: CARD_RARITY.EPIC,
-            },
-            {
-              label: 'Rare',
-              value: CARD_RARITY.RARE,
-            },
-            {
-              label: 'Normal',
-              value: CARD_RARITY.NORMAL,
-            },
-          ].map((select) => {
+          {RARITY_OPTIONS.map((select) => {
             const selected = rarityFilter === select.value
             return (
               <div
