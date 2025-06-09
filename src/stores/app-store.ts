@@ -2,7 +2,7 @@ import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import { preloadPages } from '@/navigation/routes.tsx'
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
-import { getDefaultAvatar, getStorageItem } from '@/utils/common.ts'
+import { getCardImageById, getDefaultAvatar, getStorageItem } from '@/utils/common.ts'
 import type { ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toast'
 import { BigNumber } from 'bignumber.js'
@@ -141,7 +141,7 @@ export default class StoresStore {
           if (currentValue.imageUrl) {
             previousValue.push({
               id: `cardImage${currentValue.id}${currentValue.rarity}`,
-              src: currentValue.imageUrl,
+              src: getCardImageById(currentValue.id),
             })
           }
           return previousValue

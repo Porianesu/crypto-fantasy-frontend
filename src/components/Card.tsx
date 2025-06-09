@@ -4,6 +4,7 @@ import styles from './Card.module.css'
 import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
 import { Textfit } from 'react-textfit'
+import { getCardImageById } from '@/utils/common.ts'
 
 const timeRate = 1
 export enum CARD_RARITY {
@@ -154,7 +155,7 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) =>
         <div
           className={styles.cardImage}
           style={{
-            backgroundImage: `url(${card.imageUrl})`,
+            backgroundImage: `url(${getCardImageById(card.id)})`,
           }}
         ></div>
       </div>

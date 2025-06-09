@@ -4,6 +4,8 @@ const defaultAvatars = import.meta.glob<string>('../assets/images/avatars/*.png'
   eager: true,
   import: 'default',
 })
+
+export const getCardImageById = (cardId: number) => `/cards/${cardId}.png`
 export const getDefaultAvatar = (index?: number) => {
   const avatarKeys = Object.keys(defaultAvatars)
   if (index !== undefined && index >= 0 && index < avatarKeys.length) {

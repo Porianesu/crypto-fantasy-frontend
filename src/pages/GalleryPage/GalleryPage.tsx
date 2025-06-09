@@ -11,6 +11,7 @@ import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import ViewDetailModal from '@/pages/GalleryPage/ViewDetailModal.tsx'
+import { getCardImageById } from '@/utils/common.ts'
 
 interface FormattedCardData extends ICardData {
   processed: boolean
@@ -49,6 +50,7 @@ const GalleryPage: React.FC = () => {
     return new Promise<Array<FormattedCardData>>((resolve, reject) => {
       if (!preloadQueue) reject(new Error('No preload queue'))
       const cardDatabase = preloadQueue!.getResult('cardsData') as Array<ICardData>
+      console.log('cardDatabase', cardDatabase)
       const formattedCards = cardDatabase.map((card) => {
         return {
           ...card,
@@ -170,7 +172,7 @@ const GalleryPage: React.FC = () => {
               <img
                 className={styles.detailImagePart}
                 alt={'selected-card-img'}
-                src={selectedCard.imageUrl}
+                src={getCardImageById(selectedCard.id)}
               />
               <div className={styles.detailName}>{selectedCard.name}</div>
               <div className={styles.detailInfoPart}>
