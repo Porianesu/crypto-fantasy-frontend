@@ -12,6 +12,7 @@ import classNames from 'classnames'
 export interface ITextHandle {
   splitTextRef: React.RefObject<SplitText | null>
   tweenRef: React.RefObject<gsap.core.Tween | null>
+  revertSplitText: () => void
 }
 interface ITextProps {
   className?: string
@@ -23,6 +24,15 @@ const Text = React.forwardRef<ITextHandle, PropsWithChildren<ITextProps>>(
     const textRef = useRef<HTMLDivElement>(null)
     const splitTextRef = useRef<SplitText>(null)
     const tweenRef = useRef<gsap.core.Tween>(null)
+
+    const revertSplitText = () => {
+      if (tweenRef.current) {
+        tweenRef.current.kill()
+      }
+      if (splitTextRef.current) {
+        splitTextRef.current.revert()
+      }
+    }
 
     useGSAP(
       () => {
@@ -70,7 +80,7 @@ const Text = React.forwardRef<ITextHandle, PropsWithChildren<ITextProps>>(
       },
     )
 
-    useImperativeHandle(ref, () => ({ splitTextRef, tweenRef }), [])
+    useImperativeHandle(ref, () => ({ splitTextRef, tweenRef, revertSplitText }), [])
 
     return (
       <div

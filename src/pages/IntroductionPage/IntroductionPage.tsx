@@ -12,7 +12,7 @@ const IntroductionPage: React.FC = () => {
   const textRef = useRef<ITextHandle>(null)
 
   const handleTextContainerClick = () => {
-    textRef.current?.tweenRef.current?.revert()
+    textRef.current?.revertSplitText()
   }
 
   const handleStartButtonClick = () => {
