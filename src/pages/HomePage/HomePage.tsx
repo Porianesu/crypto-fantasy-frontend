@@ -14,12 +14,12 @@ import { getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toast'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
-import fusionIcon from '/src/assets/images/home_page/footer_button_fusion.png'
-import galleryIcon from '/src/assets/images/home_page/footer_button_achs.png'
-import bagIcon from '/src/assets/images/home_page/footer_button_bag.png'
-import battleIcon from '/src/assets/images/home_page/footer_button_battle.png'
-import rewardIcon from '/src/assets/images/home_page/footer_button_reward.png'
-import shopIcon from '/src/assets/images/home_page/footer_button_shop.png'
+import fusionIcon from '../../..../../../src/assets/images/home_page/footer_button_fusion.png'
+import galleryIcon from '../../../src/assets/images/home_page/footer_button_achs.png'
+import bagIcon from '../../../src/assets/images/home_page/footer_button_bag.png'
+import battleIcon from '../../../src/assets/images/home_page/footer_button_battle.png'
+import rewardIcon from '../../../src/assets/images/home_page/footer_button_reward.png'
+import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.png'
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 
