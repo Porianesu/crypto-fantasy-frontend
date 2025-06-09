@@ -36,13 +36,13 @@ export interface ICardProps {
 }
 
 const CardRotation_Once = [0.15, 0.25]
-const CardRotation_ThreeTimes = [0.1, 0.1, 0.2, 0.2, 0.2, 0.3]
-const CardRotation_FiveTimes = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.15, 0.25, 0.25, 0.3]
+// const CardRotation_ThreeTimes = [0.1, 0.1, 0.2, 0.2, 0.2, 0.3]
+// const CardRotation_FiveTimes = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.15, 0.25, 0.25, 0.3]
 const RarityRotationMap = {
   [CARD_RARITY.NORMAL]: CardRotation_Once,
   [CARD_RARITY.RARE]: CardRotation_Once,
-  [CARD_RARITY.EPIC]: CardRotation_ThreeTimes,
-  [CARD_RARITY.LEGENDARY]: CardRotation_FiveTimes,
+  [CARD_RARITY.EPIC]: CardRotation_Once,
+  [CARD_RARITY.LEGENDARY]: CardRotation_Once,
 }
 const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) => {
   const cardIsFlipped = useRef(false)
