@@ -76,7 +76,7 @@ const GalleryPage: React.FC = () => {
     return cardData
       .filter((card) => {
         const matchesSearch = card.name.toLowerCase().includes(searchText.toLowerCase())
-        const matchesRarity = rarityFilter ? card.rarity === rarityFilter : true
+        const matchesRarity = rarityFilter === '' ? true : card.rarity === rarityFilter
         return matchesSearch && matchesRarity
       })
       .sort((a, b) => {
