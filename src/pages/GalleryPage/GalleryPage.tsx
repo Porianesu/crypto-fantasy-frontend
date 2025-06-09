@@ -12,6 +12,10 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import ViewDetailModal from '@/pages/GalleryPage/ViewDetailModal.tsx'
 import { getCardImageById } from '@/utils/common.ts'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+
+dayjs.extend(duration)
 
 interface FormattedCardData extends ICardData {
   processed: boolean
@@ -97,6 +101,25 @@ const GalleryPage: React.FC = () => {
 
   const handleBackButtonClick = () => {
     navigate(getHomePath())
+  }
+
+  const renderCardAvgDuration = () => {
+    if (!selectedCard) return null
+    const d = dayjs.duration(selectedCard.avg_duration * 1000) // Convert seconds to milliseconds
+    const totalDays = d.asDays()
+    if (totalDays >= 1) {
+      return `${Math.floor(totalDays)}days`
+    }
+    const totalHours = d.asHours()
+    if (totalHours >= 1) {
+      return `${Math.floor(totalHours)}hours`
+    }
+    const totalMinutes = d.asMinutes()
+    if (totalMinutes >= 1) {
+      return `${Math.floor(totalMinutes)}minutes`
+    } else {
+      return '< 1 minute'
+    }
   }
 
   return (
@@ -192,15 +215,15 @@ const GalleryPage: React.FC = () => {
               <div className={styles.scorePart}>
                 <div>
                   <div>30D PNL:</div>
-                  <div>{selectedCard['30_pnl']}</div>
+                  <div>{selectedCard['30_pnl']}%</div>
                 </div>
                 <div>
                   <div>30D WinRate:</div>
-                  <div>{selectedCard['30_win_rate']}</div>
+                  <div>{selectedCard['30_win_rate']}%</div>
                 </div>
                 <div>
                   <div>Avg Duration:</div>
-                  <div>{selectedCard.avg_duration}</div>
+                  <div>{renderCardAvgDuration()}</div>
                 </div>
               </div>
               <div
