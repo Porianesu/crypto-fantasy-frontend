@@ -57,23 +57,17 @@ html {
     z-index: 999;
 }
 
-body, *, a, button, [role="button"] {
+/* 全局自定义鼠标指针，支持普通、点击、pointer 状态 */
+html, body, * {
     cursor: url('/src/assets/images/entrance_page/cursor.png'), auto;
 }
-
-body:active, *:active, a:active, button:active, [role="button"]:active {
+html:active, body:active, *:active {
     cursor: url('/src/assets/images/entrance_page/cursor_active.png'), auto;
 }
-
-/* 保证 pointer 状态也用自定义鼠标 */
-*:hover, a:hover, button:hover, [role="button"]:hover {
+/* pointer 状态也强制自定义鼠标 */
+*:hover, *:focus, *[style*="cursor: pointer"], .cursor-pointer {
     cursor: url('/src/assets/images/entrance_page/cursor.png'), auto !important;
 }
-*:active, a:active, button:active, [role="button"]:active {
+*:active, *:focus:active {
     cursor: url('/src/assets/images/entrance_page/cursor_active.png'), auto !important;
-}
-
-/* 强制 pointer 状态也用自定义鼠标 */
-*:hover, *:active, *:focus, *[style*="cursor: pointer"], .cursor-pointer {
-    cursor: url('/src/assets/images/entrance_page/cursor.png'), auto !important;
 }
