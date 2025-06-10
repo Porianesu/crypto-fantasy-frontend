@@ -1,7 +1,19 @@
 @import "tailwindcss";
 
 .overlay {
-    @apply fixed inset-0 z-50 backdrop-blur-md;
+    @apply fixed inset-0 z-50;
+}
+
+@supports (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply backdrop-blur-md;
+    }
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply bg-black bg-opacity-50;
+    }
 }
 
 .modalContent {
