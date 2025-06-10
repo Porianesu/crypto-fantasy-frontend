@@ -187,7 +187,10 @@ const CardsBagContent: React.FC = observer(() => {
                         </button>
                       )}
                       <StaticCard width={cardWidth} card={card}></StaticCard>
-                      <div className={styles.cardCount}>x{card.count}</div>
+                      <div className={styles.cardCount}>
+                        <span className={'text-[18px]'}>x</span>
+                        {card.count}
+                      </div>
                     </div>
                   )
                 })}

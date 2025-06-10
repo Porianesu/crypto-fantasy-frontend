@@ -81,8 +81,8 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
           <Title></Title>
           <Description></Description>
           <Content className={styles.modalContent} onInteractOutside={(e) => e.preventDefault()}>
-            <CardsPart cards={cards}></CardsPart>
             <div className={styles.description}>Click to flip open your card.</div>
+            <CardsPart cards={cards}></CardsPart>
             <div className={styles.closeBtn} onClick={handleClose}></div>
           </Content>
         </DialogOverlay>
