@@ -13,7 +13,7 @@
         }
 
         .headerTitle {
-            @apply text-[42px] font-normal leading-[40px] ;
+            @apply text-[42px] font-normal;
             background: linear-gradient(to bottom, #FFAF00, #F3C358);
             color: transparent;
             background-clip: text;
@@ -37,7 +37,7 @@
     }
 
     .pageBody {
-        @apply grow shrink basis-0 overflow-hidden flex items-stretch pb-10;
+        @apply grow shrink basis-0 overflow-hidden flex items-stretch pb-10 pr-[74px];
 
         .toolContainer {
             @apply shrink-0 flex flex-col items-end pl-[70px] pt-3 gap-y-5 text-[#C8C3B7] text-[24px] font-normal leading-[40px];
