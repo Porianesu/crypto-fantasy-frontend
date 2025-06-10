@@ -14,8 +14,8 @@ import ViewDetailModal from '@/pages/GalleryPage/ViewDetailModal.tsx'
 import { getCardImageById } from '@/utils/common.ts'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { RARITY_OPTIONS } from '@/utils/constant.ts'
 import { BigNumber } from 'bignumber.js'
+import { RARITY_OPTIONS } from '@/components/RaritySelect.tsx'
 
 dayjs.extend(duration)
 

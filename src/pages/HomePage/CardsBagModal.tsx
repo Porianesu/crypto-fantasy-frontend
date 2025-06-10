@@ -12,14 +12,14 @@ import {
 import classNames from 'classnames'
 import styles from './CardsBagModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
+import { type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import StaticCard from '@/components/StaticCard.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { RARITY_OPTIONS } from '@/utils/constant.ts'
+import RaritySelect, { type RARITY_SELECT_VALUE } from '@/components/RaritySelect.tsx'
 
 export interface IBagCardData extends ICardData {
   count: number
@@ -47,7 +47,7 @@ const CardsBagContent: React.FC = observer(() => {
   const cardsListRef = useRef<HTMLDivElement>(null)
   const cardsGridRef = useRef<HTMLDivElement>(null)
   const [search, setSearch] = useState('')
-  const [rarity, setRarity] = useState<CARD_RARITY | 'all'>('all')
+  const [rarity, setRarity] = useState<RARITY_SELECT_VALUE>('all')
   const [selectedIds, setSelectedIds] = useState<number[]>(cardsFormation.map((card) => card.id))
   const isEdit = useMemo(
     () => cardsBagModalData.type === ICardsBagModalType.EDIT,
@@ -138,27 +138,7 @@ const CardsBagContent: React.FC = observer(() => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <div className={styles.raritySelectWrapper}>
-              <select
-                className={styles.raritySelect}
-                value={rarity}
-                onChange={(e) => {
-                  const value = e.target.value
-                  if (value === 'all') {
-                    setRarity('all')
-                  } else {
-                    setRarity(Number(value))
-                  }
-                }}
-              >
-                {RARITY_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <div className={styles.raritySelectIcon}></div>
-            </div>
+            <RaritySelect value={rarity} onChange={setRarity}></RaritySelect>
           </div>
           <div className={styles.cardsList} ref={cardsListRef}>
             {filteredCards.length === 0 ? (

@@ -59,20 +59,6 @@
                 @apply bg-transparent outline-none border-none w-full text-white placeholder-[#62463B];
             }
         }
-
-        .raritySelectWrapper {
-            @apply shrink-0 relative flex items-stretch;
-
-            .raritySelectIcon {
-                @apply absolute right-[22px] top-1/2 transform -translate-y-1/2 w-[30px] h-[20px];
-                @apply bg-[url('/src/assets/images/home_page/cards_bag_modal/down_arrow.png')] bg-contain bg-top-left bg-no-repeat;
-            }
-
-            .raritySelect {
-                @apply w-[192px] rounded-2xl border-[2px] border-[#54382F] bg-[#251812] text-[#62463B] px-[30px] focus-visible:outline-none;
-                appearance: none;
-            }
-        }
     }
 
     .cardsList {

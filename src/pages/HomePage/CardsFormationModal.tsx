@@ -12,10 +12,10 @@ import {
 import classNames from 'classnames'
 import styles from './CardsFormationModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { RARITY_OPTIONS } from '@/utils/constant.ts'
 import { CARD_RARITY } from '@/components/Card.tsx'
 import type { IBagCardData } from '@/pages/HomePage/CardsBagModal.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
+import RaritySelect from '@/components/RaritySelect.tsx'
 
 const CardsFormationModal: React.FC = () => {
   const {
@@ -104,27 +104,7 @@ const CardsFormationModal: React.FC = () => {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <div className={styles.raritySelectWrapper}>
-                <select
-                  className={styles.raritySelect}
-                  value={rarity}
-                  onChange={(e) => {
-                    const value = e.target.value
-                    if (value === 'all') {
-                      setRarity('all')
-                    } else {
-                      setRarity(Number(value))
-                    }
-                  }}
-                >
-                  {RARITY_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-                <div className={styles.raritySelectIcon}></div>
-              </div>
+              <RaritySelect value={rarity} onChange={setRarity}></RaritySelect>
             </div>
             <div className={styles.cardsList}>
               {filteredCards.length === 0 ? (
