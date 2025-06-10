@@ -15,6 +15,7 @@ import { getCardImageById } from '@/utils/common.ts'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { RARITY_OPTIONS } from '@/utils/constant.ts'
+import { BigNumber } from 'bignumber.js'
 
 dayjs.extend(duration)
 
@@ -108,15 +109,15 @@ const GalleryPage: React.FC = () => {
     const d = dayjs.duration(selectedCard.avg_duration * 1000) // Convert seconds to milliseconds
     const totalDays = d.asDays()
     if (totalDays >= 1) {
-      return `${Math.floor(totalDays)}days`
+      return `${Math.floor(totalDays)} days`
     }
     const totalHours = d.asHours()
     if (totalHours >= 1) {
-      return `${Math.floor(totalHours)}hours`
+      return `${Math.floor(totalHours)} hours`
     }
     const totalMinutes = d.asMinutes()
     if (totalMinutes >= 1) {
-      return `${Math.floor(totalMinutes)}minutes`
+      return `${Math.floor(totalMinutes)} minutes`
     } else {
       return '< 1 minute'
     }
@@ -197,11 +198,19 @@ const GalleryPage: React.FC = () => {
               <div className={styles.scorePart}>
                 <div>
                   <div>30D PNL:</div>
-                  <div>{selectedCard['30_pnl']}%</div>
+                  <div>
+                    {new BigNumber(selectedCard['30_pnl']).times(100).decimalPlaces(2).toString()}%
+                  </div>
                 </div>
                 <div>
                   <div>30D WinRate:</div>
-                  <div>{selectedCard['30_win_rate']}%</div>
+                  <div>
+                    {new BigNumber(selectedCard['30_win_rate'])
+                      .times(100)
+                      .decimalPlaces(2)
+                      .toString()}
+                    %
+                  </div>
                 </div>
                 <div>
                   <div>Avg Duration:</div>
