@@ -97,7 +97,12 @@ createRoot(document.getElementById('root')!).render(
     <TransitionProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-        <ToastContainer position={'top-right'} autoClose={1500} theme={'colored'}></ToastContainer>
+        <ToastContainer
+          position={'top-right'}
+          autoClose={1500}
+          theme={'colored'}
+          newestOnTop={true}
+        ></ToastContainer>
       </QueryClientProvider>
     </TransitionProvider>
   </StoreProvider>,
