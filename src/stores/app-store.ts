@@ -4,7 +4,7 @@ import { preloadPages } from '@/navigation/routes.tsx'
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
 import { getCardImageById, getDefaultAvatar, getStorageItem } from '@/utils/common.ts'
 import type { ICardData } from '@/components/Card.tsx'
-import { toast } from 'react-toast'
+import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 
 interface UserInfo extends UserStorageInfo {

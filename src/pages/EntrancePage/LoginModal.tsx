@@ -7,7 +7,7 @@ import classNames from 'classnames'
 import { checkHasAlreadyReadGuide, setStorageUserInfo } from '@/utils/common.ts'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
-import { toast } from 'react-toast'
+import { toast } from 'react-toastify'
 
 const LoginModal: React.FC = () => {
   const {
