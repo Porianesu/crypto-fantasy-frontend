@@ -56,3 +56,24 @@ html {
 .toastContainer {
     z-index: 999;
 }
+
+body, *, a, button, [role="button"] {
+    cursor: url('/src/assets/images/entrance_page/cursor.png'), auto;
+}
+
+body:active, *:active, a:active, button:active, [role="button"]:active {
+    cursor: url('/src/assets/images/entrance_page/cursor_active.png'), auto;
+}
+
+/* 保证 pointer 状态也用自定义鼠标 */
+*:hover, a:hover, button:hover, [role="button"]:hover {
+    cursor: url('/src/assets/images/entrance_page/cursor.png'), auto !important;
+}
+*:active, a:active, button:active, [role="button"]:active {
+    cursor: url('/src/assets/images/entrance_page/cursor_active.png'), auto !important;
+}
+
+/* 强制 pointer 状态也用自定义鼠标 */
+*:hover, *:active, *:focus, *[style*="cursor: pointer"], .cursor-pointer {
+    cursor: url('/src/assets/images/entrance_page/cursor.png'), auto !important;
+}
