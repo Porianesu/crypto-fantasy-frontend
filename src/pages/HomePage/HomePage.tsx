@@ -151,7 +151,7 @@ function HomePage() {
             <div className={styles.avatarContainer}>
               <img src={userInfo.avatarUrl} alt="avatar" className={styles.avatar} />
             </div>
-            <div>
+            <div className={styles.userInfoContainer}>
               <div className={styles.username}>{userInfo?.email}</div>
               <div className={styles.expBarBg}>
                 <div className={styles.expBarFill} style={{ width: `${userInfo.expPercent}%` }} />

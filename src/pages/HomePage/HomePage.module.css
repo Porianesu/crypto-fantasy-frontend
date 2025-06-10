@@ -31,21 +31,25 @@
         }
     }
 
-    .headerLeft {
-        @apply flex items-center;
+    .userInfoContainer {
+        @apply pt-6;
 
         .username {
-            @apply text-[23px] font-normal text-white mb-4;
+            @apply text-[23px] font-normal text-white mb-1;
         }
 
         .expBarBg {
-            @apply w-[196px] h-6 p-1 rounded-2xl overflow-hidden mb-6 bg-[#222428] flex items-stretch justify-start;
+            @apply w-[196px] h-6 p-1 rounded-2xl overflow-hidden mb-4 bg-[#222428] flex items-stretch justify-start;
 
             .expBarFill {
                 @apply transition-all duration-300 rounded-2xl;
                 background: linear-gradient(90deg, #7fffd4 0%, #ffff99 100%); /* 浅绿到浅黄渐变 */
             }
         }
+    }
+
+    .headerLeft {
+        @apply flex items-center;
 
         .iconBtnRow {
             @apply flex flex-row gap-x-[26px];
