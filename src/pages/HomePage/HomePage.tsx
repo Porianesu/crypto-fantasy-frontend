@@ -10,7 +10,7 @@ import { type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
-import { getGalleryPath } from '@/navigation/routes.tsx'
+import { getBattlePath, getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
@@ -113,7 +113,7 @@ function HomePage() {
       key: 'battle',
       icon: battleIcon,
       className: 'w-[173px] h-[164px]',
-      onClick: comingSoon,
+      onClick: () => navigate(getBattlePath()),
     },
     {
       key: 'reward',

@@ -11,6 +11,8 @@ import {
   INTRODUCTION_PATH,
   introductionPageLoader,
   ROOT_PATH,
+  BATTLE_PATH,
+  battlePageLoader,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
@@ -21,6 +23,7 @@ const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx
 const IntroductionPage = React.lazy(() => import('@/pages/IntroductionPage/IntroductionPage.tsx'))
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer } from 'react-toastify'
+import BattlePage from '@/pages/BattlePage/BattlePage.tsx'
 
 const queryClient = new QueryClient()
 
@@ -70,6 +73,15 @@ export const router = createBrowserRouter([
         element: (
           <CommonPageSuspense>
             <IntroductionPage></IntroductionPage>
+          </CommonPageSuspense>
+        ),
+      },
+      {
+        path: BATTLE_PATH,
+        loader: battlePageLoader,
+        element: (
+          <CommonPageSuspense>
+            <BattlePage></BattlePage>
           </CommonPageSuspense>
         ),
       },

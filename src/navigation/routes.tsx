@@ -6,6 +6,7 @@ export const HOME_PATH = '/home'
 export const ENTRANCE_PATH = '/entrance'
 export const GALLERY_PATH = '/gallery/:cardId?'
 export const INTRODUCTION_PATH = '/introduction'
+export const BATTLE_PATH = '/battle'
 
 export const getHomePath = () => {
   return generatePath(HOME_PATH)
@@ -21,6 +22,10 @@ export const getGalleryPath = (cardId?: number) => {
 
 export const getIntroductionPath = () => {
   return generatePath(INTRODUCTION_PATH)
+}
+
+export const getBattlePath = () => {
+  return generatePath(BATTLE_PATH)
 }
 
 const checkIsAppLoading = () => {
@@ -42,6 +47,13 @@ export const galleryPageLoader = () => {
 }
 
 export const introductionPageLoader = () => {
+  if (checkIsAppLoading()) {
+    return redirect(getEntrancePath())
+  }
+  return null
+}
+
+export const battlePageLoader = () => {
   if (checkIsAppLoading()) {
     return redirect(getEntrancePath())
   }
