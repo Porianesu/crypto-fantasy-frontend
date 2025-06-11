@@ -108,10 +108,19 @@
                 @apply shrink-0 w-[348px] h-[305px] mb-2 bg-gray-500 rounded-2xl object-cover object-left-top;
             }
 
-            .detailName {
-                @apply shrink-0 text-[#292522] text-[22px] font-normal leading-[40px] -mb-1;
+            .detailBottomPart {
+                @apply shrink grow basis-0 overflow-hidden flex flex-col items-center relative;
             }
         }
+    }
+}
+
+.detailBottomPart {
+    .detailBottomPartMask {
+        @apply absolute inset-0 z-10 backdrop-blur-sm;
+    }
+    .detailName {
+        @apply shrink-0 text-[#292522] text-[22px] font-normal leading-[40px] -mb-1;
     }
 }
 
@@ -159,4 +168,3 @@
         -webkit-text-fill-color: transparent;
     }
 }
-
