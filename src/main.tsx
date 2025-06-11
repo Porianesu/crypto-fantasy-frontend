@@ -15,7 +15,6 @@ import {
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
 import PageContainer from '@/components/PageContainer.tsx'
-import TransitionComponent from '@/components/Transition.tsx'
 import EntrancePage from '@/pages/EntrancePage/EntrancePage.tsx'
 const HomePage = React.lazy(() => import('@/pages/HomePage/HomePage.tsx'))
 const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx'))
@@ -45,43 +44,33 @@ export const router = createBrowserRouter([
       },
       {
         path: ENTRANCE_PATH,
-        element: (
-          <TransitionComponent>
-            <EntrancePage></EntrancePage>
-          </TransitionComponent>
-        ),
+        element: <EntrancePage></EntrancePage>,
       },
       {
         path: HOME_PATH,
         loader: homePageLoader,
         element: (
-          <TransitionComponent>
-            <CommonPageSuspense>
-              <HomePage></HomePage>
-            </CommonPageSuspense>
-          </TransitionComponent>
+          <CommonPageSuspense>
+            <HomePage></HomePage>
+          </CommonPageSuspense>
         ),
       },
       {
         path: GALLERY_PATH,
         loader: galleryPageLoader,
         element: (
-          <TransitionComponent>
-            <CommonPageSuspense>
-              <GalleryPage></GalleryPage>
-            </CommonPageSuspense>
-          </TransitionComponent>
+          <CommonPageSuspense>
+            <GalleryPage></GalleryPage>
+          </CommonPageSuspense>
         ),
       },
       {
         path: INTRODUCTION_PATH,
         loader: introductionPageLoader,
         element: (
-          <TransitionComponent>
-            <CommonPageSuspense>
-              <IntroductionPage></IntroductionPage>
-            </CommonPageSuspense>
-          </TransitionComponent>
+          <CommonPageSuspense>
+            <IntroductionPage></IntroductionPage>
+          </CommonPageSuspense>
         ),
       },
       {
