@@ -1,0 +1,4 @@
+@import "tailwindcss";
+.pageContainer {
+    @apply grow shrink basis-0 overflow-hidden;
+}

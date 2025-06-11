@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.pageContainer {
+    @apply flex items-start justify-center shrink basis-0 grow bg-black text-yellow-500 relative;
+}
