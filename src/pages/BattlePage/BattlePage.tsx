@@ -15,7 +15,7 @@ const BattlePage: React.FC = () => {
     {
       key: 'tournament',
       title: 'Tournament',
-      desc: '参与定期举办的锦标赛，争夺排行榜。',
+      desc: 'Participate in regular tournaments and compete for the leaderboard.',
       btn: 'Join Now',
       onClick: handleTournamentClick,
       tag: null,
@@ -24,7 +24,7 @@ const BattlePage: React.FC = () => {
     {
       key: 'abyss',
       title: 'Trading Abyss',
-      desc: '挑战AI关卡，赢取丰厚奖励。',
+      desc: 'Challenge AI stages and win generous rewards.',
       btn: 'Coming Soon',
       onClick: undefined,
       tag: 'PVE',
@@ -33,7 +33,7 @@ const BattlePage: React.FC = () => {
     {
       key: 'arena',
       title: 'Arena Duel',
-      desc: '与其他玩家实时对战，体验策略与运气的碰撞。',
+      desc: 'Battle other players in real time and experience strategy and luck.',
       btn: 'Coming Soon',
       onClick: undefined,
       tag: 'PVP',
