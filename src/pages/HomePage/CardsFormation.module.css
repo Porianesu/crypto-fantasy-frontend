@@ -1,14 +1,21 @@
 @import "tailwindcss";
 
 .formationContainer {
-    @apply flex-1 flex flex-col items-center justify-center;
+    @apply flex-1 flex flex-col items-center justify-center z-0;
 
     .formationSquare {
         @apply relative size-[362px] flex items-center justify-center;
-        @apply bg-[url('/src/assets/images/home_page/card_formation_background.png')] bg-contain bg-top-left bg-no-repeat;
+        .formationSquareBackground {
+            @apply absolute inset-0 size-full z-0;
+            @apply bg-[url('/src/assets/images/home_page/card_formation_background.png')] bg-contain bg-top-left bg-no-repeat;
+        }
+
+        .formationSquareBackgroundSpin {
+            @apply animate-[spin_5s_linear_infinite];
+        }
 
         .formationCard {
-            @apply cursor-pointer absolute rounded-xl left-1/2 top-1/2;
+            @apply cursor-pointer absolute rounded-xl left-1/2 top-1/2 z-10;
         }
 
         .emptyCard {
@@ -17,27 +24,27 @@
         }
 
         /* 五角星五角定位，顺时针从顶部开始，且卡片始终与屏幕x轴垂直 */
-        .formationCard:nth-child(1) {
+        .formationCard:nth-of-type(1) {
             @apply rotate-0;
             transform: translate(-50%, -50%) rotate(0deg) translateY(-188px) rotate(-0deg);
         }
 
-        .formationCard:nth-child(2) {
+        .formationCard:nth-of-type(2) {
             @apply rotate-0;
             transform: translate(-50%, -50%) rotate(72deg) translateY(-188px) rotate(-72deg);
         }
 
-        .formationCard:nth-child(3) {
+        .formationCard:nth-of-type(3) {
             @apply rotate-0;
             transform: translate(-50%, -50%) rotate(144deg) translateY(-188px) rotate(-144deg);
         }
 
-        .formationCard:nth-child(4) {
+        .formationCard:nth-of-type(4) {
             @apply rotate-0;
             transform: translate(-50%, -50%) rotate(216deg) translateY(-188px) rotate(-216deg);
         }
 
-        .formationCard:nth-child(5) {
+        .formationCard:nth-of-type(5) {
             @apply rotate-0;
             transform: translate(-50%, -50%) rotate(288deg) translateY(-188px) rotate(-288deg);
         }

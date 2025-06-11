@@ -36,6 +36,11 @@ const CardsFormation: React.FC = () => {
             ></div>
           )
         })}
+        <div
+          className={classNames(styles.formationSquareBackground, {
+            [styles.formationSquareBackgroundSpin]: cardsFormation.length >= 5,
+          })}
+        ></div>
       </div>
     </div>
   )
