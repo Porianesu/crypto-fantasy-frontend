@@ -33,6 +33,7 @@ export interface ICardProps {
   card: ICardData
   type?: 'static' | 'animate' // 是否静态卡片
   scale?: number // 缩放比例
+  undetected?: boolean // 是否未检测到
 }
 
 const CardRotation_Once = [0.15, 0.25]
@@ -44,7 +45,7 @@ const RarityRotationMap = {
   [CARD_RARITY.EPIC]: CardRotation_Once,
   [CARD_RARITY.LEGENDARY]: CardRotation_Once,
 }
-const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) => {
+const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale, undetected }) => {
   const cardIsFlipped = useRef(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
@@ -141,16 +142,22 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale }) =>
         ></div>
         <div className={classNames(styles.cardContent, styles[`cardContentRarity${card.rarity}`])}>
           <div className={styles.cardNameWrapper}>
-            <div className={styles.cardName}>
-              <Textfit mode={'single'}>{cardName}</Textfit>
+            <div
+              className={classNames(styles.cardName, { [styles.cardNameUndetected]: undetected })}
+            >
+              {undetected ? '???' : <Textfit mode={'single'}>{cardName}</Textfit>}
             </div>
           </div>
           <div className={styles.cardNicknameWrapper}>
-            <div className={styles.cardNickname}>
-              <Textfit>{cardNickname}</Textfit>
+            <div
+              className={classNames(styles.cardNickname, {
+                [styles.cardNicknameUndetected]: undetected,
+              })}
+            >
+              {undetected ? '???' : <Textfit>{cardNickname}</Textfit>}
             </div>
           </div>
-          <div className={styles.cardScore}>{card.score}</div>
+          <div className={styles.cardScore}>{undetected ? '?' : card.score}</div>
         </div>
         <div
           className={styles.cardImage}

@@ -161,7 +161,7 @@ const GalleryPage: React.FC = () => {
             <div className={styles.cardListContainer}>
               {filteredCards.map((card) => (
                 <StaticCard
-                  className={card.processed ? undefined : styles.cardBlackWhite}
+                  undetected={!card.processed}
                   width={cardWidth}
                   card={card}
                   key={card.id}
