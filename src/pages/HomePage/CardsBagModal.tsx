@@ -168,7 +168,7 @@ const CardsBagContent: React.FC = observer(() => {
                       )}
                       <StaticCard width={cardWidth} card={card}></StaticCard>
                       <div className={styles.cardCount}>
-                        <span className={'text-[18px]'}>x</span>
+                        <span>x</span>
                         {card.count}
                       </div>
                     </div>

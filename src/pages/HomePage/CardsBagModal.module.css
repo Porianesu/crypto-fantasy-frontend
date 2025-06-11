@@ -106,7 +106,7 @@
                 }
 
                 .cardCount {
-                    @apply absolute right-2 bottom-2  text-white text-[32px] font-bold px-2 py-1 rounded-md pointer-events-none;
+                    @apply absolute left-1/2 -translate-x-1/2 -bottom-[50px]  text-white text-[32px] font-bold px-2 py-1 rounded-md pointer-events-none;
                 }
 
                 .selectBtn {
