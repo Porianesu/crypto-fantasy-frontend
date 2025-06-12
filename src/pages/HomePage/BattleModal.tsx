@@ -2,11 +2,16 @@ import { observer } from 'mobx-react-lite'
 import React from 'react'
 import styles from './BattleModal.module.css'
 import { useNavigate } from 'react-router-dom'
-import { getTournamentPath, getHomePath } from '@/navigation/routes.tsx'
+import { getTournamentPath } from '@/navigation/routes.tsx'
+import classNames from 'classnames'
+import { Content, Description, Dialog, DialogOverlay, Portal, Title } from '@radix-ui/react-dialog'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
 
 const BattleModal: React.FC = () => {
+  const {
+    modalStore: { battleModalVisible, changeBattleModalVisible },
+  } = useMobxStore()
   const navigate = useNavigate()
-  const handleBack = () => navigate(getHomePath())
   const handleTournamentClick = () => {
     navigate(getTournamentPath())
   }
@@ -41,36 +46,48 @@ const BattleModal: React.FC = () => {
     },
   ]
   return (
-    <div className={styles.pageContainer}>
-      <button className={styles.backButton} onClick={handleBack} />
-      <div className={styles.blocksWrapper}>
-        {blocks.map((b) => (
-          <div
-            className={
-              styles.block +
-              ' ' +
-              (b.key === 'tournament'
-                ? styles.tournamentBlock
-                : b.key === 'abyss'
-                  ? styles.abyssBlock
-                  : styles.arenaBlock)
-            }
-            key={b.key}
-          >
-            {b.tag && <div className={styles.blockTag}>{b.tag}</div>}
-            <div className={styles.blockTitle}>{b.title}</div>
-            <div className={styles.blockDesc}>{b.desc}</div>
-            <button
-              className={styles.blockBtn + (b.disabled ? ' ' + styles.blockBtnDisabled : '')}
-              onClick={b.disabled ? undefined : b.onClick}
-              disabled={b.disabled}
-            >
-              {b.btn}
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Dialog open={battleModalVisible} onOpenChange={changeBattleModalVisible}>
+      <Portal>
+        <DialogOverlay
+          className={classNames(
+            'data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out',
+            styles.overlay,
+          )}
+        >
+          <Content className={styles.contentContainer}>
+            <Title></Title>
+            <Description></Description>
+            <div className={styles.blocksWrapper}>
+              {blocks.map((b) => (
+                <div
+                  className={
+                    styles.block +
+                    ' ' +
+                    (b.key === 'tournament'
+                      ? styles.tournamentBlock
+                      : b.key === 'abyss'
+                        ? styles.abyssBlock
+                        : styles.arenaBlock)
+                  }
+                  key={b.key}
+                >
+                  {b.tag && <div className={styles.blockTag}>{b.tag}</div>}
+                  <div className={styles.blockTitle}>{b.title}</div>
+                  <div className={styles.blockDesc}>{b.desc}</div>
+                  <button
+                    className={styles.blockBtn + (b.disabled ? ' ' + styles.blockBtnDisabled : '')}
+                    onClick={b.disabled ? undefined : b.onClick}
+                    disabled={b.disabled}
+                  >
+                    {b.btn}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </Content>
+        </DialogOverlay>
+      </Portal>
+    </Dialog>
   )
 }
 export default observer(BattleModal)

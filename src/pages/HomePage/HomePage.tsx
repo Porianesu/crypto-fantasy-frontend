@@ -10,7 +10,7 @@ import { type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
-import { getBattlePath, getGalleryPath } from '@/navigation/routes.tsx'
+import { getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
@@ -23,12 +23,13 @@ import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.pn
 
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 const CardsFormationModal = React.lazy(() => import('@/pages/HomePage/CardsFormationModal.tsx'))
+const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
 
 function HomePage() {
   const {
     preloadStore: { audioInstanceMap },
     appStore: { userInfo, drawCards, addCardsToBag },
-    modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData },
+    modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData, changeBattleModalVisible },
   } = useMobxStore()
   const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const drawCardSound = audioInstanceMap.get(AudioInstanceId.DrawCardSound)
@@ -117,7 +118,7 @@ function HomePage() {
       key: 'battle',
       icon: battleIcon,
       className: 'w-[173px] h-[164px]',
-      onClick: () => navigate(getBattlePath()),
+      onClick: () => changeBattleModalVisible(true),
     },
     {
       key: 'reward',
@@ -228,6 +229,9 @@ function HomePage() {
       </Suspense>
       <Suspense fallback={null}>
         <CardsFormationModal></CardsFormationModal>
+      </Suspense>
+      <Suspense fallback={null}>
+        <BattleModal></BattleModal>
       </Suspense>
     </div>
   )
