@@ -75,7 +75,7 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
           <Title></Title>
           <Description></Description>
           <Content className={styles.modalContent} onInteractOutside={(e) => e.preventDefault()}>
-            <div className={styles.description}>Click to flip open your card.</div>
+            <div className={styles.description}>Click to flip open your card</div>
             {drawCardsModalVisible ? <CardsPart cards={cards}></CardsPart> : null}
             <div className={styles.closeBtn} onClick={handleClose}></div>
           </Content>

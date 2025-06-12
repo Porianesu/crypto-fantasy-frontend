@@ -21,7 +21,7 @@
     transform: translate(-50%, -50%);
 
     .description {
-        @apply text-[#FFFFE4] text-[40px] font-normal mb-[98px];
+        @apply text-[#FFFFE4] text-[40px] font-normal mb-[146px];
     }
 
     .closeBtn {
@@ -44,7 +44,7 @@
 }
 
 .cardWrapper {
-    @apply flex flex-col items-stretch perspective-[1000px] focus-visible:outline-none mb-[84px];
+    @apply flex flex-col items-stretch perspective-[1000px] focus-visible:outline-none mb-[96px];
 }
 
 .cardContainer {
