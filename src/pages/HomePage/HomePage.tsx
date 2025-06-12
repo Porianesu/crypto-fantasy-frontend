@@ -136,12 +136,10 @@ function HomePage() {
   return (
     <div className={styles.pageContainer} ref={pageContainerRef}>
       <div className={styles.drawCardsEntranceContainer}>
-        <div className="w-[491px] h-[430px] bg-[url(/src/assets/images/home_page/open_package.png)] bg-contain bg-center bg-no-repeat mb-7"></div>
-        <div
-          className="cursor-pointer active:scale-90 flex items-center justify-center w-[340px] h-[102px] transition bg-[url(/src/assets/images/home_page/open_package_button_background.png)] bg-contain bg-center bg-no-repeat text-[36px] font-normal text-[#2A1914]"
-          onClick={handleOpenPack}
-        >
-          Open Pack
+        <div className={styles.drawCardsImage}></div>
+        <div className={styles.drawCardsButton} onClick={handleOpenPack}>
+          Open Pack 0.1
+          <div></div>
         </div>
       </div>
       <PreloadElement
