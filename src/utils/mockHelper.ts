@@ -72,3 +72,39 @@ export const fetchPrizePools = async () => {
     ])
   })
 }
+
+/**
+ * 计算某名次应��得的奖金和FaithCoin
+ * @param totalPrize 总奖金
+ * @param rank 当前名次（从1开始）
+ * @param totalPlayers 总参与人数
+ * @returns { prize: number, faithCoin: number }
+ */
+export function calculatePrizeAndCoin(totalPrize: number, rank: number, totalPlayers: number) {
+  if (rank < 1 || rank > totalPlayers) return { prize: 0, faithCoin: 0 }
+
+  // FaithCoin奖励区间
+  const top10Percent = Math.ceil(totalPlayers * 0.1)
+  const top30Percent = Math.ceil(totalPlayers * 0.3)
+  const top60Percent = Math.ceil(totalPlayers * 0.6)
+
+  // 奖金分配
+  if (rank === 1) {
+    return { prize: totalPrize * 0.4, faithCoin: 10000 }
+  } else if (rank === 2) {
+    return { prize: totalPrize * 0.3, faithCoin: 7000 }
+  } else if (rank === 3) {
+    return { prize: totalPrize * 0.2, faithCoin: 4000 }
+  } else if (rank >= 4 && rank <= 10) {
+    // 4-10名平分10%奖金
+    return { prize: (totalPrize * 0.1) / 7, faithCoin: 2000 }
+  } else if (rank >= 11 && rank <= top10Percent) {
+    return { prize: 0, faithCoin: 400 }
+  } else if (rank > top10Percent && rank <= top30Percent) {
+    return { prize: 0, faithCoin: 300 }
+  } else if (rank > top30Percent && rank <= top60Percent) {
+    return { prize: 0, faithCoin: 200 }
+  } else {
+    return { prize: 0, faithCoin: 100 }
+  }
+}
