@@ -96,16 +96,16 @@
         }
 
         .detailPartWrapper {
-            @apply shrink-0 flex flex-col items-center transition-all duration-300 w-[500px] overflow-hidden;
+            @apply shrink-0 flex flex-col items-stretch transition-all duration-300 w-[500px] overflow-hidden;
             @apply bg-[url('/src/assets/images/gallery_page/detail_background.png')] bg-cover bg-top-left bg-no-repeat;
 
             .detailTitle {
-                @apply shrink-0 w-[400px] h-[55px] text-[#64401E] text-[32px] font-normal leading-[40px] flex items-center justify-center mb-3;
+                @apply self-center shrink-0 w-[400px] h-[55px] text-[#64401E] text-[32px] font-normal leading-[40px] flex items-center justify-center mb-3;
                 @apply bg-[url('/src/assets/images/gallery_page/detail_title_background.png')] bg-contain bg-top-left bg-no-repeat;
             }
 
             .detailImagePart {
-                @apply shrink-0 w-[348px] h-[305px] mb-2 bg-gray-500 rounded-2xl object-cover object-left-top;
+                @apply self-center shrink-0 w-[348px] h-[305px] mb-2 bg-gray-500 rounded-2xl object-cover object-left-top;
             }
 
             .detailBottomPart {
@@ -116,8 +116,8 @@
 }
 
 .detailBottomPart {
-    .detailBottomPartMask {
-        @apply absolute inset-0 z-10 backdrop-blur-sm;
+    .detailUndetectedPart {
+        @apply grow shrink basis-0 flex flex-col items-center text-[#64401E] text-[26px] leading-10 font-normal px-[92px] text-center pt-11;
     }
     .detailName {
         @apply shrink-0 text-[#292522] text-[22px] font-normal leading-[40px] -mb-1;
@@ -141,17 +141,17 @@
 }
 
 .scorePart {
-    @apply shrink-0 self-stretch mx-8 text-[22px] font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-[2px] border-[#64401E];
+    @apply h-[153px] py-[18px] gap-y-1 shrink-0 self-stretch mx-8 text-[22px] font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-[2px] border-[#64401E];
 
     & > div {
         @apply flex items-center;
 
         & > div:first-child {
-            @apply w-[122px] text-[#AD613F] flex-1 flex items-center justify-end mr-2;
+            @apply w-[122px] text-[#AD613F] flex-1 flex items-center justify-end;
         }
 
         & > div:last-child {
-            @apply flex-1 text-[#64401E];
+            @apply pl-4 flex-1 text-[#64401E];
         }
     }
 }
@@ -166,5 +166,15 @@
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+    }
+}
+
+.viewDetailButtonDisabled {
+    @apply shrink-0 cursor-not-allowed w-[348px] h-[68px] flex items-center justify-center text-[27px] font-normal leading-[40px] mb-4 active:scale-95 transition;
+    @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background_disabled.png')] bg-contain bg-top-left bg-no-repeat;
+
+
+    & > div {
+        @apply text-white;
     }
 }

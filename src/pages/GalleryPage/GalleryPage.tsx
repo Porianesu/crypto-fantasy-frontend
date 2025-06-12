@@ -23,7 +23,7 @@ interface FormattedCardData extends ICardData {
   processed: boolean
 }
 
-const UndetectedPlaceholderText = '???????? ????????'
+const UndetectedPlaceholderText = 'unknown'
 const GalleryPage: React.FC = () => {
   const { cardId } = useParams()
   const navigate = useNavigate()
@@ -186,31 +186,36 @@ const GalleryPage: React.FC = () => {
               />
               <div className={styles.detailBottomPart}>
                 {!selectedCard.processed ? (
-                  <div className={styles.detailBottomPartMask}></div>
-                ) : null}
-                <div className={styles.detailName}>
-                  {!selectedCard.processed ? UndetectedPlaceholderText : selectedCard.name}
-                </div>
-                <div className={styles.detailInfoPart}>
-                  <div>
-                    <div>Faction:</div>
-                    <div>
-                      {!selectedCard.processed ? UndetectedPlaceholderText : selectedCard.faction}
-                    </div>
+                  <div className={styles.detailUndetectedPart}>
+                    You haven't collected this card yet.
                   </div>
-                  <div>
-                    <div>Tag:</div>
-                    <div>
-                      {!selectedCard.processed ? UndetectedPlaceholderText : selectedCard.tag}
+                ) : (
+                  <>
+                    <div className={styles.detailName}>{selectedCard.name}</div>
+                    <div className={styles.detailInfoPart}>
+                      <div>
+                        <div>Faction:</div>
+                        <div>
+                          {!selectedCard.processed
+                            ? UndetectedPlaceholderText
+                            : selectedCard.faction}
+                        </div>
+                      </div>
+                      <div>
+                        <div>Tag:</div>
+                        <div>
+                          {!selectedCard.processed ? UndetectedPlaceholderText : selectedCard.tag}
+                        </div>
+                      </div>
+                      <div>
+                        <div>Quotes:</div>
+                        <div>
+                          {!selectedCard.processed ? UndetectedPlaceholderText : selectedCard.quote}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <div>Quotes:</div>
-                    <div>
-                      {!selectedCard.processed ? UndetectedPlaceholderText : selectedCard.quote}
-                    </div>
-                  </div>
-                </div>
+                  </>
+                )}
                 <div className={styles.scorePart}>
                   <div>
                     <div>30D PNL:</div>
@@ -220,8 +225,7 @@ const GalleryPage: React.FC = () => {
                         : new BigNumber(selectedCard['30_pnl'])
                             .times(100)
                             .decimalPlaces(2)
-                            .toString()}
-                      %
+                            .toString() + '%'}
                     </div>
                   </div>
                   <div>
@@ -232,8 +236,7 @@ const GalleryPage: React.FC = () => {
                         : new BigNumber(selectedCard['30_win_rate'])
                             .times(100)
                             .decimalPlaces(2)
-                            .toString()}
-                      %
+                            .toString() + '%'}
                     </div>
                   </div>
                   <div>
@@ -241,15 +244,21 @@ const GalleryPage: React.FC = () => {
                     <div>{renderCardAvgDuration()}</div>
                   </div>
                 </div>
-                <div
-                  className={styles.viewDetailButton}
-                  onClick={() => {
-                    changeViewDetailModalVisible(true)
-                    changeViewDetailModalData(selectedCard)
-                  }}
-                >
-                  <div className={styles.viewDetailText}>View Details</div>
-                </div>
+                {!selectedCard?.processed ? (
+                  <div className={styles.viewDetailButtonDisabled}>
+                    <div>Not collected</div>
+                  </div>
+                ) : (
+                  <div
+                    className={styles.viewDetailButton}
+                    onClick={() => {
+                      changeViewDetailModalVisible(true)
+                      changeViewDetailModalData(selectedCard)
+                    }}
+                  >
+                    <div className={styles.viewDetailText}>View Details</div>
+                  </div>
+                )}
               </div>
             </>
           )}
