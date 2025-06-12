@@ -11,8 +11,6 @@ import {
   INTRODUCTION_PATH,
   introductionPageLoader,
   ROOT_PATH,
-  BATTLE_PATH,
-  battlePageLoader,
   TOURNAMENT_PATH,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
@@ -22,9 +20,8 @@ import EntrancePage from '@/pages/EntrancePage/EntrancePage.tsx'
 const HomePage = React.lazy(() => import('@/pages/HomePage/HomePage.tsx'))
 const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx'))
 const IntroductionPage = React.lazy(() => import('@/pages/IntroductionPage/IntroductionPage.tsx'))
-const BattlePage = React.lazy(() => import('@/pages/BattlePage/BattlePage.tsx'))
 const TournamentPage = React.lazy(
-  () => import('@/pages/BattlePage/TournamentPage/TournamentPage.tsx'),
+  () => import('@/pages/TournamentPage/TournamentPage.tsx'),
 )
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer } from 'react-toastify'
@@ -81,26 +78,12 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: BATTLE_PATH,
-        loader: battlePageLoader,
-        children: [
-          {
-            index: true,
-            element: (
-              <CommonPageSuspense>
-                <BattlePage></BattlePage>
-              </CommonPageSuspense>
-            ),
-          },
-          {
-            path: TOURNAMENT_PATH,
-            element: (
-              <CommonPageSuspense>
-                <TournamentPage></TournamentPage>
-              </CommonPageSuspense>
-            ),
-          },
-        ],
+        path: TOURNAMENT_PATH,
+        element: (
+          <CommonPageSuspense>
+            <TournamentPage></TournamentPage>
+          </CommonPageSuspense>
+        ),
       },
       {
         path: '*', // 捕获所有未匹配的路由
