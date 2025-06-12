@@ -59,7 +59,9 @@ function HomePage() {
           const videoEl = videoRef.current!.getElement() as HTMLVideoElement
           videoEl.loop = false
           videoEl.onended = () => {
-            bgmSound?.setVolume(0.5)
+            if (bgmSound) {
+              bgmSound.volume = 0.5
+            }
             gsap.to(videoRef.current!.getContainer(), {
               autoAlpha: 0,
               duration: 0.3,
@@ -69,7 +71,9 @@ function HomePage() {
               },
             })
           }
-          bgmSound?.setVolume(0.2)
+          if (bgmSound) {
+            bgmSound.volume = 0.2
+          }
           if (drawCardSound) {
             drawCardSound.play({
               volume: 1,
