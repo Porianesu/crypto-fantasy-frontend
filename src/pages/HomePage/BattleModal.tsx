@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import React from 'react'
-import styles from './BattlePage.module.css'
+import styles from './BattleModal.module.css'
 import { useNavigate } from 'react-router-dom'
 import { getTournamentPath, getHomePath } from '@/navigation/routes.tsx'
 
-const BattlePage: React.FC = () => {
+const BattleModal: React.FC = () => {
   const navigate = useNavigate()
   const handleBack = () => navigate(getHomePath())
   const handleTournamentClick = () => {
@@ -73,4 +73,4 @@ const BattlePage: React.FC = () => {
     </div>
   )
 }
-export default observer(BattlePage)
+export default observer(BattleModal)
