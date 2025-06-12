@@ -4,22 +4,8 @@ import styles from '@/pages/HomePage/Leaderboard.module.css'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { generateFantasyEnglishName, getDefaultAvatar } from '@/utils/common.ts'
 import classNames from 'classnames'
-
-// mock异步获取排行榜数据
-const fetchLeaderboard = async () => {
-  const originalData = Array.from({ length: 20 }).map((_, i) => ({
-    name: generateFantasyEnglishName(),
-    score: Math.floor(Math.random() * 450),
-    avatar: getDefaultAvatar(i),
-  }))
-  return new Promise<Array<{ name: string; score: number; avatar: string }>>((resolve) => {
-    setTimeout(() => {
-      resolve(originalData)
-    }, 1000)
-  })
-}
+import { fetchHomeLeaderboard } from '@/utils/mockHelper.ts'
 
 const Leaderboard: React.FC = () => {
   const {
@@ -27,7 +13,7 @@ const Leaderboard: React.FC = () => {
   } = useMobxStore()
   const { data, isLoading: leaderboardLoading } = useQuery({
     queryKey: ['leaderboard'],
-    queryFn: fetchLeaderboard,
+    queryFn: fetchHomeLeaderboard,
     refetchInterval: 10000, // 5分钟
     refetchOnWindowFocus: false,
   })
