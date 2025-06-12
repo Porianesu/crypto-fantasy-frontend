@@ -10,7 +10,7 @@ import { BigNumber } from 'bignumber.js'
 interface UserInfo extends UserStorageInfo {
   avatarUrl: string
   solAmount: number
-  dustAmount: number
+  faithAmount: number
   expPercent: number
 }
 
@@ -65,7 +65,7 @@ export default class StoresStore {
         ...result,
         avatarUrl: getDefaultAvatar(),
         solAmount: 100,
-        dustAmount: 0,
+        faithAmount: 100,
         expPercent: 68,
       }
       this.cardsFormation = []

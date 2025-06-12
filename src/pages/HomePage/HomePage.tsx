@@ -183,7 +183,7 @@ function HomePage() {
               <div className={styles.assetIconContainer}>
                 <div className={styles.assetIcon2}></div>
               </div>
-              <span className={styles.assetAmount}>{userInfo.dustAmount}</span>
+              <span className={styles.assetAmount}>{userInfo.faithAmount}</span>
               <div className={styles.assetPlusButton} onClick={comingSoon}></div>
             </div>
           </div>
