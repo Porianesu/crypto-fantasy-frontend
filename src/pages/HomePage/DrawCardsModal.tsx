@@ -31,13 +31,7 @@ const CardsPart: React.FC<IDrawCardsModalProps> = ({ cards }) => {
         {
           autoAlpha: 1,
           y: (index) => getYOffset(index),
-          stagger: {
-            // amount: cards.length * 0.1,
-            each: 0.4,
-            from: 'start',
-            grid: [1, cards.length],
-            axis: 'x',
-          },
+          stagger: 0.4,
           duration: 0.6,
         },
       )
@@ -82,7 +76,7 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
           <Description></Description>
           <Content className={styles.modalContent} onInteractOutside={(e) => e.preventDefault()}>
             <div className={styles.description}>Click to flip open your card.</div>
-            <CardsPart cards={cards}></CardsPart>
+            {drawCardsModalVisible ? <CardsPart cards={cards}></CardsPart> : null}
             <div className={styles.closeBtn} onClick={handleClose}></div>
           </Content>
         </DialogOverlay>
