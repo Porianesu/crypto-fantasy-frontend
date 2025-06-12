@@ -50,13 +50,19 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale, unde
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
   const isStatic = useMemo(() => type === 'static', [type])
-  const { cardName, cardNickname } = useMemo(() => {
+  const { cardName } = useMemo(() => {
+    if (undetected) {
+      return {
+        cardName: 'Unknown',
+        cardNickname: '',
+      }
+    }
     const splitResult = card.name.split(' · ')
     return {
-      cardName: splitResult[0],
-      cardNickname: splitResult[1] || '',
+      cardName: splitResult[1] || '',
+      cardNickname: splitResult[0],
     }
-  }, [card.name])
+  }, [card.name, undetected])
 
   useGSAP(
     () => {
@@ -142,22 +148,18 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale, unde
         ></div>
         <div className={classNames(styles.cardContent, styles[`cardContentRarity${card.rarity}`])}>
           <div className={styles.cardNameWrapper}>
-            <div
-              className={classNames(styles.cardName, { [styles.cardNameUndetected]: undetected })}
-            >
-              {undetected ? '???' : <Textfit mode={'single'}>{cardName}</Textfit>}
+            <div className={styles.cardName}>
+              <Textfit>{cardName}</Textfit>
             </div>
           </div>
-          <div className={styles.cardNicknameWrapper}>
-            <div
-              className={classNames(styles.cardNickname, {
-                [styles.cardNicknameUndetected]: undetected,
-              })}
-            >
-              {undetected ? '???' : <Textfit>{cardNickname}</Textfit>}
-            </div>
+          <div
+            className={classNames(styles.cardScore, {
+              [styles.cardScorePosition]: !undetected,
+              [styles.undetectedCardScorePosition]: undetected,
+            })}
+          >
+            {undetected ? '?' : card.score}
           </div>
-          <div className={styles.cardScore}>{undetected ? '?' : card.score}</div>
         </div>
         <div
           className={styles.cardImage}

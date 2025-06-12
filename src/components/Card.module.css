@@ -46,88 +46,72 @@
         @apply absolute w-full h-full rounded-lg overflow-hidden z-[2];
 
         .cardNameWrapper {
-            @apply absolute h-[42px] flex items-center;
+            @apply absolute h-[38px] flex items-center;
         }
 
         .cardName {
-            @apply w-[156px] text-2xl font-normal whitespace-pre overflow-hidden text-center;
-        }
-
-        .cardNameUndetected {
-            @apply flex items-center justify-center;
-        }
-
-        .cardNicknameWrapper {
-            @apply absolute h-[34px] flex items-center;
-        }
-
-        .cardNickname {
             @apply w-[160px] text-[#F3E838] text-2xl font-normal whitespace-pre overflow-hidden text-center;
         }
 
-        .cardNicknameUndetected {
-            @apply flex items-center justify-center;
-        }
-
         .cardScore {
-            @apply absolute text-white text-[30px] font-black text-shadow-teal-400 italic text-center min-w-9;
+            @apply absolute text-white text-[28px] font-black text-shadow-teal-400 italic text-center min-w-[30px] h-10;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
     }
 
     .cardContentRarity0 {
-        .cardScore {
-            @apply top-[44px] left-[14px]
+        .cardScorePosition {
+            @apply top-[56px] left-[14px];
+        }
+
+        .undetectedCardScorePosition {
+            @apply top-[58px] left-[14px];
         }
 
         .cardNameWrapper {
-            @apply text-[#030202] top-[40px] left-[70px];
-        }
-
-        .cardNicknameWrapper {
-            @apply top-[280px] left-[54px]
+            @apply top-[324px] left-[50px];
         }
     }
 
     .cardContentRarity1 {
-        .cardScore {
-            @apply top-[50px] left-[18px]
+        .cardScorePosition {
+            @apply top-[56px] left-[18px];
+        }
+
+        .undetectedCardScorePosition {
+            @apply top-[58px] left-[16px]
         }
 
         .cardNameWrapper {
-            @apply text-[#12468D] top-[44px] left-[78px];
-        }
-
-        .cardNicknameWrapper {
-            @apply top-[280px] left-[54px]
+            @apply top-[326px] left-[56px];
         }
     }
 
     .cardContentRarity2 {
-        .cardScore {
-            @apply top-[48px] left-[16px]
+        .cardScorePosition {
+            @apply top-[56px] left-[16px];
+        }
+
+        .undetectedCardScorePosition {
+            @apply top-[58px] left-[16px]
         }
 
         .cardNameWrapper {
-            @apply text-[#661483] top-[40px] left-[78px];
-        }
-
-        .cardNicknameWrapper {
-            @apply top-[278px] left-[54px]
+            @apply top-[326px] left-[56px];
         }
     }
 
     .cardContentRarity3 {
-        .cardScore {
-            @apply top-[56px] left-[14px]
+        .cardScorePosition {
+            @apply top-[56px] left-[14px];
+        }
+
+        .undetectedCardScorePosition {
+            @apply top-[58px] left-[14px]
         }
 
         .cardNameWrapper {
-            @apply text-[#73502A] top-[50px] left-[70px];
-        }
-
-        .cardNicknameWrapper {
-            @apply top-[288px] left-[54px]
+            @apply top-[330px] left-[54px];
         }
     }
 
