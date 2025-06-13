@@ -1,4 +1,42 @@
 @import "tailwindcss";
+@import "../../index.css";
+
 .pageContainer {
-    @apply grow shrink basis-0 overflow-hidden;
+    @apply flex flex-col w-full h-full min-h-screen bg-gray-50;
+
+    .header {
+        @apply shrink-0 flex items-center justify-between w-full h-20 px-6 bg-white shadow-md;
+
+        .headerLeft {
+            @apply flex items-center;
+
+            .backBtn {
+                @apply flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition;
+            }
+        }
+
+        .headerCenter {
+            @apply flex items-center gap-0;
+
+            .tierBtn {
+                @apply px-6 py-2 font-semibold text-gray-500 bg-transparent border-none rounded-none outline-none transition;
+
+                &.tierBtnSelected {
+                    @apply text-blue-600 border-b-2 border-blue-600 bg-gray-100;
+                }
+            }
+        }
+
+        .headerRight {
+            @apply flex items-center gap-0;
+
+            .actionBtn {
+                @apply px-4 py-2 font-medium text-gray-600 bg-gray-100 border-none rounded-none outline-none transition hover:bg-gray-200;
+            }
+        }
+    }
+
+    .body {
+        @apply grow shrink basis-0 overflow-hidden;
+    }
 }
