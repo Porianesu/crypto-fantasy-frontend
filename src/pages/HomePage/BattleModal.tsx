@@ -4,8 +4,19 @@ import styles from './BattleModal.module.css'
 import { useNavigate } from 'react-router-dom'
 import { getTournamentPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
-import { Content, Description, Dialog, DialogOverlay, Portal, Title } from '@radix-ui/react-dialog'
+import {
+  Close,
+  Content,
+  Description,
+  Dialog,
+  DialogOverlay,
+  Portal,
+  Title,
+} from '@radix-ui/react-dialog'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import tradingAbyssIcon from '@/assets/images/home_page/battle_modal/trading_abyss_icon.png'
+import arenaDuelIcon from '@/assets/images/home_page/battle_modal/arena_duel_icon.png'
+import tournamentIcon from '@/assets/images/home_page/battle_modal/tournament_icon.png'
 
 const BattleModal: React.FC = () => {
   const {
@@ -23,17 +34,17 @@ const BattleModal: React.FC = () => {
       desc: 'Participate in regular tournaments and compete for the leaderboard.',
       btn: 'Join Now',
       onClick: handleTournamentClick,
-      tag: null,
       disabled: false,
+      icon: tournamentIcon,
     },
     {
       key: 'abyss',
       title: 'Trading Abyss',
-      desc: 'Challenge AI stages and win generous rewards.',
+      desc: 'Battle ancient Chainspirits, uncover lost stories, and collect epic rewards.',
       btn: 'Coming Soon',
       onClick: undefined,
-      tag: 'PVE',
       disabled: true,
+      icon: tradingAbyssIcon,
     },
     {
       key: 'arena',
@@ -41,8 +52,8 @@ const BattleModal: React.FC = () => {
       desc: 'Battle other players in real time and experience strategy and luck.',
       btn: 'Coming Soon',
       onClick: undefined,
-      tag: 'PVP',
       disabled: true,
+      icon: arenaDuelIcon,
     },
   ]
   return (
@@ -57,29 +68,31 @@ const BattleModal: React.FC = () => {
           <Content className={styles.contentContainer}>
             <Title></Title>
             <Description></Description>
+            <Close asChild={true}>
+              <div className={classNames('button', styles.closeButton)}></div>
+            </Close>
             <div className={styles.blocksWrapper}>
               {blocks.map((b) => (
-                <div
-                  className={
-                    styles.block +
-                    ' ' +
-                    (b.key === 'tournament'
-                      ? styles.tournamentBlock
-                      : b.key === 'abyss'
-                        ? styles.abyssBlock
-                        : styles.arenaBlock)
-                  }
-                  key={b.key}
-                >
-                  {b.tag && <div className={styles.blockTag}>{b.tag}</div>}
-                  <div className={styles.blockTitle}>{b.title}</div>
-                  <div className={styles.blockDesc}>{b.desc}</div>
+                <div className={styles.block} key={b.key}>
+                  <div className={styles.blockContent}>
+                    <div className={styles.blockTitle}>{b.title}</div>
+                    <div
+                      className={styles.blockImage}
+                      style={{
+                        backgroundImage: `url(${b.icon})`,
+                      }}
+                    ></div>
+                    <div className={styles.blockDesc}>{b.desc}</div>
+                  </div>
                   <button
-                    className={styles.blockBtn + (b.disabled ? ' ' + styles.blockBtnDisabled : '')}
+                    className={classNames(styles.blockBtn, {
+                      button: !b.disabled,
+                      [styles.blockBtnDisabled]: b.disabled,
+                    })}
                     onClick={b.disabled ? undefined : b.onClick}
                     disabled={b.disabled}
                   >
-                    {b.btn}
+                    <div>{b.btn}</div>
                   </button>
                 </div>
               ))}

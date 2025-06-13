@@ -7,6 +7,12 @@
     font-style: normal;
 }
 
+@layer components {
+    .button {
+        @apply hover:scale-105 active:scale-95 transition-transform;
+    }
+}
+
 @theme {
     --color-rarity-normal: oklch(70.7% 0.022 261.325);
     --color-rarity-rare: oklch(70.7% 0.165 254.624);
@@ -61,13 +67,20 @@ html {
 html, body, * {
     cursor: url('/src/assets/images/entrance_page/cursor.png'), auto;
 }
+
 html:active, body:active, *:active {
     cursor: url('/src/assets/images/entrance_page/cursor_active.png'), auto;
 }
+
 /* pointer 状态也强制自定义鼠标 */
 *:hover, *:focus, *[style*="cursor: pointer"], .cursor-pointer {
     cursor: url('/src/assets/images/entrance_page/cursor.png'), auto !important;
 }
+
 *:active, *:focus:active {
     cursor: url('/src/assets/images/entrance_page/cursor_active.png'), auto !important;
+}
+
+* {
+    @apply focus-visible:outline-none;
 }

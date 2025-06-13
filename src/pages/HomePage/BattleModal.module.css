@@ -5,68 +5,66 @@
 }
 
 .contentContainer {
-    @apply transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 absolute flex flex-col items-stretch focus-visible:outline-none;
-    @apply w-[1500px] h-[800px];
-    @apply flex items-center justify-center bg-black text-yellow-500 relative;
-    /* 保证页面高度撑满 */
+    @apply transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 absolute flex flex-col items-center justify-start pt-[204px];
+    @apply w-[1534px] h-[866px];
+    @apply bg-[url(/src/assets/images/home_page/battle_modal/background.png)] bg-contain bg-center bg-no-repeat;
 
-    .backButton {
-        @apply absolute left-8 top-8 w-12 h-12 rounded-full bg-yellow-500/80 flex items-center justify-center shadow-lg hover:bg-yellow-400 transition;
-        z-index: 20;
-        /* 可用伪元素加icon，这里用纯色圆形 */
-
-        &::before {
-            content: "";
-            @apply block w-4 h-4 border-l-4 border-b-4 border-white rotate-45;
-            margin-left: 6px;
-        }
+    .closeButton {
+        @apply absolute top-[104px] right-[68px] w-[74px] h-[80px] z-10;
+        @apply bg-[url(/src/assets/images/home_page/battle_modal/close_icon.png)] bg-contain bg-center bg-no-repeat;
     }
 
     .blocksWrapper {
-        @apply flex flex-row items-center justify-center gap-12 w-full max-w-6xl px-8 py-24;
-        /* 横向居中，四周有间距 */
+        @apply flex flex-row items-center justify-center gap-x-12;
+    }
+}
 
-        .block {
-            @apply flex flex-col items-center justify-center bg-yellow-900/20 rounded-2xl shadow-xl px-10 py-12 min-h-[340px] relative;
-            /* 方块样式 */
-            min-width: 260px;
-            /* 默认宽度 */
 
-            .blockTag {
-                @apply absolute left-6 top-4 text-xs font-bold bg-yellow-500 text-black rounded px-3 py-1 shadow;
-                letter-spacing: 1px;
-            }
+.block {
+    @apply flex flex-col items-center;
 
-            .blockTitle {
-                @apply text-2xl font-bold mb-6 text-yellow-300;
-            }
+    .blockContent {
+        @apply flex flex-col items-center w-[374px] h-[488px] mb-5 pt-20 relative;
+        @apply bg-[url(/src/assets/images/home_page/battle_modal/block_background.png)] bg-contain bg-center bg-no-repeat;
 
-            .blockDesc {
-                @apply text-base text-yellow-100 mb-8 text-center px-2;
-            }
-
-            .blockBtn {
-                @apply mt-auto px-8 py-2 rounded-lg bg-yellow-500 text-black font-semibold text-lg shadow hover:bg-yellow-400 transition;
-            }
-
-            .blockBtnDisabled {
-                @apply bg-yellow-200 text-yellow-500 cursor-not-allowed opacity-60 hover:bg-yellow-200;
-            }
+        .blockTitle {
+            @apply text-[32px] leading-10 font-normal text-[#FFAF00] mb-[200px];
+            background: linear-gradient(to bottom, #FFAF00, #F3C358); /* 渐变色 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text; /* 部分浏览器支持 */
+            color: transparent;
         }
 
-        .tournamentBlock {
-            min-width: 280px;
-            max-width: 320px;
+        .blockImage {
+            @apply size-[250px] absolute top-[96px] z-0;
+            @apply bg-contain bg-center bg-no-repeat;
         }
 
-        .abyssBlock {
-            min-width: 320px;
-            max-width: 380px;
+        .blockDesc {
+            @apply px-11 text-[#4C3110] text-[18px] leading-[22px] font-normal;
         }
+    }
 
-        .arenaBlock {
-            min-width: 260px;
-            max-width: 300px;
+    .blockBtn {
+        @apply w-[284px] h-[72px] flex items-center justify-center;
+        @apply bg-[url(/src/assets/images/home_page/battle_modal/block_btn_background.png)] bg-contain bg-center bg-no-repeat;
+
+        & > div {
+            @apply text-2xl leading-10 font-normal text-white;
+            text-shadow: -2px -2px 0 #4C3110,
+            2px -2px 0 #4C3110,
+            -2px 2px 0 #4C3110,
+            2px 2px 0 #4C3110,
+            0px -2px 0 #4C3110,
+            0px 2px 0 #4C3110,
+            -2px 0px 0 #4C3110,
+            2px 0px 0 #4C3110;
         }
+    }
+
+    .blockBtnDisabled {
+        @apply cursor-not-allowed;
+        @apply bg-[url(/src/assets/images/home_page/battle_modal/block_btn_background_disabled.png)];
     }
 }

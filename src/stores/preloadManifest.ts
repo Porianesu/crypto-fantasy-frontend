@@ -6,16 +6,19 @@ const avatars = import.meta.glob('../assets/images/avatars/*.png', {
   eager: true,
   import: 'default',
 })
-import card_background from '../assets/images/cards/card_background.png'
-import card_border_0 from '../assets/images/cards/card_border_0.png'
-import card_border_1 from '../assets/images/cards/card_border_1.png'
-import card_border_2 from '../assets/images/cards/card_border_2.png'
-import card_border_3 from '../assets/images/cards/card_border_3.png'
+const cardImages = import.meta.glob('../assets/images/cards/*.png', {
+  eager: true,
+  import: 'default',
+})
 const introductionPageImages = import.meta.glob('../assets/images/introduction_page/*.png', {
   eager: true,
   import: 'default',
 })
 const homePageImages = import.meta.glob('../assets/images/home_page/*.png', {
+  eager: true,
+  import: 'default',
+})
+const battleModalImages = import.meta.glob('../assets/images/home_page/battle_modal/*.png', {
   eager: true,
   import: 'default',
 })
@@ -53,26 +56,17 @@ export default [
   ...Object.keys(avatars).map((key) => ({
     src: avatars[key],
   })),
-  {
-    src: card_background,
-  },
-  {
-    src: card_border_0,
-  },
-  {
-    src: card_border_1,
-  },
-  {
-    src: card_border_2,
-  },
-  {
-    src: card_border_3,
-  },
+  ...Object.keys(cardImages).map((key) => ({
+    src: cardImages[key],
+  })),
   ...Object.keys(introductionPageImages).map((key) => ({
     src: introductionPageImages[key],
   })),
   ...Object.keys(homePageImages).map((key) => ({
     src: homePageImages[key],
+  })),
+  ...Object.keys(battleModalImages).map((key) => ({
+    src: battleModalImages[key],
   })),
   ...Object.keys(cardsBagModalImages).map((key) => ({
     src: cardsBagModalImages[key],
