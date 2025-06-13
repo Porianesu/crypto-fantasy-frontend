@@ -36,7 +36,73 @@
         }
     }
 
+    .poolsContainer {
+        @apply shrink-0 flex items-center justify-center gap-2 py-4 overflow-x-auto;
+
+        .poolBtn {
+            @apply px-4 py-2 mx-1 rounded-lg font-medium text-gray-600 bg-white border border-gray-200 shadow-sm transition select-none whitespace-nowrap;
+
+            @apply hover:bg-blue-50 hover:text-blue-600;
+
+            &.poolBtnSelected {
+                @apply bg-blue-600 text-white border-blue-600 shadow-md;
+            }
+
+            &:disabled {
+                @apply opacity-60 cursor-not-allowed;
+            }
+        }
+    }
+
     .body {
-        @apply grow shrink basis-0 overflow-hidden;
+        @apply grow shrink basis-0 overflow-hidden flex items-stretch;
+
+        .loadingWrapper {
+            @apply grow basis-0 shrink overflow-hidden flex items-center justify-center;
+
+            & > span {
+                @apply text-lg text-gray-400;
+            }
+        }
+
+        .leaderboardContainer {
+            @apply flex flex-col w-[28rem] min-w-[22rem] max-w-[32rem] bg-white rounded-2xl shadow-xl p-4 mr-6 overflow-y-auto border border-blue-100;
+
+            .leaderboardTitle {
+                @apply text-xl font-bold text-blue-700 mb-4 tracking-wide text-center;
+            }
+
+            .leaderboardList {
+                @apply flex flex-col gap-2;
+
+                .leaderboardItem {
+                    @apply grid grid-cols-[2.2rem_2.8rem_1fr_3.5rem_4.5rem_4.5rem] items-center gap-2 px-2 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-white hover:from-blue-100 hover:to-blue-50 transition shadow-sm border border-transparent hover:border-blue-200;
+
+                    .rank {
+                        @apply text-center font-extrabold text-lg text-blue-500 drop-shadow-sm;
+                    }
+
+                    .avatar {
+                        @apply w-11 h-11 rounded-full object-cover border-2 border-blue-200 shadow;
+                    }
+
+                    .username {
+                        @apply font-semibold text-gray-800 truncate text-base;
+                    }
+
+                    .deckPower {
+                        @apply text-xs text-gray-400 font-mono text-center;
+                    }
+
+                    .prize {
+                        @apply text-xs font-bold text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded text-center;
+                    }
+
+                    .faithCoin {
+                        @apply text-xs font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded text-center;
+                    }
+                }
+            }
+        }
     }
 }

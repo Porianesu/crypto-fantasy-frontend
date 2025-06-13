@@ -24,6 +24,7 @@ const BattleModal: React.FC = () => {
   } = useMobxStore()
   const navigate = useNavigate()
   const handleTournamentClick = () => {
+    changeBattleModalVisible(false)
     navigate(getTournamentPath())
   }
   // mock 数据
