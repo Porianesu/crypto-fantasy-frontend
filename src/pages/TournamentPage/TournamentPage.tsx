@@ -146,6 +146,8 @@ const TournamentPage: React.FC = () => {
           <>
             {/* 左侧排行榜 */}
             <div className={styles.leaderboardContainer}>
+              {/* Leaderboard Title */}
+              <div className={styles.leaderboardTitle}>Leaderboard</div>
               {currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
                 <div className={styles.upcomingWrapper}>
                   <ClockIcon className={styles.upcomingIcon} />
@@ -159,18 +161,33 @@ const TournamentPage: React.FC = () => {
                   <span>Loading...</span>
                 </div>
               ) : (
-                <ul className={styles.leaderboardList}>
-                  {leaderboard?.map((user) => (
-                    <li key={user.rank} className={styles.leaderboardItem}>
-                      <span className={styles.rank}>{user.rank}</span>
-                      <img className={styles.avatar} src={user.avatar} alt={user.name} />
-                      <span className={styles.username}>{user.name}</span>
-                      <span className={styles.deckPower}>{user.deckPower}</span>
-                      <span className={styles.prize}>{user.prize.sol.toFixed(2)} SOL</span>
-                      <span className={styles.faithCoin}>{user.prize.faithCoin} FC</span>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className={styles.leaderboardList}>
+                    {leaderboard?.map((user) => (
+                      <li key={user.rank} className={styles.leaderboardItem}>
+                        <span className={styles.rank}>{user.rank}</span>
+                        <img className={styles.avatar} src={user.avatar} alt={user.name} />
+                        <span className={styles.username}>{user.name}</span>
+                        <span className={styles.deckPower}>{user.deckPower}</span>
+                        <span className={styles.prize}>{user.prize.sol.toFixed(2)} SOL</span>
+                        <span className={styles.faithCoin}>{user.prize.faithCoin} FC</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {/* 当前用户信息条 */}
+                  <div className={styles.currentUserBar}>
+                    <span className={styles.currentUserRank}>12</span>
+                    <img
+                      className={styles.currentUserAvatar}
+                      src="/src/assets/images/avatars/1.png"
+                      alt="You"
+                    />
+                    <span className={styles.currentUserName}>You</span>
+                    <span className={styles.currentUserDeckPower}>1,234</span>
+                    <span className={styles.currentUserPrize}>0.00 SOL</span>
+                    <span className={styles.currentUserFaithCoin}>0 FC</span>
+                  </div>
+                </>
               )}
             </div>
             {/* 中间奖池信息区 */}
