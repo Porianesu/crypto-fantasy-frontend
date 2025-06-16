@@ -9,6 +9,15 @@
     @apply w-[1534px] h-[866px];
     @apply bg-[url(/src/assets/images/home_page/battle_modal/background.png)] bg-contain bg-center bg-no-repeat;
 
+    .title {
+        @apply absolute top-[18px] text-[90px] font-normal text-[#FFAF00];
+        background: linear-gradient(to bottom, #FFAF00, #F3C358); /* 渐变色 */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text; /* 部分浏览器支持 */
+        color: transparent;
+    }
+
     .closeButton {
         @apply absolute top-[104px] right-[68px] w-[74px] h-[80px] z-10;
         @apply bg-[url(/src/assets/images/home_page/battle_modal/close_icon.png)] bg-contain bg-center bg-no-repeat;

@@ -67,7 +67,7 @@ const BattleModal: React.FC = () => {
           )}
         >
           <Content className={styles.contentContainer}>
-            <Title></Title>
+            <Title className={styles.title}>Battle</Title>
             <Description></Description>
             <Close asChild={true}>
               <div className={classNames('button', styles.closeButton)}></div>
