@@ -172,18 +172,20 @@ const TournamentPage: React.FC = () => {
                 </div>
               ) : (
                 <>
-                  <ul className={styles.leaderboardList}>
-                    {leaderboard?.map((user) => (
-                      <li key={user.rank} className={styles.leaderboardItem}>
-                        <span className={styles.rank}>{user.rank}</span>
-                        <img className={styles.avatar} src={user.avatar} alt={user.name} />
-                        <span className={styles.username}>{user.name}</span>
-                        <span className={styles.deckPower}>{user.deckPower}</span>
-                        <span className={styles.prize}>{user.prize.sol.toFixed(2)} SOL</span>
-                        <span className={styles.faithCoin}>{user.prize.faithCoin} FC</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className={styles.leaderboardListWrapper}>
+                    <ul className={styles.leaderboardList}>
+                      {leaderboard?.map((user) => (
+                        <li key={user.rank} className={styles.leaderboardItem}>
+                          <span className={styles.rank}>{user.rank}</span>
+                          <img className={styles.avatar} src={user.avatar} alt={user.name} />
+                          <span className={styles.username}>{user.name}</span>
+                          <span className={styles.deckPower}>{user.deckPower}</span>
+                          <span className={styles.prize}>{user.prize.sol.toFixed(2)} SOL</span>
+                          <span className={styles.faithCoin}>{user.prize.faithCoin} FC</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                   {/* 当前用户信息条 */}
                   {currentUserLeaderboardInfo && (
                     <div className={styles.currentUserBar}>
