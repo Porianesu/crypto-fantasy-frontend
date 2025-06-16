@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styles from './Tournament.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -42,7 +42,6 @@ const TournamentPage: React.FC = () => {
     queryFn: fetchPrizePools,
     staleTime: 5 * 60 * 1000,
   })
-  console.log('prizePools', prizePools)
   useEffect(() => {
     if (!prizePools?.length) return
     setCurrentPrizePool(prizePools.find((p) => p.status === PRIZE_POOL_STATUS.UPCOMING))
@@ -53,6 +52,7 @@ const TournamentPage: React.FC = () => {
       currentPrizePool && currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING
         ? ['prizePoolLeaderboard', currentPrizePool.id]
         : [],
+    // 传入userInfo参数
     queryFn: () => (currentPrizePool ? fetchPrizePoolLeaderboard(currentPrizePool, userInfo!) : []),
     enabled: !!currentPrizePool && currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING,
     refetchInterval:
@@ -60,8 +60,14 @@ const TournamentPage: React.FC = () => {
     staleTime: 0,
   })
 
-  // 模拟用户是否已参与当前奖池
-  const [isJoined, setIsJoined] = React.useState(false)
+  // 当前用户排行榜信息
+  const currentUserLeaderboardInfo = useMemo(() => {
+    if (!leaderboard) return undefined
+    return leaderboard.find((item) => item.name === userInfo?.email)
+  }, [leaderboard, userInfo?.email])
+
+  // joined状态由当前奖池数据决定
+  const isJoined = !!currentPrizePool?.user_participated
 
   // 倒计时逻辑
   const [countdown, setCountdown] = React.useState('')
@@ -93,10 +99,6 @@ const TournamentPage: React.FC = () => {
   }
   const handleComingSoon = () => {
     toast.info('Coming soon')
-  }
-  const handleJoin = () => {
-    setIsJoined(true)
-    toast.success('Joined successfully!')
   }
 
   return (
@@ -183,18 +185,30 @@ const TournamentPage: React.FC = () => {
                     ))}
                   </ul>
                   {/* 当前用户信息条 */}
-                  <div className={styles.currentUserBar}>
-                    <span className={styles.currentUserRank}>12</span>
-                    <img
-                      className={styles.currentUserAvatar}
-                      src="/src/assets/images/avatars/1.png"
-                      alt="You"
-                    />
-                    <span className={styles.currentUserName}>You</span>
-                    <span className={styles.currentUserDeckPower}>1,234</span>
-                    <span className={styles.currentUserPrize}>0.00 SOL</span>
-                    <span className={styles.currentUserFaithCoin}>0 FC</span>
-                  </div>
+                  {currentUserLeaderboardInfo && (
+                    <div className={styles.currentUserBar}>
+                      <span className={styles.currentUserRank}>
+                        {currentUserLeaderboardInfo.rank}
+                      </span>
+                      <img
+                        className={styles.currentUserAvatar}
+                        src={currentUserLeaderboardInfo.avatar}
+                        alt="You"
+                      />
+                      <span className={styles.currentUserName}>
+                        {currentUserLeaderboardInfo.name}
+                      </span>
+                      <span className={styles.currentUserDeckPower}>
+                        {currentUserLeaderboardInfo.deckPower}
+                      </span>
+                      <span className={styles.currentUserPrize}>
+                        {currentUserLeaderboardInfo.prize.sol.toFixed(2)} SOL
+                      </span>
+                      <span className={styles.currentUserFaithCoin}>
+                        {currentUserLeaderboardInfo.prize.faithCoin} FC
+                      </span>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -218,7 +232,7 @@ const TournamentPage: React.FC = () => {
                 <button
                   className={isJoined ? styles.joinedBtn : styles.joinBtn}
                   disabled={isJoined}
-                  onClick={isJoined ? undefined : handleJoin}
+                  // onClick={isJoined ? undefined : handleJoin}
                 >
                   {isJoined ? 'Joined' : 'Join'}
                 </button>
