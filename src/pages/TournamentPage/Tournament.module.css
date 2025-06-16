@@ -95,35 +95,3 @@
         }
     }
 }
-
-.currentUserBar {
-    @apply grid grid-cols-[2.2rem_2.8rem_1fr_3.5rem_4.5rem_4.5rem] items-center gap-2 px-4 py-3 mt-4 rounded-2xl border-2 border-yellow-400 bg-gradient-to-r from-yellow-200 via-yellow-50 to-white shadow-2xl;
-    box-shadow: 0 6px 24px 0 rgba(255, 193, 7, 0.22), 0 2px 12px 0 rgba(0,0,0,0.10);
-    border-width: 2.5px;
-    outline: 2.5px solid #ffe066;
-    outline-offset: -2px;
-    animation: userBarGlow 2.5s infinite alternate;
-    .currentUserRank {
-        @apply text-center font-extrabold text-lg text-yellow-600 drop-shadow-md;
-    }
-    .currentUserAvatar {
-        @apply w-11 h-11 rounded-full object-cover border-2 border-yellow-400 shadow-lg;
-    }
-    .currentUserName {
-        @apply font-extrabold text-yellow-800 truncate text-base;
-        letter-spacing: 0.02em;
-    }
-    .currentUserDeckPower {
-        @apply text-xs text-yellow-600 font-mono text-center font-bold;
-    }
-    .currentUserPrize {
-        @apply text-xs font-extrabold text-yellow-800 bg-yellow-200 px-2 py-0.5 rounded text-center shadow;
-    }
-    .currentUserFaithCoin {
-        @apply text-xs font-extrabold text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded text-center shadow;
-    }
-}
-@keyframes userBarGlow {
-    0% { box-shadow: 0 6px 24px 0 rgba(255, 193, 7, 0.22), 0 2px 12px 0 rgba(0,0,0,0.10); }
-    100% { box-shadow: 0 0 32px 8px #ffe066, 0 2px 12px 0 rgba(0,0,0,0.10); }
-}
