@@ -13,6 +13,7 @@ import dayjs from 'dayjs'
 import TournamentPageLeaderboard from '@/pages/TournamentPage/TournamentPageLeaderboard.tsx'
 import TournamentPageCardsFormation from '@/pages/TournamentPage/TournamentPageCardsFormation.tsx'
 import { BigNumber } from 'bignumber.js'
+import CountUp from 'react-countup'
 
 export enum PRIZE_POOL_STATUS {
   END,
@@ -88,7 +89,9 @@ const TournamentPage: React.FC = () => {
               .plus(Math.random() * 10)
               .decimalPlaces(2)
               .toNumber(),
-            user_deck_power: Math.floor(Math.random() * (990 - 225 + 1)) + 225,
+            user_deck_power: prev.user_participated
+              ? Math.floor(Math.random() * (990 - 225 + 1)) + 225
+              : 0,
           }
         } else if (prev.user_participated && prev.status !== PRIZE_POOL_STATUS.END) {
           updated = {
@@ -104,7 +107,6 @@ const TournamentPage: React.FC = () => {
         return updated
       })
     }
-    update()
     const timer = setInterval(update, 5000)
     return () => clearInterval(timer)
   }, [currentPrizePool?.id, currentPrizePool?.user_participated, currentPrizePool?.status])
@@ -185,7 +187,22 @@ const TournamentPage: React.FC = () => {
               {/* 中间奖池icon和金额 */}
               <div className="flex flex-col items-center justify-center flex-1">
                 <GiftIcon className={styles.prizeIcon} />
-                <div className={styles.prizeAmount}>{currentPrizePool?.price ?? '--'} SOL</div>
+                <div className={styles.prizeAmount}>
+                  <CountUp
+                    start={undefined}
+                    end={currentPrizePool?.price ?? 0}
+                    decimals={2}
+                    duration={1}
+                    separator=","
+                    preserveValue
+                    easingFn={(t, b, c, d) => {
+                      // easeOutQuad: 先快后慢
+                      t /= d
+                      return -c * t * (t - 2) + b
+                    }}
+                  />
+                  SOL
+                </div>
                 <div className={styles.prizeLabel}>Prize Pool</div>
               </div>
               {/* 底部参与按钮/状态 */}
