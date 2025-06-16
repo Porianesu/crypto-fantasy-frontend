@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import styles from './Tournament.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -8,9 +8,9 @@ import { ArrowLeftIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { GiftIcon } from '@heroicons/react/24/solid'
 import { getHomePath } from '@/navigation/routes.tsx'
 import { useQuery } from '@tanstack/react-query'
-import { fetchPrizePools, fetchPrizePoolLeaderboard } from '@/utils/mockHelper.ts'
+import { fetchPrizePools } from '@/utils/mockHelper.ts'
 import dayjs from 'dayjs'
-import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import TournamentPageLeaderboard from '@/pages/TournamentPage/TournamentPageLeaderboard.tsx'
 
 export enum PRIZE_POOL_STATUS {
   END,
@@ -32,9 +32,6 @@ export interface IPrizePool {
 
 const TournamentPage: React.FC = () => {
   const navigate = useNavigate()
-  const {
-    appStore: { userInfo },
-  } = useMobxStore()
   const [currentPrizePool, setCurrentPrizePool] = React.useState<IPrizePool | undefined>(undefined)
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
@@ -46,25 +43,6 @@ const TournamentPage: React.FC = () => {
     if (!prizePools?.length) return
     setCurrentPrizePool(prizePools.find((p) => p.status === PRIZE_POOL_STATUS.UPCOMING))
   }, [prizePools])
-
-  const { data: leaderboard, isLoading: leaderboardLoading } = useQuery({
-    queryKey:
-      currentPrizePool && currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING
-        ? ['prizePoolLeaderboard', currentPrizePool.id]
-        : [],
-    // 传入userInfo参数
-    queryFn: () => (currentPrizePool ? fetchPrizePoolLeaderboard(currentPrizePool, userInfo!) : []),
-    enabled: !!currentPrizePool && currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING,
-    refetchInterval:
-      currentPrizePool && currentPrizePool.status === PRIZE_POOL_STATUS.PROCESSING ? 10000 : false,
-    staleTime: 0,
-  })
-
-  // 当前用户排行榜信息
-  const currentUserLeaderboardInfo = useMemo(() => {
-    if (!leaderboard) return undefined
-    return leaderboard.find((item) => item.name === userInfo?.email)
-  }, [leaderboard, userInfo?.email])
 
   // joined状态由当前奖池数据决定
   const isJoined = !!currentPrizePool?.user_participated
@@ -155,65 +133,9 @@ const TournamentPage: React.FC = () => {
         ) : (
           <>
             {/* 左侧排行榜 */}
-            <div className={styles.leaderboardContainer}>
-              {/* Leaderboard Title */}
-              <div className={styles.leaderboardTitle}>Leaderboard</div>
-              {currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
-                <div className={styles.upcomingWrapper}>
-                  <ClockIcon className={styles.upcomingIcon} />
-                  <span className={styles.upcomingText}>Coming Soon</span>
-                  <span className={styles.upcomingSubText}>
-                    Please stay tuned for the event start time!
-                  </span>
-                </div>
-              ) : leaderboardLoading ? (
-                <div className={styles.loadingWrapper}>
-                  <span>Loading...</span>
-                </div>
-              ) : (
-                <>
-                  <div className={styles.leaderboardListWrapper}>
-                    <ul className={styles.leaderboardList}>
-                      {leaderboard?.map((user) => (
-                        <li key={user.rank} className={styles.leaderboardItem}>
-                          <span className={styles.rank}>{user.rank}</span>
-                          <img className={styles.avatar} src={user.avatar} alt={user.name} />
-                          <span className={styles.username}>{user.name}</span>
-                          <span className={styles.deckPower}>{user.deckPower}</span>
-                          <span className={styles.prize}>{user.prize.sol.toFixed(2)} SOL</span>
-                          <span className={styles.faithCoin}>{user.prize.faithCoin} FC</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {/* 当前用户信息条 */}
-                  {currentUserLeaderboardInfo && (
-                    <div className={styles.currentUserBar}>
-                      <span className={styles.currentUserRank}>
-                        {currentUserLeaderboardInfo.rank}
-                      </span>
-                      <img
-                        className={styles.currentUserAvatar}
-                        src={currentUserLeaderboardInfo.avatar}
-                        alt="You"
-                      />
-                      <span className={styles.currentUserName}>
-                        {currentUserLeaderboardInfo.name}
-                      </span>
-                      <span className={styles.currentUserDeckPower}>
-                        {currentUserLeaderboardInfo.deckPower}
-                      </span>
-                      <span className={styles.currentUserPrize}>
-                        {currentUserLeaderboardInfo.prize.sol.toFixed(2)} SOL
-                      </span>
-                      <span className={styles.currentUserFaithCoin}>
-                        {currentUserLeaderboardInfo.prize.faithCoin} FC
-                      </span>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
+            <TournamentPageLeaderboard
+              currentPrizePool={currentPrizePool}
+            ></TournamentPageLeaderboard>
             {/* 中间奖池信息区 */}
             <div className={styles.prizeInfoContainer}>
               {/* 顶部倒计时，仅PROCESSING显示 */}
