@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { ArrowLeftIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { GiftIcon } from '@heroicons/react/24/solid'
 import { getHomePath } from '@/navigation/routes.tsx'
 import { useQuery } from '@tanstack/react-query'
 import { fetchPrizePools, fetchPrizePoolLeaderboard } from '@/utils/mockHelper.ts'
@@ -51,13 +52,43 @@ const TournamentPage: React.FC = () => {
     staleTime: 0,
   })
 
-  console.log('leaderboard', leaderboard)
+  // 模拟用户是否已参与当前奖池
+  const [isJoined, setIsJoined] = React.useState(false)
+
+  // 倒计时逻辑
+  const [countdown, setCountdown] = React.useState('')
+  useEffect(() => {
+    if (!currentPrizePool || currentPrizePool.status !== PRIZE_POOL_STATUS.PROCESSING) {
+      setCountdown('')
+      return
+    }
+    const updateCountdown = () => {
+      const now = dayjs()
+      const end = dayjs(currentPrizePool.end_date)
+      const diff = end.diff(now, 'second')
+      if (diff <= 0) {
+        setCountdown('00:00:00')
+        return
+      }
+      const h = String(Math.floor(diff / 3600)).padStart(2, '0')
+      const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0')
+      const s = String(diff % 60).padStart(2, '0')
+      setCountdown(`${h}:${m}:${s}`)
+    }
+    updateCountdown()
+    const timer = setInterval(updateCountdown, 1000)
+    return () => clearInterval(timer)
+  }, [currentPrizePool])
 
   const handleBack = () => {
     navigate(getHomePath())
   }
   const handleComingSoon = () => {
     toast.info('Coming soon')
+  }
+  const handleJoin = () => {
+    setIsJoined(true)
+    toast.success('Joined successfully!')
   }
 
   return (
@@ -141,6 +172,32 @@ const TournamentPage: React.FC = () => {
                   ))}
                 </ul>
               )}
+            </div>
+            {/* 中间奖池信息区 */}
+            <div className={styles.prizeInfoContainer}>
+              {/* 顶部倒计时，仅PROCESSING显示 */}
+              {currentPrizePool?.status === PRIZE_POOL_STATUS.PROCESSING && (
+                <div className={styles.prizeCountdown}>
+                  <ClockIcon className="w-6 h-6 text-blue-400" />
+                  <span>Ends in {countdown}</span>
+                </div>
+              )}
+              {/* 中间奖池icon和金额 */}
+              <div className="flex flex-col items-center justify-center flex-1">
+                <GiftIcon className={styles.prizeIcon} />
+                <div className={styles.prizeAmount}>{currentPrizePool?.price ?? '--'} SOL</div>
+                <div className={styles.prizeLabel}>Prize Pool</div>
+              </div>
+              {/* 底部参与按钮/状态 */}
+              {currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
+                <button
+                  className={isJoined ? styles.joinedBtn : styles.joinBtn}
+                  disabled={isJoined}
+                  onClick={isJoined ? undefined : handleJoin}
+                >
+                  {isJoined ? 'Joined' : 'Join'}
+                </button>
+              ) : null}
             </div>
             {/* 右侧和中间后续实现 */}
           </>
