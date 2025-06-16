@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Tournament.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -33,7 +33,7 @@ export interface IPrizePool {
 
 const TournamentPage: React.FC = () => {
   const navigate = useNavigate()
-  const [currentPrizePool, setCurrentPrizePool] = React.useState<IPrizePool | undefined>(undefined)
+  const [currentPrizePool, setCurrentPrizePool] = useState<IPrizePool | undefined>(undefined)
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
     queryKey: ['prizePools'],
@@ -72,6 +72,28 @@ const TournamentPage: React.FC = () => {
     const timer = setInterval(updateCountdown, 1000)
     return () => clearInterval(timer)
   }, [currentPrizePool])
+
+  useEffect(() => {
+    if (
+      !currentPrizePool ||
+      !currentPrizePool.user_participated ||
+      currentPrizePool.status === PRIZE_POOL_STATUS.END
+    )
+      return
+    const updateDeckPower = () => {
+      setCurrentPrizePool((prev) =>
+        prev
+          ? {
+              ...prev,
+              user_deck_power: Math.floor(Math.random() * (990 - 225 + 1)) + 225,
+            }
+          : prev,
+      )
+    }
+    updateDeckPower()
+    const timer = setInterval(updateDeckPower, 10000)
+    return () => clearInterval(timer)
+  }, [currentPrizePool?.id, currentPrizePool?.user_participated, currentPrizePool?.status])
 
   const handleBack = () => {
     navigate(getHomePath())

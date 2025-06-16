@@ -20,13 +20,22 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
   const { data: leaderboard, isLoading: leaderboardLoading } = useQuery({
     queryKey:
       currentPrizePool && currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING
-        ? ['prizePoolLeaderboard', currentPrizePool.id]
+        ? [
+            'prizePoolLeaderboard',
+            currentPrizePool.id,
+            currentPrizePool.user_participated,
+            currentPrizePool.user_deck_power,
+          ]
         : [],
     // 传入userInfo参数
     queryFn: () => (currentPrizePool ? fetchPrizePoolLeaderboard(currentPrizePool, userInfo!) : []),
     enabled: !!currentPrizePool && currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING,
     refetchInterval:
-      currentPrizePool && currentPrizePool.status === PRIZE_POOL_STATUS.PROCESSING ? 10000 : false,
+      currentPrizePool &&
+      currentPrizePool.status === PRIZE_POOL_STATUS.PROCESSING &&
+      !currentPrizePool.user_participated
+        ? 10000
+        : false,
     staleTime: 0,
   })
 
