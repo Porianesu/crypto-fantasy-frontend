@@ -164,11 +164,7 @@ const TournamentPage: React.FC = () => {
               ) : null}
             </div>
             {/* 右侧出战卡组信息区 */}
-            <TournamentPageCardsFormation
-              user_card_formation={currentPrizePool?.user_card_formation}
-              user_deck_power={currentPrizePool?.user_deck_power}
-            />
-            {/* 右侧和中间后续实现 */}
+            <TournamentPageCardsFormation currentPrizePool={currentPrizePool} />
           </>
         )}
       </div>

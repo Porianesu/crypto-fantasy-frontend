@@ -8,15 +8,18 @@
     }
 
     .formationCards {
-        @apply flex flex-row items-center justify-center gap-4 mt-4 mb-4;
+        @apply flex flex-col items-center justify-center gap-2 mt-4 mb-4 w-full;
+    }
+    .formationCardsRow {
+        @apply flex flex-row items-center justify-center gap-4 w-full;
     }
 
     .formationCardSlot {
-        @apply w-20 h-28 rounded-xl border-2 border-dashed border-blue-300 bg-blue-50 flex items-center justify-center text-3xl text-blue-200 shadow-inner transition;
+        @apply w-36 h-52 rounded-3xl border-2 border-dashed border-blue-300 bg-blue-50 flex items-center justify-center text-5xl text-blue-200 shadow-inner transition;
     }
 
     .formationCardImg {
-        @apply w-20 h-28 rounded-xl border-2 border-blue-400 shadow-lg object-cover bg-white;
+        @apply w-36 h-52 rounded-3xl border-2 border-blue-400 shadow-lg object-cover bg-white;
     }
 
     .deckPowerLabel {
