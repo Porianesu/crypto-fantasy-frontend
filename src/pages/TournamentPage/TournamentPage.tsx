@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchPrizePools } from '@/utils/mockHelper.ts'
 import dayjs from 'dayjs'
 import TournamentPageLeaderboard from '@/pages/TournamentPage/TournamentPageLeaderboard.tsx'
+import TournamentPageCardsFormation from '@/pages/TournamentPage/TournamentPageCardsFormation.tsx'
 
 export enum PRIZE_POOL_STATUS {
   END,
@@ -162,6 +163,11 @@ const TournamentPage: React.FC = () => {
                 </button>
               ) : null}
             </div>
+            {/* 右侧出战卡组信息区 */}
+            <TournamentPageCardsFormation
+              user_card_formation={currentPrizePool?.user_card_formation}
+              user_deck_power={currentPrizePool?.user_deck_power}
+            />
             {/* 右侧和中间后续实现 */}
           </>
         )}
