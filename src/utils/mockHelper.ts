@@ -2,6 +2,7 @@ import { type IPrizePool, PRIZE_POOL_STATUS } from '@/pages/TournamentPage/Tourn
 import dayjs from 'dayjs'
 import { generateFantasyEnglishName, getDefaultAvatar } from '@/utils/common.ts'
 import { BigNumber } from 'bignumber.js'
+import type { UserInfo } from '@/stores/app-store.ts'
 
 export const fetchHomeLeaderboard = async () => {
   const originalData = Array.from({ length: 20 }).map((_, i) => ({
@@ -22,6 +23,8 @@ export const fetchPrizePools = async () => {
     const getRandomPrice = () =>
       new BigNumber(Math.random() * 490).plus(10).decimalPlaces(2).toNumber()
     const getRandomPlayerCount = () => Math.floor(Math.random() * 100) + 1
+    const getRandomFormation = () => Array.from({ length: 5 }, () => Math.floor(Math.random() * 80))
+    const getRandomDeckPower = () => Math.floor(Math.random() * 991)
     const data = [
       {
         id: 0,
@@ -64,7 +67,22 @@ export const fetchPrizePools = async () => {
         player_count: getRandomPlayerCount(),
       },
     ]
-    resolve(data)
+    // 随机为非UPCOMING奖池生成当前用户参与信息
+    const result = data.map((pool) => {
+      if (pool.status !== PRIZE_POOL_STATUS.UPCOMING && Math.random() < 0.5) {
+        return {
+          ...pool,
+          user_participated: true,
+          user_card_formation: getRandomFormation(),
+          user_deck_power: getRandomDeckPower(),
+        }
+      }
+      return {
+        ...pool,
+        user_participated: false,
+      }
+    })
+    resolve(result)
   })
 }
 
@@ -104,7 +122,7 @@ export function calculateSolAndCoin(totalSol: number, rank: number, totalPlayers
   }
 }
 
-export const fetchPrizePoolLeaderboard = async (pool: IPrizePool) => {
+export const fetchPrizePoolLeaderboard = async (pool: IPrizePool, userInfo: UserInfo) => {
   return new Promise<
     Array<{
       name: string

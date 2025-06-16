@@ -7,7 +7,7 @@ import type { ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 
-interface UserInfo extends UserStorageInfo {
+export interface UserInfo extends UserStorageInfo {
   avatarUrl: string
   solAmount: number
   faithAmount: number

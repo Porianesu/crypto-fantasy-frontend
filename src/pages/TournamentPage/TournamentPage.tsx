@@ -10,6 +10,7 @@ import { getHomePath } from '@/navigation/routes.tsx'
 import { useQuery } from '@tanstack/react-query'
 import { fetchPrizePools, fetchPrizePoolLeaderboard } from '@/utils/mockHelper.ts'
 import dayjs from 'dayjs'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
 
 export enum PRIZE_POOL_STATUS {
   END,
@@ -24,10 +25,16 @@ export interface IPrizePool {
   price: number
   status: PRIZE_POOL_STATUS
   player_count: number
+  user_participated: boolean
+  user_card_formation?: Array<number>
+  user_deck_power?: number
 }
 
 const TournamentPage: React.FC = () => {
   const navigate = useNavigate()
+  const {
+    appStore: { userInfo },
+  } = useMobxStore()
   const [currentPrizePool, setCurrentPrizePool] = React.useState<IPrizePool | undefined>(undefined)
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
@@ -45,7 +52,7 @@ const TournamentPage: React.FC = () => {
       currentPrizePool && currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING
         ? ['prizePoolLeaderboard', currentPrizePool.id]
         : [],
-    queryFn: () => (currentPrizePool ? fetchPrizePoolLeaderboard(currentPrizePool) : []),
+    queryFn: () => (currentPrizePool ? fetchPrizePoolLeaderboard(currentPrizePool, userInfo!) : []),
     enabled: !!currentPrizePool && currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING,
     refetchInterval:
       currentPrizePool && currentPrizePool.status === PRIZE_POOL_STATUS.PROCESSING ? 10000 : false,
