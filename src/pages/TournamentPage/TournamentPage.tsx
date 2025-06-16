@@ -230,7 +230,7 @@ const TournamentPage: React.FC = () => {
                 <div className={styles.prizeLabel}>Prize Pool</div>
               </div>
               {/* 底部参与按钮/状态 */}
-              {currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
+              {isJoined || currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
                 <button
                   className={isJoined ? styles.joinedBtn : styles.joinBtn}
                   disabled={isJoined}
