@@ -32,7 +32,7 @@ const BattleModal: React.FC = () => {
     {
       key: 'tournament',
       title: 'Tournament',
-      desc: 'Participate in regular tournaments and compete for the leaderboard.',
+      desc: 'Build your strongest deck and climb the rankings to earn a share of the prize pool.',
       btn: 'Join Now',
       onClick: handleTournamentClick,
       disabled: false,
@@ -50,7 +50,7 @@ const BattleModal: React.FC = () => {
     {
       key: 'arena',
       title: 'Arena Duel',
-      desc: 'Battle other players in real time and experience strategy and luck.',
+      desc: 'Go head-to-head against other players. Rank up and earn exclusive rewards.',
       btn: 'Coming Soon',
       onClick: undefined,
       disabled: true,
