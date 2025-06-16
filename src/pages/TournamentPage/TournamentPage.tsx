@@ -7,11 +7,12 @@ import { toast } from 'react-toastify'
 import { ArrowLeftIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { GiftIcon } from '@heroicons/react/24/solid'
 import { getHomePath } from '@/navigation/routes.tsx'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchPrizePools } from '@/utils/mockHelper.ts'
 import dayjs from 'dayjs'
 import TournamentPageLeaderboard from '@/pages/TournamentPage/TournamentPageLeaderboard.tsx'
 import TournamentPageCardsFormation from '@/pages/TournamentPage/TournamentPageCardsFormation.tsx'
+import { BigNumber } from 'bignumber.js'
 
 export enum PRIZE_POOL_STATUS {
   END,
@@ -34,6 +35,7 @@ export interface IPrizePool {
 const TournamentPage: React.FC = () => {
   const navigate = useNavigate()
   const [currentPrizePool, setCurrentPrizePool] = useState<IPrizePool | undefined>(undefined)
+  const queryClient = useQueryClient()
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
     queryKey: ['prizePools'],
@@ -74,24 +76,36 @@ const TournamentPage: React.FC = () => {
   }, [currentPrizePool])
 
   useEffect(() => {
-    if (
-      !currentPrizePool ||
-      !currentPrizePool.user_participated ||
-      currentPrizePool.status === PRIZE_POOL_STATUS.END
-    )
-      return
-    const updateDeckPower = () => {
-      setCurrentPrizePool((prev) =>
-        prev
-          ? {
-              ...prev,
-              user_deck_power: Math.floor(Math.random() * (990 - 225 + 1)) + 225,
-            }
-          : prev,
-      )
+    if (!currentPrizePool) return
+    const update = () => {
+      setCurrentPrizePool((prev) => {
+        if (!prev) return prev
+        let updated: IPrizePool = prev
+        if (prev.status === PRIZE_POOL_STATUS.UPCOMING) {
+          updated = {
+            ...prev,
+            price: new BigNumber(prev.price)
+              .plus(Math.random() * 10)
+              .decimalPlaces(2)
+              .toNumber(),
+            user_deck_power: Math.floor(Math.random() * (990 - 225 + 1)) + 225,
+          }
+        } else if (prev.user_participated && prev.status !== PRIZE_POOL_STATUS.END) {
+          updated = {
+            ...prev,
+            user_deck_power: Math.floor(Math.random() * (990 - 225 + 1)) + 225,
+          }
+        }
+        // 更新prizePools缓存
+        queryClient.setQueryData(['prizePools'], (old: IPrizePool[] | undefined) => {
+          if (!old) return old
+          return old.map((pool) => (pool.id === updated.id ? updated : pool))
+        })
+        return updated
+      })
     }
-    updateDeckPower()
-    const timer = setInterval(updateDeckPower, 10000)
+    update()
+    const timer = setInterval(update, 5000)
     return () => clearInterval(timer)
   }, [currentPrizePool?.id, currentPrizePool?.user_participated, currentPrizePool?.status])
 
