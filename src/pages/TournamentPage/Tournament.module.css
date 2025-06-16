@@ -65,6 +65,20 @@
             }
         }
 
+        .upcomingWrapper {
+            @apply px-4 grow basis-0 shrink overflow-hidden flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-blue-50 to-white border-2 border-dashed border-blue-300 rounded-xl shadow-inner;
+
+            .upcomingIcon {
+                @apply w-12 h-12 text-blue-400;
+            }
+            .upcomingText {
+                @apply text-2xl font-bold text-blue-600 tracking-wide;
+            }
+            .upcomingSubText {
+                @apply text-base text-blue-400 text-center;
+            }
+        }
+
         .leaderboardContainer {
             @apply flex flex-col w-[28rem] min-w-[22rem] max-w-[32rem] bg-white rounded-2xl shadow-xl p-4 mr-6 overflow-y-auto border border-blue-100;
 

@@ -4,7 +4,7 @@ import styles from './Tournament.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { getHomePath } from '@/navigation/routes.tsx'
 import { useQuery } from '@tanstack/react-query'
 import { fetchPrizePools, fetchPrizePoolLeaderboard } from '@/utils/mockHelper.ts'
@@ -116,8 +116,12 @@ const TournamentPage: React.FC = () => {
             {/* 左侧排行榜 */}
             <div className={styles.leaderboardContainer}>
               {currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
-                <div className={styles.loadingWrapper}>
-                  <span>Upcoming</span>
+                <div className={styles.upcomingWrapper}>
+                  <ClockIcon className={styles.upcomingIcon} />
+                  <span className={styles.upcomingText}>Coming Soon</span>
+                  <span className={styles.upcomingSubText}>
+                    Please stay tuned for the event start time!
+                  </span>
                 </div>
               ) : leaderboardLoading ? (
                 <div className={styles.loadingWrapper}>
