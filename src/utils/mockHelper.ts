@@ -133,13 +133,26 @@ export const fetchPrizePoolLeaderboard = async (pool: IPrizePool, userInfo: User
         sol: number
         faithCoin: number
       }
+      isCurrentUser?: boolean
+      user_card_formation?: number[]
     }>
   >((resolve) => {
+    // 生成排行榜数据
     const originalData = Array.from({ length: pool.player_count }).map((_, i) => ({
       name: generateFantasyEnglishName(),
       deckPower: Math.floor(Math.random() * 990),
       avatar: getDefaultAvatar(i),
     }))
+    // 如果当前用户参与，插入用户数据
+    if (pool.user_participated && userInfo) {
+      const userDeckPower = pool.user_deck_power ?? Math.floor(Math.random() * 990)
+      // 用一个特殊的avatar
+      originalData.push({
+        name: userInfo.email || 'You',
+        deckPower: userDeckPower,
+        avatar: userInfo.avatarUrl || getDefaultAvatar(99),
+      })
+    }
     // 排序，生成rank
     const sorted = originalData.sort((a, b) => b.deckPower - a.deckPower)
     const withRankAndPrize = sorted.map((item, idx) => {

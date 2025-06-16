@@ -42,6 +42,7 @@ const TournamentPage: React.FC = () => {
     queryFn: fetchPrizePools,
     staleTime: 5 * 60 * 1000,
   })
+  console.log('prizePools', prizePools)
   useEffect(() => {
     if (!prizePools?.length) return
     setCurrentPrizePool(prizePools.find((p) => p.status === PRIZE_POOL_STATUS.UPCOMING))
