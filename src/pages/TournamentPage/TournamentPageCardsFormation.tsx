@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './TournamentPageCardsFormation.module.css'
 import type { IPrizePool } from '@/pages/TournamentPage/TournamentPage.tsx'
+import { observer } from 'mobx-react-lite'
 
 interface TournamentPageCardsFormationProps {
   currentPrizePool: IPrizePool | undefined
@@ -65,4 +66,4 @@ const TournamentPageCardsFormation: React.FC<TournamentPageCardsFormationProps> 
   )
 }
 
-export default TournamentPageCardsFormation
+export default observer(TournamentPageCardsFormation)
