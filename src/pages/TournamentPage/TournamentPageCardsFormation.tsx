@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react'
+import React, { useEffect, useImperativeHandle, useMemo, useState } from 'react'
 import styles from './TournamentPageCardsFormation.module.css'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/pages/TournamentPage/TournamentPage.tsx'
 import { observer } from 'mobx-react-lite'
@@ -8,6 +8,7 @@ import StaticCard from '@/components/StaticCard.tsx'
 import classNames from 'classnames'
 import TournamentPageCardsFormationModal from '@/pages/TournamentPage/TournamentPageCardsFormationModal.tsx'
 import { toast } from 'react-toastify'
+import { BigNumber } from 'bignumber.js'
 
 export interface ITournamentPageCardsFormationHandle {
   tempCardsFormation: Array<number>
@@ -76,6 +77,49 @@ const TournamentPageCardsFormation = React.forwardRef<
 >(({ currentPrizePool, rules, cardData }, ref) => {
   const [tempCardsFormation, setTempCardsFormation] = useState<Array<number>>([])
   const [cardsFormationModalOpen, setCardsFormationModalOpen] = useState(false)
+  const [cardsDeckPowerRate, setCardsDeckPowerRate] = useState(1)
+  const cards = useMemo(
+    () =>
+      currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING
+        ? tempCardsFormation
+        : currentPrizePool.user_card_formation || [],
+    [currentPrizePool.status, currentPrizePool.user_card_formation, tempCardsFormation],
+  )
+  const formatedCards = useMemo(
+    () => cards.map((cardId) => cardData.find((c) => c.id === cardId)).filter((card) => card),
+    [cardData, cards],
+  )
+  const deckPower = useMemo(
+    () =>
+      currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING
+        ? new BigNumber(
+            formatedCards.reduce((previousValue, currentValue) => {
+              return previousValue + (currentValue?.score || 0)
+            }, 0),
+          )
+            .multipliedBy(cardsDeckPowerRate)
+            .decimalPlaces(0)
+            .toNumber()
+        : currentPrizePool.user_deck_power || 0,
+    [cardsDeckPowerRate, currentPrizePool.status, currentPrizePool.user_deck_power, formatedCards],
+  )
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval> | undefined
+    if (currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING) {
+      const updateCardsDeckPowerRate = () => {
+        setCardsDeckPowerRate(Math.random() * 1.5 + 0.5) // 随机生成0.5到2之间的倍率
+      }
+      updateCardsDeckPowerRate()
+      timer = setInterval(
+        updateCardsDeckPowerRate,
+        1000 * 10, // 每10秒更新一次倍率
+      )
+    }
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [currentPrizePool.id, currentPrizePool.status])
 
   useEffect(() => {
     if (
@@ -93,7 +137,7 @@ const TournamentPageCardsFormation = React.forwardRef<
     }),
     [tempCardsFormation],
   )
-  const handleEmptyCardClick = () => {
+  const handleCardClick = () => {
     setCardsFormationModalOpen(true)
   }
 
@@ -123,30 +167,17 @@ const TournamentPageCardsFormation = React.forwardRef<
   // 卡片渲染函数，避免重复
   const renderCard = (card: ICardData | undefined, key: React.Key) =>
     card ? (
-      <StaticCard key={card.id} card={card} width={142}></StaticCard>
+      <StaticCard key={card.id} card={card} width={142} onClick={handleCardClick}></StaticCard>
     ) : (
       <button
         key={key}
         className={classNames(styles.formationCardSlot, 'button')}
-        onClick={handleEmptyCardClick}
+        onClick={handleCardClick}
       >
         +
       </button>
     )
 
-  const cards =
-    currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING
-      ? tempCardsFormation
-      : currentPrizePool.user_card_formation || []
-  const formatedCards = cards
-    .map((cardId) => cardData.find((c) => c.id === cardId))
-    .filter((card) => card)
-  const deckPower =
-    currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING
-      ? formatedCards.reduce((previousValue, currentValue) => {
-          return previousValue + (currentValue?.score || 0)
-        }, 0)
-      : currentPrizePool.user_deck_power || 0
   // 保证5个卡槽
   const paddedCards: Array<ICardData | undefined> = [
     ...formatedCards,
