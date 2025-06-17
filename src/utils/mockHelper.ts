@@ -69,7 +69,10 @@ export const fetchPrizePools = async () => {
     ]
     // 随机为非UPCOMING奖池生成当前用户参与信息
     const result = data.map((pool) => {
-      if (pool.status !== PRIZE_POOL_STATUS.UPCOMING && Math.random() < 0.5) {
+      if (
+        pool.status === PRIZE_POOL_STATUS.PROCESSING ||
+        (pool.status === PRIZE_POOL_STATUS.END && Math.random() < 0.5)
+      ) {
         return {
           ...pool,
           user_participated: true,
