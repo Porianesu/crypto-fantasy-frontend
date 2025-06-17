@@ -2,6 +2,10 @@ import React from 'react'
 import styles from './TournamentPageCardsFormation.module.css'
 import type { IPrizePool } from '@/pages/TournamentPage/TournamentPage.tsx'
 import { observer } from 'mobx-react-lite'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import type { ICardData } from '@/components/Card.tsx'
+import StaticCard from '@/components/StaticCard.tsx'
+import classNames from 'classnames'
 
 interface TournamentPageCardsFormationProps {
   currentPrizePool: IPrizePool | undefined
@@ -10,7 +14,12 @@ interface TournamentPageCardsFormationProps {
 const TournamentPageCardsFormation: React.FC<TournamentPageCardsFormationProps> = ({
   currentPrizePool,
 }) => {
-  if (!currentPrizePool) {
+  const {
+    preloadStore: { preloadQueue },
+  } = useMobxStore()
+
+  const cardData = preloadQueue?.getResult('cardsData') as Array<ICardData> | undefined
+  if (!currentPrizePool || !cardData) {
     return (
       <div className={styles.formationContainer}>
         <div className={styles.formationTitle}>Your Formation</div>
@@ -31,33 +40,34 @@ const TournamentPageCardsFormation: React.FC<TournamentPageCardsFormationProps> 
     )
   }
   // 卡片渲染函数，避免重复
-  const renderCard = (cardId: number | undefined | null, key: React.Key) =>
-    cardId !== undefined && cardId !== null ? (
-      <img
-        key={key}
-        className={styles.formationCardImg}
-        src={`/public/cards/${cardId}.png`}
-        alt={`Card ${cardId}`}
-      />
+  const renderCard = (card: ICardData | undefined, key: React.Key) =>
+    card ? (
+      <StaticCard card={card} width={142}></StaticCard>
     ) : (
-      <div key={key} className={styles.formationCardSlot}>
+      <button key={key} className={classNames(styles.formationCardSlot, 'button')}>
         +
-      </div>
+      </button>
     )
 
   const cards = currentPrizePool.user_card_formation || []
+  const formatedCards = cards
+    .map((cardId) => cardData.find((c) => c.id === cardId))
+    .filter((card) => card)
   // 保证5个卡槽
-  const paddedCards = [...cards, ...Array(5 - cards.length).fill(undefined)]
+  const paddedCards: Array<ICardData | undefined> = [
+    ...formatedCards,
+    ...Array(5 - cards.length).fill(undefined),
+  ]
 
   return (
     <div className={styles.formationContainer}>
       <div className={styles.formationTitle}>Your Formation</div>
       <div className={styles.formationCards}>
         <div className={styles.formationCardsRow}>
-          {paddedCards.slice(0, 3).map((cardId, idx) => renderCard(cardId, idx))}
+          {paddedCards.slice(0, 3).map((card, idx) => renderCard(card, idx))}
         </div>
         <div className={styles.formationCardsRow}>
-          {paddedCards.slice(3, 5).map((cardId, idx) => renderCard(cardId, idx + 3))}
+          {paddedCards.slice(3, 5).map((card, idx) => renderCard(card, idx + 3))}
         </div>
       </div>
       <div className={styles.deckPowerLabel}>Deck Power</div>
