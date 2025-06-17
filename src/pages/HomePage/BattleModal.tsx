@@ -41,7 +41,7 @@ const BattleModal: React.FC = () => {
     {
       key: 'abyss',
       title: 'Trading Abyss',
-      desc: 'Battle ancient Chainspirits, uncover lost stories, and collect epic rewards.',
+      desc: 'Battle ancient Chainspirit, uncover lost stories, and collect epic rewards.',
       btn: 'Coming Soon',
       onClick: undefined,
       disabled: true,
