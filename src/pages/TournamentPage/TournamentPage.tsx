@@ -46,7 +46,7 @@ const TournamentPage: React.FC = () => {
   useEffect(() => {
     if (!prizePools?.length) return
     setCurrentPrizePool(prizePools.find((p) => p.status === PRIZE_POOL_STATUS.UPCOMING))
-  }, [prizePools])
+  }, [prizePools?.length])
 
   // joined状态由当前奖池数据决定
   const isJoined = !!currentPrizePool?.user_participated
