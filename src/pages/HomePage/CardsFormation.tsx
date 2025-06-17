@@ -31,7 +31,7 @@ const CardsFormation: React.FC = () => {
           ) : (
             <div
               key={idx}
-              className={classNames(styles.formationCard, styles.emptyCard)}
+              className={classNames(styles.formationCard, styles.emptyCard, 'button')}
               onClick={handleCardClick}
             ></div>
           )
