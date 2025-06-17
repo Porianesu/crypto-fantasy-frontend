@@ -1,4 +1,4 @@
-import { type IPrizePool, PRIZE_POOL_STATUS } from '@/pages/TournamentPage/TournamentPage.tsx'
+import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 import dayjs from 'dayjs'
 import { generateFantasyEnglishName, getDefaultAvatar } from '@/utils/common.ts'
 import { BigNumber } from 'bignumber.js'

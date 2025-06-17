@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite'
 import React, { useMemo } from 'react'
-import { type IPrizePool, PRIZE_POOL_STATUS } from '@/pages/TournamentPage/TournamentPage.tsx'
 import styles from './TournamentPageLeaderboard.module.css'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
 import { fetchPrizePoolLeaderboard } from '@/utils/mockHelper.ts'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 
 interface ITournamentPageLeaderboardProps {
   currentPrizePool: IPrizePool | undefined

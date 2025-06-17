@@ -1,6 +1,6 @@
 import React, { useEffect, useImperativeHandle, useMemo, useState } from 'react'
 import styles from './TournamentPageCardsFormation.module.css'
-import { type IPrizePool, PRIZE_POOL_STATUS } from '@/pages/TournamentPage/TournamentPage.tsx'
+import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 import { observer } from 'mobx-react-lite'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'

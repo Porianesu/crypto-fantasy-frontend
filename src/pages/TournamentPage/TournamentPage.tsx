@@ -17,24 +17,7 @@ import TournamentPageCardsFormation, {
 import { BigNumber } from 'bignumber.js'
 import CountUp from 'react-countup'
 import { CARD_RARITY } from '@/components/Card.tsx'
-
-export enum PRIZE_POOL_STATUS {
-  END,
-  PROCESSING,
-  UPCOMING,
-}
-
-export interface IPrizePool {
-  id: number
-  start_date: number
-  end_date: number
-  price: number
-  status: PRIZE_POOL_STATUS
-  player_count: number
-  user_participated: boolean
-  user_card_formation?: Array<number>
-  user_deck_power?: number
-}
+import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 
 const FormationRules = [
   {
