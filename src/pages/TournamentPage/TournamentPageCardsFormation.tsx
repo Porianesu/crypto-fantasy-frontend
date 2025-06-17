@@ -1,23 +1,32 @@
-import React from 'react'
+import React, { useEffect, useImperativeHandle, useState } from 'react'
 import styles from './TournamentPageCardsFormation.module.css'
-import type { IPrizePool } from '@/pages/TournamentPage/TournamentPage.tsx'
+import { type IPrizePool, PRIZE_POOL_STATUS } from '@/pages/TournamentPage/TournamentPage.tsx'
 import { observer } from 'mobx-react-lite'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import type { ICardData } from '@/components/Card.tsx'
+import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import classNames from 'classnames'
+import TournamentPageCardsFormationModal from '@/pages/TournamentPage/TournamentPageCardsFormationModal.tsx'
+import { toast } from 'react-toastify'
 
-interface TournamentPageCardsFormationProps {
+export interface ITournamentPageCardsFormationHandle {
+  tempCardsFormation: Array<number>
+}
+interface ITournamentPageCardsFormationWrapperProps {
   currentPrizePool: IPrizePool | undefined
+  rules: Array<{
+    key: CARD_RARITY
+    value: number
+  }>
 }
 
-const TournamentPageCardsFormation: React.FC<TournamentPageCardsFormationProps> = ({
-  currentPrizePool,
-}) => {
+const TournamentPageCardsFormationWrapper = React.forwardRef<
+  ITournamentPageCardsFormationHandle,
+  ITournamentPageCardsFormationWrapperProps
+>(({ currentPrizePool, rules }, ref) => {
   const {
     preloadStore: { preloadQueue },
   } = useMobxStore()
-
   const cardData = preloadQueue?.getResult('cardsData') as Array<ICardData> | undefined
   if (!currentPrizePool || !cardData) {
     return (
@@ -29,7 +38,10 @@ const TournamentPageCardsFormation: React.FC<TournamentPageCardsFormationProps> 
       </div>
     )
   }
-  if (currentPrizePool.status !== 2 && !currentPrizePool.user_participated) {
+  if (
+    currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING &&
+    !currentPrizePool.user_participated
+  ) {
     return (
       <div className={styles.formationContainer}>
         <div className={styles.formationTitle}>Your Formation</div>
@@ -39,24 +51,106 @@ const TournamentPageCardsFormation: React.FC<TournamentPageCardsFormationProps> 
       </div>
     )
   }
+
+  return (
+    <TournamentPageCardsFormation
+      ref={ref}
+      cardData={cardData}
+      currentPrizePool={currentPrizePool}
+      rules={rules}
+    ></TournamentPageCardsFormation>
+  )
+})
+
+interface ITournamentPageCardsFormationProps {
+  cardData: Array<ICardData>
+  currentPrizePool: IPrizePool
+  rules: Array<{
+    key: CARD_RARITY
+    value: number
+  }>
+}
+const TournamentPageCardsFormation = React.forwardRef<
+  ITournamentPageCardsFormationHandle,
+  ITournamentPageCardsFormationProps
+>(({ currentPrizePool, rules, cardData }, ref) => {
+  const [tempCardsFormation, setTempCardsFormation] = useState<Array<number>>([])
+  const [cardsFormationModalOpen, setCardsFormationModalOpen] = useState(false)
+
+  useEffect(() => {
+    if (
+      currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING &&
+      currentPrizePool.user_card_formation
+    ) {
+      setTempCardsFormation(currentPrizePool.user_card_formation)
+    }
+  }, [currentPrizePool?.id])
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      tempCardsFormation,
+    }),
+    [tempCardsFormation],
+  )
+  const handleEmptyCardClick = () => {
+    setCardsFormationModalOpen(true)
+  }
+
+  const changeTempCardsFormation = (newCards: Array<number>) => {
+    // 统计每种稀有度的数量
+    const rarityCount: Record<CARD_RARITY, number> = {
+      [CARD_RARITY.NORMAL]: 0,
+      [CARD_RARITY.RARE]: 0,
+      [CARD_RARITY.EPIC]: 0,
+      [CARD_RARITY.LEGENDARY]: 0,
+    }
+    // 统计新阵容中每种稀有度的数量
+    newCards.forEach((cardId) => {
+      const card = cardData?.find((c) => c.id === cardId)
+      if (card) rarityCount[card.rarity] = (rarityCount[card.rarity] || 0) + 1
+    })
+    // 检查是否超出规则限制
+    for (const rule of rules) {
+      if (rarityCount[rule.key] > rule.value) {
+        toast.warn(`Exceeds the maximum allowed number of ${rule.key} cards: ${rule.value}`)
+        return
+      }
+    }
+    setTempCardsFormation(newCards)
+  }
+
   // 卡片渲染函数，避免重复
   const renderCard = (card: ICardData | undefined, key: React.Key) =>
     card ? (
-      <StaticCard card={card} width={142}></StaticCard>
+      <StaticCard key={card.id} card={card} width={142}></StaticCard>
     ) : (
-      <button key={key} className={classNames(styles.formationCardSlot, 'button')}>
+      <button
+        key={key}
+        className={classNames(styles.formationCardSlot, 'button')}
+        onClick={handleEmptyCardClick}
+      >
         +
       </button>
     )
 
-  const cards = currentPrizePool.user_card_formation || []
+  const cards =
+    currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING
+      ? tempCardsFormation
+      : currentPrizePool.user_card_formation || []
   const formatedCards = cards
     .map((cardId) => cardData.find((c) => c.id === cardId))
     .filter((card) => card)
+  const deckPower =
+    currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING
+      ? formatedCards.reduce((previousValue, currentValue) => {
+          return previousValue + (currentValue?.score || 0)
+        }, 0)
+      : currentPrizePool.user_deck_power || 0
   // 保证5个卡槽
   const paddedCards: Array<ICardData | undefined> = [
     ...formatedCards,
-    ...Array(5 - cards.length).fill(undefined),
+    ...Array(5 - formatedCards.length).fill(undefined),
   ]
 
   return (
@@ -71,9 +165,15 @@ const TournamentPageCardsFormation: React.FC<TournamentPageCardsFormationProps> 
         </div>
       </div>
       <div className={styles.deckPowerLabel}>Deck Power</div>
-      <div className={styles.deckPowerValue}>{currentPrizePool.user_deck_power ?? 0}</div>
+      <div className={styles.deckPowerValue}>{deckPower}</div>
+      <TournamentPageCardsFormationModal
+        open={cardsFormationModalOpen}
+        onOpenChange={setCardsFormationModalOpen}
+        cardsFormation={tempCardsFormation}
+        changeCardsFormation={changeTempCardsFormation}
+      ></TournamentPageCardsFormationModal>
     </div>
   )
-}
+})
 
-export default observer(TournamentPageCardsFormation)
+export default observer(TournamentPageCardsFormationWrapper)

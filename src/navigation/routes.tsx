@@ -53,6 +53,13 @@ export const introductionPageLoader = () => {
   return null
 }
 
+export const tournamentPageLoader = () => {
+  if (checkIsAppLoading()) {
+    return redirect(getEntrancePath())
+  }
+  return null
+}
+
 export const preloadPages = async () => {
   try {
     await import('@/pages/GalleryPage/GalleryPage.tsx')

@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './Tournament.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -11,9 +11,12 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchPrizePools } from '@/utils/mockHelper.ts'
 import dayjs from 'dayjs'
 import TournamentPageLeaderboard from '@/pages/TournamentPage/TournamentPageLeaderboard.tsx'
-import TournamentPageCardsFormation from '@/pages/TournamentPage/TournamentPageCardsFormation.tsx'
+import TournamentPageCardsFormation, {
+  type ITournamentPageCardsFormationHandle,
+} from '@/pages/TournamentPage/TournamentPageCardsFormation.tsx'
 import { BigNumber } from 'bignumber.js'
 import CountUp from 'react-countup'
+import { CARD_RARITY } from '@/components/Card.tsx'
 
 export enum PRIZE_POOL_STATUS {
   END,
@@ -33,10 +36,29 @@ export interface IPrizePool {
   user_deck_power?: number
 }
 
+const FormationRules = [
+  {
+    key: CARD_RARITY.NORMAL,
+    value: 5,
+  },
+  {
+    key: CARD_RARITY.RARE,
+    value: 4,
+  },
+  {
+    key: CARD_RARITY.EPIC,
+    value: 3,
+  },
+  {
+    key: CARD_RARITY.LEGENDARY,
+    value: 1,
+  },
+]
 const TournamentPage: React.FC = () => {
   const navigate = useNavigate()
   const [currentPrizePool, setCurrentPrizePool] = useState<IPrizePool | undefined>(undefined)
   const queryClient = useQueryClient()
+  const cardsFormationRef = useRef<ITournamentPageCardsFormationHandle>(null)
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
     queryKey: ['prizePools'],
@@ -116,6 +138,27 @@ const TournamentPage: React.FC = () => {
   }
   const handleComingSoon = () => {
     toast.info('Coming soon')
+  }
+
+  const handleJoinButtonClick = () => {
+    if (currentPrizePool?.status !== PRIZE_POOL_STATUS.UPCOMING) return
+    if (cardsFormationRef.current) {
+      const formation = cardsFormationRef.current.tempCardsFormation
+      if (formation.length < 5) return toast.warning('Please select at 5 cards')
+      // 更新prizePools缓存
+      const newPool: IPrizePool = {
+        ...currentPrizePool,
+        user_participated: true,
+        user_card_formation: formation,
+        user_deck_power: Math.floor(Math.random() * (990 - 225 + 1)) + 225, // 随机生成一个225-990之间的数0
+      }
+      setCurrentPrizePool(newPool)
+      queryClient.setQueryData(['prizePools'], (old: IPrizePool[] | undefined) => {
+        if (!old) return old
+        return old.map((pool) => (pool.id === newPool.id ? newPool : pool))
+      })
+      toast.success('Joined successfully!')
+    }
   }
 
   return (
@@ -210,14 +253,18 @@ const TournamentPage: React.FC = () => {
                 <button
                   className={isJoined ? styles.joinedBtn : styles.joinBtn}
                   disabled={isJoined}
-                  // onClick={isJoined ? undefined : handleJoin}
+                  onClick={isJoined ? undefined : handleJoinButtonClick}
                 >
                   {isJoined ? 'Joined' : 'Join'}
                 </button>
               ) : null}
             </div>
             {/* 右侧出战卡组信息区 */}
-            <TournamentPageCardsFormation currentPrizePool={currentPrizePool} />
+            <TournamentPageCardsFormation
+              ref={cardsFormationRef}
+              currentPrizePool={currentPrizePool}
+              rules={FormationRules}
+            />
           </>
         )}
       </div>
