@@ -1,0 +1,133 @@
+@import "tailwindcss";
+@import "../../index.css";
+
+.pageContainer {
+    @apply flex-1 overflow-hidden flex flex-col items-stretch;
+    @apply bg-[url('/src/assets/images/tournament_page/background.png')] bg-contain bg-center bg-no-repeat;
+
+    .header {
+        @apply shrink-0 flex items-center justify-center h-32.5 relative mb-10;
+
+        .headerLeft {
+            @apply flex items-center absolute top-8 left-11 z-10;
+
+            .backBtn {
+                @apply w-26 h-22.5;
+                @apply bg-[url('/src/assets/images/tournament_page/back_button.png')] bg-contain bg-center bg-no-repeat;
+            }
+        }
+
+        .headerCenter {
+            @apply flex items-start gap-x-5;
+
+            .tierBtn {
+                @apply flex items-start justify-center w-46.5 h-29 pt-6.5 text-white font-normal text-[2rem] leading-10;
+                @apply bg-[url('/src/assets/images/tournament_page/rules_background.png')] bg-contain bg-center bg-no-repeat;
+                text-shadow: -2px -2px 0 #561900,
+                2px -2px 0 #561900,
+                -2px 2px 0 #561900,
+                2px 2px 0 #561900,
+                0 -2px 0 #561900,
+                0 2px 0 #561900,
+                -2px 0 0 #561900,
+                2px 0 0 #561900;
+            }
+
+            .tierBtnSelected {
+                @apply h-32.5 text-[2.625rem];
+                @apply bg-[url('/src/assets/images/tournament_page/rules_background_active.png')] bg-cover bg-center bg-no-repeat;
+            }
+        }
+
+        .headerRight {
+            @apply flex items-center absolute top-8 right-11 z-10 gap-x-6;
+
+            & > button {
+                @apply w-26 h-22.5;
+            }
+
+            .historyBtn {
+                @apply bg-[url('/src/assets/images/tournament_page/history_button.png')] bg-contain bg-center bg-no-repeat;
+            }
+
+            .rulesBtn {
+                @apply bg-[url('/src/assets/images/tournament_page/rules_button.png')] bg-contain bg-center bg-no-repeat;
+            }
+        }
+    }
+
+    .poolsContainer {
+        @apply shrink-0 flex items-center justify-between w-181 h-11 self-center pl-26 pr-28;
+        @apply bg-[url('/src/assets/images/tournament_page/pools_container_background.png')] bg-cover bg-center bg-no-repeat;
+
+        .poolBtn {
+            @apply size-5.5 rounded-full relative text-[#662E00] whitespace-pre flex flex-col items-center;
+            text-shadow: -2px -2px 0 #FAEEBB,
+            2px -2px 0 #FAEEBB,
+            -2px 2px 0 #FAEEBB,
+            2px 2px 0 #FAEEBB,
+            0 -2px 0 #FAEEBB,
+            0 2px 0 #FAEEBB,
+            -2px 0 0 #FAEEBB,
+            2px 0 0 #FAEEBB;
+
+            .poolStatus {
+                @apply text-lg leading-10 italic absolute -top-12;
+            }
+
+            .poolStartDate {
+                @apply text-2xl leading-10 italic absolute -bottom-12;
+            }
+        }
+
+        .poolBtnSelected {
+            background: linear-gradient(to bottom, #FFC356, #FEF69C);
+        }
+    }
+
+    .body {
+        @apply grow shrink basis-0 overflow-hidden flex items-stretch justify-between px-21 pt-1;
+
+        .loadingWrapper {
+            @apply grow basis-0 shrink overflow-hidden flex items-center justify-center text-2xl text-white;
+        }
+
+        .prizeInfoContainer {
+            @apply flex flex-col items-center justify-between flex-1 bg-gradient-to-br from-yellow-50 to-white rounded-3xl shadow-2xl border-4 border-yellow-200 px-12 py-10 mx-auto max-w-xl min-w-[28rem] min-h-[30rem] gap-10 relative;
+            box-shadow: 0 8px 32px 0 rgba(255, 193, 7, 0.18), 0 1.5px 8px 0 rgba(0, 0, 0, 0.08);
+        }
+
+        .prizeCountdown {
+            @apply flex items-center gap-2 text-xl font-bold text-yellow-700 bg-yellow-100 rounded-full px-6 py-2 shadow border border-yellow-200 absolute -top-8 left-1/2 -translate-x-1/2;
+        }
+
+        .prizeIcon {
+            @apply w-28 h-28 text-yellow-400 drop-shadow-2xl mb-4 animate-bounce;
+            filter: drop-shadow(0 0 16px #ffe066);
+        }
+
+        .prizeAmount {
+            @apply text-5xl font-extrabold text-yellow-600 mt-2 mb-2 drop-shadow-lg;
+
+            & > span {
+                @apply mr-2;
+            }
+        }
+
+        .prizeLabel {
+            @apply text-lg text-yellow-500 font-semibold tracking-wide mb-2;
+        }
+
+        .joinBtn {
+            @apply px-12 py-4 rounded-full text-xl font-extrabold transition shadow-xl bg-gradient-to-r from-blue-500 to-blue-400 text-white hover:from-blue-600 hover:to-blue-500 border-2 border-blue-300;
+            @apply absolute left-1/2 -translate-x-1/2 bottom-8;
+            margin-top: 0;
+        }
+
+        .joinedBtn {
+            @apply px-12 py-4 rounded-full text-xl font-extrabold bg-gray-200 text-gray-400 cursor-not-allowed shadow-none border-2 border-gray-200;
+            @apply absolute left-1/2 -translate-x-1/2 bottom-8;
+            margin-top: 0;
+        }
+    }
+}

@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './Tournament.module.css'
+import styles from './TournamentPage.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { ArrowLeftIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { ClockIcon } from '@heroicons/react/24/outline'
 import { GiftIcon } from '@heroicons/react/24/solid'
 import { getHomePath } from '@/navigation/routes.tsx'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -149,9 +149,7 @@ const TournamentPage: React.FC = () => {
       <div className={styles.header}>
         {/* 左侧返回按钮 */}
         <div className={styles.headerLeft}>
-          <button className={styles.backBtn} onClick={handleBack}>
-            <ArrowLeftIcon className="w-6 h-6 text-gray-700" />
-          </button>
+          <button className={classNames(styles.backBtn, 'button')} onClick={handleBack}></button>
         </div>
         {/* 中间Bronze/Silver/Gold按钮 */}
         <div className={styles.headerCenter}>
@@ -167,12 +165,14 @@ const TournamentPage: React.FC = () => {
         </div>
         {/* 右侧History/Rules按钮 */}
         <div className={styles.headerRight}>
-          <button className={styles.actionBtn} onClick={handleComingSoon}>
-            History
-          </button>
-          <button className={styles.actionBtn} onClick={handleComingSoon}>
-            Rules
-          </button>
+          <button
+            className={classNames(styles.historyBtn, 'button')}
+            onClick={handleComingSoon}
+          ></button>
+          <button
+            className={classNames(styles.rulesBtn, 'button')}
+            onClick={handleComingSoon}
+          ></button>
         </div>
       </div>
       {/* poolsContainer 横向按钮组 */}
@@ -187,7 +187,14 @@ const TournamentPage: React.FC = () => {
             onClick={() => setCurrentPrizePool(pool)}
             disabled={currentPrizePool?.id === pool.id}
           >
-            {dayjs(pool.start_date).format('MMMM D')} - {dayjs(pool.end_date).format('MMMM D')}
+            <div className={styles.poolStatus}>
+              {pool.status === PRIZE_POOL_STATUS.PROCESSING
+                ? 'Ongoing'
+                : pool.status === PRIZE_POOL_STATUS.UPCOMING
+                  ? 'Upcoming'
+                  : ''}
+            </div>
+            <div className={styles.poolStartDate}>{dayjs(pool.start_date).format('MMMM D')}</div>
           </button>
         ))}
       </div>

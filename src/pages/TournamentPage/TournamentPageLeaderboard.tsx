@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchPrizePoolLeaderboard } from '@/utils/mockHelper.ts'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
+import classNames from 'classnames'
 
 interface ITournamentPageLeaderboardProps {
   currentPrizePool: IPrizePool | undefined
@@ -39,6 +40,29 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
     staleTime: 0,
   })
 
+  const renderUserGroup = (user: { group?: string; prize: { sol: number; faithCoin: number } }) => {
+    if (!user.group) return null
+    let rankPart
+    if (['1', '2', '3'].includes(user.group)) {
+      rankPart = <div className={styles[`rankImage${user.group}`]}></div>
+    } else {
+      rankPart = <div className={'mr-auto'}>{user.group}</div>
+    }
+    return (
+      <div className={styles.groupContainer}>
+        {rankPart}
+        {user.prize.sol ? (
+          <>
+            <div className={styles.groupPrizeAssetSolImage}></div>
+            <div className={styles.groupPrizeAssetSol}>{user.prize.sol.toFixed(2)}</div>
+          </>
+        ) : null}
+        <div className={styles.groupPrizeAssetFaithImage}></div>
+        <div className={styles.groupPrizeAssetFaith}>{user.prize.faithCoin}</div>
+      </div>
+    )
+  }
+
   // 当前用户排行榜信息
   const currentUserLeaderboardInfo = useMemo(() => {
     if (!leaderboard) return undefined
@@ -63,16 +87,16 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
         </div>
       ) : (
         <>
-          <div className={styles.leaderboardListWrapper}>
+          <div className={classNames(styles.leaderboardListWrapper, 'no-scrollbar')}>
             <ul className={styles.leaderboardList}>
               {leaderboard?.map((user) => (
                 <li key={user.rank} className={styles.leaderboardItem}>
-                  <span className={styles.rank}>{user.rank}</span>
-                  <img className={styles.avatar} src={user.avatar} alt={user.name} />
-                  <span className={styles.username}>{user.name}</span>
-                  <span className={styles.deckPower}>{user.deckPower}</span>
-                  <span className={styles.prize}>{user.prize.sol.toFixed(2)} SOL</span>
-                  <span className={styles.faithCoin}>{user.prize.faithCoin} FC</span>
+                  {renderUserGroup(user)}
+                  <div className={styles.rankUserInfoContainer}>
+                    <img className={styles.avatar} src={user.avatar} alt={user.name} />
+                    <span className={styles.username}>{user.name}</span>
+                    <span className={styles.deckPower}>{`${user.deckPower} power`}</span>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -88,13 +112,7 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
               />
               <span className={styles.currentUserName}>{currentUserLeaderboardInfo.name}</span>
               <span className={styles.currentUserDeckPower}>
-                {currentUserLeaderboardInfo.deckPower}
-              </span>
-              <span className={styles.currentUserPrize}>
-                {currentUserLeaderboardInfo.prize.sol.toFixed(2)} SOL
-              </span>
-              <span className={styles.currentUserFaithCoin}>
-                {currentUserLeaderboardInfo.prize.faithCoin} FC
+                {`${currentUserLeaderboardInfo.deckPower} power`}
               </span>
             </div>
           )}

@@ -11,6 +11,14 @@
     .button {
         @apply hover:scale-105 active:scale-95 transition-transform;
     }
+
+    .no-scrollbar {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+        &::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+    }
 }
 
 @theme {
