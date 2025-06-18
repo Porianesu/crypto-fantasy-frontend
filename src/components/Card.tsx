@@ -22,8 +22,8 @@ export interface ICardData {
   rarity: CARD_RARITY
   score: number
   '30_pnl': number
-  '30_win_rate': number
-  avg_duration: number
+  '30_winrate': number
+  average_duration: number
   faction: string
   tag: string
   quote: string
