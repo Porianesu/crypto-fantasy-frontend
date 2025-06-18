@@ -191,7 +191,9 @@ const GalleryPage: React.FC = () => {
                   </div>
                 ) : (
                   <>
-                    <div className={styles.detailName}>{selectedCard.name}</div>
+                    <div
+                      className={styles.detailName}
+                    >{`${selectedCard.nickname} · ${selectedCard.name}`}</div>
                     <div className={styles.detailInfoPart}>
                       <div>
                         <div>Faction:</div>
