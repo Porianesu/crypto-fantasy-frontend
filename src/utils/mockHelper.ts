@@ -23,7 +23,8 @@ export const fetchPrizePools = async () => {
     const getRandomPrice = () =>
       new BigNumber(Math.random() * 490).plus(10).decimalPlaces(2).toNumber()
     const getRandomPlayerCount = () => Math.floor(Math.random() * 100) + 1
-    const getRandomFormation = () => Array.from({ length: 5 }, () => Math.floor(Math.random() * 80))
+    const getRandomFormation = () =>
+      Array.from({ length: 5 }, () => Math.floor(Math.random() * 200))
     const getRandomDeckPower = () => Math.floor(Math.random() * 991)
     const data = [
       {
