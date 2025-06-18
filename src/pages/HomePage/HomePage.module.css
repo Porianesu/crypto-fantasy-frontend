@@ -37,7 +37,7 @@
         }
 
         .drawCardsButton {
-            @apply hover:scale-110 cursor-pointer active:scale-90 flex items-center justify-center w-[340px] h-[102px] transition bg-[url(/src/assets/images/home_page/open_package_button_background.png)] bg-contain bg-center bg-no-repeat text-[26px] font-normal text-[#2A1914];
+            @apply hover:scale-110 cursor-pointer active:scale-90 flex items-center justify-center w-[340px] h-[102px] transition bg-[url(/src/assets/images/common/button_background.png)] bg-contain bg-center bg-no-repeat text-[26px] font-normal text-[#2A1914];
 
             & > div {
                 @apply size-[34px] ml-2.5;

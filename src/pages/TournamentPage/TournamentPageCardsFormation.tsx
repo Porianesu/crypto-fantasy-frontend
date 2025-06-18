@@ -33,7 +33,7 @@ const TournamentPageCardsFormationWrapper = React.forwardRef<
     return (
       <div className={styles.formationContainer}>
         <div className={styles.formationTitle}>Your Formation</div>
-        <div className="flex flex-1 items-center justify-center w-full h-full text-blue-300 text-2xl">
+        <div className="flex flex-1 items-center justify-center pb-40 text-2xl text-white">
           Loading...
         </div>
       </div>
@@ -103,6 +103,7 @@ const TournamentPageCardsFormation = React.forwardRef<
         : currentPrizePool.user_deck_power || 0,
     [cardsDeckPowerRate, currentPrizePool.status, currentPrizePool.user_deck_power, formatedCards],
   )
+  console.log('my deck power', deckPower)
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval> | undefined
@@ -167,15 +168,24 @@ const TournamentPageCardsFormation = React.forwardRef<
   // 卡片渲染函数，避免重复
   const renderCard = (card: ICardData | undefined, key: React.Key) =>
     card ? (
-      <StaticCard key={card.id} card={card} width={142} onClick={handleCardClick}></StaticCard>
+      <StaticCard
+        className={classNames(styles.formationCard, styles[`formationCard${key}`])}
+        key={card.id}
+        card={card}
+        width={122}
+        onClick={handleCardClick}
+      ></StaticCard>
     ) : (
       <button
         key={key}
-        className={classNames(styles.formationCardSlot, 'button')}
+        className={classNames(
+          styles.formationCard,
+          styles[`formationCard${key}`],
+          styles.emptyCard,
+          'button',
+        )}
         onClick={handleCardClick}
-      >
-        +
-      </button>
+      ></button>
     )
 
   // 保证5个卡槽
@@ -186,17 +196,14 @@ const TournamentPageCardsFormation = React.forwardRef<
 
   return (
     <div className={styles.formationContainer}>
-      <div className={styles.formationTitle}>Your Formation</div>
-      <div className={styles.formationCards}>
-        <div className={styles.formationCardsRow}>
-          {paddedCards.slice(0, 3).map((card, idx) => renderCard(card, idx))}
-        </div>
-        <div className={styles.formationCardsRow}>
-          {paddedCards.slice(3, 5).map((card, idx) => renderCard(card, idx + 3))}
-        </div>
+      <div className={styles.formationTitle}>My Deck</div>
+      <div className={styles.formationSquare}>
+        {paddedCards.map((card, idx) => renderCard(card, idx + 1))}
+        <div className={styles.formationSquareBackground}></div>
       </div>
-      <div className={styles.deckPowerLabel}>Deck Power</div>
-      <div className={styles.deckPowerValue}>{deckPower}</div>
+      {/*<div className={styles.deckPowerLabel}>Deck Power</div>*/}
+      {/*<div className={styles.deckPowerValue}>{deckPower}</div>*/}
+      <button className={styles.openPackButton}>Open Pack</button>
       <TournamentPageCardsFormationModal
         open={cardsFormationModalOpen}
         onOpenChange={setCardsFormationModalOpen}
