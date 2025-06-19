@@ -111,7 +111,7 @@
 
         .joinBtnIcon {
             @apply w-16 h-16 ml-4;
-            @apply bg-[url('/src/assets/images/tournament_page/leaderboard_asset_icon_faith.png')] bg-contain bg-center bg-no-repeat;
+            @apply bg-[url('/src/assets/images/common/asset_icon_faith.png')] bg-contain bg-center bg-no-repeat;
         }
 
         .joinedBtn {
@@ -138,7 +138,7 @@
 
         .prizeAmountIcon {
             @apply w-16.5 h-12 ml-2.5;
-            @apply bg-[url('/src/assets/images/tournament_page/leaderboard_asset_icon_sol.png')] bg-contain bg-center bg-no-repeat;
+            @apply bg-[url('/src/assets/images/common/asset_icon_sol.png')] bg-contain bg-center bg-no-repeat;
         }
     }
 }

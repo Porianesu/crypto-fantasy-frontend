@@ -59,14 +59,14 @@
 
             .groupPrizeAssetSolImage {
                 @apply w-7 h-6.5 mr-0.5;
-                @apply bg-[url('/src/assets/images/tournament_page/leaderboard_asset_icon_sol.png')] bg-cover bg-center bg-no-repeat relative;
+                @apply bg-[url('/src/assets/images/common/asset_icon_sol.png')] bg-cover bg-center bg-no-repeat relative;
             }
             .groupPrizeAssetSol {
                 @apply w-15;
             }
             .groupPrizeAssetFaithImage {
                 @apply size-7 mr-0.5;
-                @apply bg-[url('/src/assets/images/tournament_page/leaderboard_asset_icon_faith.png')] bg-cover bg-center bg-no-repeat relative;
+                @apply bg-[url('/src/assets/images/common/asset_icon_faith.png')] bg-cover bg-center bg-no-repeat relative;
             }
 
             .groupPrizeAssetFaith {

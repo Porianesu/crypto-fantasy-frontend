@@ -32,8 +32,8 @@
             @apply hover:scale-110 cursor-pointer active:scale-90 flex items-center justify-center w-[340px] h-[102px] transition bg-[url(/src/assets/images/common/button_background.png)] bg-contain bg-center bg-no-repeat text-[26px] font-normal text-[#2A1914];
 
             & > div {
-                @apply size-[34px] ml-2.5;
-                @apply bg-[url('/src/assets/images/home_page/asset_icon_1.png')] bg-contain bg-top-left bg-no-repeat;
+                @apply size-8.5 ml-2.5;
+                @apply bg-[url('/src/assets/images/common/asset_icon_sol.png')] bg-contain bg-top-left bg-no-repeat;
             }
         }
     }
@@ -102,12 +102,12 @@
 
             .assetIcon1 {
                 @apply size-11;
-                @apply bg-[url('/src/assets/images/home_page/asset_icon_1.png')] bg-contain bg-top-left bg-no-repeat;
+                @apply bg-[url('/src/assets/images/common/asset_icon_sol.png')] bg-contain bg-top-left bg-no-repeat;
             }
 
             .assetIcon2 {
-                @apply w-[33px] h-[42px];
-                @apply bg-[url('/src/assets/images/home_page/asset_icon_2.png')] bg-contain bg-top-left bg-no-repeat;
+                @apply size-11;
+                @apply bg-[url('/src/assets/images/common/asset_icon_faith.png')] bg-contain bg-top-left bg-no-repeat;
             }
         }
 
