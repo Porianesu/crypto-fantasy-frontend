@@ -58,7 +58,7 @@ const TournamentPageCardsFormationWrapper = React.forwardRef<
     return (
       <div className={styles.formationContainer}>
         <div className={styles.formationTitle}>Your Formation</div>
-        <div className="flex flex-1 items-center justify-center w-full h-full text-blue-300 text-xl">
+        <div className="flex flex-1 items-center justify-center pb-40 text-2xl text-white px-2 text-center">
           You did not participate in this pool.
         </div>
       </div>

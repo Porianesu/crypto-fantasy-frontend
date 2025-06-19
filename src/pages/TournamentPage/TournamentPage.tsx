@@ -131,13 +131,13 @@ const TournamentPage: React.FC = () => {
         </div>
         {/* 中间Bronze/Silver/Gold按钮 */}
         <div className={styles.headerCenter}>
-          <button className={classNames(styles.tierBtn, styles.tierBtnSelected)} disabled>
+          <button className={classNames('button', styles.tierBtn, styles.tierBtnSelected)} disabled>
             Bronze
           </button>
-          <button className={styles.tierBtn} disabled>
+          <button className={classNames('button', styles.tierBtn)} onClick={handleComingSoon}>
             Silver
           </button>
-          <button className={styles.tierBtn} disabled>
+          <button className={classNames('button', styles.tierBtn)} onClick={handleComingSoon}>
             Gold
           </button>
         </div>
