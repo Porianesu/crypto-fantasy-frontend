@@ -57,8 +57,16 @@
     }
 
     .poolsContainer {
-        @apply shrink-0 flex items-center justify-between w-181 h-11 self-center pl-26 pr-28;
+        @apply shrink-0 flex items-center justify-between w-181 h-11 self-center pl-26 pr-28 relative;
         @apply bg-[url('/src/assets/images/tournament_page/pools_container_background.png')] bg-cover bg-center bg-no-repeat;
+
+        .poolsClickHelper {
+            @apply w-full h-full flex flex-row items-stretch absolute top-0 left-0 z-10 px-13;
+
+            & > button {
+                @apply flex-1;
+            }
+        }
 
         .poolBtn {
             @apply size-5.5 rounded-full relative text-[#662E00] whitespace-pre flex flex-col items-center;
@@ -127,6 +135,7 @@
         .prizeAmount {
             @apply italic text-4xl text-[#F9F9F9] flex items-center;
         }
+
         .prizeAmountIcon {
             @apply w-16.5 h-12 ml-2.5;
             @apply bg-[url('/src/assets/images/tournament_page/leaderboard_asset_icon_sol.png')] bg-contain bg-center bg-no-repeat;

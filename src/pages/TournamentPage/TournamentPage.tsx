@@ -155,15 +155,23 @@ const TournamentPage: React.FC = () => {
       </div>
       {/* poolsContainer 横向按钮组 */}
       <div className={styles.poolsContainer}>
+        <div className={styles.poolsClickHelper}>
+          {prizePools?.map((pool) => {
+            return (
+              <button
+                onClick={() => setCurrentPrizePool(pool)}
+                disabled={currentPrizePool?.id === pool.id}
+              ></button>
+            )
+          })}
+        </div>
         {prizePools?.map((pool) => (
-          <button
+          <div
             key={pool.id}
             className={classNames(
               styles.poolBtn,
               currentPrizePool?.id === pool.id && styles.poolBtnSelected,
             )}
-            onClick={() => setCurrentPrizePool(pool)}
-            disabled={currentPrizePool?.id === pool.id}
           >
             <div className={styles.poolStatus}>
               {pool.status === PRIZE_POOL_STATUS.PROCESSING
@@ -173,7 +181,7 @@ const TournamentPage: React.FC = () => {
                   : ''}
             </div>
             <div className={styles.poolStartDate}>{dayjs(pool.start_date).format('MMMM D')}</div>
-          </button>
+          </div>
         ))}
       </div>
       {/* body部分后续实现 */}
