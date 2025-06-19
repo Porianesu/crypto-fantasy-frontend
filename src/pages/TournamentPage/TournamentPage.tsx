@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import styles from './TournamentPage.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -18,6 +18,9 @@ import { BigNumber } from 'bignumber.js'
 import CountUp from 'react-countup'
 import { CARD_RARITY } from '@/components/Card.tsx'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
+import type { IOpenPackHandle } from '@/components/OpenPack.tsx'
+
+const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 
 const FormationRules = [
   {
@@ -42,6 +45,7 @@ const TournamentPage: React.FC = () => {
   const [currentPrizePool, setCurrentPrizePool] = useState<IPrizePool | undefined>(undefined)
   const queryClient = useQueryClient()
   const cardsFormationRef = useRef<ITournamentPageCardsFormationHandle>(null)
+  const openPackRef = useRef<IOpenPackHandle>(null)
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
     queryKey: ['prizePools'],
@@ -254,10 +258,14 @@ const TournamentPage: React.FC = () => {
               ref={cardsFormationRef}
               currentPrizePool={currentPrizePool}
               rules={FormationRules}
+              openPackRef={openPackRef}
             />
           </>
         )}
       </div>
+      <Suspense>
+        <OpenPack ref={openPackRef}></OpenPack>
+      </Suspense>
     </div>
   )
 }

@@ -1,4 +1,11 @@
-import React, { Suspense, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import React, {
+  type RefObject,
+  Suspense,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react'
 import styles from './TournamentPageCardsFormation.module.css'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 import { observer } from 'mobx-react-lite'
@@ -13,7 +20,6 @@ import type { IOpenPackHandle } from '@/components/OpenPack.tsx'
 const TournamentPageCardsFormationModal = React.lazy(
   () => import('@/pages/TournamentPage/TournamentPageCardsFormationModal.tsx'),
 )
-const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 
 export interface ITournamentPageCardsFormationHandle {
   tempCardsFormation: Array<number>
@@ -24,12 +30,13 @@ interface ITournamentPageCardsFormationWrapperProps {
     key: CARD_RARITY
     value: number
   }>
+  openPackRef: RefObject<IOpenPackHandle | null>
 }
 
 const TournamentPageCardsFormationWrapper = React.forwardRef<
   ITournamentPageCardsFormationHandle,
   ITournamentPageCardsFormationWrapperProps
->(({ currentPrizePool, rules }, ref) => {
+>(({ currentPrizePool, rules, openPackRef }, ref) => {
   const {
     preloadStore: { preloadQueue },
   } = useMobxStore()
@@ -64,6 +71,7 @@ const TournamentPageCardsFormationWrapper = React.forwardRef<
       cardData={cardData}
       currentPrizePool={currentPrizePool}
       rules={rules}
+      openPackRef={openPackRef}
     ></TournamentPageCardsFormation>
   )
 })
@@ -75,12 +83,12 @@ interface ITournamentPageCardsFormationProps {
     key: CARD_RARITY
     value: number
   }>
+  openPackRef: RefObject<IOpenPackHandle | null>
 }
 const TournamentPageCardsFormation = React.forwardRef<
   ITournamentPageCardsFormationHandle,
   ITournamentPageCardsFormationProps
->(({ currentPrizePool, rules, cardData }, ref) => {
-  const openPackRef = useRef<IOpenPackHandle>(null)
+>(({ currentPrizePool, rules, cardData, openPackRef }, ref) => {
   const [tempCardsFormation, setTempCardsFormation] = useState<Array<number>>([])
   const [cardsFormationModalOpen, setCardsFormationModalOpen] = useState(false)
   const [cardsDeckPowerRate, setCardsDeckPowerRate] = useState(1)
@@ -227,9 +235,6 @@ const TournamentPageCardsFormation = React.forwardRef<
           cardsFormation={tempCardsFormation}
           changeCardsFormation={changeTempCardsFormation}
         ></TournamentPageCardsFormationModal>
-      </Suspense>
-      <Suspense>
-        <OpenPack ref={openPackRef}></OpenPack>
       </Suspense>
     </>
   )
