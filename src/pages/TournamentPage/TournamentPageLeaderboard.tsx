@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import styles from './TournamentPageLeaderboard.module.css'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
@@ -40,6 +40,14 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
     staleTime: 0,
   })
 
+  // 缓存上一次有效的 leaderboard
+  const lastLeaderboardRef = useRef<typeof leaderboard>([])
+  if (leaderboard && leaderboard.length > 0) {
+    lastLeaderboardRef.current = leaderboard
+  }
+  const displayLeaderboard =
+    leaderboard && leaderboard.length > 0 ? leaderboard : lastLeaderboardRef.current
+
   const renderUserGroup = (user: { group?: string; prize: { sol: number; faithCoin: number } }) => {
     if (!user.group) return null
     let rankPart
@@ -65,9 +73,9 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
 
   // 当前用户排行榜信息
   const currentUserLeaderboardInfo = useMemo(() => {
-    if (!leaderboard) return undefined
-    return leaderboard.find((item) => item.name === userInfo?.email)
-  }, [leaderboard, userInfo?.email])
+    if (!displayLeaderboard) return undefined
+    return displayLeaderboard.find((item) => item.name === userInfo?.email)
+  }, [displayLeaderboard, userInfo?.email])
 
   return (
     <div className={styles.leaderboardContainer}>
@@ -81,7 +89,7 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
             Please stay tuned for the event start time!
           </span>
         </div>
-      ) : leaderboardLoading ? (
+      ) : !displayLeaderboard && leaderboardLoading ? (
         <div className={styles.loadingWrapper}>
           <span>Loading...</span>
         </div>
@@ -89,7 +97,7 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
         <>
           <div className={classNames(styles.leaderboardListWrapper, 'no-scrollbar')}>
             <ul className={styles.leaderboardList}>
-              {leaderboard?.map((user) => (
+              {displayLeaderboard?.map((user) => (
                 <li key={user.rank} className={styles.leaderboardItem}>
                   {renderUserGroup(user)}
                   <div className={styles.rankUserInfoContainer}>
