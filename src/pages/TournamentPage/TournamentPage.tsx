@@ -4,7 +4,6 @@ import styles from './TournamentPage.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { ClockIcon } from '@heroicons/react/24/outline'
 import { GiftIcon } from '@heroicons/react/24/solid'
 import { getHomePath } from '@/navigation/routes.tsx'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -19,6 +18,7 @@ import CountUp from 'react-countup'
 import { CARD_RARITY } from '@/components/Card.tsx'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 import type { IOpenPackHandle } from '@/components/OpenPack.tsx'
+import TournamentPageCountDown from '@/pages/TournamentPage/TournamentPageCountDown.tsx'
 
 const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 
@@ -59,31 +59,6 @@ const TournamentPage: React.FC = () => {
 
   // joined状态由当前奖池数据决定
   const isJoined = !!currentPrizePool?.user_participated
-
-  // 倒计时逻辑
-  const [countdown, setCountdown] = React.useState('')
-  useEffect(() => {
-    if (!currentPrizePool || currentPrizePool.status !== PRIZE_POOL_STATUS.PROCESSING) {
-      setCountdown('')
-      return
-    }
-    const updateCountdown = () => {
-      const now = dayjs()
-      const end = dayjs(currentPrizePool.end_date)
-      const diff = end.diff(now, 'second')
-      if (diff <= 0) {
-        setCountdown('00:00:00')
-        return
-      }
-      const h = String(Math.floor(diff / 3600)).padStart(2, '0')
-      const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0')
-      const s = String(diff % 60).padStart(2, '0')
-      setCountdown(`${h}:${m}:${s}`)
-    }
-    updateCountdown()
-    const timer = setInterval(updateCountdown, 1000)
-    return () => clearInterval(timer)
-  }, [currentPrizePool])
 
   useEffect(() => {
     if (!currentPrizePool) return
@@ -214,13 +189,9 @@ const TournamentPage: React.FC = () => {
             ></TournamentPageLeaderboard>
             {/* 中间奖池信息区 */}
             <div className={styles.prizeInfoContainer}>
-              {/* 顶部倒计时，仅PROCESSING显示 */}
-              {currentPrizePool?.status === PRIZE_POOL_STATUS.PROCESSING && (
-                <div className={styles.prizeCountdown}>
-                  <ClockIcon className="w-6 h-6 text-blue-400" />
-                  <span>Ends in {countdown}</span>
-                </div>
-              )}
+              <TournamentPageCountDown
+                currentPrizePool={currentPrizePool}
+              ></TournamentPageCountDown>
               {/* 中间奖池icon和金额 */}
               <div className="flex flex-col items-center justify-center flex-1">
                 <GiftIcon className={styles.prizeIcon} />

@@ -93,12 +93,7 @@
         }
 
         .prizeInfoContainer {
-            @apply flex flex-col items-center justify-between flex-1 bg-gradient-to-br from-yellow-50 to-white rounded-3xl shadow-2xl border-4 border-yellow-200 px-12 py-10 mx-auto max-w-xl min-w-[28rem] min-h-[30rem] gap-10 relative;
-            box-shadow: 0 8px 32px 0 rgba(255, 193, 7, 0.18), 0 1.5px 8px 0 rgba(0, 0, 0, 0.08);
-        }
-
-        .prizeCountdown {
-            @apply flex items-center gap-2 text-xl font-bold text-yellow-700 bg-yellow-100 rounded-full px-6 py-2 shadow border border-yellow-200 absolute -top-8 left-1/2 -translate-x-1/2;
+            @apply flex flex-col items-center justify-between flex-1 overflow-hidden pt-14;
         }
 
         .prizeIcon {
