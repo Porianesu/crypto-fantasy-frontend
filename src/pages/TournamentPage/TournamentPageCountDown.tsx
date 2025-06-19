@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 import styles from './TournamentPageCountDown.module.css'
 import FlipNumbers from 'react-flip-numbers'
@@ -17,13 +17,12 @@ const TournamentPageCountDown: React.FC<ITournamentPageCountDownProps> = ({ curr
     minutes: '00',
     seconds: '00',
   }
-  const [countdown, setCountdown] = React.useState(DEFAULT_COUNTDOWN)
+  const [countdown, setCountdown] = useState(DEFAULT_COUNTDOWN)
   const NUMBER_COLOR = '#734319'
   const NUMBER_HEIGHT = 40
   const NUMBER_WIDTH = 30
   useEffect(() => {
     if (!currentPrizePool || currentPrizePool.status !== PRIZE_POOL_STATUS.PROCESSING) {
-      setCountdown(DEFAULT_COUNTDOWN)
       return
     }
     const updateCountdown = () => {
@@ -43,7 +42,7 @@ const TournamentPageCountDown: React.FC<ITournamentPageCountDownProps> = ({ curr
     updateCountdown()
     const timer = setInterval(updateCountdown, 1000)
     return () => clearInterval(timer)
-  }, [currentPrizePool])
+  }, [currentPrizePool?.id])
 
   return currentPrizePool?.status === PRIZE_POOL_STATUS.PROCESSING ? (
     <div className={styles.prizeCountdown}>

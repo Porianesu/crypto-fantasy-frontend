@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .prizeCountdown {
-    @apply flex flex-col items-center text-[#734319];
+    @apply absolute top-14 flex flex-col items-center text-[#734319];
     .title {
         @apply text-[#662E00] text-2xl leading-10 italic;
 

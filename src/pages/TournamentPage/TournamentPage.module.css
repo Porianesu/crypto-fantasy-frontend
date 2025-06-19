@@ -93,7 +93,7 @@
         }
 
         .prizeInfoContainer {
-            @apply flex flex-col items-center justify-between flex-1 overflow-hidden pt-14;
+            @apply flex flex-col items-center justify-between flex-1 overflow-hidden pt-14 relative;
         }
 
         .prizeIcon {
