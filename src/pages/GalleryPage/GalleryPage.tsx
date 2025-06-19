@@ -196,14 +196,6 @@ const GalleryPage: React.FC = () => {
                     >{`${selectedCard.nickname} · ${selectedCard.name}`}</div>
                     <div className={styles.detailInfoPart}>
                       <div>
-                        <div>Faction:</div>
-                        <div>
-                          {!selectedCard.processed
-                            ? UndetectedPlaceholderText
-                            : selectedCard.faction}
-                        </div>
-                      </div>
-                      <div>
                         <div>Tag:</div>
                         <div>
                           {!selectedCard.processed ? UndetectedPlaceholderText : selectedCard.tag}
