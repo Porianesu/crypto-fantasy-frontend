@@ -15,8 +15,9 @@ import bagIcon from '../../../src/assets/images/home_page/footer_button_bag.png'
 import battleIcon from '../../../src/assets/images/home_page/footer_button_battle.png'
 import rewardIcon from '../../../src/assets/images/home_page/footer_button_reward.png'
 import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.png'
-import OpenPack, { type IOpenPackHandle } from '@/components/OpenPack.tsx'
+import { type IOpenPackHandle } from '@/components/OpenPack.tsx'
 
+const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 const CardsFormationModal = React.lazy(() => import('@/pages/HomePage/CardsFormationModal.tsx'))
 const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
