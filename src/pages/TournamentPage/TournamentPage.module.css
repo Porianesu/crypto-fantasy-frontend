@@ -93,36 +93,43 @@
         }
 
         .prizeInfoContainer {
-            @apply flex flex-col items-center justify-between flex-1 overflow-hidden pt-14 relative;
-        }
-
-        .prizeIcon {
-            @apply w-28 h-28 text-yellow-400 drop-shadow-2xl mb-4 animate-bounce;
-            filter: drop-shadow(0 0 16px #ffe066);
-        }
-
-        .prizeAmount {
-            @apply text-5xl font-extrabold text-yellow-600 mt-2 mb-2 drop-shadow-lg;
-
-            & > span {
-                @apply mr-2;
-            }
-        }
-
-        .prizeLabel {
-            @apply text-lg text-yellow-500 font-semibold tracking-wide mb-2;
+            @apply flex flex-col items-center justify-between flex-1 overflow-hidden pt-14 relative pb-14;
         }
 
         .joinBtn {
-            @apply px-12 py-4 rounded-full text-xl font-extrabold transition shadow-xl bg-gradient-to-r from-blue-500 to-blue-400 text-white hover:from-blue-600 hover:to-blue-500 border-2 border-blue-300;
-            @apply absolute left-1/2 -translate-x-1/2 bottom-8;
-            margin-top: 0;
+            @apply w-107.5 h-32 flex items-center justify-center text-[#2D1813] text-5xl;
+            @apply bg-[url('/src/assets/images/common/button_background.png')] bg-cover bg-center bg-no-repeat;
+        }
+
+        .joinBtnIcon {
+            @apply w-16 h-16 ml-4;
+            @apply bg-[url('/src/assets/images/tournament_page/leaderboard_asset_icon_faith.png')] bg-contain bg-center bg-no-repeat;
         }
 
         .joinedBtn {
-            @apply px-12 py-4 rounded-full text-xl font-extrabold bg-gray-200 text-gray-400 cursor-not-allowed shadow-none border-2 border-gray-200;
-            @apply absolute left-1/2 -translate-x-1/2 bottom-8;
-            margin-top: 0;
+            @apply bg-[url('/src/assets/images/tournament_page/joined_button_background.png')] text-white;
+        }
+    }
+}
+
+
+.prizeInfoBottomPartContainer {
+    @apply mt-auto flex flex-col items-center;
+
+    .prizeAmountContainer {
+        @apply flex flex-col items-center justify-center w-125.5 h-25 mb-6;
+        @apply bg-[url('/src/assets/images/tournament_page/prize_background.png')] bg-contain bg-center bg-no-repeat;
+
+        .prizeDescription {
+            @apply text-xl text-white;
+        }
+
+        .prizeAmount {
+            @apply italic text-4xl text-[#F9F9F9] flex items-center;
+        }
+        .prizeAmountIcon {
+            @apply w-16.5 h-12 ml-2.5;
+            @apply bg-[url('/src/assets/images/tournament_page/leaderboard_asset_icon_sol.png')] bg-contain bg-center bg-no-repeat;
         }
     }
 }

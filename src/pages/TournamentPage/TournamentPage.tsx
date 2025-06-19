@@ -4,7 +4,6 @@ import styles from './TournamentPage.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { GiftIcon } from '@heroicons/react/24/solid'
 import { getHomePath } from '@/navigation/routes.tsx'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchPrizePools } from '@/utils/mockHelper.ts'
@@ -192,37 +191,44 @@ const TournamentPage: React.FC = () => {
               <TournamentPageCountDown
                 currentPrizePool={currentPrizePool}
               ></TournamentPageCountDown>
-              {/* 中间奖池icon和金额 */}
-              <div className="flex flex-col items-center justify-center flex-1">
-                <GiftIcon className={styles.prizeIcon} />
-                <div className={styles.prizeAmount}>
-                  <CountUp
-                    start={undefined}
-                    end={currentPrizePool?.price ?? 0}
-                    decimals={2}
-                    duration={1}
-                    separator=","
-                    preserveValue
-                    easingFn={(t, b, c, d) => {
-                      // easeOutQuad: 先快后慢
-                      t /= d
-                      return -c * t * (t - 2) + b
-                    }}
-                  />
-                  SOL
+              <div className={styles.prizeInfoBottomPartContainer}>
+                <div className={styles.prizeAmountContainer}>
+                  <div className={styles.prizeDescription}>The Current Prize pool</div>
+                  <div className={styles.prizeAmount}>
+                    <CountUp
+                      start={undefined}
+                      end={currentPrizePool?.price ?? 0}
+                      decimals={2}
+                      duration={1}
+                      separator=","
+                      preserveValue
+                      easingFn={(t, b, c, d) => {
+                        // easeOutQuad: 先快后慢
+                        t /= d
+                        return -c * t * (t - 2) + b
+                      }}
+                    />
+                    <div className={styles.prizeAmountIcon}></div>
+                  </div>
                 </div>
-                <div className={styles.prizeLabel}>Prize Pool</div>
-              </div>
-              {/* 底部参与按钮/状态 */}
-              {isJoined || currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
                 <button
-                  className={isJoined ? styles.joinedBtn : styles.joinBtn}
+                  className={classNames(styles.joinBtn, {
+                    [styles.joinedBtn]: isJoined,
+                    button: !isJoined,
+                  })}
                   disabled={isJoined}
                   onClick={isJoined ? undefined : handleJoinButtonClick}
                 >
-                  {isJoined ? 'Joined' : 'Join'}
+                  {isJoined ? (
+                    'Joined'
+                  ) : (
+                    <>
+                      {'Join 100'}
+                      <div className={styles.joinBtnIcon}></div>
+                    </>
+                  )}
                 </button>
-              ) : null}
+              </div>
             </div>
             {/* 右侧出战卡组信息区 */}
             <TournamentPageCardsFormation
