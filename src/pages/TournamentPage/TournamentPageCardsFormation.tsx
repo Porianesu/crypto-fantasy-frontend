@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useMemo, useState } from 'react'
+import React, { Suspense, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import styles from './TournamentPageCardsFormation.module.css'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 import { observer } from 'mobx-react-lite'
@@ -6,9 +6,14 @@ import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import classNames from 'classnames'
-import TournamentPageCardsFormationModal from '@/pages/TournamentPage/TournamentPageCardsFormationModal.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
+import type { IOpenPackHandle } from '@/components/OpenPack.tsx'
+
+const TournamentPageCardsFormationModal = React.lazy(
+  () => import('@/pages/TournamentPage/TournamentPageCardsFormationModal.tsx'),
+)
+const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 
 export interface ITournamentPageCardsFormationHandle {
   tempCardsFormation: Array<number>
@@ -75,6 +80,7 @@ const TournamentPageCardsFormation = React.forwardRef<
   ITournamentPageCardsFormationHandle,
   ITournamentPageCardsFormationProps
 >(({ currentPrizePool, rules, cardData }, ref) => {
+  const openPackRef = useRef<IOpenPackHandle>(null)
   const [tempCardsFormation, setTempCardsFormation] = useState<Array<number>>([])
   const [cardsFormationModalOpen, setCardsFormationModalOpen] = useState(false)
   const [cardsDeckPowerRate, setCardsDeckPowerRate] = useState(1)
@@ -104,6 +110,11 @@ const TournamentPageCardsFormation = React.forwardRef<
     [cardsDeckPowerRate, currentPrizePool.status, currentPrizePool.user_deck_power, formatedCards],
   )
   console.log('my deck power', deckPower)
+
+  const paddedCards: Array<ICardData | undefined> = useMemo(
+    () => [...formatedCards, ...Array(5 - formatedCards.length).fill(undefined)],
+    [formatedCards],
+  )
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval> | undefined
@@ -138,6 +149,13 @@ const TournamentPageCardsFormation = React.forwardRef<
     }),
     [tempCardsFormation],
   )
+
+  const handleOpenPack = () => {
+    if (openPackRef.current) {
+      openPackRef.current.handleOpenPack()
+    }
+  }
+
   const handleCardClick = () => {
     setCardsFormationModalOpen(true)
   }
@@ -188,29 +206,32 @@ const TournamentPageCardsFormation = React.forwardRef<
       ></button>
     )
 
-  // 保证5个卡槽
-  const paddedCards: Array<ICardData | undefined> = [
-    ...formatedCards,
-    ...Array(5 - formatedCards.length).fill(undefined),
-  ]
-
   return (
-    <div className={styles.formationContainer}>
-      <div className={styles.formationTitle}>My Deck</div>
-      <div className={styles.formationSquare}>
-        {paddedCards.map((card, idx) => renderCard(card, idx + 1))}
-        <div className={styles.formationSquareBackground}></div>
+    <>
+      <div className={styles.formationContainer}>
+        <div className={styles.formationTitle}>My Deck</div>
+        <div className={styles.formationSquare}>
+          {paddedCards.map((card, idx) => renderCard(card, idx + 1))}
+          <div className={styles.formationSquareBackground}></div>
+        </div>
+        {/*<div className={styles.deckPowerLabel}>Deck Power</div>*/}
+        {/*<div className={styles.deckPowerValue}>{deckPower}</div>*/}
+        <button className={classNames(styles.openPackButton, 'button')} onClick={handleOpenPack}>
+          Open Pack
+        </button>
       </div>
-      {/*<div className={styles.deckPowerLabel}>Deck Power</div>*/}
-      {/*<div className={styles.deckPowerValue}>{deckPower}</div>*/}
-      <button className={styles.openPackButton}>Open Pack</button>
-      <TournamentPageCardsFormationModal
-        open={cardsFormationModalOpen}
-        onOpenChange={setCardsFormationModalOpen}
-        cardsFormation={tempCardsFormation}
-        changeCardsFormation={changeTempCardsFormation}
-      ></TournamentPageCardsFormationModal>
-    </div>
+      <Suspense fallback={null}>
+        <TournamentPageCardsFormationModal
+          open={cardsFormationModalOpen}
+          onOpenChange={setCardsFormationModalOpen}
+          cardsFormation={tempCardsFormation}
+          changeCardsFormation={changeTempCardsFormation}
+        ></TournamentPageCardsFormationModal>
+      </Suspense>
+      <Suspense>
+        <OpenPack ref={openPackRef}></OpenPack>
+      </Suspense>
+    </>
   )
 })
 

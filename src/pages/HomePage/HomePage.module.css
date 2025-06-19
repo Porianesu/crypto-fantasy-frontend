@@ -19,14 +19,6 @@
     @apply relative shrink grow basis-0 overflow-hidden flex flex-col items-stretch justify-start;
     @apply bg-[url('/src/assets/images/home_page/background.png')] bg-cover bg-center bg-no-repeat;
 
-    .videoContainer {
-        @apply absolute inset-0 -z-10 invisible opacity-0 flex items-center justify-center bg-transparent backdrop-blur-md;
-
-        & > video {
-            @apply h-full w-full object-cover;
-        }
-    }
-
     .drawCardsEntranceContainer {
         @apply absolute z-10 top-1/2 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center;
         transform: translateY(calc(130px - 50%));
