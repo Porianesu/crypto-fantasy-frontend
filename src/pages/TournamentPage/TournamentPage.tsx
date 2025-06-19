@@ -58,6 +58,7 @@ const TournamentPage: React.FC = () => {
 
   // joined状态由当前奖池数据决定
   const isJoined = !!currentPrizePool?.user_participated
+  const canUserJoin = !isJoined && currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING
 
   useEffect(() => {
     if (!currentPrizePool) return
@@ -221,19 +222,21 @@ const TournamentPage: React.FC = () => {
                 </div>
                 <button
                   className={classNames(styles.joinBtn, {
-                    [styles.joinedBtn]: isJoined,
-                    button: !isJoined,
+                    [styles.joinedBtn]: !canUserJoin,
+                    button: canUserJoin,
                   })}
-                  disabled={isJoined}
-                  onClick={isJoined ? undefined : handleJoinButtonClick}
+                  disabled={!canUserJoin}
+                  onClick={!canUserJoin ? undefined : handleJoinButtonClick}
                 >
                   {isJoined ? (
                     'Joined'
-                  ) : (
+                  ) : currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
                     <>
                       {'Join 100'}
                       <div className={styles.joinBtnIcon}></div>
                     </>
+                  ) : (
+                    'Completed'
                   )}
                 </button>
               </div>
