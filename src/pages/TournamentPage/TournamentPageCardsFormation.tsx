@@ -247,7 +247,7 @@ const TournamentPageCardsFormation = React.forwardRef<
           <div>
             {renderCard(paddedCards[0], 0)}
             <div className={styles.powerContainer}>
-              <div>Power</div>
+              <div className={styles.powerLabel}>Power</div>
               <div>{deckPower}</div>
             </div>
             {renderCard(paddedCards[1], 1)}
