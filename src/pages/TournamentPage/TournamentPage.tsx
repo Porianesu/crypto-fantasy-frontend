@@ -47,7 +47,7 @@ const TournamentPage: React.FC = () => {
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
     queryKey: ['prizePools'],
-    queryFn: fetchPrizePools,
+    queryFn: () => fetchPrizePools(FormationRules),
     staleTime: 5 * 60 * 1000,
   })
   useEffect(() => {

@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { generateFantasyEnglishName, getDefaultAvatar } from '@/utils/common.ts'
 import { BigNumber } from 'bignumber.js'
 import type { UserInfo } from '@/stores/app-store.ts'
+import { CARD_RARITY } from '@/components/Card.tsx'
 
 export const fetchHomeLeaderboard = async () => {
   const originalData = Array.from({ length: 20 }).map((_, i) => ({
@@ -17,14 +18,47 @@ export const fetchHomeLeaderboard = async () => {
   })
 }
 
-export const fetchPrizePools = async () => {
+const getRandomFormation = (
+  rules: {
+    totalCrystal: number
+    rarity: Array<{
+      key: CARD_RARITY
+      crystal: number
+    }>
+  },
+  cardMaxId = 199,
+) => {
+  const getRandomCard = (remainingCrystal: number) => {
+    const availableRarities = rules.rarity.filter((r) => r.crystal <= remainingCrystal)
+    const cardIdBase = Math.floor(Math.random() * Math.floor(cardMaxId / 4))
+    const rarity = availableRarities[Math.floor(Math.random() * availableRarities.length)]
+    return {
+      cardId: cardIdBase * 4 + rarity.key,
+      cost: rarity.crystal,
+    }
+  }
+  const cardsId = []
+  let remainingCrystal = rules.totalCrystal
+  while (cardsId.length < 5 && remainingCrystal > 0) {
+    const randomResult = getRandomCard(remainingCrystal)
+    cardsId.push(randomResult.cardId)
+    remainingCrystal -= randomResult.cost
+  }
+  return cardsId
+}
+
+export const fetchPrizePools = async (rules: {
+  totalCrystal: number
+  rarity: Array<{
+    key: CARD_RARITY
+    crystal: number
+  }>
+}) => {
   return new Promise<Array<IPrizePool>>((resolve) => {
     const today = dayjs().startOf('day')
     const getRandomPrice = () =>
       new BigNumber(Math.random() * 490).plus(10).decimalPlaces(2).toNumber()
     const getRandomPlayerCount = () => Math.floor(Math.random() * 100) + 110
-    const getRandomFormation = () =>
-      Array.from({ length: 5 }, () => Math.floor(Math.random() * 200))
     const getRandomDeckPower = () => Math.floor(Math.random() * 991)
     const data = [
       {
@@ -77,7 +111,7 @@ export const fetchPrizePools = async () => {
         return {
           ...pool,
           user_participated: true,
-          user_card_formation: getRandomFormation(),
+          user_card_formation: getRandomFormation(rules),
           user_deck_power: getRandomDeckPower(),
         }
       }

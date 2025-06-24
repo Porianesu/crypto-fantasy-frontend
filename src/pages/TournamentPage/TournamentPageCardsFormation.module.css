@@ -76,7 +76,7 @@
 
 
 .powerContainer {
-    @apply w-36 h-33 flex flex-col items-center font-[FFDin] text-white font-black italic text-6xl tracking-tighter pt-2.5;
+    @apply w-36 h-33 flex flex-col items-center font-[FFDin] text-white font-black italic text-6xl tracking-tight pt-2.5;
     @apply bg-[url('/src/assets/images/tournament_page/deck_power_background.png')] bg-contain bg-no-repeat;
 
     text-shadow: -2px -2px 0 #731A1A,
