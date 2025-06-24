@@ -23,8 +23,8 @@
     }
 
     .closeButton {
-        @apply absolute top-[104px] right-[68px] w-[74px] h-[80px] z-10;
-        @apply bg-[url(/src/assets/images/home_page/battle_modal/close_icon.png)] bg-contain bg-center bg-no-repeat;
+        @apply absolute size-37 right-0 top-14 z-10;
+        @apply bg-[url('/src/assets/images/common/close_icon.png')] bg-contain bg-top-left bg-no-repeat;
     }
 
     .blocksWrapper {
