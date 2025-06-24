@@ -7,6 +7,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'FFDin';
+    src: url('./assets/fonts/FFDinPro-BlackItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @layer components {
     .button {
         @apply hover:scale-105 active:scale-95 transition-transform;

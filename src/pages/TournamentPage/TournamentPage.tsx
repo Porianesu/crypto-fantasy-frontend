@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { Suspense, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './TournamentPage.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -16,35 +16,34 @@ import { BigNumber } from 'bignumber.js'
 import CountUp from 'react-countup'
 import { CARD_RARITY } from '@/components/Card.tsx'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
-import type { IOpenPackHandle } from '@/components/OpenPack.tsx'
 import TournamentPageCountDown from '@/pages/TournamentPage/TournamentPageCountDown.tsx'
 
-const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
-
-const FormationRules = [
-  {
-    key: CARD_RARITY.NORMAL,
-    value: 5,
-  },
-  {
-    key: CARD_RARITY.RARE,
-    value: 4,
-  },
-  {
-    key: CARD_RARITY.EPIC,
-    value: 3,
-  },
-  {
-    key: CARD_RARITY.LEGENDARY,
-    value: 1,
-  },
-]
+const FormationRules = {
+  totalCrystal: 8,
+  rarity: [
+    {
+      key: CARD_RARITY.NORMAL,
+      crystal: 1,
+    },
+    {
+      key: CARD_RARITY.RARE,
+      crystal: 2,
+    },
+    {
+      key: CARD_RARITY.EPIC,
+      crystal: 3,
+    },
+    {
+      key: CARD_RARITY.LEGENDARY,
+      crystal: 4,
+    },
+  ],
+}
 const TournamentPage: React.FC = () => {
   const navigate = useNavigate()
   const [currentPrizePool, setCurrentPrizePool] = useState<IPrizePool | undefined>(undefined)
   const queryClient = useQueryClient()
   const cardsFormationRef = useRef<ITournamentPageCardsFormationHandle>(null)
-  const openPackRef = useRef<IOpenPackHandle>(null)
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
     queryKey: ['prizePools'],
@@ -160,6 +159,7 @@ const TournamentPage: React.FC = () => {
           {prizePools?.map((pool) => {
             return (
               <button
+                key={pool.id}
                 onClick={() => setCurrentPrizePool(pool)}
                 disabled={currentPrizePool?.id === pool.id}
               ></button>
@@ -246,14 +246,10 @@ const TournamentPage: React.FC = () => {
               ref={cardsFormationRef}
               currentPrizePool={currentPrizePool}
               rules={FormationRules}
-              openPackRef={openPackRef}
             />
           </>
         )}
       </div>
-      <Suspense>
-        <OpenPack ref={openPackRef}></OpenPack>
-      </Suspense>
     </div>
   )
 }

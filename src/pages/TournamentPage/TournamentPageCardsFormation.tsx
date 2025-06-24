@@ -1,6 +1,6 @@
 import React, {
-  type RefObject,
   Suspense,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -15,7 +15,6 @@ import StaticCard from '@/components/StaticCard.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
-import type { IOpenPackHandle } from '@/components/OpenPack.tsx'
 
 const TournamentPageCardsFormationModal = React.lazy(
   () => import('@/pages/TournamentPage/TournamentPageCardsFormationModal.tsx'),
@@ -24,19 +23,29 @@ const TournamentPageCardsFormationModal = React.lazy(
 export interface ITournamentPageCardsFormationHandle {
   tempCardsFormation: Array<number>
 }
+
 interface ITournamentPageCardsFormationWrapperProps {
   currentPrizePool: IPrizePool | undefined
-  rules: Array<{
-    key: CARD_RARITY
-    value: number
-  }>
-  openPackRef: RefObject<IOpenPackHandle | null>
+  rules: {
+    totalCrystal: number
+    rarity: Array<{
+      key: CARD_RARITY
+      crystal: number
+    }>
+  }
+}
+
+const Rarity_Label_Map = {
+  [CARD_RARITY.NORMAL]: 'Common',
+  [CARD_RARITY.RARE]: 'Rare',
+  [CARD_RARITY.EPIC]: 'Epic',
+  [CARD_RARITY.LEGENDARY]: 'Legendary',
 }
 
 const TournamentPageCardsFormationWrapper = React.forwardRef<
   ITournamentPageCardsFormationHandle,
   ITournamentPageCardsFormationWrapperProps
->(({ currentPrizePool, rules, openPackRef }, ref) => {
+>(({ currentPrizePool, rules }, ref) => {
   const {
     preloadStore: { preloadQueue },
   } = useMobxStore()
@@ -71,7 +80,6 @@ const TournamentPageCardsFormationWrapper = React.forwardRef<
       cardData={cardData}
       currentPrizePool={currentPrizePool}
       rules={rules}
-      openPackRef={openPackRef}
     ></TournamentPageCardsFormation>
   )
 })
@@ -79,16 +87,19 @@ const TournamentPageCardsFormationWrapper = React.forwardRef<
 interface ITournamentPageCardsFormationProps {
   cardData: Array<ICardData>
   currentPrizePool: IPrizePool
-  rules: Array<{
-    key: CARD_RARITY
-    value: number
-  }>
-  openPackRef: RefObject<IOpenPackHandle | null>
+  rules: {
+    totalCrystal: number
+    rarity: Array<{
+      key: CARD_RARITY
+      crystal: number
+    }>
+  }
 }
+
 const TournamentPageCardsFormation = React.forwardRef<
   ITournamentPageCardsFormationHandle,
   ITournamentPageCardsFormationProps
->(({ currentPrizePool, rules, cardData, openPackRef }, ref) => {
+>(({ currentPrizePool, rules, cardData }, ref) => {
   const [tempCardsFormation, setTempCardsFormation] = useState<Array<number>>([])
   const [cardsFormationModalOpen, setCardsFormationModalOpen] = useState(false)
   const [cardsDeckPowerRate, setCardsDeckPowerRate] = useState(1)
@@ -117,12 +128,34 @@ const TournamentPageCardsFormation = React.forwardRef<
         : currentPrizePool.user_deck_power || 0,
     [cardsDeckPowerRate, currentPrizePool.status, currentPrizePool.user_deck_power, formatedCards],
   )
-  console.log('my deck power', deckPower)
-
   const paddedCards: Array<ICardData | undefined> = useMemo(
     () => [...formatedCards, ...Array(5 - formatedCards.length).fill(undefined)],
     [formatedCards],
   )
+  const getTotalCrystal = useCallback(
+    (cardsId: Array<number>) => {
+      // 统计每种稀有度的数量
+      const rarityCount: Record<CARD_RARITY, number> = {
+        [CARD_RARITY.NORMAL]: 0,
+        [CARD_RARITY.RARE]: 0,
+        [CARD_RARITY.EPIC]: 0,
+        [CARD_RARITY.LEGENDARY]: 0,
+      }
+      // 统计新阵容中每种稀有度的数量
+      cardsId.forEach((cardId) => {
+        const card = cardData?.find((c) => c.id === cardId)
+        if (card) rarityCount[card.rarity] = (rarityCount[card.rarity] || 0) + 1
+      })
+      // 统计消耗的总水晶数量
+      return Object.entries(rarityCount).reduce<number>((previousValue, currentValue) => {
+        const [rarity, count] = currentValue
+        const rarityRule = rules.rarity.find((r) => `${r.key}` === rarity)
+        return previousValue + (rarityRule?.crystal || 0) * count
+      }, 0)
+    },
+    [cardData, rules.rarity],
+  )
+  const currentDeckTotalCrystal = useMemo(() => getTotalCrystal(cards), [getTotalCrystal, cards])
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval> | undefined
@@ -158,52 +191,30 @@ const TournamentPageCardsFormation = React.forwardRef<
     [tempCardsFormation],
   )
 
-  const handleOpenPack = () => {
-    if (openPackRef.current) {
-      openPackRef.current.handleOpenPack()
-    }
-  }
-
   const handleCardClick = () => {
+    if (currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING) return
     setCardsFormationModalOpen(true)
   }
 
   const changeTempCardsFormation = (newCards: Array<number>) => {
-    // 统计每种稀有度的数量
-    const rarityCount: Record<CARD_RARITY, number> = {
-      [CARD_RARITY.NORMAL]: 0,
-      [CARD_RARITY.RARE]: 0,
-      [CARD_RARITY.EPIC]: 0,
-      [CARD_RARITY.LEGENDARY]: 0,
-    }
-    // 统计新阵容中每种稀有度的数量
-    newCards.forEach((cardId) => {
-      const card = cardData?.find((c) => c.id === cardId)
-      if (card) rarityCount[card.rarity] = (rarityCount[card.rarity] || 0) + 1
-    })
-    // 检查是否超出规则限制
-    for (const rule of rules) {
-      if (rarityCount[rule.key] > rule.value) {
-        toast.warn(`Exceeds the maximum allowed number of ${rule.key} cards: ${rule.value}`)
-        return
-      }
+    const totalCrystal = getTotalCrystal(newCards)
+    if (totalCrystal >= rules.totalCrystal) {
+      return toast.warning('You have exceeded the total crystal limit.')
     }
     setTempCardsFormation(newCards)
   }
 
-  // 卡片渲染函数，避免重复
   const renderCard = (card: ICardData | undefined, key: React.Key) =>
     card ? (
       <StaticCard
         className={classNames(styles.formationCard, styles[`formationCard${key}`])}
         key={card.id}
         card={card}
-        width={122}
+        width={111}
         onClick={handleCardClick}
       ></StaticCard>
     ) : (
       <button
-        key={key}
         className={classNames(
           styles.formationCard,
           styles[`formationCard${key}`],
@@ -218,15 +229,44 @@ const TournamentPageCardsFormation = React.forwardRef<
     <>
       <div className={styles.formationContainer}>
         <div className={styles.formationTitle}>My Deck</div>
+        <div className={styles.crystalCount}>{`(${currentDeckTotalCrystal}/8)`}</div>
+        <div className={styles.crystalContainer}>
+          {new Array(rules.totalCrystal).fill(null).map((_item, index) => {
+            return (
+              <div
+                key={index}
+                className={classNames(styles.crystalBase, {
+                  [styles.crystalInactive]: index >= currentDeckTotalCrystal,
+                  [styles.crystalActive]: index < currentDeckTotalCrystal,
+                })}
+              ></div>
+            )
+          })}
+        </div>
         <div className={styles.formationSquare}>
-          {paddedCards.map((card, idx) => renderCard(card, idx + 1))}
+          <div>
+            {renderCard(paddedCards[0], 0)}
+            <div className={styles.powerContainer}>
+              <div>Power</div>
+              <div>{deckPower}</div>
+            </div>
+            {renderCard(paddedCards[1], 1)}
+          </div>
+          <div>{paddedCards.slice(2, 5).map((card, idx) => renderCard(card, idx + 1))}</div>
           <div className={styles.formationSquareBackground}></div>
         </div>
-        {/*<div className={styles.deckPowerLabel}>Deck Power</div>*/}
-        {/*<div className={styles.deckPowerValue}>{deckPower}</div>*/}
-        <button className={classNames(styles.openPackButton, 'button')} onClick={handleOpenPack}>
-          Open Pack
-        </button>
+        <div className={styles.rulesContainer}>
+          {rules.rarity.map((r) => (
+            <div key={r.key} className={styles.ruleItem}>
+              <div className={styles.ruleRarity}>{Rarity_Label_Map[r.key]}</div>
+              <div className={styles.ruleCrystal}>
+                {new Array(r.crystal).fill(null).map((_item, index) => {
+                  return <div key={index}></div>
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <Suspense fallback={null}>
         <TournamentPageCardsFormationModal
