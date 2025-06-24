@@ -12,8 +12,8 @@
             @apply flex items-center absolute top-8 left-11 z-10;
 
             .backBtn {
-                @apply w-26 h-22.5;
-                @apply bg-[url('/src/assets/images/tournament_page/back_button.png')] bg-contain bg-center bg-no-repeat;
+                @apply size-22.5;
+                @apply bg-[url('/src/assets/images/common/back_icon.png')] bg-contain bg-center bg-no-repeat;
             }
         }
 
@@ -40,10 +40,10 @@
         }
 
         .headerRight {
-            @apply flex items-center absolute top-8 right-11 z-10 gap-x-6;
+            @apply flex items-center absolute top-8 right-11 z-10 gap-x-12.5;
 
             & > button {
-                @apply w-26 h-22.5;
+                @apply size-22.5;
             }
 
             .historyBtn {

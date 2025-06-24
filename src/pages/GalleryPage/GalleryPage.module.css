@@ -9,7 +9,7 @@
 
         .backButton {
             @apply cursor-pointer size-16 active:scale-95 transition;
-            @apply bg-[url('/src/assets/images/gallery_page/close_icon.png')] bg-cover bg-top-left bg-no-repeat;
+            @apply bg-[url('/src/assets/images/common/back_icon.png')] bg-cover bg-top-left bg-no-repeat;
         }
 
         .headerTitle {
