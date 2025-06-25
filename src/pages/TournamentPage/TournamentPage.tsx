@@ -105,7 +105,7 @@ const TournamentPage: React.FC = () => {
     if (currentPrizePool?.status !== PRIZE_POOL_STATUS.UPCOMING) return
     if (cardsFormationRef.current) {
       const formation = cardsFormationRef.current.tempCardsFormation
-      if (formation.length <= 1) return toast.warning('Please select at least 1 cards')
+      if (formation.length < 1) return toast.warning('Please add 1 card into your deck at least.')
       // 更新prizePools缓存
       const newPool: IPrizePool = {
         ...currentPrizePool,

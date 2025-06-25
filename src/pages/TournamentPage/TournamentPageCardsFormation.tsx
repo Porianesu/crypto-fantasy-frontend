@@ -192,14 +192,18 @@ const TournamentPageCardsFormation = React.forwardRef<
   )
 
   const handleCardClick = () => {
-    if (currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING) return
+    if (
+      currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING ||
+      currentPrizePool.user_participated
+    )
+      return
     setCardsFormationModalOpen(true)
   }
 
   const changeTempCardsFormation = (newCards: Array<number>) => {
     const totalCrystal = getTotalCrystal(newCards)
     if (totalCrystal > rules.totalCrystal) {
-      return toast.warning('You have exceeded the total crystal limit.')
+      return toast.warning('Not enough energy slots remaining.')
     }
     setTempCardsFormation(newCards)
   }
