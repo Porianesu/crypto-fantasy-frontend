@@ -198,7 +198,7 @@ const TournamentPageCardsFormation = React.forwardRef<
 
   const changeTempCardsFormation = (newCards: Array<number>) => {
     const totalCrystal = getTotalCrystal(newCards)
-    if (totalCrystal >= rules.totalCrystal) {
+    if (totalCrystal > rules.totalCrystal) {
       return toast.warning('You have exceeded the total crystal limit.')
     }
     setTempCardsFormation(newCards)
