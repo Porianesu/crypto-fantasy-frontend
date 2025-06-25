@@ -116,7 +116,7 @@
     }
 
     .cardImage {
-        @apply absolute top-[80px] left-[40px] w-7/10 h-7/10 z-0 bg-no-repeat bg-contain bg-center;
+        @apply absolute top-20 left-8 w-7/10 h-7/10 z-0 bg-no-repeat bg-contain bg-center;
     }
 }
 
