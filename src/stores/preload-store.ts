@@ -12,6 +12,7 @@ interface PreloadProgressEvent {
 export enum AudioInstanceId {
   BGM = 'bgm',
   DrawCardSound = 'drawCardSound',
+  IntroductionSound = 'introductionSound',
 }
 export default class PreloadStore {
   rootStoreRef: Store

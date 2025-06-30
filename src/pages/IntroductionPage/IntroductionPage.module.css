@@ -22,3 +22,7 @@
         @apply bg-[url('/src/assets/images/introduction_page/start_button_background.png')] bg-contain bg-center bg-no-repeat;
     }
 }
+
+.lineDivider {
+    @apply my-1;
+}

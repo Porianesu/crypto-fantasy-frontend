@@ -6,23 +6,56 @@ import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath } from '@/navigation/routes.tsx'
 import { setStorageUserInfo } from '@/utils/common.ts'
+import { AudioInstanceId } from '@/stores/preload-store.ts'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
 
 const IntroductionPage: React.FC = () => {
+  const {
+    preloadStore: { audioInstanceMap },
+  } = useMobxStore()
   const navigate = useNavigate()
   const textRef = useRef<ITextHandle>(null)
-
-  const handleTextContainerClick = () => {
-    textRef.current?.revertSplitText()
-  }
+  const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
+  const introductionSound = audioInstanceMap.get(AudioInstanceId.IntroductionSound)
 
   const handleStartButtonClick = () => {
     navigate(getHomePath())
+  }
+
+  const playIntroductionSound = () => {
+    if (bgmSound) {
+      bgmSound.volume = 0.2
+    }
+    if (introductionSound) {
+      introductionSound.play({
+        loop: 1,
+        volume: 1,
+      })
+    }
+  }
+
+  const stopIntroductionSound = () => {
+    if (bgmSound) {
+      bgmSound.volume = 1
+    }
+    if (introductionSound) {
+      introductionSound.stop()
+    }
+  }
+
+  const handleTextContainerClick = () => {
+    stopIntroductionSound()
+    textRef.current?.revertSplitText()
   }
 
   useEffect(() => {
     setStorageUserInfo({
       hasAlreadyReadGuide: true,
     })
+    playIntroductionSound()
+    return () => {
+      stopIntroductionSound()
+    }
   }, [])
 
   return (
@@ -34,21 +67,36 @@ const IntroductionPage: React.FC = () => {
           splitTextVars={{
             smartWrap: false,
           }}
+          animationVars={{
+            duration: 0.05,
+            stagger: 0.07,
+          }}
         >
-          {'Since the dawn of Bitcoin, the civilization of blockchain has rapidly \n' +
-            "expanded. Satoshi's dream evolvedinto the Interchain Realms-a world \n" +
-            'of countless projects coexisting. Each public chain is like acontinent, birthing \n' +
-            'unique ecosystems, economic systems, and belief cultures:'}
-          <div className={'my-2'} />
-          {'・Solana, where speed and frenzy reign,\n' +
-            '・Ethereum, master of structure and order,\n' +
-            '・Base, the cutting-edge frontier of tech...\n' +
-            'For ages, two opposing primal forces have ruled these realms:\n' +
-            'The Bullof Fire s.The Bear of Tide\n' +
-            'But now...Chaos stirs once more.\n' +
-            'Legends speak of a Cryptowalker-one,who wields the "Eye of Asset Control"-destined to lead a"Strategy War" that will alter the fate of the chains.\n' +
-            'And you... are the Chosen One.\n' +
-            'Follow in their footsteps. Awaken the slumbering Chainspirits. Battle through trading labyrinths. Risevictorious in the Grand Tournament. And ultimately...tame the Bull and Bear, breaking through the Gates of Destiny.'}
+          Since the dawn of Bitcoin, the civilization of blockchain has rapidly expanded. Satoshi's
+          dream evolved into the Interchain Realms - a world of countless projects coexisting.
+          <div className={styles.lineDivider} />
+          Each public chain is like a continent, birthing unique ecosystems, economic systems, and
+          belief cultures:
+          <div className={styles.lineDivider} />
+          ・Solana, where speed and frenzy reign,
+          <div className={styles.lineDivider} />
+          ・Ethereum, master of structure and order,
+          <div className={styles.lineDivider} />
+          ・Base, the cutting-edge frontier of tech...
+          <div className={styles.lineDivider} />
+          For ages, two opposing primal forces have ruled these realms: The Bull of Fire vs. The
+          Bear of Tide.
+          <div className={styles.lineDivider} />
+          But now...Chaos stirs once more.
+          <div className={styles.lineDivider} />
+          Legends speak of a Cryptowalker - one who wields the "Eye of Asset Control"-destined to
+          lead a"Strategy War" that will alter the fate of the chains.
+          <div className={styles.lineDivider} />
+          And you... are the Chosen One.
+          <div className={styles.lineDivider} />
+          Follow in their footsteps. Awaken the slumbering Chainspirits. Battle through trading
+          labyrinths. Risevictorious in the Grand Tournament. And ultimately...tame the Bull and
+          Bear, breaking through the Gates of Destiny.
         </Text>
       </div>
       <button className={styles.skipButton} onClick={handleStartButtonClick}>

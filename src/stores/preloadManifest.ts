@@ -1,5 +1,6 @@
 import openPackVideo from '../assets/video/open_pack.webm'
 import bgm from '../assets/audio/background_music.mp3'
+import introductionSound from '../assets/audio/introduction.mp3'
 import drawCardSound from '../assets/audio/draw_card_final.mp3'
 import flipCardSound from '../assets/audio/flip_card_final.mp3'
 const avatars = import.meta.glob('../assets/images/avatars/*.png', {
@@ -52,6 +53,10 @@ export default [
   {
     id: 'flipCardSound',
     src: flipCardSound,
+  },
+  {
+    id: 'introductionSound',
+    src: introductionSound,
   },
   ...Object.keys(avatars).map((key) => ({
     src: avatars[key],
