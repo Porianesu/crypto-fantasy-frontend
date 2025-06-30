@@ -44,7 +44,6 @@ const IntroductionPage: React.FC = () => {
   }
 
   const handleTextContainerClick = () => {
-    stopIntroductionSound()
     textRef.current?.revertSplitText()
   }
 
