@@ -1,4 +1,6 @@
 import React, {
+  type Dispatch,
+  type SetStateAction,
   Suspense,
   useCallback,
   useEffect,
@@ -33,6 +35,7 @@ interface ITournamentPageCardsFormationWrapperProps {
       crystal: number
     }>
   }
+  setIsEditing: Dispatch<SetStateAction<boolean>>
 }
 
 const Rarity_Label_Map = {
@@ -45,7 +48,7 @@ const Rarity_Label_Map = {
 const TournamentPageCardsFormationWrapper = React.forwardRef<
   ITournamentPageCardsFormationHandle,
   ITournamentPageCardsFormationWrapperProps
->(({ currentPrizePool, rules }, ref) => {
+>(({ currentPrizePool, rules, setIsEditing }, ref) => {
   const {
     preloadStore: { preloadQueue },
   } = useMobxStore()
@@ -80,6 +83,7 @@ const TournamentPageCardsFormationWrapper = React.forwardRef<
       cardData={cardData}
       currentPrizePool={currentPrizePool}
       rules={rules}
+      setIsEditing={setIsEditing}
     ></TournamentPageCardsFormation>
   )
 })
@@ -87,6 +91,7 @@ const TournamentPageCardsFormationWrapper = React.forwardRef<
 interface ITournamentPageCardsFormationProps {
   cardData: Array<ICardData>
   currentPrizePool: IPrizePool
+  setIsEditing: Dispatch<SetStateAction<boolean>>
   rules: {
     totalCrystal: number
     rarity: Array<{
@@ -99,7 +104,7 @@ interface ITournamentPageCardsFormationProps {
 const TournamentPageCardsFormation = React.forwardRef<
   ITournamentPageCardsFormationHandle,
   ITournamentPageCardsFormationProps
->(({ currentPrizePool, rules, cardData }, ref) => {
+>(({ currentPrizePool, rules, cardData, setIsEditing }, ref) => {
   const [tempCardsFormation, setTempCardsFormation] = useState<Array<number>>([])
   const [cardsFormationModalOpen, setCardsFormationModalOpen] = useState(false)
   const [cardsDeckPowerRate, setCardsDeckPowerRate] = useState(1)
@@ -192,11 +197,7 @@ const TournamentPageCardsFormation = React.forwardRef<
   )
 
   const handleCardClick = () => {
-    if (
-      currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING ||
-      currentPrizePool.user_participated
-    )
-      return
+    if (currentPrizePool.status !== PRIZE_POOL_STATUS.UPCOMING) return
     setCardsFormationModalOpen(true)
   }
 
@@ -206,6 +207,9 @@ const TournamentPageCardsFormation = React.forwardRef<
       return toast.warning('Not enough energy slots remaining.')
     }
     setTempCardsFormation(newCards)
+    if (currentPrizePool.user_participated) {
+      setIsEditing(true)
+    }
   }
 
   const renderCard = (card: ICardData | undefined, key: React.Key) =>

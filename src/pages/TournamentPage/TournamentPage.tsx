@@ -44,6 +44,7 @@ const TournamentPage: React.FC = () => {
   const [currentPrizePool, setCurrentPrizePool] = useState<IPrizePool | undefined>(undefined)
   const queryClient = useQueryClient()
   const cardsFormationRef = useRef<ITournamentPageCardsFormationHandle>(null)
+  const [isEditing, setIsEditing] = useState(false)
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
     queryKey: ['prizePools'],
@@ -55,9 +56,9 @@ const TournamentPage: React.FC = () => {
     setCurrentPrizePool(prizePools.find((p) => p.status === PRIZE_POOL_STATUS.PROCESSING))
   }, [prizePools?.length])
 
-  // joined状态由当前奖池数据决定
-  const isJoined = !!currentPrizePool?.user_participated
-  const canUserJoin = !isJoined && currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING
+  useEffect(() => {
+    setIsEditing(false)
+  }, [currentPrizePool?.id])
 
   useEffect(() => {
     if (!currentPrizePool) return
@@ -114,12 +115,51 @@ const TournamentPage: React.FC = () => {
         user_deck_power: Math.floor(Math.random() * (990 - 225 + 1)) + 225, // 随机生成一个225-990之间的数0
       }
       setCurrentPrizePool(newPool)
+      setIsEditing(false)
       queryClient.setQueryData(['prizePools'], (old: IPrizePool[] | undefined) => {
         if (!old) return old
         return old.map((pool) => (pool.id === newPool.id ? newPool : pool))
       })
       toast.success('Joined successfully!')
     }
+  }
+
+  const renderJoinButton = () => {
+    if (!currentPrizePool) return null
+    const isJoined = currentPrizePool.user_participated
+    const isUpcoming = currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING
+    const isButtonActive = isEditing || (!isJoined && isUpcoming)
+
+    let buttonContent: React.ReactNode
+    if (isUpcoming) {
+      if (isEditing) {
+        buttonContent = 'Edit'
+      } else if (isJoined) {
+        buttonContent = 'Joined'
+      } else {
+        buttonContent = (
+          <>
+            {'Join 100'}
+            <div className={styles.joinBtnIcon}></div>
+          </>
+        )
+      }
+    } else {
+      buttonContent = isJoined ? 'Joined' : 'Completed'
+    }
+
+    return (
+      <button
+        className={classNames(styles.joinBtn, {
+          [styles.joinedBtn]: !isButtonActive,
+          button: isButtonActive,
+        })}
+        disabled={!isButtonActive}
+        onClick={isButtonActive ? handleJoinButtonClick : undefined}
+      >
+        {buttonContent}
+      </button>
+    )
   }
 
   return (
@@ -220,25 +260,7 @@ const TournamentPage: React.FC = () => {
                     <div className={styles.prizeAmountIcon}></div>
                   </div>
                 </div>
-                <button
-                  className={classNames(styles.joinBtn, {
-                    [styles.joinedBtn]: !canUserJoin,
-                    button: canUserJoin,
-                  })}
-                  disabled={!canUserJoin}
-                  onClick={!canUserJoin ? undefined : handleJoinButtonClick}
-                >
-                  {isJoined ? (
-                    'Joined'
-                  ) : currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
-                    <>
-                      {'Join 100'}
-                      <div className={styles.joinBtnIcon}></div>
-                    </>
-                  ) : (
-                    'Completed'
-                  )}
-                </button>
+                {renderJoinButton()}
               </div>
             </div>
             {/* 右侧出战卡组信息区 */}
@@ -246,6 +268,7 @@ const TournamentPage: React.FC = () => {
               ref={cardsFormationRef}
               currentPrizePool={currentPrizePool}
               rules={FormationRules}
+              setIsEditing={setIsEditing}
             />
           </>
         )}
