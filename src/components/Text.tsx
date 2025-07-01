@@ -45,6 +45,7 @@ const Text = React.forwardRef<ITextHandle, PropsWithChildren<ITextProps>>(
           wordsClass: 'word',
           linesClass: 'line',
           reduceWhiteSpace: false,
+          ...splitTextVars,
           onSplit: (self) => {
             // return gsap.from(self.words, {
             //   opacity: 0,
@@ -71,8 +72,11 @@ const Text = React.forwardRef<ITextHandle, PropsWithChildren<ITextProps>>(
               ease: 'power1.out',
               ...animationVars,
             })
+            if (splitTextVars?.onSplit) {
+              splitTextVars.onSplit(self)
+            }
+            return tweenRef.current
           },
-          ...splitTextVars,
         })
       },
       {

@@ -17,21 +17,27 @@ const IntroductionPage: React.FC = () => {
   const textRef = useRef<ITextHandle>(null)
   const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const introductionSound = audioInstanceMap.get(AudioInstanceId.IntroductionSound)
+  const playIntroductionSoundTimer = useRef<number>(null)
 
   const handleStartButtonClick = () => {
     navigate(getHomePath())
   }
 
   const playIntroductionSound = () => {
-    if (bgmSound) {
-      bgmSound.volume = 0.2
+    if (playIntroductionSoundTimer.current) {
+      clearTimeout(playIntroductionSoundTimer.current)
     }
-    if (introductionSound) {
-      introductionSound.play({
-        loop: 0,
-        volume: 1,
-      })
-    }
+    playIntroductionSoundTimer.current = setTimeout(() => {
+      if (bgmSound) {
+        bgmSound.volume = 0.2
+      }
+      if (introductionSound) {
+        introductionSound.play({
+          loop: 0,
+          volume: 1,
+        })
+      }
+    }, 300)
   }
 
   const stopIntroductionSound = () => {
@@ -51,7 +57,6 @@ const IntroductionPage: React.FC = () => {
     setStorageUserInfo({
       hasAlreadyReadGuide: true,
     })
-    playIntroductionSound()
     return () => {
       stopIntroductionSound()
     }
@@ -65,10 +70,13 @@ const IntroductionPage: React.FC = () => {
           className={classNames(styles.introduction)}
           splitTextVars={{
             smartWrap: false,
+            onSplit: () => {
+              playIntroductionSound()
+            },
           }}
           animationVars={{
-            duration: 0.05,
-            stagger: 0.07,
+            duration: 0.04,
+            stagger: 0.072,
           }}
         >
           Since the dawn of Bitcoin, the civilization of blockchain has rapidly expanded. Satoshi's
@@ -83,8 +91,9 @@ const IntroductionPage: React.FC = () => {
           <div className={styles.lineDivider} />
           ・Base, the cutting-edge frontier of tech...
           <div className={styles.lineDivider} />
-          For ages, two opposing primal forces have ruled these realms: The Bull of Fire vs. The
-          Bear of Tide.
+          For ages, two opposing primal forces have ruled these realms:
+          <div className={styles.lineDivider} />
+          The Bull of Fire vs. The Bear of Tide.
           <div className={styles.lineDivider} />
           But now...Chaos stirs once more.
           <div className={styles.lineDivider} />
