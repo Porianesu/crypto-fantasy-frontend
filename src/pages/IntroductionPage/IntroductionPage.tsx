@@ -28,7 +28,7 @@ const IntroductionPage: React.FC = () => {
     }
     if (introductionSound) {
       introductionSound.play({
-        loop: 1,
+        loop: 0,
         volume: 1,
       })
     }
