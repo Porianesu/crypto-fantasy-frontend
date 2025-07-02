@@ -46,19 +46,19 @@ function HomePage() {
     {
       key: 'fusion',
       icon: fusionIcon,
-      className: 'w-[173px] h-[177px]',
+      className: 'w-43 h-44',
       onClick: comingSoon,
     },
     {
       key: 'gallery',
       icon: galleryIcon,
-      className: 'w-[173px] h-[175px]',
+      className: 'w-43 h-44',
       onClick: () => navigate(getGalleryPath()),
     },
     {
       key: 'bag',
       icon: bagIcon,
-      className: 'w-[174px] h-[174px]',
+      className: 'w-43.5 h-43.5',
       onClick: () =>
         changeCardsBagModalData({
           visible: true,
@@ -68,19 +68,19 @@ function HomePage() {
     {
       key: 'battle',
       icon: battleIcon,
-      className: 'w-[173px] h-[164px]',
+      className: 'w-43 h-41',
       onClick: () => changeBattleModalVisible(true),
     },
     {
       key: 'reward',
       icon: rewardIcon,
-      className: 'w-[177px] h-[165px]',
+      className: 'w-44 h-41',
       onClick: comingSoon,
     },
     {
       key: 'shop',
       icon: shopIcon,
-      className: 'w-[173px] h-[175px]',
+      className: 'w-43 h-44',
       onClick: comingSoon,
     },
   ]
