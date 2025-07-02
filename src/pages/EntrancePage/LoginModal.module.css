@@ -5,7 +5,7 @@
 }
 
 .modalContent {
-    @apply w-[703px] h-[616px] flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-[26px] px-[100px] leading-[40px] focus-visible:outline-none;
+    @apply w-176 h-154 flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-6.5 px-25 leading-10 focus-visible:outline-none;
     @apply bg-[url('/src/assets/images/entrance_page/login_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .modalTitle {
-    @apply shrink-0 text-[42px] font-normal text-center mb-[62px];
+    @apply shrink-0 text-[42px] font-normal text-center mb-15.5;
     background: linear-gradient(to bottom, #FEB109, #F2C661);
     color: transparent;
     background-clip: text;
@@ -31,11 +31,11 @@
 }
 
 .input {
-    @apply text-[24px] font-normal text-white bg-[#5C4010] self-stretch rounded-2xl h-[72px] px-5 focus-visible:outline-none placeholder-[#8F703D];
+    @apply text-[24px] font-normal text-white bg-[#5C4010] self-stretch rounded-2xl h-18 px-5 focus-visible:outline-none placeholder-[#8F703D];
 }
 
 .submitButton {
-    @apply self-center shrink-0 cursor-pointer flex items-center justify-center text-white text-[35px] font-normal leading-[40px] mb-4 active:scale-95 transition;
-    @apply w-[406px] h-[100px] ;
+    @apply self-center shrink-0 cursor-pointer flex items-center justify-center text-white text-[35px] font-normal leading-10 mb-4 active:scale-95 transition;
+    @apply w-101.5 h-25 ;
     @apply bg-[url('/src/assets/images/entrance_page/login_modal_confirm_button_background.png')] bg-contain bg-center bg-no-repeat;
 }

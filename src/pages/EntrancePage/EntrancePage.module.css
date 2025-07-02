@@ -16,7 +16,7 @@
     @apply bg-[url('/src/assets/images/entrance_page/background.png')] bg-cover bg-center bg-no-repeat;
 
     .title {
-        @apply w-[760px] h-[384px] mt-[106px];
+        @apply w-190 h-96 mt-26.5;
         @apply bg-[url('/src/assets/images/entrance_page/title.png')] bg-contain bg-center bg-no-repeat;
     }
 
@@ -24,7 +24,7 @@
         @apply absolute bottom-20 flex items-center justify-center;
 
         .progressBarWrapper {
-            @apply w-[800px] h-[35px] z-1 absolute p-[3px] ;
+            @apply w-200 h-9 z-1 absolute p-1 ;
             @apply bg-[url('/src/assets/images/entrance_page/progress_bar_background.png')] bg-cover bg-center bg-no-repeat;
 
             .progressBarContainer {
@@ -39,7 +39,7 @@
     }
 
     .startButton {
-        @apply w-[457px] h-5 invisible opacity-0 cursor-pointer;
+        @apply w-114.5 h-5 invisible opacity-0 cursor-pointer;
         @apply bg-[url('/src/assets/images/entrance_page/start_button.png')] bg-contain bg-center bg-no-repeat;
     }
 }

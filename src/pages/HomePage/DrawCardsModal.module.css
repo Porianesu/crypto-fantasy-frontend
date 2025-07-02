@@ -21,11 +21,11 @@
     transform: translate(-50%, -50%);
 
     .description {
-        @apply text-[#FFFFE4] text-[40px] font-normal mb-[146px];
+        @apply text-[#FFFFE4] text-[40px] font-normal mb-36.5;
     }
 
     .closeBtn {
-        @apply w-[653px] h-[40px] cursor-pointer active:scale-95 transition-transform;
+        @apply w-163.5 h-10 cursor-pointer active:scale-95 transition-transform;
         @apply bg-[url('/src/assets/images/home_page/draw_cards_modal_close_button.png')] bg-contain bg-top-left bg-no-repeat;
         animation: closeBtnBreath 1.8s ease-in-out infinite;
     }
@@ -44,9 +44,9 @@
 }
 
 .cardWrapper {
-    @apply flex flex-col items-stretch perspective-[1000px] focus-visible:outline-none mb-[96px];
+    @apply flex flex-col items-stretch perspective-distant focus-visible:outline-none mb-24;
 }
 
 .cardContainer {
-    @apply flex items-center justify-center perspective-[1000px] gap-x-8;
+    @apply flex items-center justify-center perspective-distant gap-x-8;
 }

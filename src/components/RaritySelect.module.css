@@ -4,19 +4,19 @@
     @apply shrink-0 relative flex items-stretch;
 
     .raritySelectIcon {
-        @apply absolute right-[22px] top-1/2 transform -translate-y-1/2 w-[30px] h-[20px];
+        @apply absolute right-5.5 top-1/2 transform -translate-y-1/2 w-7.5 h-5;
         @apply bg-[url('/src/assets/images/home_page/cards_bag_modal/down_arrow.png')] bg-contain bg-top-left bg-no-repeat;
     }
 
     .raritySelect {
-        @apply w-[232px] rounded-2xl border-2 border-[#54382F] bg-[#251812] text-[#62463B] px-[30px] focus-visible:outline-none flex items-center justify-items-start;
+        @apply w-58 rounded-2xl border-2 border-[#54382F] bg-[#251812] text-[#62463B] px-7.5 focus-visible:outline-none flex items-center justify-items-start;
         appearance: none;
     }
 }
 
 
 .selectContent {
-    @apply z-50 bg-[#251812] rounded-2xl border-2 border-[#54382F] shadow-lg p-2 min-w-[232px];
+    @apply z-50 bg-[#251812] rounded-2xl border-2 border-[#54382F] shadow-lg p-2 min-w-58;
 
     .selectOption {
         @apply px-4 py-2 cursor-pointer hover:bg-[#54382F] rounded-xl text-[#62463B] text-[18px] leading-7 select-none;

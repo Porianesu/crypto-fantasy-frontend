@@ -5,7 +5,7 @@
     @apply bg-[url('/src/assets/images/gallery_page/background.png')] bg-cover bg-top-left bg-no-repeat;
 
     .pageHeader {
-        @apply shrink-0 flex items-center justify-between pl-[70px] pr-[74px] pt-[20px] pb-[30px];
+        @apply shrink-0 flex items-center justify-between pl-17.5 pr-18.5 pt-5 pb-7.5;
 
         .backButton {
             @apply cursor-pointer size-16 active:scale-95 transition;
@@ -22,8 +22,8 @@
         }
 
         .searchBox {
-            @apply text-white text-[24px] font-normal leading-[40px] ;
-            @apply w-[502px] h-[72px] flex items-center bg-[#251812] rounded-2xl px-4 border-2 border-[#54382F];
+            @apply text-white text-[24px] font-normal leading-10 ;
+            @apply w-125.5 h-18 flex items-center bg-[#251812] rounded-2xl px-4 border-2 border-[#54382F];
 
             .searchIcon {
                 @apply size-8 mr-4;
@@ -37,21 +37,21 @@
     }
 
     .pageBody {
-        @apply grow shrink basis-0 overflow-hidden flex items-stretch pb-10 pr-[74px];
+        @apply grow shrink basis-0 overflow-hidden flex items-stretch pb-10 pr-18.5;
 
         .toolContainer {
-            @apply shrink-0 flex flex-col items-end pl-[70px] pt-3 gap-y-5 text-[#C8C3B7] text-[24px] font-normal leading-[40px];
+            @apply shrink-0 flex flex-col items-end pl-17.5 pt-3 gap-y-5 text-[#C8C3B7] text-[24px] font-normal leading-10;
 
             & > div {
                 @apply cursor-pointer flex items-center justify-center rounded-md bg-[#47413C];
             }
 
             .season {
-                @apply w-[226px] h-[102px];
+                @apply w-56.5 h-25.5;
             }
 
             .raritySelect {
-                @apply w-[204px] h-[80px];
+                @apply w-51 h-20;
             }
 
             .raritySelected {
@@ -61,7 +61,7 @@
         }
 
         .cardsPart {
-            @apply grow shrink basis-0 flex flex-col items-stretch overflow-y-auto overflow-x-hidden mr-[34px];
+            @apply grow shrink basis-0 flex flex-col items-stretch overflow-y-auto overflow-x-hidden mr-8.5;
             /* 自定义滚动条样式 */
             scrollbar-width: thin;
             scrollbar-color: #7D6F53 transparent;
@@ -87,25 +87,25 @@
             }
 
             .loadingWrapper {
-                @apply h-[500px] flex items-center justify-center text-lg text-yellow-600;
+                @apply h-125 flex items-center justify-center text-lg text-yellow-600;
             }
 
             .cardListContainer {
-                @apply grid grid-cols-3 gap-x-16 gap-y-11 pt-11 pb-4 pl-[68px] pr-[68px];
+                @apply grid grid-cols-3 gap-x-16 gap-y-11 pt-11 pb-4 pl-17 pr-17;
             }
         }
 
         .detailPartWrapper {
-            @apply shrink-0 flex flex-col items-stretch transition-all duration-300 w-[500px] overflow-hidden;
+            @apply shrink-0 flex flex-col items-stretch transition-all duration-300 w-125 overflow-hidden;
             @apply bg-[url('/src/assets/images/gallery_page/detail_background.png')] bg-cover bg-top-left bg-no-repeat;
 
             .detailTitle {
-                @apply self-center shrink-0 w-[400px] h-[55px] text-[#64401E] text-[32px] font-normal leading-[40px] flex items-center justify-center mb-3;
+                @apply self-center shrink-0 w-100 h-14 text-[#64401E] text-[32px] font-normal leading-10 flex items-center justify-center mb-3;
                 @apply bg-[url('/src/assets/images/gallery_page/detail_title_background.png')] bg-contain bg-top-left bg-no-repeat;
             }
 
             .detailImagePart {
-                @apply self-center shrink-0 w-[348px] h-[305px] mb-2 bg-gray-500 rounded-2xl object-cover object-left-top;
+                @apply self-center shrink-0 w-87 h-76.5 mb-2 bg-gray-500 rounded-2xl object-cover object-left-top;
             }
 
             .detailBottomPart {
@@ -117,7 +117,7 @@
 
 .detailBottomPart {
     .detailUndetectedPart {
-        @apply grow shrink basis-0 flex flex-col items-center text-[#64401E] text-[26px] leading-10 font-normal px-[92px] text-center pt-11;
+        @apply grow shrink basis-0 flex flex-col items-center text-[#64401E] text-[26px] leading-10 font-normal px-23 text-center pt-11;
     }
     .detailName {
         @apply px-10 shrink-0 text-[#292522] text-[22px] font-normal leading-normal text-center -mb-1;
@@ -131,7 +131,7 @@
         @apply flex items-start;
 
         & > div:first-child {
-            @apply w-[122px] text-[#AD613F] shrink;
+            @apply w-30.5 text-[#AD613F] shrink;
         }
 
         & > div:last-child {
@@ -141,13 +141,13 @@
 }
 
 .scorePart {
-    @apply h-[153px] py-[18px] gap-y-1 shrink-0 self-stretch mx-8 text-[22px] font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-2 border-[#64401E];
+    @apply h-38.5 py-4.5 gap-y-1 shrink-0 self-stretch mx-8 text-[22px] font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-2 border-[#64401E];
 
     & > div {
         @apply flex items-center;
 
         & > div:first-child {
-            @apply w-[122px] text-[#AD613F] flex-1 flex items-center justify-end;
+            @apply w-30.5 text-[#AD613F] flex-1 flex items-center justify-end;
         }
 
         & > div:last-child {
@@ -157,7 +157,7 @@
 }
 
 .viewDetailButton {
-    @apply shrink-0 cursor-pointer w-[348px] h-[68px] flex items-center justify-center text-[27px] font-normal leading-[40px] mb-4 active:scale-95 transition;
+    @apply shrink-0 cursor-pointer w-87 h-17 flex items-center justify-center text-[27px] font-normal leading-10 mb-4 active:scale-95 transition;
     @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background.png')] bg-contain bg-top-left bg-no-repeat;
 
     .viewDetailText {
@@ -170,7 +170,7 @@
 }
 
 .viewDetailButtonDisabled {
-    @apply shrink-0 cursor-not-allowed w-[348px] h-[68px] flex items-center justify-center text-[27px] font-normal leading-[40px] mb-4 active:scale-95 transition;
+    @apply shrink-0 cursor-not-allowed w-87 h-17 flex items-center justify-center text-[27px] font-normal leading-10 mb-4 active:scale-95 transition;
     @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background_disabled.png')] bg-contain bg-top-left bg-no-repeat;
 
 
