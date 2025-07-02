@@ -55,7 +55,7 @@
             }
 
             .raritySelected {
-                @apply border-r-[8px] border-white text-[#030201];
+                @apply border-r-8 border-white text-[#030201];
                 background: linear-gradient(to right, #F79F00, #FFC512);
             }
         }
@@ -141,7 +141,7 @@
 }
 
 .scorePart {
-    @apply h-[153px] py-[18px] gap-y-1 shrink-0 self-stretch mx-8 text-[22px] font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-[2px] border-[#64401E];
+    @apply h-[153px] py-[18px] gap-y-1 shrink-0 self-stretch mx-8 text-[22px] font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-2 border-[#64401E];
 
     & > div {
         @apply flex items-center;
