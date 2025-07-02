@@ -223,6 +223,7 @@ const TournamentPageCardsFormation = React.forwardRef<
       ></StaticCard>
     ) : (
       <button
+        key={key}
         className={classNames(
           styles.formationCard,
           styles[`formationCard${key}`],

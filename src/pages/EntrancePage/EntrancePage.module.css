@@ -25,7 +25,7 @@
 
         .progressBarWrapper {
             @apply w-200 h-9 z-1 absolute p-1 ;
-            @apply bg-[url('/src/assets/images/entrance_page/progress_bar_background.png')] bg-cover bg-center bg-no-repeat;
+            @apply bg-[url('/src/assets/images/entrance_page/progress_bar_background.png')] bg-size-[100%_100%] bg-center bg-no-repeat;
 
             .progressBarContainer {
                 @apply w-full h-full overflow-hidden rounded-2xl;

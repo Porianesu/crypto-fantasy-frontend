@@ -11,31 +11,49 @@ export default class SystemStore {
 
   resizeDebounceTimer = 0
 
-  screenWidth = window?.innerWidth || DESIGN_WIDTH
+  ratioContainerWidth = window?.innerWidth || DESIGN_WIDTH
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
       rootStoreRef: observable,
       resetStore: action,
-      screenWidth: observable,
-      handleWindowResize: action,
+      ratioContainerWidth: observable,
+      scaleScreen: action,
       aspectRatio: computed,
     })
     window.addEventListener('resize', this.handleWindowResize)
-    this.scaleFontSize(this.screenWidth)
   }
 
-  scaleFontSize = (targetWidth: number) => {
-    const resultFontSize = Math.min(
-      DESIGN_FONT_SIZE,
-      new BigNumber(targetWidth)
-        .dividedBy(DESIGN_WIDTH)
-        .times(DESIGN_FONT_SIZE)
-        .decimalPlaces(2)
-        .toNumber(),
-    )
-    window.document.documentElement.style.fontSize = `${resultFontSize}px`
+  scaleScreen = () => {
+    const container = document.getElementById('ratio-container')
+    if (container) {
+      const ww = window.innerWidth
+      const wh = window.innerHeight
+      let targetWidth: number
+      let targetHeight = wh
+      if (ww / wh > 16 / 9) {
+        // 屏幕更宽
+        targetWidth = (wh * 16) / 9
+        container.style.width = `${targetWidth}px`
+        container.style.height = `100vh`
+      } else {
+        // 屏幕更高
+        targetWidth = ww
+        targetHeight = (ww * 9) / 16
+        container.style.width = `100vw`
+        container.style.height = `${targetHeight}px`
+      }
+      const resultFontSize = Math.min(
+        DESIGN_FONT_SIZE,
+        new BigNumber(targetWidth)
+          .dividedBy(DESIGN_WIDTH)
+          .times(DESIGN_FONT_SIZE)
+          .decimalPlaces(2)
+          .toNumber(),
+      )
+      window.document.documentElement.style.fontSize = `${resultFontSize}px`
+    }
   }
 
   handleWindowResize = (ev: UIEvent) => {
@@ -44,14 +62,12 @@ export default class SystemStore {
     // 节流：高频时每600ms执行一次
     if (now - this.resizeThrottleTimer > 200) {
       this.resizeThrottleTimer = now
-      this.screenWidth = (ev.currentTarget as Window).innerWidth || DESIGN_WIDTH
-      this.scaleFontSize(this.screenWidth)
+      this.scaleScreen()
     }
     // 防抖：最后一次一定执行
     if (this.resizeDebounceTimer) clearTimeout(this.resizeDebounceTimer)
     this.resizeDebounceTimer = window.setTimeout(() => {
-      this.screenWidth = (ev.currentTarget as Window).innerWidth || DESIGN_WIDTH
-      this.scaleFontSize(this.screenWidth)
+      this.scaleScreen()
     }, 500)
   }
 
@@ -61,6 +77,9 @@ export default class SystemStore {
   }
 
   get aspectRatio() {
-    return new BigNumber(this.screenWidth).dividedBy(DESIGN_WIDTH).decimalPlaces(2).toNumber()
+    return new BigNumber(this.ratioContainerWidth)
+      .dividedBy(DESIGN_WIDTH)
+      .decimalPlaces(2)
+      .toNumber()
   }
 }
