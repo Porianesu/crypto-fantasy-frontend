@@ -119,21 +119,30 @@ export default class StoresStore {
         'cardsData',
       ) as Array<ICardData>
       if (!cardsData) reject(new Error('未找到卡片数据'))
-      const resultCards = Array.from({ length: 5 }, () => {
-        const cardTypeIndex = Math.floor(Math.random() * (cardsData.length / 4)) * 4
+      // 先生成所有可用的 cardTypeIndex
+      const cardTypeCount = cardsData.length / 4
+      const availableIndexes = Array.from({ length: cardTypeCount }, (_, i) => i)
+      // 随机抽取5个不重复的 cardTypeIndex
+      for (let i = availableIndexes.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[availableIndexes[i], availableIndexes[j]] = [availableIndexes[j], availableIndexes[i]]
+      }
+      const selectedIndexes = availableIndexes.slice(0, 5)
+      const resultCards = selectedIndexes.map((cardTypeIndex) => {
+        const baseIndex = cardTypeIndex * 4
         const cardRaritySeed = Math.random()
         if (cardRaritySeed >= 0.995) {
           // 0.5%概率抽到SSR
-          return cardsData[cardTypeIndex + 3]
+          return cardsData[baseIndex + 3]
         } else if (cardRaritySeed >= 0.95) {
           // 4.5%概率抽到SR
-          return cardsData[cardTypeIndex + 2]
+          return cardsData[baseIndex + 2]
         } else if (cardRaritySeed >= 0.75) {
           // 20%概率抽到R
-          return cardsData[cardTypeIndex + 1]
+          return cardsData[baseIndex + 1]
         } else {
           // 75%概率抽到N
-          return cardsData[cardTypeIndex]
+          return cardsData[baseIndex]
         }
       })
       const preloadImageList = resultCards.reduce<Array<{ id: string; src: string }>>(
