@@ -5,12 +5,12 @@
 }
 
 .contentContainer {
-    @apply transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 absolute flex flex-col items-center justify-start pt-[204px];
-    @apply w-[1534px] h-[866px];
+    @apply transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 absolute flex flex-col items-center justify-start pt-51;
+    @apply w-383.5 h-216.5;
     @apply bg-[url(/src/assets/images/home_page/battle_modal/background.png)] bg-contain bg-center bg-no-repeat;
 
     .title {
-        @apply absolute top-[18px] text-[90px] font-normal text-[#FFAF00];
+        @apply absolute top-4.5 text-7xl font-normal text-[#FFAF00];
 
         text-shadow: -2px -2px 0 #4C3110,
         2px -2px 0 #4C3110,
@@ -37,11 +37,11 @@
     @apply flex flex-col items-center;
 
     .blockContent {
-        @apply flex flex-col items-center w-[374px] h-[488px] mb-5 pt-20 relative;
+        @apply flex flex-col items-center w-93.5 h-122 mb-5 pt-20 relative;
         @apply bg-[url(/src/assets/images/home_page/battle_modal/block_background.png)] bg-contain bg-center bg-no-repeat;
 
         .blockTitle {
-            @apply text-[32px] leading-10 font-normal text-[#FFAF00] mb-[200px];
+            @apply text-3xl leading-10 font-normal text-[#FFAF00] mb-50;
 
             text-shadow: -2px -2px 0 #4C3110,
             2px -2px 0 #4C3110,
@@ -54,17 +54,17 @@
         }
 
         .blockImage {
-            @apply size-[250px] absolute top-[96px] z-0;
+            @apply size-62.5 absolute top-24 z-0;
             @apply bg-contain bg-center bg-no-repeat;
         }
 
         .blockDesc {
-            @apply px-11 text-[#4C3110] text-[18px] leading-[22px] font-normal;
+            @apply px-11 text-[#4C3110] text-lg leading-5.5 font-normal;
         }
     }
 
     .blockBtn {
-        @apply w-[284px] h-[72px] flex items-center justify-center;
+        @apply w-71 h-18 flex items-center justify-center;
         @apply bg-[url(/src/assets/images/home_page/battle_modal/block_btn_background.png)] bg-contain bg-center bg-no-repeat;
 
         & > div {

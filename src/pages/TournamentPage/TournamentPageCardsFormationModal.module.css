@@ -35,20 +35,20 @@
 }
 
 .modalContent {
-    @apply h-[96vh] w-[800px] absolute bottom-0 left-0 focus-visible:outline-none flex flex-col items-stretch py-[44px];
+    @apply h-[96vh] w-200 absolute bottom-0 left-0 focus-visible:outline-none flex flex-col items-stretch py-11;
     @apply bg-[url('/src/assets/images/home_page/cards_formation_modal/background.png')] bg-top-left bg-no-repeat;
     background-size: 100% 100%;
 
     .closeBtn {
-        @apply cursor-pointer size-[108px] absolute -right-[36px] -top-[34px];
+        @apply cursor-pointer size-27 absolute -right-9 -top-8.5;
         @apply bg-[url('/src/assets/images/home_page/cards_bag_modal/close_icon.png')] bg-contain bg-top-left bg-no-repeat;
     }
 
     .headerPart {
-        @apply shrink-0 text-2xl h-[72px] px-[60px] flex items-stretch justify-between gap-x-4 mb-[18px];
+        @apply shrink-0 text-2xl h-18 px-15 flex items-stretch justify-between gap-x-4 mb-4.5;
 
         .searchBox {
-            @apply grow shrink basis-0 overflow-hidden flex items-center bg-[#251812] rounded-2xl px-4 border-[2px] border-[#54382F];
+            @apply grow shrink basis-0 overflow-hidden flex items-center bg-[#251812] rounded-2xl px-4 border-2 border-[#54382F];
 
             .searchIcon {
                 @apply size-8 mr-4;
@@ -91,7 +91,7 @@
 }
 
 .cardsGrid {
-    @apply grid grid-cols-3 gap-x-[34px] gap-y-[30px] pl-[68px] pr-[56px] py-[18px];
+    @apply grid grid-cols-3 gap-x-8.5 gap-y-7.5 pl-17 pr-14 py-4.5;
 
     .cardItem {
         @apply cursor-pointer relative flex flex-col items-center justify-center;

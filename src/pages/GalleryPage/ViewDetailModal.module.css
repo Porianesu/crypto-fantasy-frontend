@@ -5,16 +5,16 @@
 }
 
 .modalContent {
-    @apply w-[974px] h-[788px] flex flex-col items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-[56px] pl-[56px] pr-[66px] focus-visible:outline-none;
+    @apply w-243.5 h-197 flex flex-col items-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-14 pl-14 pr-16.5 focus-visible:outline-none;
     @apply bg-[url('/src/assets/images/gallery_page/view_detail_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
 
     .title {
-        @apply shrink-0 w-[470px] h-[64px] text-[#64401E] text-[36px] font-normal leading-[24px] flex items-center justify-center mb-[44px];
+        @apply shrink-0 w-117.5 h-16 text-[#64401E] text-4xl font-normal leading-6 flex items-center justify-center mb-11;
         @apply bg-[url('/src/assets/images/gallery_page/detail_title_background.png')] bg-cover bg-top-left bg-no-repeat;
     }
 
     .content {
-        @apply cursor-pointer self-stretch grow shrink basis-0 overflow-x-hidden overflow-y-auto text-[#64401E] text-[20px] font-normal leading-[24px];
+        @apply cursor-pointer self-stretch grow shrink basis-0 overflow-x-hidden overflow-y-auto text-[#64401E] text-xl font-normal leading-6;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
 
@@ -24,12 +24,12 @@
     }
 
     .line {
-        @apply self-stretch h-[6px] mb-[42px];
+        @apply self-stretch h-1.5 mb-10.5;
         @apply bg-[url('/src/assets/images/gallery_page/divide_line.png')] bg-cover bg-top-left bg-no-repeat;
     }
 
     .button {
-        @apply mb-[52px] shrink-0 cursor-pointer w-[348px] h-[68px] flex items-center justify-center text-[27px] font-normal leading-[40px] active:scale-95 transition;
+        @apply mb-13 shrink-0 cursor-pointer w-87 h-17 flex items-center justify-center text-2xl font-normal leading-10 active:scale-95 transition;
         @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background.png')] bg-contain bg-top-left bg-no-repeat;
 
         .buttonText {

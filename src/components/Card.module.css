@@ -3,7 +3,7 @@
 
 .card {
     @apply p-0 cursor-pointer will-change-transform shrink-0;
-    @apply w-[285px] h-[413px];
+    @apply w-71.5 h-103.5;
     transform-style: preserve-3d;
     transform-origin: center;
     position: relative;
@@ -46,72 +46,72 @@
         @apply absolute w-full h-full rounded-lg overflow-hidden z-[2];
 
         .cardNameWrapper {
-            @apply absolute h-[38px] flex items-center justify-center;
+            @apply absolute h-9.5 flex items-center justify-center;
         }
 
         .cardName {
-            @apply w-[160px] text-[#F3E838] text-2xl font-normal whitespace-pre overflow-hidden text-center;
+            @apply w-40 text-[#F3E838] text-2xl font-normal whitespace-pre overflow-hidden text-center;
         }
 
         .cardScore {
-            @apply absolute text-white text-[28px] font-black text-shadow-teal-400 italic text-center min-w-[30px] h-10;
+            @apply absolute text-white text-2xl font-black text-shadow-teal-400 italic text-center min-w-7.5 h-10;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
     }
 
     .cardContentRarity0 {
         .cardScorePosition {
-            @apply top-[56px] left-[14px];
+            @apply top-14 left-3.5;
         }
 
         .undetectedCardScorePosition {
-            @apply top-[58px] left-[14px];
+            @apply top-14.5 left-3.5;
         }
 
         .cardNameWrapper {
-            @apply top-[324px] left-[50px];
+            @apply top-81 left-12.5;
         }
     }
 
     .cardContentRarity1 {
         .cardScorePosition {
-            @apply top-[56px] left-[18px];
+            @apply top-14 left-4.5;
         }
 
         .undetectedCardScorePosition {
-            @apply top-[58px] left-[16px]
+            @apply top-14.5 left-4
         }
 
         .cardNameWrapper {
-            @apply top-[326px] left-[56px];
+            @apply top-81.5 left-14;
         }
     }
 
     .cardContentRarity2 {
         .cardScorePosition {
-            @apply top-[56px] left-[16px];
+            @apply top-14 left-4;
         }
 
         .undetectedCardScorePosition {
-            @apply top-[58px] left-[16px]
+            @apply top-14.5 left-4
         }
 
         .cardNameWrapper {
-            @apply top-[326px] left-[56px];
+            @apply top-81.5 left-14;
         }
     }
 
     .cardContentRarity3 {
         .cardScorePosition {
-            @apply top-[56px] left-[14px];
+            @apply top-14 left-3.5;
         }
 
         .undetectedCardScorePosition {
-            @apply top-[58px] left-[14px]
+            @apply top-14.5 left-3.5
         }
 
         .cardNameWrapper {
-            @apply top-[330px] left-[54px];
+            @apply top-82.5 left-13.5;
         }
     }
 

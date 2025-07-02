@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 .leaderboardWrapper {
-    @apply w-[413px] h-[558px] flex flex-col items-center pt-20 px-[22px] pb-[102px] relative;
+    @apply w-103.5 h-139.5 flex flex-col items-center pt-20 px-5.5 pb-25.5 relative;
     @apply bg-[url('/src/assets/images/home_page/leaderboard_background.png')] bg-contain bg-top-left bg-no-repeat;
 
     .leaderboardTitle {
-        @apply absolute left-1/2 top-5 -translate-x-1/2 text-white text-[23px] font-normal;
+        @apply absolute left-1/2 top-5 -translate-x-1/2 text-white text-xl font-normal;
     }
 
     .leaderboardContent {
-        @apply flex-1 w-full flex flex-col items-stretch justify-start overflow-y-auto pb-[14px] gap-y-[14px];
+        @apply flex-1 w-full flex flex-col items-stretch justify-start overflow-y-auto pb-3.5 gap-y-3.5;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
     }
@@ -24,7 +24,7 @@
         @apply bg-[url('/src/assets/images/home_page/leaderboard_item_background.png')] bg-contain bg-top-left bg-no-repeat;
 
         .leaderboardRankContainer {
-            @apply size-14 flex items-center justify-center text-[#2D1813] font-normal text-[42px] shrink-0;
+            @apply size-14 flex items-center justify-center text-[#2D1813] font-normal text-4xl shrink-0;
 
             .rankContent {
                 @apply w-14 h-9 bg-contain bg-top-left bg-no-repeat;
@@ -51,22 +51,22 @@
             }
 
             .leaderboardUserInfo {
-                @apply grow shrink basis-0 overflow-hidden flex flex-col justify-center text-[17px] font-normal z-0;
+                @apply grow shrink basis-0 overflow-hidden flex flex-col justify-center text-base font-normal z-0;
 
                 .leaderboardUserName {
-                    @apply text-white pl-[46px] whitespace-nowrap overflow-hidden text-ellipsis;
+                    @apply text-white pl-11.5 whitespace-nowrap overflow-hidden text-ellipsis;
                     background: linear-gradient(90deg, #888888 0%, transparent 100%);
                 }
 
                 .leaderboardUserScore {
-                    @apply text-[#774400] pl-[46px];
+                    @apply text-[#774400] pl-11.5;
                 }
             }
         }
     }
 
     .leaderboardCurrentUserBar {
-        @apply flex flex-row items-center justify-between w-[368px] h-20 z-[1] absolute bottom-2.5;
+        @apply flex flex-row items-center justify-between w-92 h-20 z-[1] absolute bottom-2.5;
         @apply bg-[url('/src/assets/images/home_page/leaderboard_current_user_background.png')] bg-contain bg-top-left bg-no-repeat;
     }
 

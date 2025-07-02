@@ -5,16 +5,16 @@
 }
 
 .modalContent {
-    @apply transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 absolute flex flex-col items-stretch focus-visible:outline-none pt-[88px] pr-[50px] pb-[40px];
-    @apply w-[1800px] h-[993px];
+    @apply transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 absolute flex flex-col items-stretch focus-visible:outline-none pt-22 pr-12.5 pb-10;
+    @apply w-450 h-248.5;
     @apply bg-[url('/src/assets/images/home_page/cards_bag_modal/background.png')] bg-cover bg-top-left bg-no-repeat;
 
     .title {
-        @apply text-[42px] text-[#E6C7A4] font-normal leading-[40px] absolute top-[20px] left-[220px];
+        @apply text-4xl text-[#E6C7A4] font-normal leading-10 absolute top-5 left-55;
     }
 
     .closeBtn {
-        @apply cursor-pointer size-[148px] absolute -right-[26px] top-[10px];
+        @apply cursor-pointer size-37 absolute -right-6.5 top-2.5;
         @apply bg-[url('/src/assets/images/common/close_icon.png')] bg-contain bg-top-left bg-no-repeat;
     }
 
@@ -22,10 +22,10 @@
         @apply grow shrink basis-0 overflow-hidden flex flex-row items-stretch;
 
         .sidebar {
-            @apply shrink-0 flex flex-col gap-4 items-center pt-[92px] w-[156px];
+            @apply shrink-0 flex flex-col gap-4 items-center pt-23 w-39;
 
             .sidebarBtn {
-                @apply w-full text-2xl leading-[40px] font-normal text-[#62463B] transition-colors duration-150 hover:bg-gray-200 hover:text-gray-800 disabled:opacity-60 disabled:cursor-not-allowed;
+                @apply w-full text-2xl leading-10 font-normal text-[#62463B] transition-colors duration-150 hover:bg-gray-200 hover:text-gray-800 disabled:opacity-60 disabled:cursor-not-allowed;
             }
 
             .active {
@@ -43,10 +43,10 @@
             @apply grow shrink basis-0 overflow-hidden flex flex-col items-stretch py-8 border border-white pr-5;
 
             .cardsHeader {
-                @apply shrink-0 flex items-stretch gap-4 h-[72px] text-[24px] leading-[40px] font-normal pl-11 pr-6;
+                @apply shrink-0 flex items-stretch gap-4 h-18 text-2xl leading-10 font-normal pl-11 pr-6;
 
                 .searchBox {
-                    @apply grow shrink basis-0 overflow-hidden flex items-center bg-[#251812] rounded-2xl px-4 border-[2px] border-[#54382F];
+                    @apply grow shrink basis-0 overflow-hidden flex items-center bg-[#251812] rounded-2xl px-4 border-2 border-[#54382F];
 
                     .searchIcon {
                         @apply size-8 mr-4;
@@ -61,11 +61,11 @@
                 .raritySelectWrapper {
                     @apply shrink-0 relative flex items-stretch;
                     .raritySelectIcon {
-                        @apply absolute right-[22px] top-1/2 transform -translate-y-1/2 w-[30px] h-[20px];
+                        @apply absolute right-5.5 top-1/2 transform -translate-y-1/2 w-7.5 h-5;
                         @apply bg-[url('/src/assets/images/home_page/cards_bag_modal/down_arrow.png')] bg-contain bg-top-left bg-no-repeat;
                     }
                     .raritySelect {
-                        @apply w-[354px] rounded-2xl border-[2px] border-[#54382F] bg-[#251812] text-[#62463B] px-[30px] focus-visible:outline-none;
+                        @apply w-88.5 rounded-2xl border-2 border-[#54382F] bg-[#251812] text-[#62463B] px-7.5 focus-visible:outline-none;
                         appearance: none;
                     }
                 }
@@ -98,7 +98,7 @@
                 }
 
                 .cardsGrid {
-                    @apply grid grid-cols-5 gap-x-[46px] gap-y-[50px] pt-9 pl-11 pr-6;
+                    @apply grid grid-cols-5 gap-x-11.5 gap-y-12.5 pt-9 pl-11 pr-6;
                 }
 
                 .cardItem {
@@ -106,7 +106,7 @@
                 }
 
                 .cardCount {
-                    @apply absolute left-1/2 -translate-x-1/2 -bottom-[50px]  text-white text-[32px] font-bold px-2 py-1 rounded-md pointer-events-none;
+                    @apply absolute left-1/2 -translate-x-1/2 -bottom-12.5  text-white text-3xl font-bold px-2 py-1 rounded-md pointer-events-none;
                 }
 
                 .selectBtn {
@@ -123,7 +123,7 @@
                 @apply absolute left-0 right-0 bottom-0 flex justify-center pb-4 z-10;
 
                 .confirmBtn {
-                    @apply shrink-0 cursor-pointer w-[348px] h-[68px] flex items-center justify-center text-[27px] font-normal leading-[40px] mb-4 active:scale-95 transition;
+                    @apply shrink-0 cursor-pointer w-87 h-17 flex items-center justify-center text-2xl font-normal leading-10 mb-4 active:scale-95 transition;
                     @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background.png')] bg-contain bg-top-left bg-no-repeat;
 
                     .confirmBtnText {

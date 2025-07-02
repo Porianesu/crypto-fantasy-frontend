@@ -3,11 +3,14 @@ import { enableStaticRendering } from 'mobx-react-lite'
 import AppStore from './app-store.ts'
 import ModalStore from '@/stores/modal-store.ts'
 import PreloadStore from '@/stores/preload-store.ts'
+import SystemStore from '@/stores/system-store.ts'
 
 enableStaticRendering(typeof window === 'undefined')
 
 export class Store {
   initSearchParams?: URLSearchParams = undefined
+
+  systemStore: SystemStore
 
   appStore: AppStore
 
@@ -16,11 +19,13 @@ export class Store {
   modalStore: ModalStore
 
   constructor() {
+    this.systemStore = new SystemStore(this)
     this.appStore = new AppStore(this)
     this.modalStore = new ModalStore(this)
     this.preloadStore = new PreloadStore(this)
     makeObservable(this, {
       hydrate: action,
+      systemStore: observable,
       appStore: observable,
       modalStore: observable,
       preloadStore: observable,
@@ -38,6 +43,7 @@ export class Store {
 
   resetStore = () => {
     this.initSearchParams = undefined
+    this.systemStore.resetStore()
     this.appStore.resetStore()
     this.preloadStore.resetStore()
     this.modalStore.resetStore()

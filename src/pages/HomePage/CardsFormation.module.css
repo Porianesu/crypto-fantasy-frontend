@@ -4,7 +4,7 @@
     @apply flex-1 flex flex-col items-center justify-center z-0;
 
     .formationSquare {
-        @apply relative size-[362px] flex items-center justify-center;
+        @apply relative size-90.5 flex items-center justify-center;
         .formationSquareBackground {
             @apply absolute inset-0 size-full z-0;
             @apply bg-[url('/src/assets/images/home_page/card_formation_background.png')] bg-contain bg-top-left bg-no-repeat;
@@ -19,7 +19,7 @@
         }
 
         .emptyCard {
-            @apply w-[123px] h-[189px];
+            @apply w-31 h-47.5;
             @apply bg-[url('/src/assets/images/home_page/card_formation_plus_icon.png')] bg-contain bg-top-left bg-no-repeat;
         }
 
