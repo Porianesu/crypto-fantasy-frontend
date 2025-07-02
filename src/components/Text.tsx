@@ -18,9 +18,10 @@ interface ITextProps {
   className?: string
   style?: CSSProperties
   splitTextVars?: Partial<SplitText.Vars>
+  animationVars?: Partial<SplitText.Vars>
 }
 const Text = React.forwardRef<ITextHandle, PropsWithChildren<ITextProps>>(
-  ({ children, className, splitTextVars, style }, ref) => {
+  ({ children, className, splitTextVars, style, animationVars }, ref) => {
     const textRef = useRef<HTMLDivElement>(null)
     const splitTextRef = useRef<SplitText>(null)
     const tweenRef = useRef<gsap.core.Tween>(null)
@@ -44,6 +45,7 @@ const Text = React.forwardRef<ITextHandle, PropsWithChildren<ITextProps>>(
           wordsClass: 'word',
           linesClass: 'line',
           reduceWhiteSpace: false,
+          ...splitTextVars,
           onSplit: (self) => {
             // return gsap.from(self.words, {
             //   opacity: 0,
@@ -68,9 +70,13 @@ const Text = React.forwardRef<ITextHandle, PropsWithChildren<ITextProps>>(
               duration: 0.05,
               stagger: 0.04,
               ease: 'power1.out',
+              ...animationVars,
             })
+            if (splitTextVars?.onSplit) {
+              splitTextVars.onSplit(self)
+            }
+            return tweenRef.current
           },
-          ...splitTextVars,
         })
       },
       {

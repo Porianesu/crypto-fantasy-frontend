@@ -9,7 +9,7 @@
 
         .backButton {
             @apply cursor-pointer size-16 active:scale-95 transition;
-            @apply bg-[url('/src/assets/images/gallery_page/close_icon.png')] bg-cover bg-top-left bg-no-repeat;
+            @apply bg-[url('/src/assets/images/common/back_icon.png')] bg-cover bg-top-left bg-no-repeat;
         }
 
         .headerTitle {
@@ -120,7 +120,7 @@
         @apply grow shrink basis-0 flex flex-col items-center text-[#64401E] text-[26px] leading-10 font-normal px-[92px] text-center pt-11;
     }
     .detailName {
-        @apply shrink-0 text-[#292522] text-[22px] font-normal leading-[40px] -mb-1;
+        @apply px-10 shrink-0 text-[#292522] text-[22px] font-normal leading-normal text-center -mb-1;
     }
 }
 

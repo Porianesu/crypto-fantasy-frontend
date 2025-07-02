@@ -110,7 +110,7 @@ const GalleryPage: React.FC = () => {
     if (!selectedCard.processed) {
       return UndetectedPlaceholderText
     }
-    const d = dayjs.duration(selectedCard.avg_duration * 1000) // Convert seconds to milliseconds
+    const d = dayjs.duration(selectedCard.average_duration * 1000) // Convert seconds to milliseconds
     const totalDays = d.asDays()
     if (totalDays >= 1) {
       return `${Math.floor(totalDays)} days`
@@ -191,16 +191,10 @@ const GalleryPage: React.FC = () => {
                   </div>
                 ) : (
                   <>
-                    <div className={styles.detailName}>{selectedCard.name}</div>
+                    <div
+                      className={styles.detailName}
+                    >{`${selectedCard.nickname} · ${selectedCard.name}`}</div>
                     <div className={styles.detailInfoPart}>
-                      <div>
-                        <div>Faction:</div>
-                        <div>
-                          {!selectedCard.processed
-                            ? UndetectedPlaceholderText
-                            : selectedCard.faction}
-                        </div>
-                      </div>
                       <div>
                         <div>Tag:</div>
                         <div>
@@ -233,7 +227,7 @@ const GalleryPage: React.FC = () => {
                     <div>
                       {!selectedCard.processed
                         ? UndetectedPlaceholderText
-                        : new BigNumber(selectedCard['30_win_rate'])
+                        : new BigNumber(selectedCard['30_winrate'])
                             .times(100)
                             .decimalPlaces(2)
                             .toString() + '%'}

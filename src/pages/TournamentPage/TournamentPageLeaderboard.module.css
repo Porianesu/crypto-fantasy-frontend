@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 .leaderboardContainer {
-    @apply flex flex-col w-[600px] bg-white rounded-2xl shadow-xl p-4 border border-blue-100 relative;
+    @apply flex flex-col items-stretch w-103 h-191 pt-24 pb-25.5;
+    @apply bg-[url('/src/assets/images/tournament_page/leaderboard_background.png')] bg-size-[100%] bg-center bg-no-repeat relative;
 
     .leaderboardTitle {
-        @apply text-xl font-bold text-blue-700 mb-4 tracking-wide text-center bg-white sticky top-0 z-20 py-3 shadow border-b border-blue-100;
+        @apply text-white text-2xl leading-10 absolute top-5 self-center;
     }
 }
 
@@ -17,52 +18,79 @@
 }
 
 .upcomingWrapper {
-    @apply px-4 grow basis-0 shrink overflow-hidden flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-blue-50 to-white border-2 border-dashed border-blue-300 rounded-xl shadow-inner;
+    @apply px-6 grow basis-0 shrink overflow-hidden flex flex-col items-center justify-center gap-3;
 
     .upcomingIcon {
-        @apply w-12 h-12 text-blue-400;
+        @apply w-12 h-12 text-white;
     }
 
     .upcomingText {
-        @apply text-2xl font-bold text-blue-600 tracking-wide;
+        @apply text-2xl font-bold text-white tracking-wide;
     }
 
     .upcomingSubText {
-        @apply text-base text-blue-400 text-center;
+        @apply text-base text-white text-center;
     }
 }
 
 .leaderboardListWrapper {
-    @apply flex flex-col items-stretch flex-1 overflow-x-hidden overflow-y-auto;
+    @apply flex flex-col items-stretch flex-1 overflow-x-hidden overflow-y-auto px-6;
 
     .leaderboardList {
-        @apply flex flex-col gap-2;
+        @apply flex flex-col gap-y-2.5;
 
-        .leaderboardItem {
-            @apply grid grid-cols-[2.2rem_2.8rem_1fr_3.5rem_4.5rem_4.5rem] items-center gap-2 px-2 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-white hover:from-blue-100 hover:to-blue-50 transition shadow-sm border border-transparent hover:border-blue-200;
+        .groupContainer {
+            @apply flex items-center text-white text-lg italic pt-1 pb-3;
 
-            .rank {
-                @apply text-center font-extrabold text-lg text-blue-500 drop-shadow-sm;
+            .rankImage1 {
+                @apply size-9 mr-auto;
+                @apply bg-[url('/src/assets/images/tournament_page/leaderboard_rank_1.png')] bg-cover bg-center bg-no-repeat relative;
             }
 
+            .rankImage2 {
+                @apply w-9 h-8 mr-auto;
+                @apply bg-[url('/src/assets/images/tournament_page/leaderboard_rank_2.png')] bg-cover bg-center bg-no-repeat relative;
+            }
+
+            .rankImage3 {
+                @apply w-9 h-7 mr-auto;
+                @apply bg-[url('/src/assets/images/tournament_page/leaderboard_rank_3.png')] bg-cover bg-center bg-no-repeat relative;
+            }
+
+            .groupPrizeAssetSolImage {
+                @apply w-7 h-6.5 mr-0.5;
+                @apply bg-[url('/src/assets/images/common/asset_icon_sol.png')] bg-cover bg-center bg-no-repeat relative;
+            }
+            .groupPrizeAssetSol {
+                @apply w-15;
+            }
+            .groupPrizeAssetFaithImage {
+                @apply size-7 mr-0.5;
+                @apply bg-[url('/src/assets/images/common/asset_icon_faith.png')] bg-cover bg-center bg-no-repeat relative;
+            }
+
+            .groupPrizeAssetFaith {
+                @apply w-14;
+            }
+        }
+
+        .leaderboardItem {
+            @apply flex flex-col items-stretch;
+        }
+
+        .rankUserInfoContainer {
+            @apply flex items-center bg-[#FAEEBB] rounded-2xl h-18 px-5;
+
             .avatar {
-                @apply w-11 h-11 rounded-full object-cover border-2 border-blue-200 shadow;
+                @apply shrink-0 size-13 rounded-full object-cover border-2 border-[#774400] mr-3.5;
             }
 
             .username {
-                @apply font-semibold text-gray-800 truncate text-base;
+                @apply flex-1 overflow-hidden overflow-ellipsis text-[#774400] text-xl italic;
             }
 
             .deckPower {
-                @apply text-xs text-gray-400 font-mono text-center;
-            }
-
-            .prize {
-                @apply text-xs font-bold text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded text-center;
-            }
-
-            .faithCoin {
-                @apply text-xs font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded text-center;
+                @apply shrink-0 text-[#8A0001] text-xl italic;
             }
         }
     }
@@ -70,33 +98,30 @@
 
 
 .currentUserBar {
-    @apply grid grid-cols-[2.2rem_2.8rem_1fr_3.5rem_4.5rem_4.5rem] items-center gap-2 px-4 py-3 mt-4 rounded-2xl border-2 border-yellow-400 bg-gradient-to-r from-yellow-200 via-yellow-50 to-white shadow-2xl;
-    box-shadow: 0 6px 24px 0 rgba(255, 193, 7, 0.22), 0 2px 12px 0 rgba(0,0,0,0.10);
-    border-width: 2.5px;
-    outline: 2.5px solid #ffe066;
-    outline-offset: -2px;
-    animation: userBarGlow 2.5s infinite alternate;
+    @apply absolute bottom-3.5 h-18 px-10.5 flex items-center;
+
     .currentUserRank {
-        @apply text-center font-extrabold text-lg text-yellow-600 drop-shadow-md;
+        @apply shrink-0 text-[#FAEEBB] text-xl italic mr-2;
     }
+
     .currentUserAvatar {
-        @apply w-11 h-11 rounded-full object-cover border-2 border-yellow-400 shadow-lg;
+        @apply shrink-0 size-13 rounded-full object-cover border-2 border-[#774400] mr-3.5;
     }
+
     .currentUserName {
-        @apply font-extrabold text-yellow-800 truncate text-base;
-        letter-spacing: 0.02em;
+        @apply flex-1 overflow-hidden overflow-ellipsis text-[#774400] text-xl italic;
     }
+
     .currentUserDeckPower {
-        @apply text-xs text-yellow-600 font-mono text-center font-bold;
-    }
-    .currentUserPrize {
-        @apply text-xs font-extrabold text-yellow-800 bg-yellow-200 px-2 py-0.5 rounded text-center shadow;
-    }
-    .currentUserFaithCoin {
-        @apply text-xs font-extrabold text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded text-center shadow;
+        @apply shrink-0 text-[#8A0001] text-xl italic;
     }
 }
+
 @keyframes userBarGlow {
-    0% { box-shadow: 0 6px 24px 0 rgba(255, 193, 7, 0.22), 0 2px 12px 0 rgba(0,0,0,0.10); }
-    100% { box-shadow: 0 0 32px 8px #ffe066, 0 2px 12px 0 rgba(0,0,0,0.10); }
+    0% {
+        box-shadow: 0 6px 24px 0 rgba(255, 193, 7, 0.22), 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+    }
+    100% {
+        box-shadow: 0 0 32px 8px #ffe066, 0 2px 12px 0 rgba(0, 0, 0, 0.10);
+    }
 }

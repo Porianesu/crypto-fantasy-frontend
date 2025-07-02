@@ -15,7 +15,7 @@
 
     .closeBtn {
         @apply cursor-pointer size-[148px] absolute -right-[26px] top-[10px];
-        @apply bg-[url('/src/assets/images/home_page/cards_bag_modal/close_icon.png')] bg-contain bg-top-left bg-no-repeat;
+        @apply bg-[url('/src/assets/images/common/close_icon.png')] bg-contain bg-top-left bg-no-repeat;
     }
 
     .contentBody {

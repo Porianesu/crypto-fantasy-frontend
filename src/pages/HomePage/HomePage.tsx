@@ -2,92 +2,43 @@ import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/HomePage/Leaderboard.tsx'
-import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
-import React, { Suspense, useRef, useState } from 'react'
-import { gsap } from 'gsap'
-import DrawCardsModal from '@/pages/HomePage/DrawCardsModal.tsx'
-import { type ICardData } from '@/components/Card.tsx'
+import React, { Suspense, useRef } from 'react'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
-import { AudioInstanceId } from '@/stores/preload-store.ts'
 import fusionIcon from '../../..../../../src/assets/images/home_page/footer_button_fusion.png'
 import galleryIcon from '../../../src/assets/images/home_page/footer_button_achs.png'
 import bagIcon from '../../../src/assets/images/home_page/footer_button_bag.png'
 import battleIcon from '../../../src/assets/images/home_page/footer_button_battle.png'
 import rewardIcon from '../../../src/assets/images/home_page/footer_button_reward.png'
 import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.png'
+import { type IOpenPackHandle } from '@/components/OpenPack.tsx'
 
+const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 const CardsFormationModal = React.lazy(() => import('@/pages/HomePage/CardsFormationModal.tsx'))
 const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
 
 function HomePage() {
   const {
-    preloadStore: { audioInstanceMap },
-    appStore: { userInfo, drawCards, addCardsToBag },
-    modalStore: { changeDrawCardsModalVisible, changeCardsBagModalData, changeBattleModalVisible },
+    appStore: { userInfo },
+    modalStore: { changeCardsBagModalData, changeBattleModalVisible },
   } = useMobxStore()
-  const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
-  const drawCardSound = audioInstanceMap.get(AudioInstanceId.DrawCardSound)
   const navigate = useNavigate()
-  const [cards, setCards] = useState<Array<ICardData>>([])
   const pageContainerRef = useRef<HTMLDivElement>(null)
-  const videoRef = useRef<IPreloadElementHandle>(null)
-
-  const handleOpenPack = () => {
-    if (videoRef.current) {
-      // 模拟获取5张随机卡片
-      drawCards().then((cards) => {
-        console.debug('获取到的随机卡片:', cards)
-        setCards(cards)
-        addCardsToBag(cards)
-      })
-      const containerWidth = gsap.getProperty(pageContainerRef.current, 'width')
-      const containerHeight = gsap.getProperty(pageContainerRef.current, 'height')
-      gsap.set(videoRef.current.getContainer(), {
-        zIndex: 10,
-        width: containerWidth,
-        height: containerHeight,
-      })
-      gsap.to(videoRef.current.getContainer(), {
-        autoAlpha: 1,
-        duration: 0.3,
-        onStart: () => {
-          const videoEl = videoRef.current!.getElement() as HTMLVideoElement
-          videoEl.loop = false
-          videoEl.onended = () => {
-            if (bgmSound) {
-              bgmSound.volume = 0.5
-            }
-            gsap.to(videoRef.current!.getContainer(), {
-              autoAlpha: 0,
-              duration: 0.3,
-              onStart: () => {
-                gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
-                changeDrawCardsModalVisible(true)
-              },
-            })
-          }
-          if (bgmSound) {
-            bgmSound.volume = 0.2
-          }
-          if (drawCardSound) {
-            drawCardSound.play({
-              volume: 1,
-            })
-          }
-          videoEl.play()
-        },
-      })
-    }
-  }
+  const openPackRef = useRef<IOpenPackHandle>(null)
 
   const comingSoon = () => {
     toast.info('Coming Soon!')
+  }
+
+  const handleOpenPack = () => {
+    if (openPackRef.current) {
+      openPackRef.current.handleOpenPack()
+    }
   }
 
   // footer按钮配置
@@ -143,11 +94,6 @@ function HomePage() {
           <div></div>
         </div>
       </div>
-      <PreloadElement
-        ref={videoRef}
-        id={'openPackVideo'}
-        className={styles.videoContainer}
-      ></PreloadElement>
       {userInfo ? (
         <div className={styles.header}>
           <div className={styles.headerLeft}>
@@ -223,7 +169,9 @@ function HomePage() {
           ))}
         </div>
       </div>
-      {cards.length ? <DrawCardsModal cards={cards}></DrawCardsModal> : null}
+      <Suspense fallback={null}>
+        <OpenPack ref={openPackRef}></OpenPack>
+      </Suspense>
       <Suspense fallback={null}>
         <CardsBagModal></CardsBagModal>
       </Suspense>

@@ -1,32 +1,94 @@
 @import "tailwindcss";
 
 .formationContainer {
-    @apply flex flex-col items-center justify-between flex-1 bg-gradient-to-br from-blue-50 to-white rounded-3xl shadow-2xl border-4 border-blue-200 px-10 py-8 mx-auto max-w-xl min-w-[22rem] min-h-[30rem] gap-8 relative;
+    @apply flex flex-col items-stretch w-103 h-191 pt-20;
+    @apply bg-[url('/src/assets/images/tournament_page/card_formation_background.png')] bg-size-[100%] bg-center bg-no-repeat relative;
 
     .formationTitle {
-        @apply text-xl font-bold text-blue-700 mb-2 tracking-wide text-center;
+        @apply text-white text-2xl leading-10 absolute top-5 self-center;
     }
 
-    .formationCards {
-        @apply flex flex-col items-center justify-center gap-2 mt-4 mb-4 w-full;
-    }
-    .formationCardsRow {
-        @apply flex flex-row items-center justify-center gap-4 w-full;
+    .crystalCount {
+        @apply h-10 text-2xl italic font-black text-white font-[FFDin] flex items-center justify-center mb-2;
     }
 
-    .formationCardSlot {
-        @apply w-36 h-52 rounded-3xl border-2 border-dashed border-blue-300 bg-blue-50 flex items-center justify-center text-5xl text-blue-200 shadow-inner transition;
+    .crystalContainer {
+        @apply flex flex-row items-center gap-x-1.5 self-center mb-5;
+
+        .crystalBase {
+            @apply w-9 h-13 bg-contain bg-center bg-no-repeat relative;
+        }
+
+        .crystalInactive {
+            @apply bg-[url('/src/assets/images/tournament_page/crystal_inactive.png')];
+        }
+
+        .crystalActive {
+            @apply bg-[url('/src/assets/images/tournament_page/crystal_active.png')];
+        }
     }
 
-    .formationCardImg {
-        @apply w-36 h-52 rounded-3xl border-2 border-blue-400 shadow-lg object-cover bg-white;
+    .formationSquare {
+        @apply relative w-94 h-100.5 flex flex-col items-stretch justify-center self-center gap-y-1;
+
+        .formationSquareBackground {
+            @apply absolute inset-0 size-full z-0;
+            @apply bg-[url('/src/assets/images/tournament_page/card_formation_magic_background.png')] bg-contain bg-no-repeat;
+            background-position-x: center;
+            background-position-y: bottom;
+        }
+
+        & > div {
+            @apply flex items-center justify-between h-41 z-10 ;
+        }
+
+        .formationCard {
+            @apply cursor-pointer;
+        }
+
+        .emptyCard {
+            @apply w-27 h-41;
+            @apply bg-[url('/src/assets/images/home_page/card_formation_plus_icon.png')] bg-contain bg-top-left bg-no-repeat;
+        }
     }
 
-    .deckPowerLabel {
-        @apply text-base text-blue-500 font-semibold tracking-wide mt-2;
-    }
+    .rulesContainer {
+        @apply grid grid-cols-2 -mt-4 px-5;
 
-    .deckPowerValue {
-        @apply text-3xl font-extrabold text-blue-700 drop-shadow-lg;
+        .ruleItem {
+            @apply flex flex-col items-stretch;
+        }
+
+        .ruleRarity {
+            @apply text-white text-2xl leading-10 h-10 flex flex-col items-start justify-center;
+        }
+
+        .ruleCrystal {
+            @apply flex flex-row items-center gap-x-1;
+
+            & > div {
+                @apply w-7 h-9.5;
+                @apply bg-[url('/src/assets/images/tournament_page/crystal_active.png')] bg-contain bg-center bg-no-repeat;
+            }
+        }
+    }
+}
+
+
+.powerContainer {
+    @apply w-36 h-33 flex flex-col items-center font-[FFDin] text-white font-black italic text-6xl tracking-tight pt-2.5;
+    @apply bg-[url('/src/assets/images/tournament_page/deck_power_background.png')] bg-contain bg-no-repeat;
+
+    text-shadow: -2px -2px 0 #731A1A,
+    2px -2px 0 #731A1A,
+    -2px 2px 0 #731A1A,
+    2px 2px 0 #731A1A,
+    0 -2px 0 #731A1A,
+    0 2px 0 #731A1A,
+    -2px 0 0 #731A1A,
+    2px 0 0 #731A1A;
+
+    .powerLabel {
+        @apply text-2xl tracking-normal;
     }
 }

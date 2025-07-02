@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+.prizeCountdown {
+    @apply absolute top-14 flex flex-col items-center text-[#734319];
+    .title {
+        @apply text-[#662E00] text-2xl leading-10 italic;
+
+        text-shadow: -2px -2px 0 #FAEEBB,
+        2px -2px 0 #FAEEBB,
+        -2px 2px 0 #FAEEBB,
+        2px 2px 0 #FAEEBB,
+        0 -2px 0 #FAEEBB,
+        0 2px 0 #FAEEBB,
+        -2px 0 0 #FAEEBB,
+        2px 0 0 #FAEEBB;
+    }
+
+    .numberContainer {
+        @apply w-92 h-21 flex items-center justify-between pb-1.5 px-4.5;
+        @apply bg-[url(/src/assets/images/tournament_page/countdown_background.png)] bg-contain bg-center bg-no-repeat;
+
+        & > section {
+            @apply gap-x-5.5;
+        }
+    }
+}

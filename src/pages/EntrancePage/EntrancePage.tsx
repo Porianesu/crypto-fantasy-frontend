@@ -17,7 +17,7 @@ const EntrancePage: React.FC = () => {
     appStore: { initData },
     modalStore: { changeLoginModalVisible },
   } = useMobxStore()
-  const bgmInstance = audioInstanceMap.get(AudioInstanceId.BGM)
+  const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const containerRef = useRef<HTMLDivElement>(null)
   const progressBarWrapperRef = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
@@ -67,8 +67,8 @@ const EntrancePage: React.FC = () => {
   )
 
   const handleStartButtonClick = () => {
-    if (bgmInstance) {
-      bgmInstance.play({
+    if (bgmSound) {
+      bgmSound.play({
         loop: -1,
         volume: 0.3,
       })

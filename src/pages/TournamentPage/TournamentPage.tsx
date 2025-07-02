@@ -1,11 +1,9 @@
 import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './Tournament.module.css'
+import styles from './TournamentPage.module.css'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { ArrowLeftIcon, ClockIcon } from '@heroicons/react/24/outline'
-import { GiftIcon } from '@heroicons/react/24/solid'
 import { getHomePath } from '@/navigation/routes.tsx'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchPrizePools } from '@/utils/mockHelper.ts'
@@ -18,68 +16,49 @@ import { BigNumber } from 'bignumber.js'
 import CountUp from 'react-countup'
 import { CARD_RARITY } from '@/components/Card.tsx'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
+import TournamentPageCountDown from '@/pages/TournamentPage/TournamentPageCountDown.tsx'
 
-const FormationRules = [
-  {
-    key: CARD_RARITY.NORMAL,
-    value: 5,
-  },
-  {
-    key: CARD_RARITY.RARE,
-    value: 4,
-  },
-  {
-    key: CARD_RARITY.EPIC,
-    value: 3,
-  },
-  {
-    key: CARD_RARITY.LEGENDARY,
-    value: 1,
-  },
-]
+const FormationRules = {
+  totalCrystal: 8,
+  rarity: [
+    {
+      key: CARD_RARITY.NORMAL,
+      crystal: 1,
+    },
+    {
+      key: CARD_RARITY.RARE,
+      crystal: 2,
+    },
+    {
+      key: CARD_RARITY.EPIC,
+      crystal: 3,
+    },
+    {
+      key: CARD_RARITY.LEGENDARY,
+      crystal: 4,
+    },
+  ],
+}
 const TournamentPage: React.FC = () => {
   const navigate = useNavigate()
   const [currentPrizePool, setCurrentPrizePool] = useState<IPrizePool | undefined>(undefined)
   const queryClient = useQueryClient()
   const cardsFormationRef = useRef<ITournamentPageCardsFormationHandle>(null)
+  const [isEditing, setIsEditing] = useState(false)
 
   const { data: prizePools, isLoading: prizePoolsLoading } = useQuery({
     queryKey: ['prizePools'],
-    queryFn: fetchPrizePools,
+    queryFn: () => fetchPrizePools(FormationRules),
     staleTime: 5 * 60 * 1000,
   })
   useEffect(() => {
     if (!prizePools?.length) return
-    setCurrentPrizePool(prizePools.find((p) => p.status === PRIZE_POOL_STATUS.UPCOMING))
+    setCurrentPrizePool(prizePools.find((p) => p.status === PRIZE_POOL_STATUS.PROCESSING))
   }, [prizePools?.length])
 
-  // joined状态由当前奖池数据决定
-  const isJoined = !!currentPrizePool?.user_participated
-
-  // 倒计时逻辑
-  const [countdown, setCountdown] = React.useState('')
   useEffect(() => {
-    if (!currentPrizePool || currentPrizePool.status !== PRIZE_POOL_STATUS.PROCESSING) {
-      setCountdown('')
-      return
-    }
-    const updateCountdown = () => {
-      const now = dayjs()
-      const end = dayjs(currentPrizePool.end_date)
-      const diff = end.diff(now, 'second')
-      if (diff <= 0) {
-        setCountdown('00:00:00')
-        return
-      }
-      const h = String(Math.floor(diff / 3600)).padStart(2, '0')
-      const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0')
-      const s = String(diff % 60).padStart(2, '0')
-      setCountdown(`${h}:${m}:${s}`)
-    }
-    updateCountdown()
-    const timer = setInterval(updateCountdown, 1000)
-    return () => clearInterval(timer)
-  }, [currentPrizePool])
+    setIsEditing(false)
+  }, [currentPrizePool?.id])
 
   useEffect(() => {
     if (!currentPrizePool) return
@@ -127,7 +106,7 @@ const TournamentPage: React.FC = () => {
     if (currentPrizePool?.status !== PRIZE_POOL_STATUS.UPCOMING) return
     if (cardsFormationRef.current) {
       const formation = cardsFormationRef.current.tempCardsFormation
-      if (formation.length < 5) return toast.warning('Please select at 5 cards')
+      if (formation.length < 1) return toast.warning('Please add 1 card into your deck at least.')
       // 更新prizePools缓存
       const newPool: IPrizePool = {
         ...currentPrizePool,
@@ -136,6 +115,7 @@ const TournamentPage: React.FC = () => {
         user_deck_power: Math.floor(Math.random() * (990 - 225 + 1)) + 225, // 随机生成一个225-990之间的数0
       }
       setCurrentPrizePool(newPool)
+      setIsEditing(false)
       queryClient.setQueryData(['prizePools'], (old: IPrizePool[] | undefined) => {
         if (!old) return old
         return old.map((pool) => (pool.id === newPool.id ? newPool : pool))
@@ -144,51 +124,105 @@ const TournamentPage: React.FC = () => {
     }
   }
 
+  const renderJoinButton = () => {
+    if (!currentPrizePool) return null
+    const isJoined = currentPrizePool.user_participated
+    const isUpcoming = currentPrizePool.status === PRIZE_POOL_STATUS.UPCOMING
+    const isButtonActive = isEditing || (!isJoined && isUpcoming)
+
+    let buttonContent: React.ReactNode
+    if (isUpcoming) {
+      if (isEditing) {
+        buttonContent = 'Edit'
+      } else if (isJoined) {
+        buttonContent = 'Joined'
+      } else {
+        buttonContent = (
+          <>
+            {'Join 100'}
+            <div className={styles.joinBtnIcon}></div>
+          </>
+        )
+      }
+    } else {
+      buttonContent = isJoined ? 'Joined' : 'Completed'
+    }
+
+    return (
+      <button
+        className={classNames(styles.joinBtn, {
+          [styles.joinedBtn]: !isButtonActive,
+          button: isButtonActive,
+        })}
+        disabled={!isButtonActive}
+        onClick={isButtonActive ? handleJoinButtonClick : undefined}
+      >
+        {buttonContent}
+      </button>
+    )
+  }
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         {/* 左侧返回按钮 */}
         <div className={styles.headerLeft}>
-          <button className={styles.backBtn} onClick={handleBack}>
-            <ArrowLeftIcon className="w-6 h-6 text-gray-700" />
-          </button>
+          <button className={classNames(styles.backBtn, 'button')} onClick={handleBack}></button>
         </div>
         {/* 中间Bronze/Silver/Gold按钮 */}
         <div className={styles.headerCenter}>
-          <button className={classNames(styles.tierBtn, styles.tierBtnSelected)} disabled>
+          <button className={classNames('button', styles.tierBtn, styles.tierBtnSelected)} disabled>
             Bronze
           </button>
-          <button className={styles.tierBtn} disabled>
+          <button className={classNames('button', styles.tierBtn)} onClick={handleComingSoon}>
             Silver
           </button>
-          <button className={styles.tierBtn} disabled>
+          <button className={classNames('button', styles.tierBtn)} onClick={handleComingSoon}>
             Gold
           </button>
         </div>
         {/* 右侧History/Rules按钮 */}
         <div className={styles.headerRight}>
-          <button className={styles.actionBtn} onClick={handleComingSoon}>
-            History
-          </button>
-          <button className={styles.actionBtn} onClick={handleComingSoon}>
-            Rules
-          </button>
+          <button
+            className={classNames(styles.historyBtn, 'button')}
+            onClick={handleComingSoon}
+          ></button>
+          <button
+            className={classNames(styles.rulesBtn, 'button')}
+            onClick={handleComingSoon}
+          ></button>
         </div>
       </div>
       {/* poolsContainer 横向按钮组 */}
       <div className={styles.poolsContainer}>
+        <div className={styles.poolsClickHelper}>
+          {prizePools?.map((pool) => {
+            return (
+              <button
+                key={pool.id}
+                onClick={() => setCurrentPrizePool(pool)}
+                disabled={currentPrizePool?.id === pool.id}
+              ></button>
+            )
+          })}
+        </div>
         {prizePools?.map((pool) => (
-          <button
+          <div
             key={pool.id}
             className={classNames(
               styles.poolBtn,
               currentPrizePool?.id === pool.id && styles.poolBtnSelected,
             )}
-            onClick={() => setCurrentPrizePool(pool)}
-            disabled={currentPrizePool?.id === pool.id}
           >
-            {dayjs(pool.start_date).format('MMMM D')} - {dayjs(pool.end_date).format('MMMM D')}
-          </button>
+            <div className={styles.poolStatus}>
+              {pool.status === PRIZE_POOL_STATUS.PROCESSING
+                ? 'Ongoing'
+                : pool.status === PRIZE_POOL_STATUS.UPCOMING
+                  ? 'Upcoming'
+                  : ''}
+            </div>
+            <div className={styles.poolStartDate}>{dayjs(pool.start_date).format('MMMM D')}</div>
+          </div>
         ))}
       </div>
       {/* body部分后续实现 */}
@@ -203,50 +237,38 @@ const TournamentPage: React.FC = () => {
             ></TournamentPageLeaderboard>
             {/* 中间奖池信息区 */}
             <div className={styles.prizeInfoContainer}>
-              {/* 顶部倒计时，仅PROCESSING显示 */}
-              {currentPrizePool?.status === PRIZE_POOL_STATUS.PROCESSING && (
-                <div className={styles.prizeCountdown}>
-                  <ClockIcon className="w-6 h-6 text-blue-400" />
-                  <span>Ends in {countdown}</span>
+              <TournamentPageCountDown
+                currentPrizePool={currentPrizePool}
+              ></TournamentPageCountDown>
+              <div className={styles.prizeInfoBottomPartContainer}>
+                <div className={styles.prizeAmountContainer}>
+                  <div className={styles.prizeDescription}>The Current Prize pool</div>
+                  <div className={styles.prizeAmount}>
+                    <CountUp
+                      start={undefined}
+                      end={currentPrizePool?.price ?? 0}
+                      decimals={2}
+                      duration={1}
+                      separator=","
+                      preserveValue
+                      easingFn={(t, b, c, d) => {
+                        // easeOutQuad: 先快后慢
+                        t /= d
+                        return -c * t * (t - 2) + b
+                      }}
+                    />
+                    <div className={styles.prizeAmountIcon}></div>
+                  </div>
                 </div>
-              )}
-              {/* 中间奖池icon和金额 */}
-              <div className="flex flex-col items-center justify-center flex-1">
-                <GiftIcon className={styles.prizeIcon} />
-                <div className={styles.prizeAmount}>
-                  <CountUp
-                    start={undefined}
-                    end={currentPrizePool?.price ?? 0}
-                    decimals={2}
-                    duration={1}
-                    separator=","
-                    preserveValue
-                    easingFn={(t, b, c, d) => {
-                      // easeOutQuad: 先快后慢
-                      t /= d
-                      return -c * t * (t - 2) + b
-                    }}
-                  />
-                  SOL
-                </div>
-                <div className={styles.prizeLabel}>Prize Pool</div>
+                {renderJoinButton()}
               </div>
-              {/* 底部参与按钮/状态 */}
-              {isJoined || currentPrizePool?.status === PRIZE_POOL_STATUS.UPCOMING ? (
-                <button
-                  className={isJoined ? styles.joinedBtn : styles.joinBtn}
-                  disabled={isJoined}
-                  onClick={isJoined ? undefined : handleJoinButtonClick}
-                >
-                  {isJoined ? 'Joined' : 'Join'}
-                </button>
-              ) : null}
             </div>
             {/* 右侧出战卡组信息区 */}
             <TournamentPageCardsFormation
               ref={cardsFormationRef}
               currentPrizePool={currentPrizePool}
               rules={FormationRules}
+              setIsEditing={setIsEditing}
             />
           </>
         )}

@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { generateFantasyEnglishName, getDefaultAvatar } from '@/utils/common.ts'
 import { BigNumber } from 'bignumber.js'
 import type { UserInfo } from '@/stores/app-store.ts'
+import { CARD_RARITY } from '@/components/Card.tsx'
 
 export const fetchHomeLeaderboard = async () => {
   const originalData = Array.from({ length: 20 }).map((_, i) => ({
@@ -17,13 +18,47 @@ export const fetchHomeLeaderboard = async () => {
   })
 }
 
-export const fetchPrizePools = async () => {
+const getRandomFormation = (
+  rules: {
+    totalCrystal: number
+    rarity: Array<{
+      key: CARD_RARITY
+      crystal: number
+    }>
+  },
+  cardMaxId = 199,
+) => {
+  const getRandomCard = (remainingCrystal: number) => {
+    const availableRarities = rules.rarity.filter((r) => r.crystal <= remainingCrystal)
+    const cardIdBase = Math.floor(Math.random() * Math.floor(cardMaxId / 4))
+    const rarity = availableRarities[Math.floor(Math.random() * availableRarities.length)]
+    return {
+      cardId: cardIdBase * 4 + rarity.key,
+      cost: rarity.crystal,
+    }
+  }
+  const cardsId = []
+  let remainingCrystal = rules.totalCrystal
+  while (cardsId.length < 5 && remainingCrystal > 0) {
+    const randomResult = getRandomCard(remainingCrystal)
+    cardsId.push(randomResult.cardId)
+    remainingCrystal -= randomResult.cost
+  }
+  return cardsId
+}
+
+export const fetchPrizePools = async (rules: {
+  totalCrystal: number
+  rarity: Array<{
+    key: CARD_RARITY
+    crystal: number
+  }>
+}) => {
   return new Promise<Array<IPrizePool>>((resolve) => {
     const today = dayjs().startOf('day')
     const getRandomPrice = () =>
       new BigNumber(Math.random() * 490).plus(10).decimalPlaces(2).toNumber()
-    const getRandomPlayerCount = () => Math.floor(Math.random() * 100) + 1
-    const getRandomFormation = () => Array.from({ length: 5 }, () => Math.floor(Math.random() * 80))
+    const getRandomPlayerCount = () => Math.floor(Math.random() * 100) + 110
     const getRandomDeckPower = () => Math.floor(Math.random() * 991)
     const data = [
       {
@@ -76,7 +111,7 @@ export const fetchPrizePools = async () => {
         return {
           ...pool,
           user_participated: true,
-          user_card_formation: getRandomFormation(),
+          user_card_formation: getRandomFormation(rules),
           user_deck_power: getRandomDeckPower(),
         }
       }
@@ -138,6 +173,7 @@ export const fetchPrizePoolLeaderboard = async (pool: IPrizePool, userInfo: User
       }
       isCurrentUser?: boolean
       user_card_formation?: number[]
+      group?: string // 仅分组起始项有group字段
     }>
   >((resolve) => {
     // 生成排行榜数据
@@ -158,9 +194,32 @@ export const fetchPrizePoolLeaderboard = async (pool: IPrizePool, userInfo: User
     }
     // 排序，生成rank
     const sorted = originalData.sort((a, b) => b.deckPower - a.deckPower)
+    const totalPlayers = sorted.length
+    const top10Percent = Math.ceil(totalPlayers * 0.1)
+    const top30Percent = Math.ceil(totalPlayers * 0.3)
+    const top60Percent = Math.ceil(totalPlayers * 0.6)
+    // 记录每个分组的第一个下标
+    const groupRanges = [
+      { name: '1', start: 1, end: 1 },
+      { name: '2', start: 2, end: 2 },
+      { name: '3', start: 3, end: 3 },
+      { name: '#4~#10', start: 4, end: Math.min(10, totalPlayers) },
+      { name: '#11-#10%', start: 11, end: top10Percent },
+      { name: '#10%-#30%', start: top10Percent + 1, end: top30Percent },
+      { name: '#30%-#60%', start: top30Percent + 1, end: top60Percent },
+      { name: '#60%-100%', start: top60Percent + 1, end: totalPlayers },
+    ]
+    // 生成分组起始下标集合
+    const groupStartMap = new Map<number, string>()
+    groupRanges.forEach((g) => {
+      if (g.start <= g.end && g.start <= totalPlayers) {
+        groupStartMap.set(g.start, g.name)
+      }
+    })
     const withRankAndPrize = sorted.map((item, idx) => {
       const rank = idx + 1
-      const prize = calculateSolAndCoin(pool.price, rank, pool.player_count)
+      const prize = calculateSolAndCoin(pool.price, rank, totalPlayers)
+      const group = groupStartMap.get(rank)
       return {
         ...item,
         rank,
@@ -168,6 +227,7 @@ export const fetchPrizePoolLeaderboard = async (pool: IPrizePool, userInfo: User
           sol: prize.sol,
           faithCoin: prize.faithCoin,
         },
+        ...(group ? { group } : {}),
       }
     })
     setTimeout(() => {

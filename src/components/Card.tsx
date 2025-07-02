@@ -14,15 +14,16 @@ export enum CARD_RARITY {
   LEGENDARY = 3,
 }
 export interface ICardData {
-  name: string
   id: number
+  name: string
+  nickname: string
   description: string
   imageUrl: string
   rarity: CARD_RARITY
   score: number
   '30_pnl': number
-  '30_win_rate': number
-  avg_duration: number
+  '30_winrate': number
+  average_duration: number
   faction: string
   tag: string
   quote: string
@@ -50,19 +51,6 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale, unde
   const cardRef = useRef<HTMLDivElement>(null)
   const flipAnimationTimelineRef = useRef<gsap.core.Timeline>(null)
   const isStatic = useMemo(() => type === 'static', [type])
-  const { cardName } = useMemo(() => {
-    if (undetected) {
-      return {
-        cardName: 'Unknown',
-        cardNickname: '',
-      }
-    }
-    const splitResult = card.name.split(' · ')
-    return {
-      cardName: splitResult[1] || '',
-      cardNickname: splitResult[0],
-    }
-  }, [card.name, undetected])
 
   useGSAP(
     () => {
@@ -149,7 +137,7 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale, unde
         <div className={classNames(styles.cardContent, styles[`cardContentRarity${card.rarity}`])}>
           <div className={styles.cardNameWrapper}>
             <div className={styles.cardName}>
-              <Textfit>{cardName}</Textfit>
+              <Textfit>{card.name}</Textfit>
             </div>
           </div>
           <div

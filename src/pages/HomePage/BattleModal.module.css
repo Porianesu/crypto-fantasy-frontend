@@ -11,16 +11,20 @@
 
     .title {
         @apply absolute top-[18px] text-[90px] font-normal text-[#FFAF00];
-        background: linear-gradient(to bottom, #FFAF00, #F3C358); /* 渐变色 */
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text; /* 部分浏览器支持 */
-        color: transparent;
+
+        text-shadow: -2px -2px 0 #4C3110,
+        2px -2px 0 #4C3110,
+        -2px 2px 0 #4C3110,
+        2px 2px 0 #4C3110,
+        0 -2px 0 #4C3110,
+        0 2px 0 #4C3110,
+        -2px 0 0 #4C3110,
+        2px 0 0 #4C3110;
     }
 
     .closeButton {
-        @apply absolute top-[104px] right-[68px] w-[74px] h-[80px] z-10;
-        @apply bg-[url(/src/assets/images/home_page/battle_modal/close_icon.png)] bg-contain bg-center bg-no-repeat;
+        @apply absolute size-37 right-0 top-14 z-10;
+        @apply bg-[url('/src/assets/images/common/close_icon.png')] bg-contain bg-top-left bg-no-repeat;
     }
 
     .blocksWrapper {
@@ -38,11 +42,15 @@
 
         .blockTitle {
             @apply text-[32px] leading-10 font-normal text-[#FFAF00] mb-[200px];
-            background: linear-gradient(to bottom, #FFAF00, #F3C358); /* 渐变色 */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text; /* 部分浏览器支持 */
-            color: transparent;
+
+            text-shadow: -2px -2px 0 #4C3110,
+            2px -2px 0 #4C3110,
+            -2px 2px 0 #4C3110,
+            2px 2px 0 #4C3110,
+            0 -2px 0 #4C3110,
+            0 2px 0 #4C3110,
+            -2px 0 0 #4C3110,
+            2px 0 0 #4C3110;
         }
 
         .blockImage {
