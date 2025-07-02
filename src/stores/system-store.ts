@@ -27,14 +27,15 @@ export default class SystemStore {
   }
 
   scaleFontSize = (targetWidth: number) => {
-    window.document.documentElement.style.fontSize = new BigNumber(targetWidth)
-      .dividedBy(DESIGN_WIDTH)
-      .times(DESIGN_FONT_SIZE)
-      .decimalPlaces(2)
-      .toFormat({
-        decimalSeparator: '.',
-        suffix: 'px',
-      })
+    const resultFontSize = Math.min(
+      DESIGN_FONT_SIZE,
+      new BigNumber(targetWidth)
+        .dividedBy(DESIGN_WIDTH)
+        .times(DESIGN_FONT_SIZE)
+        .decimalPlaces(2)
+        .toNumber(),
+    )
+    window.document.documentElement.style.fontSize = `${resultFontSize}px`
   }
 
   handleWindowResize = (ev: UIEvent) => {
