@@ -54,7 +54,7 @@ const LoginModal: React.FC = () => {
                 'grow shrink basis-0 overflow-hidden flex flex-col items-stretch self-stretch '
               }
             >
-              <div className={classNames(styles.inputGroup, 'mb-[30px]')}>
+              <div className={classNames(styles.inputGroup, 'mb-7.5')}>
                 <label htmlFor="email">Email</label>
                 <input
                   className={styles.input}
