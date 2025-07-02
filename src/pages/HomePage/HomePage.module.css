@@ -29,7 +29,7 @@
         }
 
         .drawCardsButton {
-            @apply hover:scale-110 cursor-pointer active:scale-90 flex items-center justify-center w-85 h-25.5 transition bg-[url(/src/assets/images/common/button_background.png)] bg-contain bg-center bg-no-repeat text-[26px] font-normal text-[#2A1914];
+            @apply hover:scale-110 cursor-pointer active:scale-90 flex items-center justify-center w-85 h-25.5 transition bg-[url(/src/assets/images/common/button_background.png)] bg-contain bg-center bg-no-repeat text-2xl font-normal text-[#2A1914];
 
             & > div {
                 @apply size-8.5 ml-2.5;
@@ -56,7 +56,7 @@
         @apply pt-6;
 
         .username {
-            @apply text-[23px] font-normal text-white mb-1;
+            @apply text-xl font-normal text-white mb-1;
         }
 
         .expBarBg {
@@ -113,7 +113,7 @@
 
 
         .assetAmount {
-            @apply text-white font-black text-[30px] italic;
+            @apply text-white font-black text-3xl italic;
         }
 
         .assetPlusButton {

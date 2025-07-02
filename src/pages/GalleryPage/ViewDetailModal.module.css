@@ -9,12 +9,12 @@
     @apply bg-[url('/src/assets/images/gallery_page/view_detail_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
 
     .title {
-        @apply shrink-0 w-117.5 h-16 text-[#64401E] text-[36px] font-normal leading-6 flex items-center justify-center mb-11;
+        @apply shrink-0 w-117.5 h-16 text-[#64401E] text-4xl font-normal leading-6 flex items-center justify-center mb-11;
         @apply bg-[url('/src/assets/images/gallery_page/detail_title_background.png')] bg-cover bg-top-left bg-no-repeat;
     }
 
     .content {
-        @apply cursor-pointer self-stretch grow shrink basis-0 overflow-x-hidden overflow-y-auto text-[#64401E] text-[20px] font-normal leading-6;
+        @apply cursor-pointer self-stretch grow shrink basis-0 overflow-x-hidden overflow-y-auto text-[#64401E] text-xl font-normal leading-6;
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE 10+ */
 
@@ -29,7 +29,7 @@
     }
 
     .button {
-        @apply mb-13 shrink-0 cursor-pointer w-87 h-17 flex items-center justify-center text-[27px] font-normal leading-10 active:scale-95 transition;
+        @apply mb-13 shrink-0 cursor-pointer w-87 h-17 flex items-center justify-center text-2xl font-normal leading-10 active:scale-95 transition;
         @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background.png')] bg-contain bg-top-left bg-no-repeat;
 
         .buttonText {

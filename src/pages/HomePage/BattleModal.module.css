@@ -10,7 +10,7 @@
     @apply bg-[url(/src/assets/images/home_page/battle_modal/background.png)] bg-contain bg-center bg-no-repeat;
 
     .title {
-        @apply absolute top-4.5 text-[90px] font-normal text-[#FFAF00];
+        @apply absolute top-4.5 text-7xl font-normal text-[#FFAF00];
 
         text-shadow: -2px -2px 0 #4C3110,
         2px -2px 0 #4C3110,
@@ -41,7 +41,7 @@
         @apply bg-[url(/src/assets/images/home_page/battle_modal/block_background.png)] bg-contain bg-center bg-no-repeat;
 
         .blockTitle {
-            @apply text-[32px] leading-10 font-normal text-[#FFAF00] mb-50;
+            @apply text-3xl leading-10 font-normal text-[#FFAF00] mb-50;
 
             text-shadow: -2px -2px 0 #4C3110,
             2px -2px 0 #4C3110,
@@ -59,7 +59,7 @@
         }
 
         .blockDesc {
-            @apply px-11 text-[#4C3110] text-[18px] leading-5.5 font-normal;
+            @apply px-11 text-[#4C3110] text-lg leading-5.5 font-normal;
         }
     }
 

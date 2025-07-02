@@ -13,7 +13,7 @@
         }
 
         .headerTitle {
-            @apply text-[42px] font-normal;
+            @apply text-4xl font-normal;
             background: linear-gradient(to bottom, #FFAF00, #F3C358);
             color: transparent;
             background-clip: text;
@@ -22,7 +22,7 @@
         }
 
         .searchBox {
-            @apply text-white text-[24px] font-normal leading-10 ;
+            @apply text-white text-2xl font-normal leading-10 ;
             @apply w-125.5 h-18 flex items-center bg-[#251812] rounded-2xl px-4 border-2 border-[#54382F];
 
             .searchIcon {
@@ -40,7 +40,7 @@
         @apply grow shrink basis-0 overflow-hidden flex items-stretch pb-10 pr-18.5;
 
         .toolContainer {
-            @apply shrink-0 flex flex-col items-end pl-17.5 pt-3 gap-y-5 text-[#C8C3B7] text-[24px] font-normal leading-10;
+            @apply shrink-0 flex flex-col items-end pl-17.5 pt-3 gap-y-5 text-[#C8C3B7] text-2xl font-normal leading-10;
 
             & > div {
                 @apply cursor-pointer flex items-center justify-center rounded-md bg-[#47413C];
@@ -100,7 +100,7 @@
             @apply bg-[url('/src/assets/images/gallery_page/detail_background.png')] bg-cover bg-top-left bg-no-repeat;
 
             .detailTitle {
-                @apply self-center shrink-0 w-100 h-14 text-[#64401E] text-[32px] font-normal leading-10 flex items-center justify-center mb-3;
+                @apply self-center shrink-0 w-100 h-14 text-[#64401E] text-3xl font-normal leading-10 flex items-center justify-center mb-3;
                 @apply bg-[url('/src/assets/images/gallery_page/detail_title_background.png')] bg-contain bg-top-left bg-no-repeat;
             }
 
@@ -117,15 +117,15 @@
 
 .detailBottomPart {
     .detailUndetectedPart {
-        @apply grow shrink basis-0 flex flex-col items-center text-[#64401E] text-[26px] leading-10 font-normal px-23 text-center pt-11;
+        @apply grow shrink basis-0 flex flex-col items-center text-[#64401E] text-2xl leading-10 font-normal px-23 text-center pt-11;
     }
     .detailName {
-        @apply px-10 shrink-0 text-[#292522] text-[22px] font-normal leading-normal text-center -mb-1;
+        @apply px-10 shrink-0 text-[#292522] text-xl font-normal leading-normal text-center -mb-1;
     }
 }
 
 .detailInfoPart {
-    @apply leading-6 grow shrink basis-0 self-stretch px-10 text-[20px] font-normal flex flex-col items-stretch overflow-x-hidden overflow-y-auto mb-4;
+    @apply leading-6 grow shrink basis-0 self-stretch px-10 text-xl font-normal flex flex-col items-stretch overflow-x-hidden overflow-y-auto mb-4;
 
     & > div {
         @apply flex items-start;
@@ -141,7 +141,7 @@
 }
 
 .scorePart {
-    @apply h-38.5 py-4.5 gap-y-1 shrink-0 self-stretch mx-8 text-[22px] font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-2 border-[#64401E];
+    @apply h-38.5 py-4.5 gap-y-1 shrink-0 self-stretch mx-8 text-xl font-black italic flex flex-col items-stretch overflow-hidden mb-5 bg-[#DBC788] border-b-2 border-[#64401E];
 
     & > div {
         @apply flex items-center;
@@ -157,7 +157,7 @@
 }
 
 .viewDetailButton {
-    @apply shrink-0 cursor-pointer w-87 h-17 flex items-center justify-center text-[27px] font-normal leading-10 mb-4 active:scale-95 transition;
+    @apply shrink-0 cursor-pointer w-87 h-17 flex items-center justify-center text-2xl font-normal leading-10 mb-4 active:scale-95 transition;
     @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background.png')] bg-contain bg-top-left bg-no-repeat;
 
     .viewDetailText {
@@ -170,7 +170,7 @@
 }
 
 .viewDetailButtonDisabled {
-    @apply shrink-0 cursor-not-allowed w-87 h-17 flex items-center justify-center text-[27px] font-normal leading-10 mb-4 active:scale-95 transition;
+    @apply shrink-0 cursor-not-allowed w-87 h-17 flex items-center justify-center text-2xl font-normal leading-10 mb-4 active:scale-95 transition;
     @apply bg-[url('/src/assets/images/gallery_page/view_detail_button_background_disabled.png')] bg-contain bg-top-left bg-no-repeat;
 
 
