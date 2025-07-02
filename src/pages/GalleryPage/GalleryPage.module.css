@@ -23,7 +23,7 @@
 
         .searchBox {
             @apply text-white text-[24px] font-normal leading-[40px] ;
-            @apply w-[502px] h-[72px] flex items-center bg-[#251812] rounded-2xl px-4 border-[2px] border-[#54382F];
+            @apply w-[502px] h-[72px] flex items-center bg-[#251812] rounded-2xl px-4 border-2 border-[#54382F];
 
             .searchIcon {
                 @apply size-8 mr-4;

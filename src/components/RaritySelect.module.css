@@ -9,7 +9,7 @@
     }
 
     .raritySelect {
-        @apply w-[232px] rounded-2xl border-[2px] border-[#54382F] bg-[#251812] text-[#62463B] px-[30px] focus-visible:outline-none flex items-center justify-items-start;
+        @apply w-[232px] rounded-2xl border-2 border-[#54382F] bg-[#251812] text-[#62463B] px-[30px] focus-visible:outline-none flex items-center justify-items-start;
         appearance: none;
     }
 }
