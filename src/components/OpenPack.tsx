@@ -31,10 +31,12 @@ const OpenPack = React.forwardRef<IOpenPackHandle, any>((_props, ref) => {
           addCardsToBag(cards)
           resolve(cards)
         })
+        const containerWidth = gsap.getProperty('#ratio-container', 'width', 'px')
+        const containerHeight = gsap.getProperty('#ratio-container', 'height', 'px')
         gsap.set(videoRef.current.getContainer(), {
           zIndex: 10,
-          width: '100vw',
-          height: '100vh',
+          width: containerWidth,
+          height: containerHeight,
         })
         gsap.to(videoRef.current.getContainer(), {
           autoAlpha: 1,
