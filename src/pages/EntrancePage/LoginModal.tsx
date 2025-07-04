@@ -8,6 +8,8 @@ import { checkHasAlreadyReadGuide, setStorageUserInfo } from '@/utils/common.ts'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
 import { toast } from 'react-toastify'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover'
 
 const LoginModal: React.FC = () => {
   const {
@@ -46,6 +48,16 @@ const LoginModal: React.FC = () => {
           )}
         >
           <Content className={styles.modalContent}>
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className={styles.hintIcon} tabIndex={0}>
+                  <QuestionMarkCircleIcon />
+                </div>
+              </PopoverTrigger>
+              <PopoverContent side="top" align="center" className={styles.tooltipContent}>
+                请输入您的账号和密码进行登录。
+              </PopoverContent>
+            </Popover>
             <Title className={styles.modalTitle}>Login</Title>
             <Description></Description>
             <form

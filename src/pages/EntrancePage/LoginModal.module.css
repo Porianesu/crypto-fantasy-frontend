@@ -7,6 +7,18 @@
 .modalContent {
     @apply w-176 h-154 flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-6.5 px-25 leading-10 focus-visible:outline-none;
     @apply bg-[url('/src/assets/images/entrance_page/login_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
+
+    .hintIcon {
+        @apply absolute top-19.5 right-10.5 flex items-center justify-center cursor-pointer;
+
+        & > svg {
+            @apply size-8;
+        }
+    }
+}
+
+.tooltipContent {
+    @apply px-4 py-2 rounded-lg shadow-lg bg-[#fffbe8] text-[#3A2400] text-base font-medium z-50 border border-[#f2c661] min-w-45 text-center pointer-events-none;
 }
 
 .modalHeader {
