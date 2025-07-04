@@ -54,7 +54,7 @@
         }
 
         .cardScore {
-            @apply absolute text-white text-2xl font-black text-shadow-teal-400 italic text-center min-w-7.5 h-10;
+            @apply absolute text-white text-2xl font-black text-shadow-teal-400 italic text-center min-w-7.5 h-10 flex items-center justify-center;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
     }
@@ -111,7 +111,7 @@
         }
 
         .cardNameWrapper {
-            @apply top-82.5 left-13.5;
+            @apply top-83 left-13.5;
         }
     }
 
