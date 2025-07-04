@@ -21,7 +21,7 @@
 
     .drawCardsEntranceContainer {
         @apply absolute z-10 top-1/2 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center;
-        transform: translateY(calc(130px - 50%));
+        transform: translateY(calc(8.125rem - 50%));
 
         .drawCardsImage {
             @apply w-123 h-107.5 bg-[url(/src/assets/images/home_page/open_package.png)] bg-contain bg-center bg-no-repeat mb-7;
