@@ -55,7 +55,7 @@ const LoginModal: React.FC = () => {
                 </div>
               </PopoverTrigger>
               <PopoverContent side="top" align="center" className={styles.tooltipContent}>
-                请输入您的账号和密码进行登录。
+                Please join the waitlist to get a demo account.
               </PopoverContent>
             </Popover>
             <Title className={styles.modalTitle}>Login</Title>
