@@ -10,24 +10,24 @@ import {
   Title,
 } from '@radix-ui/react-dialog'
 import classNames from 'classnames'
-import styles from './TournamentPageCardsFormationModal.module.css'
+import styles from './CardSelectModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { CARD_RARITY } from '@/components/Card.tsx'
+import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import type { IBagCardData } from '@/pages/HomePage/CardsBagModal.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import RaritySelect from '@/components/RaritySelect.tsx'
 
-interface ITournamentPageCardsFormationModalProps {
+interface ICardSelectModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  cardsFormation: Array<number>
-  changeCardsFormation: (cardsFormation: Array<number>) => void
+  selectedCards: Array<number>
+  handleCardSelect: (card: ICardData) => void
 }
-const TournamentPageCardsFormationModal: React.FC<ITournamentPageCardsFormationModalProps> = ({
+const CardSelectModal: React.FC<ICardSelectModalProps> = ({
   open,
   onOpenChange,
-  cardsFormation: selectedIds,
-  changeCardsFormation,
+  selectedCards: selectedIds,
+  handleCardSelect,
 }) => {
   const {
     appStore: { cardsBag },
@@ -75,20 +75,6 @@ const TournamentPageCardsFormationModal: React.FC<ITournamentPageCardsFormationM
     }
   }, [open])
 
-  const handleCardClick = (card: IBagCardData) => {
-    const findIndex = selectedIds.findIndex((id) => id === card.id)
-    if (findIndex !== -1) {
-      // If the card is already selected, remove it from the formation
-      const newCardsFormation = selectedIds.filter((id) => id !== card.id)
-      changeCardsFormation(newCardsFormation)
-    } else {
-      if (selectedIds.length >= 5) return
-      // If the card is not selected, add it to the formation
-      const newCardsFormation = [...selectedIds, card.id]
-      changeCardsFormation(newCardsFormation)
-    }
-  }
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <Portal>
@@ -124,7 +110,7 @@ const TournamentPageCardsFormationModal: React.FC<ITournamentPageCardsFormationM
                       <div
                         key={card.id}
                         className={classNames(styles.cardItem, selected && styles.selectedCard)}
-                        onClick={() => handleCardClick(card)}
+                        onClick={() => handleCardSelect(card)}
                       >
                         {
                           <button
@@ -149,4 +135,4 @@ const TournamentPageCardsFormationModal: React.FC<ITournamentPageCardsFormationM
     </Dialog>
   )
 }
-export default observer(TournamentPageCardsFormationModal)
+export default observer(CardSelectModal)

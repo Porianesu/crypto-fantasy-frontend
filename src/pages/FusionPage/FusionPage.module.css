@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.pageContainer {
+    @apply flex-1 flex flex-col items-stretch justify-start;
+}

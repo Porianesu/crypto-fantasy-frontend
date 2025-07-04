@@ -27,8 +27,6 @@ export default class ModalStore {
 
   viewDetailModalVisible = false
 
-  cardsFormationModalVisible = false
-
   battleModalVisible = false
 
   constructor(rootStore: Store) {
@@ -45,8 +43,6 @@ export default class ModalStore {
       changeViewDetailModalData: action,
       viewDetailModalVisible: observable,
       changeViewDetailModalVisible: action,
-      cardsFormationModalVisible: observable,
-      changeCardsFormationModalVisible: action,
       battleModalVisible: observable,
       changeBattleModalVisible: action,
     })
@@ -61,7 +57,6 @@ export default class ModalStore {
     }
     this.viewDetailModalData = undefined
     this.viewDetailModalVisible = false
-    this.cardsFormationModalVisible = false
   }
 
   changeLoginModalVisible = (newValue: boolean) => {
@@ -85,10 +80,6 @@ export default class ModalStore {
 
   changeViewDetailModalVisible = (newValue: boolean) => {
     this.viewDetailModalVisible = newValue
-  }
-
-  changeCardsFormationModalVisible = (newValue: boolean) => {
-    this.cardsFormationModalVisible = newValue
   }
 
   changeBattleModalVisible = (newValue: boolean) => {

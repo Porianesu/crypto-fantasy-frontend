@@ -18,9 +18,7 @@ import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 
-const TournamentPageCardsFormationModal = React.lazy(
-  () => import('@/pages/TournamentPage/TournamentPageCardsFormationModal.tsx'),
-)
+const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 
 export interface ITournamentPageCardsFormationHandle {
   tempCardsFormation: Array<number>
@@ -212,6 +210,20 @@ const TournamentPageCardsFormation = React.forwardRef<
     }
   }
 
+  const handleCardSelect = (card: ICardData) => {
+    const findIndex = tempCardsFormation.findIndex((id) => id === card.id)
+    if (findIndex !== -1) {
+      // If the card is already selected, remove it from the formation
+      const newCardsFormation = tempCardsFormation.filter((id) => id !== card.id)
+      changeTempCardsFormation(newCardsFormation)
+    } else {
+      if (tempCardsFormation.length >= 5) return
+      // If the card is not selected, add it to the formation
+      const newCardsFormation = [...tempCardsFormation, card.id]
+      changeTempCardsFormation(newCardsFormation)
+    }
+  }
+
   const renderCard = (card: ICardData | undefined, key: React.Key) =>
     card ? (
       <StaticCard
@@ -278,12 +290,12 @@ const TournamentPageCardsFormation = React.forwardRef<
         </div>
       </div>
       <Suspense fallback={null}>
-        <TournamentPageCardsFormationModal
+        <CardSelectModal
           open={cardsFormationModalOpen}
           onOpenChange={setCardsFormationModalOpen}
-          cardsFormation={tempCardsFormation}
-          changeCardsFormation={changeTempCardsFormation}
-        ></TournamentPageCardsFormationModal>
+          selectedCards={tempCardsFormation}
+          handleCardSelect={handleCardSelect}
+        ></CardSelectModal>
       </Suspense>
     </>
   )

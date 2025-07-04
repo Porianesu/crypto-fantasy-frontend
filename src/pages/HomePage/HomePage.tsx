@@ -2,11 +2,11 @@ import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/HomePage/Leaderboard.tsx'
-import React, { Suspense, useRef } from 'react'
+import React, { Suspense, useMemo, useRef, useState } from 'react'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
-import { getGalleryPath } from '@/navigation/routes.tsx'
+import { getFusionPath, getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import fusionIcon from '../../..../../../src/assets/images/home_page/footer_button_fusion.png'
@@ -16,20 +16,37 @@ import battleIcon from '../../../src/assets/images/home_page/footer_button_battl
 import rewardIcon from '../../../src/assets/images/home_page/footer_button_reward.png'
 import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.png'
 import { type IOpenPackHandle } from '@/components/OpenPack.tsx'
+import type { ICardData } from '@/components/Card.tsx'
 
 const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
-const CardsFormationModal = React.lazy(() => import('@/pages/HomePage/CardsFormationModal.tsx'))
 const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
+const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 
 function HomePage() {
   const {
-    appStore: { userInfo },
+    appStore: { userInfo, cardsFormation, changeCardsFormation },
     modalStore: { changeCardsBagModalData, changeBattleModalVisible },
   } = useMobxStore()
   const navigate = useNavigate()
   const pageContainerRef = useRef<HTMLDivElement>(null)
   const openPackRef = useRef<IOpenPackHandle>(null)
+  const [cardsFormationModalVisible, setCardsFormationModalVisible] = useState(false)
+  const selectedCards = useMemo(() => cardsFormation.map((card) => card.id), [cardsFormation])
+
+  const handleCardSelect = (card: ICardData) => {
+    const findIndex = cardsFormation.findIndex((c) => c.id === card.id)
+    if (findIndex !== -1) {
+      // If the card is already selected, remove it from the formation
+      const newCardsFormation = cardsFormation.filter((c) => c.id !== card.id)
+      changeCardsFormation(newCardsFormation)
+    } else {
+      if (cardsFormation.length >= 5) return
+      // If the card is not selected, add it to the formation
+      const newCardsFormation = [...cardsFormation, card]
+      changeCardsFormation(newCardsFormation)
+    }
+  }
 
   const comingSoon = () => {
     toast.info('Coming Soon!')
@@ -47,7 +64,7 @@ function HomePage() {
       key: 'fusion',
       icon: fusionIcon,
       className: 'w-43 h-44',
-      onClick: comingSoon,
+      onClick: () => navigate(getFusionPath()),
     },
     {
       key: 'gallery',
@@ -141,7 +158,9 @@ function HomePage() {
         {/* 中间抽卡/书本图示 */}
         <div className="flex-1"></div>
         {/* 右侧卡组展示 */}
-        <CardsFormation></CardsFormation>
+        <CardsFormation
+          setCardsFormationModalVisible={setCardsFormationModalVisible}
+        ></CardsFormation>
       </div>
       <div className={styles.footer}>
         <div className={styles.footerBtnGroup}>
@@ -176,7 +195,12 @@ function HomePage() {
         <CardsBagModal></CardsBagModal>
       </Suspense>
       <Suspense fallback={null}>
-        <CardsFormationModal></CardsFormationModal>
+        <CardSelectModal
+          open={cardsFormationModalVisible}
+          onOpenChange={setCardsFormationModalVisible}
+          selectedCards={selectedCards}
+          handleCardSelect={handleCardSelect}
+        ></CardSelectModal>
       </Suspense>
       <Suspense fallback={null}>
         <BattleModal></BattleModal>

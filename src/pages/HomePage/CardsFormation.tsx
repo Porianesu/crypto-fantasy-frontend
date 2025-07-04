@@ -1,18 +1,20 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { type Dispatch, type SetStateAction } from 'react'
 import styles from './CardsFormation.module.css'
 import classNames from 'classnames'
 import StaticCard from '@/components/StaticCard.tsx'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 
-const CardsFormation: React.FC = () => {
+interface ICardsFormationProps {
+  setCardsFormationModalVisible: Dispatch<SetStateAction<boolean>>
+}
+const CardsFormation: React.FC<ICardsFormationProps> = ({ setCardsFormationModalVisible }) => {
   const {
     appStore: { cardsFormation },
-    modalStore: { changeCardsFormationModalVisible },
   } = useMobxStore()
 
   const handleCardClick = () => {
-    changeCardsFormationModalVisible(true)
+    setCardsFormationModalVisible(true)
   }
 
   return (

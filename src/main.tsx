@@ -13,6 +13,8 @@ import {
   ROOT_PATH,
   TOURNAMENT_PATH,
   tournamentPageLoader,
+  FUSION_PATH,
+  fusionPageLoader,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
@@ -22,6 +24,7 @@ const HomePage = React.lazy(() => import('@/pages/HomePage/HomePage.tsx'))
 const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx'))
 const IntroductionPage = React.lazy(() => import('@/pages/IntroductionPage/IntroductionPage.tsx'))
 const TournamentPage = React.lazy(() => import('@/pages/TournamentPage/TournamentPage.tsx'))
+const FusionPage = React.lazy(() => import('@/pages/FusionPage/FusionPage.tsx'))
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer } from 'react-toastify'
 
@@ -82,6 +85,15 @@ export const router = createBrowserRouter([
         element: (
           <CommonPageSuspense>
             <TournamentPage></TournamentPage>
+          </CommonPageSuspense>
+        ),
+      },
+      {
+        path: FUSION_PATH,
+        loader: fusionPageLoader,
+        element: (
+          <CommonPageSuspense>
+            <FusionPage></FusionPage>
           </CommonPageSuspense>
         ),
       },

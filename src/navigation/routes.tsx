@@ -7,6 +7,7 @@ export const ENTRANCE_PATH = '/entrance'
 export const GALLERY_PATH = '/gallery/:cardId?'
 export const INTRODUCTION_PATH = '/introduction'
 export const TOURNAMENT_PATH = '/tournament'
+export const FUSION_PATH = '/fusion'
 
 export const getHomePath = () => {
   return generatePath(HOME_PATH)
@@ -26,6 +27,10 @@ export const getIntroductionPath = () => {
 
 export const getTournamentPath = () => {
   return generatePath(TOURNAMENT_PATH)
+}
+
+export const getFusionPath = () => {
+  return generatePath(FUSION_PATH)
 }
 
 const checkIsAppLoading = () => {
@@ -54,6 +59,13 @@ export const introductionPageLoader = () => {
 }
 
 export const tournamentPageLoader = () => {
+  if (checkIsAppLoading()) {
+    return redirect(getEntrancePath())
+  }
+  return null
+}
+
+export const fusionPageLoader = () => {
   if (checkIsAppLoading()) {
     return redirect(getEntrancePath())
   }
