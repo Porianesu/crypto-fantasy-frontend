@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Close,
   Content,
@@ -16,6 +16,9 @@ import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import type { IBagCardData } from '@/pages/HomePage/CardsBagModal.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import RaritySelect from '@/components/RaritySelect.tsx'
+import { gsap } from 'gsap'
+import { BigNumber } from 'bignumber.js'
+import { useGSAP } from '@gsap/react'
 
 interface ICardSelectModalProps {
   open: boolean
@@ -23,6 +26,75 @@ interface ICardSelectModalProps {
   selectedCards: Array<number>
   handleCardSelect: (card: ICardData) => void
 }
+
+const DEFAULT_DESIGN_GAP_X = 66
+
+interface ICardsListProps {
+  filteredCards: Array<IBagCardData>
+  selectedIds: Array<number>
+  handleCardSelect: (card: ICardData) => void
+}
+const CardsList: React.FC<ICardsListProps> = observer(
+  ({ filteredCards, selectedIds, handleCardSelect }) => {
+    const {
+      systemStore: { fontSizeScaleRate },
+    } = useMobxStore()
+    const cardsListRef = useRef<HTMLDivElement>(null)
+    const [cardWidth, setCardWidth] = useState(202)
+
+    useGSAP(
+      () => {
+        if (!open) return
+        const containerWidth = gsap.getProperty(cardsListRef.current, 'width')
+        const cardWidth = new BigNumber(containerWidth)
+          .minus(new BigNumber(DEFAULT_DESIGN_GAP_X).times(fontSizeScaleRate))
+          .dividedBy(3)
+          .decimalPlaces(0)
+          .toNumber()
+        setCardWidth(cardWidth)
+      },
+      {
+        scope: cardsListRef,
+        dependencies: [open],
+      },
+    )
+
+    return (
+      <div className={styles.cardsList} ref={cardsListRef}>
+        {filteredCards.length === 0 ? (
+          <div className={styles.emptyTip}>no cards</div>
+        ) : (
+          <div className={styles.cardsGrid}>
+            {filteredCards.map((card) => {
+              const currentCardFormationIndex = selectedIds.findIndex((id) => id === card.id)
+              const selected = currentCardFormationIndex !== -1
+              return (
+                <div
+                  key={card.id}
+                  className={classNames(styles.cardItem, selected && styles.selectedCard)}
+                  onClick={() => handleCardSelect(card)}
+                >
+                  {
+                    <button
+                      className={classNames(styles.selectBtn, {
+                        [styles.selectedBtn]: selected,
+                      })}
+                      type="button"
+                    >
+                      {selected ? currentCardFormationIndex + 1 : ''}
+                    </button>
+                  }
+                  <StaticCard width={cardWidth} card={card}></StaticCard>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    )
+  },
+)
+
 const CardSelectModal: React.FC<ICardSelectModalProps> = ({
   open,
   onOpenChange,
@@ -98,37 +170,11 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
               </div>
               <RaritySelect value={rarity} onChange={setRarity}></RaritySelect>
             </div>
-            <div className={styles.cardsList}>
-              {filteredCards.length === 0 ? (
-                <div className={styles.emptyTip}>no cards</div>
-              ) : (
-                <div className={styles.cardsGrid}>
-                  {filteredCards.map((card) => {
-                    const currentCardFormationIndex = selectedIds.findIndex((id) => id === card.id)
-                    const selected = currentCardFormationIndex !== -1
-                    return (
-                      <div
-                        key={card.id}
-                        className={classNames(styles.cardItem, selected && styles.selectedCard)}
-                        onClick={() => handleCardSelect(card)}
-                      >
-                        {
-                          <button
-                            className={classNames(styles.selectBtn, {
-                              [styles.selectedBtn]: selected,
-                            })}
-                            type="button"
-                          >
-                            {selected ? currentCardFormationIndex + 1 : ''}
-                          </button>
-                        }
-                        <StaticCard width={202} card={card}></StaticCard>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
+            <CardsList
+              filteredCards={filteredCards}
+              selectedIds={selectedIds}
+              handleCardSelect={handleCardSelect}
+            ></CardsList>
           </Content>
         </DialogOverlay>
       </Portal>

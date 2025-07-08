@@ -91,7 +91,7 @@
 }
 
 .cardsGrid {
-    @apply grid grid-cols-3 gap-x-8.5 gap-y-7.5 pl-17 pr-14 py-4.5;
+    @apply grid grid-cols-3 gap-x-8.5 gap-y-7.5 pl-15.5 pr-14 py-4.5;
 
     .cardItem {
         @apply cursor-pointer relative flex flex-col items-center justify-center;
