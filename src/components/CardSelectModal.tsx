@@ -16,9 +16,6 @@ import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import type { IBagCardData } from '@/pages/HomePage/CardsBagModal.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import RaritySelect from '@/components/RaritySelect.tsx'
-import { gsap } from 'gsap'
-import { BigNumber } from 'bignumber.js'
-import { useGSAP } from '@gsap/react'
 
 interface ICardSelectModalProps {
   open: boolean
@@ -27,8 +24,6 @@ interface ICardSelectModalProps {
   handleCardSelect: (card: ICardData) => void
 }
 
-const DEFAULT_DESIGN_GAP_X = 66
-
 interface ICardsListProps {
   filteredCards: Array<IBagCardData>
   selectedIds: Array<number>
@@ -36,28 +31,7 @@ interface ICardsListProps {
 }
 const CardsList: React.FC<ICardsListProps> = observer(
   ({ filteredCards, selectedIds, handleCardSelect }) => {
-    const {
-      systemStore: { fontSizeScaleRate },
-    } = useMobxStore()
     const cardsListRef = useRef<HTMLDivElement>(null)
-    const [cardWidth, setCardWidth] = useState(202)
-
-    useGSAP(
-      () => {
-        if (!open) return
-        const containerWidth = gsap.getProperty(cardsListRef.current, 'width')
-        const cardWidth = new BigNumber(containerWidth)
-          .minus(new BigNumber(DEFAULT_DESIGN_GAP_X).times(fontSizeScaleRate))
-          .dividedBy(3)
-          .decimalPlaces(0)
-          .toNumber()
-        setCardWidth(cardWidth)
-      },
-      {
-        scope: cardsListRef,
-        dependencies: [open],
-      },
-    )
 
     return (
       <div className={styles.cardsList} ref={cardsListRef}>
@@ -84,7 +58,7 @@ const CardsList: React.FC<ICardsListProps> = observer(
                       {selected ? currentCardFormationIndex + 1 : ''}
                     </button>
                   }
-                  <StaticCard width={cardWidth} card={card}></StaticCard>
+                  <StaticCard width={202} card={card}></StaticCard>
                 </div>
               )
             })}

@@ -17,8 +17,6 @@ import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import StaticCard from '@/components/StaticCard.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
-import { gsap } from 'gsap'
-import { useGSAP } from '@gsap/react'
 import RaritySelect, { type RARITY_SELECT_VALUE } from '@/components/RaritySelect.tsx'
 
 export interface IBagCardData extends ICardData {
@@ -43,7 +41,6 @@ const CardsBagContent: React.FC = observer(() => {
     })
     return Object.values(cardCountMap)
   }, [cardsBag])
-  const [cardWidth, setCardWidth] = useState(300)
   const cardsListRef = useRef<HTMLDivElement>(null)
   const cardsGridRef = useRef<HTMLDivElement>(null)
   const [search, setSearch] = useState('')
@@ -52,21 +49,6 @@ const CardsBagContent: React.FC = observer(() => {
   const isEdit = useMemo(
     () => cardsBagModalData.type === ICardsBagModalType.EDIT,
     [cardsBagModalData.type],
-  )
-
-  useGSAP(
-    () => {
-      if (!cardsGridRef.current) return
-      const width = gsap.getProperty(cardsGridRef.current, 'width')
-      if (!width) return
-      const cardWidth = Math.floor((Number(width) - 184) / 5)
-      console.debug('cardWidth', cardWidth)
-      setCardWidth(cardWidth)
-    },
-    {
-      dependencies: [],
-      scope: cardsListRef,
-    },
   )
 
   const handleSelect = (id: number) => {
@@ -166,7 +148,7 @@ const CardsBagContent: React.FC = observer(() => {
                           {selected ? '✓' : ''}
                         </button>
                       )}
-                      <StaticCard width={cardWidth} card={card}></StaticCard>
+                      <StaticCard width={258} card={card}></StaticCard>
                       <div className={styles.cardCount}>
                         <span>x</span>
                         {card.count}

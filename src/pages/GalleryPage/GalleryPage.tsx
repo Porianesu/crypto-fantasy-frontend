@@ -8,8 +8,6 @@ import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import classNames from 'classnames'
-import { useGSAP } from '@gsap/react'
-import { gsap } from 'gsap'
 import ViewDetailModal from '@/pages/GalleryPage/ViewDetailModal.tsx'
 import { getCardImageById } from '@/utils/common.ts'
 import dayjs from 'dayjs'
@@ -35,23 +33,8 @@ const GalleryPage: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState<FormattedCardData>()
   const [searchText, setSearchText] = useState('')
   const [rarityFilter, setRarityFilter] = useState<CARD_RARITY | 'all'>('all')
-  const [cardWidth, setCardWidth] = useState(300)
   const pageBodyRef = useRef<HTMLDivElement>(null)
   const cardsPartRef = useRef<HTMLDivElement>(null)
-
-  useGSAP(
-    () => {
-      if (!cardsPartRef.current) return
-      const width = gsap.getProperty(cardsPartRef.current, 'width')
-      if (!width) return
-      const cardWidth = Math.floor((Number(width) - 68 - 68 - 8 - 64 * 2) / 3)
-      setCardWidth(cardWidth)
-    },
-    {
-      dependencies: [],
-      scope: cardsPartRef,
-    },
-  )
 
   const fetchCardDatabase = () => {
     return new Promise<Array<FormattedCardData>>((resolve, reject) => {
@@ -166,7 +149,7 @@ const GalleryPage: React.FC = () => {
               {filteredCards.map((card) => (
                 <StaticCard
                   undetected={!card.processed}
-                  width={cardWidth}
+                  width={258}
                   card={card}
                   key={card.id}
                   onClick={() => setSelectedCard(card)}

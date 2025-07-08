@@ -3,6 +3,7 @@ import Card, { type ICardData } from '@/components/Card.tsx'
 import classNames from 'classnames'
 import { observer } from 'mobx-react-lite'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import { BigNumber } from 'bignumber.js'
 
 interface IStaticCardProps extends HTMLAttributes<HTMLDivElement> {
   card: ICardData
@@ -24,14 +25,15 @@ const StaticCard: React.FC<IStaticCardProps> = ({
   const {
     systemStore: { fontSizeScaleRate },
   } = useMobxStore()
-  const height = useMemo(
-    () => Math.round((width * CARD_DESIGN_HEIGHT) / CARD_DESIGN_WIDTH),
-    [width],
-  )
-  const scale = useMemo(
-    () => width / (CARD_DESIGN_WIDTH * fontSizeScaleRate),
+  const scaledWidth = useMemo(
+    () => new BigNumber(width).times(fontSizeScaleRate).decimalPlaces(2).toNumber(),
     [fontSizeScaleRate, width],
   )
+  const height = useMemo(
+    () => Math.round((scaledWidth * CARD_DESIGN_HEIGHT) / CARD_DESIGN_WIDTH),
+    [scaledWidth],
+  )
+  const scale = useMemo(() => width / CARD_DESIGN_WIDTH, [width])
 
   return (
     <div
@@ -39,7 +41,7 @@ const StaticCard: React.FC<IStaticCardProps> = ({
         grayscale: undetected,
         'contrast-[0.8]': undetected,
       })}
-      style={{ width: `${width}px`, height: `${height}px`, ...style }}
+      style={{ width: `${scaledWidth}px`, height: `${height}px`, ...style }}
       {...otherProps}
     >
       <Card type={'static'} card={card} scale={scale} undetected={undetected}></Card>
