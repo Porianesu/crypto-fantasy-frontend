@@ -2,7 +2,7 @@
 
 
 .card {
-    @apply p-0 cursor-pointer will-change-transform shrink-0 font-sans;
+    @apply p-0 cursor-pointer will-change-transform shrink-0;
     @apply w-71.5 h-103.5;
     transform-style: preserve-3d;
     transform-origin: center;
@@ -46,7 +46,7 @@
         @apply absolute w-full h-full rounded-lg overflow-hidden z-[2];
 
         .cardNameWrapper {
-            @apply absolute w-42 h-9.5 border border-[red] flex items-center justify-center;
+            @apply absolute w-42 h-9.5 flex items-center justify-center;
         }
 
         .cardName {
@@ -54,7 +54,7 @@
         }
 
         .cardScore {
-            @apply rounded-full size-12 border border-[red] absolute text-white text-2xl font-black text-shadow-teal-400 text-center flex items-center justify-center;
+            @apply rounded-full size-12 absolute text-white text-2xl font-black text-shadow-teal-400 text-center flex items-center justify-center;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
     }

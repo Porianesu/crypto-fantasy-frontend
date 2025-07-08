@@ -148,7 +148,7 @@ const GalleryPage: React.FC = () => {
             <div className={styles.cardListContainer}>
               {filteredCards.map((card) => (
                 <StaticCard
-                  undetected={false}
+                  undetected={!card.processed}
                   width={258}
                   card={card}
                   key={card.id}
