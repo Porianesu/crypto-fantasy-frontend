@@ -1,26 +1,41 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { type IPrizePool, PRIZE_POOL_STATUS } from '@/types/TournamentPageTypes.ts'
 import styles from './TournamentPageCountDown.module.css'
 import FlipNumbers from 'react-flip-numbers'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import { BigNumber } from 'bignumber.js'
+
 dayjs.extend(duration)
 
 interface ITournamentPageCountDownProps {
   currentPrizePool: IPrizePool | undefined
 }
 
+const DEFAULT_COUNTDOWN = {
+  days: '00',
+  minutes: '00',
+  seconds: '00',
+}
+const NUMBER_COLOR = '#734319'
+const NUMBER_HEIGHT = 40
+const NUMBER_WIDTH = 30
 const TournamentPageCountDown: React.FC<ITournamentPageCountDownProps> = ({ currentPrizePool }) => {
-  const DEFAULT_COUNTDOWN = {
-    days: '00',
-    minutes: '00',
-    seconds: '00',
-  }
+  const {
+    systemStore: { fontSizeScaleRate },
+  } = useMobxStore()
+  const scaledHeight = useMemo(
+    () => new BigNumber(NUMBER_HEIGHT).times(fontSizeScaleRate).decimalPlaces(2).toNumber(),
+    [fontSizeScaleRate],
+  )
+  const scaledWidth = useMemo(
+    () => new BigNumber(NUMBER_WIDTH).times(fontSizeScaleRate).decimalPlaces(2).toNumber(),
+    [fontSizeScaleRate],
+  )
   const [countdown, setCountdown] = useState(DEFAULT_COUNTDOWN)
-  const NUMBER_COLOR = '#734319'
-  const NUMBER_HEIGHT = 40
-  const NUMBER_WIDTH = 30
+
   useEffect(() => {
     if (!currentPrizePool || currentPrizePool.status !== PRIZE_POOL_STATUS.PROCESSING) {
       return
@@ -52,22 +67,22 @@ const TournamentPageCountDown: React.FC<ITournamentPageCountDownProps> = ({ curr
           color={NUMBER_COLOR}
           numbers={countdown.days}
           play={true}
-          height={NUMBER_HEIGHT}
-          width={NUMBER_WIDTH}
+          height={scaledHeight}
+          width={scaledWidth}
         ></FlipNumbers>
         <FlipNumbers
           color={NUMBER_COLOR}
           numbers={countdown.minutes}
           play={true}
-          height={NUMBER_HEIGHT}
-          width={NUMBER_WIDTH}
+          height={scaledHeight}
+          width={scaledWidth}
         ></FlipNumbers>
         <FlipNumbers
           color={NUMBER_COLOR}
           numbers={countdown.seconds}
           play={true}
-          height={NUMBER_HEIGHT}
-          width={NUMBER_WIDTH}
+          height={scaledHeight}
+          width={scaledWidth}
         ></FlipNumbers>
       </div>
     </div>
