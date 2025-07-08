@@ -48,11 +48,8 @@ export default class SystemStore {
         container.style.height = `${targetHeight}px`
       }
       const measureScaleRate = new BigNumber(targetWidth).dividedBy(DESIGN_WIDTH)
-      this.fontSizeScaleRate = Math.min(1, measureScaleRate.toNumber())
-      const resultFontSize = Math.min(
-        DESIGN_FONT_SIZE,
-        measureScaleRate.times(DESIGN_FONT_SIZE).decimalPlaces(2).toNumber(),
-      )
+      this.fontSizeScaleRate = measureScaleRate.toNumber()
+      const resultFontSize = measureScaleRate.times(DESIGN_FONT_SIZE).decimalPlaces(2).toNumber()
       window.document.documentElement.style.fontSize = `${resultFontSize}px`
     }
   }
