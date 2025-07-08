@@ -230,7 +230,7 @@ const TournamentPageCardsFormation = React.forwardRef<
         className={classNames(styles.formationCard, styles[`formationCard${key}`])}
         key={card.id}
         card={card}
-        width={111}
+        width={108}
         onClick={handleCardClick}
       ></StaticCard>
     ) : (
