@@ -1,6 +1,8 @@
 import React, { type HTMLAttributes, useMemo } from 'react'
 import Card, { type ICardData } from '@/components/Card.tsx'
 import classNames from 'classnames'
+import { observer } from 'mobx-react-lite'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
 
 interface IStaticCardProps extends HTMLAttributes<HTMLDivElement> {
   card: ICardData
@@ -8,7 +10,8 @@ interface IStaticCardProps extends HTMLAttributes<HTMLDivElement> {
   undetected?: boolean
 }
 
-const aspectRatio = 285 / 413
+const CARD_DESIGN_WIDTH = 286
+const CARD_DESIGN_HEIGHT = 413
 
 const StaticCard: React.FC<IStaticCardProps> = ({
   card,
@@ -18,8 +21,18 @@ const StaticCard: React.FC<IStaticCardProps> = ({
   undetected = false,
   ...otherProps
 }) => {
-  const height = useMemo(() => Math.round(width / aspectRatio), [width])
-  const scale = useMemo(() => width / 285, [width])
+  const {
+    systemStore: { fontSizeScaleRate },
+  } = useMobxStore()
+  const height = useMemo(
+    () => Math.round((width * CARD_DESIGN_HEIGHT) / CARD_DESIGN_WIDTH),
+    [width],
+  )
+  const scale = useMemo(
+    () => width / (CARD_DESIGN_WIDTH * fontSizeScaleRate),
+    [fontSizeScaleRate, width],
+  )
+
   return (
     <div
       className={classNames('flex items-center justify-center', className, {
@@ -33,4 +46,4 @@ const StaticCard: React.FC<IStaticCardProps> = ({
     </div>
   )
 }
-export default StaticCard
+export default observer(StaticCard)

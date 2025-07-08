@@ -13,12 +13,15 @@ export default class SystemStore {
 
   ratioContainerWidth = window?.innerWidth || DESIGN_WIDTH
 
+  fontSizeScaleRate = 1
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
       rootStoreRef: observable,
       resetStore: action,
       ratioContainerWidth: observable,
+      fontSizeScaleRate: observable,
       scaleScreen: action,
       aspectRatio: computed,
     })
@@ -44,13 +47,11 @@ export default class SystemStore {
         container.style.width = `100vw`
         container.style.height = `${targetHeight}px`
       }
+      const measureScaleRate = new BigNumber(targetWidth).dividedBy(DESIGN_WIDTH)
+      this.fontSizeScaleRate = Math.min(1, measureScaleRate.toNumber())
       const resultFontSize = Math.min(
         DESIGN_FONT_SIZE,
-        new BigNumber(targetWidth)
-          .dividedBy(DESIGN_WIDTH)
-          .times(DESIGN_FONT_SIZE)
-          .decimalPlaces(2)
-          .toNumber(),
+        measureScaleRate.times(DESIGN_FONT_SIZE).decimalPlaces(2).toNumber(),
       )
       window.document.documentElement.style.fontSize = `${resultFontSize}px`
     }
