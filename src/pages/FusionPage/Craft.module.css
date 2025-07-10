@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
 .bodyContainer {
-    @apply flex-1 overflow-hidden bg-amber-200;
+    @apply flex-1 overflow-hidden flex items-end px-22;
+
+    .checklistContainer {
+        @apply flex flex-col items-stretch w-103 h-189 mb-12.5;
+        @apply bg-[url(/src/assets/images/fusion_page/checklist_background.png)] bg-cover bg-top-left bg-no-repeat;
+    }
 }
