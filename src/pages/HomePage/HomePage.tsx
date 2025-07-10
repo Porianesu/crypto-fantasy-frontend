@@ -6,7 +6,7 @@ import React, { Suspense, useMemo, useRef, useState } from 'react'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
-import { getGalleryPath } from '@/navigation/routes.tsx'
+import { getFusionPath, getGalleryPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import fusionIcon from '../../..../../../src/assets/images/home_page/footer_button_fusion.png'
@@ -64,7 +64,7 @@ function HomePage() {
       key: 'fusion',
       icon: fusionIcon,
       className: 'w-43 h-44',
-      onClick: comingSoon,
+      onClick: () => navigate(getFusionPath()),
     },
     {
       key: 'gallery',

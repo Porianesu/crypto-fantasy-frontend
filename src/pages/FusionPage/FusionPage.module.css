@@ -1,5 +1,35 @@
 @import "tailwindcss";
 
 .pageContainer {
-    @apply flex-1 flex flex-col items-stretch justify-start;
+    @apply flex-1 overflow-hidden flex flex-col items-stretch justify-start;
+    @apply bg-[url(/src/assets/images/fusion_page/background.png)] bg-cover bg-top-left bg-no-repeat;
+
+    .header {
+        @apply pl-22 pr-21 flex  justify-between;
+
+        .backButton {
+            @apply size-22.5 mt-8;
+            @apply bg-[url(/src/assets/images/common/back_icon.png)] bg-cover bg-top-left bg-no-repeat;
+        }
+
+        .typeButtons {
+            @apply flex items-start gap-x-5;
+        }
+
+        .questionButton {
+            @apply size-22.5 mt-8;
+            @apply bg-[url(/src/assets/images/common/question_icon.png)] bg-cover bg-top-left bg-no-repeat;
+        }
+    }
+}
+
+.typeButtons {
+    .typeButton {
+        @apply shrink-0 w-46.5 h-29 text-3xl font-normal leading-10 flex flex-col items-center justify-start pt-7 text-white;
+        @apply bg-[url(/src/assets/images/common/page_type_background.png)] bg-cover bg-top-left bg-no-repeat;
+    }
+
+    .typeButtonActive {
+        @apply w-49.5 h-32.5 text-4xl bg-[url(/src/assets/images/common/page_type_background_active.png)];
+    }
 }

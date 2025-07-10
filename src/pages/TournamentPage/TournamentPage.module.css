@@ -22,7 +22,7 @@
 
             .tierBtn {
                 @apply flex items-start justify-center w-46.5 h-29 pt-6.5 text-white font-normal text-[2rem] leading-10;
-                @apply bg-[url('/src/assets/images/tournament_page/rules_background.png')] bg-contain bg-center bg-no-repeat;
+                @apply bg-[url('/src/assets/images/common/page_type_background.png')] bg-contain bg-center bg-no-repeat;
                 text-shadow: -2px -2px 0 #561900,
                 2px -2px 0 #561900,
                 -2px 2px 0 #561900,
@@ -35,7 +35,7 @@
 
             .tierBtnSelected {
                 @apply h-32.5 text-[2.625rem];
-                @apply bg-[url('/src/assets/images/tournament_page/rules_background_active.png')] bg-cover bg-center bg-no-repeat;
+                @apply bg-[url('/src/assets/images/common/page_type_background_active.png')] bg-cover bg-center bg-no-repeat;
             }
         }
 
@@ -51,7 +51,7 @@
             }
 
             .rulesBtn {
-                @apply bg-[url('/src/assets/images/tournament_page/rules_button.png')] bg-contain bg-center bg-no-repeat;
+                @apply bg-[url('/src/assets/images/common/question_icon.png')] bg-contain bg-center bg-no-repeat;
             }
         }
     }

@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.bodyContainer {
+    @apply flex-1 overflow-hidden bg-blue-500;
+}
