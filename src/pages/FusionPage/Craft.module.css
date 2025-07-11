@@ -1,18 +1,38 @@
 @import "tailwindcss";
 
 .bodyContainer {
-    @apply flex-1 overflow-hidden flex items-end justify-between px-22;
+    @apply flex-1 overflow-hidden flex items-end justify-between px-22 text-white;
 
     .checklistContainer {
-        @apply flex flex-col items-stretch w-103 h-189 mb-12.5 shrink-0;
+        @apply flex flex-col items-stretch w-103 h-189 mb-12.5 shrink-0 relative px-5.5 pt-28.5 text-2xl leading-10 gap-y-5;
         @apply bg-[url(/src/assets/images/fusion_page/checklist_background.png)] bg-cover bg-top-left bg-no-repeat;
+
+        & > div {
+            @apply bg-[#763B1F] rounded-3xl pl-5.5 pr-4.5;
+        }
+
+        .title {
+            @apply absolute top-4.5 self-center;
+        }
+
+        .checklistTarget {
+            @apply h-19.5 flex items-center justify-between;
+        }
+
+        .requiredContainer {
+            @apply flex flex-col items-stretch gap-y-2.5 h-59 pt-5.5;
+        }
+
+        .optionalContainer {
+            @apply flex items-center justify-between h-19.5;
+        }
     }
 
     .middleContainer {
         @apply flex flex-col items-center shrink-0 mb-6.5;
 
         .magicContainer {
-            @apply w-204 h-205.5;
+            @apply w-204 h-205.5 relative;
             @apply bg-[url(/src/assets/images/fusion_page/magic_background_1.png)] bg-contain bg-top-left bg-no-repeat;
         }
 
@@ -31,6 +51,35 @@
 .craftButton {
     .assetIcon {
         @apply size-13 ml-5;
-        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+}
+
+
+.magicContainer {
+    .magicBackground {
+        @apply size-156 absolute z-0 inset-24.5;
+        @apply bg-[url(/src/assets/images/fusion_page/magic_background_2.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+}
+
+.requiredContainer {
+    & > div {
+        @apply flex items-center justify-between;
+
+        & > div {
+            @apply flex items-center justify-between;
+        }
+    }
+
+    .requiredAssetIcon {
+        @apply size-10 ml-2;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+}
+
+.optionalContainer {
+    .optionalCount {
+        @apply text-[#45F053] font-semibold;
     }
 }
