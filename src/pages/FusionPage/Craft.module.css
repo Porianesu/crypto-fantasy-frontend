@@ -1,10 +1,36 @@
 @import "tailwindcss";
 
 .bodyContainer {
-    @apply flex-1 overflow-hidden flex items-end px-22;
+    @apply flex-1 overflow-hidden flex items-end justify-between px-22;
 
     .checklistContainer {
-        @apply flex flex-col items-stretch w-103 h-189 mb-12.5;
+        @apply flex flex-col items-stretch w-103 h-189 mb-12.5 shrink-0;
         @apply bg-[url(/src/assets/images/fusion_page/checklist_background.png)] bg-cover bg-top-left bg-no-repeat;
+    }
+
+    .middleContainer {
+        @apply flex flex-col items-center shrink-0 mb-6.5;
+
+        .magicContainer {
+            @apply w-204 h-205.5;
+            @apply bg-[url(/src/assets/images/fusion_page/magic_background_1.png)] bg-contain bg-top-left bg-no-repeat;
+        }
+
+        .craftButton {
+            @apply w-102 h-25 text-4xl leading-10 font-normal text-white flex items-center justify-center;
+            @apply bg-[url(/src/assets/images/common/block_button_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        }
+    }
+
+    .additiveContainer {
+        @apply flex flex-col items-stretch w-103 h-190 mb-12 shrink-0 -mt-8.5;
+        @apply bg-[url(/src/assets/images/fusion_page/checklist_background.png)] bg-cover bg-top-left bg-no-repeat;
+    }
+}
+
+.craftButton {
+    .assetIcon {
+        @apply size-13 ml-5;
+        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
     }
 }

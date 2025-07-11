@@ -90,7 +90,7 @@ export const router = createBrowserRouter([
       },
       {
         path: FUSION_PATH,
-        loader: fusionPageLoader,
+        // loader: fusionPageLoader,
         element: (
           <CommonPageSuspense>
             <FusionPage></FusionPage>

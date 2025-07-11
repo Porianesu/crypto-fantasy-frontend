@@ -65,7 +65,7 @@
 
     .blockBtn {
         @apply w-71 h-18 flex items-center justify-center;
-        @apply bg-[url(/src/assets/images/home_page/battle_modal/block_btn_background.png)] bg-contain bg-center bg-no-repeat;
+        @apply bg-[url(/src/assets/images/common/block_button_background.png)] bg-contain bg-center bg-no-repeat;
 
         & > div {
             @apply text-2xl leading-10 font-normal text-white;
@@ -82,6 +82,6 @@
 
     .blockBtnDisabled {
         @apply cursor-not-allowed;
-        @apply bg-[url(/src/assets/images/home_page/battle_modal/block_btn_background_disabled.png)];
+        @apply bg-[url(/src/assets/images/common/block_button_background_disabled.png)];
     }
 }
