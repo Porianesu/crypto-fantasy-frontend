@@ -141,8 +141,7 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale, unde
             </div>
           </div>
           <div
-            className={classNames(styles.cardScore, {
-              [styles.cardScorePosition]: !undetected,
+            className={classNames(styles.cardScore, styles.cardScorePosition, {
               [styles.undetectedCardScorePosition]: undetected,
             })}
           >

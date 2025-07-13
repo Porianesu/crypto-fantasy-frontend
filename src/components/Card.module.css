@@ -57,15 +57,15 @@
             @apply rounded-full size-12 absolute text-white text-2xl font-black text-shadow-teal-400 text-center flex items-center justify-center;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
+
+        .undetectedCardScorePosition {
+            @apply font-sans;
+        }
     }
 
     .cardContentRarity0 {
         .cardScorePosition {
             @apply top-13 left-2;
-        }
-
-        .undetectedCardScorePosition {
-            @apply top-14.5 left-3.5;
         }
 
         .cardNameWrapper {
@@ -78,10 +78,6 @@
             @apply top-13.5 left-3;
         }
 
-        .undetectedCardScorePosition {
-            @apply top-14.5 left-4
-        }
-
         .cardNameWrapper {
             @apply top-81.5 left-14;
         }
@@ -92,10 +88,6 @@
             @apply top-13.5 left-2.5;
         }
 
-        .undetectedCardScorePosition {
-            @apply top-14.5 left-4
-        }
-
         .cardNameWrapper {
             @apply top-81.5 left-14;
         }
@@ -104,10 +96,6 @@
     .cardContentRarity3 {
         .cardScorePosition {
             @apply top-13.5 left-2.5;
-        }
-
-        .undetectedCardScorePosition {
-            @apply top-14.5 left-3.5
         }
 
         .cardNameWrapper {
