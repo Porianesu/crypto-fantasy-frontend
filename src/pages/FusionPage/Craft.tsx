@@ -6,15 +6,24 @@ import type { ICardData } from '@/components/Card.tsx'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import CountUp from 'react-countup'
 import StaticCard from '@/components/StaticCard.tsx'
+import { type Location, useLocation, useNavigate } from 'react-router-dom'
+import { FUSION_PATH, type FusionPathState, getGalleryPath } from '@/navigation/routes.tsx'
 
 const ArrowArray = new Array(4).fill(null)
 const Craft: React.FC = () => {
   const {
     appStore: { userInfo },
   } = useMobxStore()
-  const [craftTargetCard, setCraftTargetCard] = useState<ICardData>()
+  const navigate = useNavigate()
+  const location: Location<FusionPathState> = useLocation()
+  const state = location.state
+  const [craftTargetCard, setCraftTargetCard] = useState<ICardData | undefined>(state?.card)
   const [additiveCards, setAdditiveCards] = useState<Array<ICardData>>([])
   const [successRate, setSuccessRate] = useState(0)
+
+  const handleTargetCardClick = () => {
+    navigate(getGalleryPath(undefined), { state: { type: 'select', from: FUSION_PATH } })
+  }
 
   return (
     <div className={styles.bodyContainer}>
@@ -82,16 +91,20 @@ const Craft: React.FC = () => {
             </div>
           </div>
           {ArrowArray.map((_item, index) => (
-            <div className={classNames(styles.arrow, styles[`arrow${index + 1}`])}></div>
+            <div
+              key={index}
+              className={classNames(styles.arrow, styles[`arrow${index + 1}`])}
+            ></div>
           ))}
           <div
             className={classNames(styles.targetCardContainer, {
               [styles.targetCardEmpty]: !craftTargetCard,
               button: !craftTargetCard,
             })}
+            onClick={handleTargetCardClick}
           >
             {craftTargetCard ? (
-              <StaticCard width={100} card={craftTargetCard}></StaticCard>
+              <StaticCard width={178} card={craftTargetCard}></StaticCard>
             ) : (
               <div className={classNames(styles.targetCardTitle, 'text-shadow')}>Target</div>
             )}

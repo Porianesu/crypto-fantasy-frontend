@@ -91,7 +91,15 @@
             }
 
             .cardListContainer {
-                @apply grid grid-cols-3 gap-x-16 gap-y-11 pt-11 pb-4 pl-17 pr-17;
+                @apply grid gap-x-0 justify-items-center gap-y-11 pt-11 pb-4 pl-17 pr-17;
+            }
+
+            .cardListContainerBrowseType {
+                @apply grid-cols-3;
+            }
+
+            .cardListContainerSelectType {
+                @apply grid-cols-5;
             }
         }
 

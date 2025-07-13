@@ -1,12 +1,20 @@
 import { generatePath, redirect } from 'react-router-dom'
 import { getStoreRef } from '@/stores/StoreProvider.tsx'
+import type { ICardData } from '@/components/Card.tsx'
 
 export const ROOT_PATH = '/'
 export const HOME_PATH = '/home'
 export const ENTRANCE_PATH = '/entrance'
+export type GalleryPathState = {
+  type?: 'select' | 'browse'
+  from: string
+} | null
 export const GALLERY_PATH = '/gallery/:cardId?'
 export const INTRODUCTION_PATH = '/introduction'
 export const TOURNAMENT_PATH = '/tournament'
+export type FusionPathState = {
+  card?: ICardData
+} | null
 export const FUSION_PATH = '/fusion'
 
 export const getHomePath = () => {
