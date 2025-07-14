@@ -198,7 +198,7 @@
     }
 
     .inspectionNotPass {
-        @apply size-6.5 text-red-500 text-4xl flex items-center justify-center;
+        @apply size-6.5 text-red-500 text-5xl flex items-center justify-center;
     }
 }
 

@@ -293,7 +293,7 @@ const TournamentPageCardsFormation = React.forwardRef<
         <CardSelectModal
           open={cardsFormationModalOpen}
           onOpenChange={setCardsFormationModalOpen}
-          selectedCards={tempCardsFormation}
+          selectedCardIds={tempCardsFormation}
           handleCardSelect={handleCardSelect}
         ></CardSelectModal>
       </Suspense>

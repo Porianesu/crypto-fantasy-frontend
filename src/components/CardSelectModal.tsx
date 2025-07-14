@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   Close,
   Content,
@@ -13,76 +13,47 @@ import classNames from 'classnames'
 import styles from './CardSelectModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
-import type { IBagCardData } from '@/pages/HomePage/CardsBagModal.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import RaritySelect from '@/components/RaritySelect.tsx'
 
 interface ICardSelectModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  selectedCards: Array<number>
-  handleCardSelect: (card: ICardData) => void
+  selectedCardIds?: Array<number>
+  selectedCardPositions?: Array<number>
+  handleCardSelect: (card: IdModeCardData | PositionModeCardData) => void
+  mode?: 'id' | 'positon'
+}
+export interface IdModeCardData extends ICardData {
+  count: number
 }
 
-interface ICardsListProps {
-  filteredCards: Array<IBagCardData>
-  selectedIds: Array<number>
-  handleCardSelect: (card: ICardData) => void
+export interface PositionModeCardData extends ICardData {
+  bagPosition: number
 }
-const CardsList: React.FC<ICardsListProps> = observer(
-  ({ filteredCards, selectedIds, handleCardSelect }) => {
-    const cardsListRef = useRef<HTMLDivElement>(null)
-
-    return (
-      <div className={styles.cardsList} ref={cardsListRef}>
-        {filteredCards.length === 0 ? (
-          <div className={styles.emptyTip}>no cards</div>
-        ) : (
-          <div className={styles.cardsGrid}>
-            {filteredCards.map((card) => {
-              const currentCardFormationIndex = selectedIds.findIndex((id) => id === card.id)
-              const selected = currentCardFormationIndex !== -1
-              return (
-                <div
-                  key={card.id}
-                  className={classNames(styles.cardItem, selected && styles.selectedCard)}
-                  onClick={() => handleCardSelect(card)}
-                >
-                  {
-                    <button
-                      className={classNames(styles.selectBtn, {
-                        [styles.selectedBtn]: selected,
-                      })}
-                      type="button"
-                    >
-                      {selected ? currentCardFormationIndex + 1 : ''}
-                    </button>
-                  }
-                  <StaticCard width={202} card={card}></StaticCard>
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
-    )
-  },
-)
 
 const CardSelectModal: React.FC<ICardSelectModalProps> = ({
   open,
   onOpenChange,
-  selectedCards: selectedIds,
+  selectedCardIds,
+  selectedCardPositions,
   handleCardSelect,
+  mode = 'id',
 }) => {
+  console.log('selectedCardPositions', selectedCardPositions)
   const {
     appStore: { cardsBag },
   } = useMobxStore()
-  const contentRef = React.useRef<HTMLDivElement>(null)
   const [search, setSearch] = useState('')
   const [rarity, setRarity] = useState<CARD_RARITY | 'all'>('all')
-  const formattedCardsBag = useMemo<Array<IBagCardData>>(() => {
-    const cardCountMap: Record<string, IBagCardData> = {}
+  const isPositionMode = useMemo(() => mode === 'positon', [mode])
+  const formattedCardsBag = useMemo<Array<IdModeCardData | PositionModeCardData>>(() => {
+    if (isPositionMode)
+      return cardsBag.map((item, index) => ({
+        ...item,
+        bagPosition: index,
+      }))
+    const cardCountMap: Record<string, IdModeCardData> = {}
     cardsBag?.forEach((card) => {
       if (cardCountMap[card.id]) {
         cardCountMap[card.id].count += 1
@@ -91,9 +62,11 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
       }
     })
     return Object.values(cardCountMap)
-  }, [cardsBag])
-  const [cardsFormationIdsBeforeModalOpen, setCardsFormationIdsBeforeModalOpen] =
-    useState(selectedIds)
+  }, [cardsBag, isPositionMode])
+  const [selectedCardIdsBeforeModalOpen, setSelectedCardIdsBeforeModalOpen] =
+    useState(selectedCardIds)
+  const [selectedCardPositionsBeforeModalOpen, setSelectedCardPositionsBeforeModalOpen] =
+    useState(selectedCardPositions)
   const filteredCards = useMemo(
     () =>
       formattedCardsBag
@@ -103,8 +76,18 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
           return matchName && matchRarity
         })
         .sort((a, b) => {
-          const indexA = cardsFormationIdsBeforeModalOpen.indexOf(a.id)
-          const indexB = cardsFormationIdsBeforeModalOpen.indexOf(b.id)
+          const indexA =
+            (isPositionMode
+              ? selectedCardPositionsBeforeModalOpen?.indexOf(
+                  (a as PositionModeCardData).bagPosition,
+                )
+              : selectedCardIdsBeforeModalOpen?.indexOf(a.id)) || 0
+          const indexB =
+            (isPositionMode
+              ? selectedCardPositionsBeforeModalOpen?.indexOf(
+                  (b as PositionModeCardData).bagPosition,
+                )
+              : selectedCardIdsBeforeModalOpen?.indexOf(b.id)) || 0
           if (indexA !== -1 && indexB !== -1) {
             return indexA - indexB
           }
@@ -112,12 +95,20 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
           if (indexB !== -1) return 1
           return a.id - b.id
         }),
-    [formattedCardsBag, rarity, search, cardsFormationIdsBeforeModalOpen],
+    [
+      formattedCardsBag,
+      isPositionMode,
+      rarity,
+      search,
+      selectedCardIdsBeforeModalOpen,
+      selectedCardPositionsBeforeModalOpen,
+    ],
   )
 
   useEffect(() => {
     if (open) {
-      setCardsFormationIdsBeforeModalOpen(selectedIds)
+      setSelectedCardIdsBeforeModalOpen(selectedCardIds)
+      setSelectedCardPositionsBeforeModalOpen(selectedCardPositions)
     }
   }, [open])
 
@@ -126,7 +117,7 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
       <Portal>
         <DialogOverlay className={classNames(styles.overlay)}>
           <Description></Description>
-          <Content className={styles.modalContent} ref={contentRef}>
+          <Content className={styles.modalContent}>
             <Title></Title>
             <Close asChild>
               <div className={styles.closeBtn} aria-label="Close"></div>
@@ -144,11 +135,41 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
               </div>
               <RaritySelect value={rarity} onChange={setRarity}></RaritySelect>
             </div>
-            <CardsList
-              filteredCards={filteredCards}
-              selectedIds={selectedIds}
-              handleCardSelect={handleCardSelect}
-            ></CardsList>
+            <div className={styles.cardsList}>
+              {filteredCards.length === 0 ? (
+                <div className={styles.emptyTip}>no cards</div>
+              ) : (
+                <div className={styles.cardsGrid}>
+                  {filteredCards.map((card) => {
+                    const selectedIndex = isPositionMode
+                      ? selectedCardPositions?.indexOf((card as PositionModeCardData).bagPosition)
+                      : selectedCardIds?.findIndex((id) => id === card.id)
+                    const currentCardFormationIndex =
+                      selectedIndex === undefined ? -1 : selectedIndex
+                    const selected = currentCardFormationIndex !== -1
+                    return (
+                      <div
+                        key={card.id}
+                        className={classNames(styles.cardItem, selected && styles.selectedCard)}
+                        onClick={() => handleCardSelect(card)}
+                      >
+                        {
+                          <button
+                            className={classNames(styles.selectBtn, {
+                              [styles.selectedBtn]: selected,
+                            })}
+                            type="button"
+                          >
+                            {selected ? (isPositionMode ? '√' : currentCardFormationIndex + 1) : ''}
+                          </button>
+                        }
+                        <StaticCard width={202} card={card}></StaticCard>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
           </Content>
         </DialogOverlay>
       </Portal>

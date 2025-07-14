@@ -198,7 +198,7 @@ function HomePage() {
         <CardSelectModal
           open={cardsFormationModalVisible}
           onOpenChange={setCardsFormationModalVisible}
-          selectedCards={selectedCards}
+          selectedCardIds={selectedCards}
           handleCardSelect={handleCardSelect}
         ></CardSelectModal>
       </Suspense>

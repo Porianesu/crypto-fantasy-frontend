@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './Craft.module.css'
 import classNames from 'classnames'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
@@ -10,6 +10,10 @@ import { type Location, useLocation, useNavigate } from 'react-router-dom'
 import { FUSION_PATH, type FusionPathState, getGalleryPath } from '@/navigation/routes.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
+import CardSelectModal, {
+  type IdModeCardData,
+  type PositionModeCardData,
+} from '@/components/CardSelectModal.tsx'
 
 const ArrowArray = new Array(4).fill(null)
 const AdditiveCardArray = new Array(4).fill(null)
@@ -51,6 +55,7 @@ const DEFAULT_REQUIRED_CARDS_COUNT = 2
 function isSameChain(id1: number, id2: number): boolean {
   return Math.floor(id1 / 4) === Math.floor(id2 / 4)
 }
+
 function calculateAdditiveCardBonusRate(craftTargetCard: ICardData, additiveCard: ICardData) {
   let exponent = additiveCard.rarity - craftTargetCard.rarity
   if (!isSameChain(additiveCard.id, craftTargetCard.id)) {
@@ -60,9 +65,15 @@ function calculateAdditiveCardBonusRate(craftTargetCard: ICardData, additiveCard
   const base = new BigNumber(2)
   return baseSuccessRate.times(base.exponentiatedBy(exponent))
 }
+
 interface CardDataInBag {
   card: ICardData
   position: number
+}
+
+enum CARD_SELECT_TYPE {
+  REQUIRED = 'required',
+  ADDITIVE = 'additive',
 }
 const Craft: React.FC = () => {
   const {
@@ -71,8 +82,15 @@ const Craft: React.FC = () => {
   const navigate = useNavigate()
   const location: Location<FusionPathState> = useLocation()
   const craftTargetCard = location.state?.card
-  const [additiveCards, setAdditiveCards] = useState<Array<CardDataInBag>>([])
   const [requiredCards, setRequiredCards] = useState<Array<CardDataInBag>>([])
+  const [additiveCards, setAdditiveCards] = useState<Array<CardDataInBag>>([])
+  const cardSelectType = useRef<CARD_SELECT_TYPE>(CARD_SELECT_TYPE.REQUIRED)
+  const selectedCardPositions = useMemo(() => {
+    return requiredCards
+      .map((card) => card.position)
+      .concat(additiveCards.map((card) => card.position))
+  }, [additiveCards, requiredCards])
+  const [cardSelectModalOpen, setCardSelectModalOpen] = useState(false)
   const currentCraftRule = useMemo(
     () => CraftRule.find((item) => item.targetRarity === craftTargetCard?.rarity),
     [craftTargetCard?.rarity],
@@ -83,7 +101,9 @@ const Craft: React.FC = () => {
     const maxSuccessRate = currentCraftRule.maxSuccessRate
     const additiveSuccessRate = additiveCards
       .reduce((previousValue, currentValue) => {
-        return previousValue.plus(calculateAdditiveCardBonusRate(craftTargetCard, currentValue))
+        return previousValue.plus(
+          calculateAdditiveCardBonusRate(craftTargetCard, currentValue.card),
+        )
       }, new BigNumber(0))
       .toNumber()
     return Math.min(maxSuccessRate, baseSuccessRate + additiveSuccessRate)
@@ -104,7 +124,51 @@ const Craft: React.FC = () => {
     }
   }
 
-  const handleRequiredCardClick = () => {}
+  const handleRequiredCardClick = () => {
+    setCardSelectModalOpen(true)
+    cardSelectType.current = CARD_SELECT_TYPE.REQUIRED
+  }
+
+  const handleAdditiveCardClick = () => {
+    setCardSelectModalOpen(true)
+    cardSelectType.current = CARD_SELECT_TYPE.ADDITIVE
+  }
+
+  const handleCardSelect = (cardData: PositionModeCardData | IdModeCardData) => {
+    const card = cardData as PositionModeCardData
+    console.log('Selected card:', card)
+    if (!craftTargetCard || !currentCraftRule) return
+    if (requiredCards.some((item) => item.position === card.bagPosition)) {
+      return toast.warning('You can not remove a required card')
+    }
+    if (cardSelectType.current === CARD_SELECT_TYPE.REQUIRED) {
+      if (card.rarity !== currentCraftRule.requiredCards.rarity) {
+        return toast.warning('Required cards must be the same rarity as the target card.')
+      }
+      if (!isSameChain(craftTargetCard.id, card.id)) {
+        return toast.warning('Required cards must be the same chain as the target card.')
+      }
+      if (selectedCardPositions.indexOf(card.bagPosition) !== -1) {
+        return
+      } else {
+        if (requiredCards.length >= currentCraftRule.requiredCards.count) {
+          return toast.warning('You have already selected the required number of cards.')
+        }
+        setRequiredCards((prevState) => prevState.concat([{ card, position: card.bagPosition }]))
+      }
+    } else {
+      if (selectedCardPositions.indexOf(card.bagPosition) !== -1) {
+        setAdditiveCards((prevState) =>
+          prevState.filter((item) => item.position !== card.bagPosition),
+        )
+      } else {
+        if (additiveCards.length >= 4) {
+          return toast.warning('You can only add up to 4 additive cards.')
+        }
+        setAdditiveCards((prevState) => prevState.concat([{ card, position: card.bagPosition }]))
+      }
+    }
+  }
 
   useEffect(() => {
     if (craftTargetCard && currentCraftRule) {
@@ -262,11 +326,12 @@ const Craft: React.FC = () => {
           {AdditiveCardArray.map((_item, index) => {
             return (
               <div
+                key={`${index}-${additiveCards[index]?.card?.id}`}
                 className={classNames(styles.additiveCardContainer, {
                   [styles.additiveCardContainerEmpty]: !additiveCards[index],
                   button: !additiveCards[index],
                 })}
-                onClick={handleRequiredCardClick}
+                onClick={handleAdditiveCardClick}
               >
                 {additiveCards[index] ? (
                   <StaticCard width={CARD_WIDTH} card={additiveCards[index]?.card}></StaticCard>
@@ -276,6 +341,13 @@ const Craft: React.FC = () => {
           })}
         </div>
       </div>
+      <CardSelectModal
+        open={cardSelectModalOpen}
+        onOpenChange={setCardSelectModalOpen}
+        selectedCardPositions={selectedCardPositions}
+        handleCardSelect={handleCardSelect}
+        mode={'positon'}
+      ></CardSelectModal>
     </div>
   )
 }

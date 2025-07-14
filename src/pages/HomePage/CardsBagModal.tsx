@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
 import RaritySelect, { type RARITY_SELECT_VALUE } from '@/components/RaritySelect.tsx'
 
-export interface IBagCardData extends ICardData {
+interface IBagCardData extends ICardData {
   count: number
 }
 
