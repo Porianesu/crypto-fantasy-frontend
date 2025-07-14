@@ -66,15 +66,45 @@
     }
 
     .additiveContainer {
-        @apply flex flex-col items-stretch w-103 h-190 mb-12 shrink-0 -mt-8.5;
+        @apply flex flex-col items-stretch w-103 h-190 mb-12 shrink-0 -mt-8.5 pt-4.5;
         @apply bg-[url(/src/assets/images/fusion_page/checklist_background.png)] bg-cover bg-top-left bg-no-repeat;
+
+        .additiveTitle {
+            @apply h-10 self-center text-2xl mb-10.5 flex items-center justify-center;
+        }
+
+        .additiveDescription {
+            @apply self-center text-[#F2D270] text-3xl max-w-83 text-center flex items-center justify-center mb-8;
+        }
+
+        .additiveCardsContainer {
+            @apply w-92.5 h-100 self-center grid grid-cols-2 gap-x-6 justify-items-center;
+            @apply bg-[url(/src/assets/images/common/card_formation_magic_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        }
     }
+}
+
+
+.additiveCardContainer {
+    @apply w-31 h-47.5 flex items-center justify-center;
+}
+
+.additiveCardContainerEmpty {
+    @apply bg-[url(/src/assets/images/fusion_page/craft_required_card_empty_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
 }
 
 .craftButton {
     .assetIcon {
         @apply size-13 ml-5;
         @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+}
+
+.requiredCardContainer {
+    @apply flex items-center justify-start gap-4.5;
+
+    .requiredCardCount {
+        @apply mt-1;
     }
 }
 
@@ -105,6 +135,22 @@
 
     .targetCardEmpty {
         @apply bg-[url(/src/assets/images/fusion_page/craft_target_card_empty_background.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .cardRequiredContainer {
+        @apply absolute w-39.5 h-61 z-30 flex items-center justify-center;
+    }
+
+    .cardRequiredContainer1 {
+        @apply left-13.5 bottom-13.5;
+    }
+
+    .cardRequiredContainer2 {
+        @apply right-13.5 bottom-13.5;
+    }
+
+    .cardRequiredEmpty {
+        @apply bg-[url(/src/assets/images/fusion_page/craft_required_card_empty_background.png)] bg-contain bg-top-left bg-no-repeat;
     }
 
     .arrow {
@@ -145,6 +191,15 @@
         @apply size-10 ml-2;
         @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
     }
+
+    .inspectionPass {
+        @apply size-6.5;
+        @apply bg-[url(/src/assets/images/common/inspection_pass_icon.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .inspectionNotPass {
+        @apply size-6.5 text-red-500 text-4xl flex items-center justify-center;
+    }
 }
 
 .optionalContainer {
@@ -153,4 +208,23 @@
     }
 }
 
+.cardRarityExample {
+    @apply w-30.5 h-8;
+    @apply bg-size-[100%_auto] bg-top-left bg-no-repeat;
+}
 
+.cardRarityExample0 {
+    @apply bg-[url('/src/assets/images/cards/card_border_0.png')];
+}
+
+.cardRarityExample1 {
+    @apply bg-[url('/src/assets/images/cards/card_border_1.png')];
+}
+
+.cardRarityExample2 {
+    @apply bg-[url('/src/assets/images/cards/card_border_2.png')];
+}
+
+.cardRarityExample3 {
+    @apply bg-[url('/src/assets/images/cards/card_border_3.png')];
+}

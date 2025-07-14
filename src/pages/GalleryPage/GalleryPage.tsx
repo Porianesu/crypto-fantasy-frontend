@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
-import React, { useState, useMemo, useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './GalleryPage.module.css'
-import { useLocation, useNavigate, useParams, type Location } from 'react-router-dom'
+import { type Location, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { type GalleryPathState, getHomePath } from '@/navigation/routes.tsx'
 import { useQuery } from '@tanstack/react-query'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
@@ -14,6 +14,7 @@ import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { BigNumber } from 'bignumber.js'
 import { RARITY_OPTIONS } from '@/components/RaritySelect.tsx'
+import { toast } from 'react-toastify'
 
 dayjs.extend(duration)
 
@@ -115,6 +116,9 @@ const GalleryPage: React.FC = () => {
 
   const handleCardClick = (card: FormattedCardData) => {
     if (isSelectType) {
+      if (card.rarity === CARD_RARITY.NORMAL) {
+        return toast.warning('You cannot craft a common card.')
+      }
       if (state?.from) {
         navigate(state.from, {
           state: { card },

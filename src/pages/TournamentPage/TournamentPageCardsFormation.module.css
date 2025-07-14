@@ -33,7 +33,7 @@
 
         .formationSquareBackground {
             @apply absolute inset-0 size-full z-0;
-            @apply bg-[url('/src/assets/images/tournament_page/card_formation_magic_background.png')] bg-contain bg-no-repeat;
+            @apply bg-[url('/src/assets/images/common/card_formation_magic_background.png')] bg-contain bg-no-repeat;
             background-position-x: center;
             background-position-y: bottom;
         }

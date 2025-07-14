@@ -1,29 +1,126 @@
 import { observer } from 'mobx-react-lite'
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styles from './Craft.module.css'
 import classNames from 'classnames'
-import type { ICardData } from '@/components/Card.tsx'
+import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import CountUp from 'react-countup'
 import StaticCard from '@/components/StaticCard.tsx'
 import { type Location, useLocation, useNavigate } from 'react-router-dom'
 import { FUSION_PATH, type FusionPathState, getGalleryPath } from '@/navigation/routes.tsx'
+import { toast } from 'react-toastify'
+import { BigNumber } from 'bignumber.js'
 
 const ArrowArray = new Array(4).fill(null)
+const AdditiveCardArray = new Array(4).fill(null)
+const CraftRule = [
+  {
+    targetRarity: CARD_RARITY.RARE,
+    requiredCards: {
+      rarity: CARD_RARITY.NORMAL,
+      count: 2,
+    },
+    requiredFaithCoin: 51,
+    baseSuccessRate: 0.5,
+    maxSuccessRate: 0.7,
+  },
+  {
+    targetRarity: CARD_RARITY.EPIC,
+    requiredCards: {
+      rarity: CARD_RARITY.RARE,
+      count: 2,
+    },
+    requiredFaithCoin: 256,
+    baseSuccessRate: 0.2,
+    maxSuccessRate: 0.4,
+  },
+  {
+    targetRarity: CARD_RARITY.LEGENDARY,
+    requiredCards: {
+      rarity: CARD_RARITY.EPIC,
+      count: 2,
+    },
+    requiredFaithCoin: 2100,
+    baseSuccessRate: 0.1,
+    maxSuccessRate: 0.3,
+  },
+]
+const CARD_WIDTH = 178
+const DEFAULT_REQUIRED_CARDS_COUNT = 2
+
+function isSameChain(id1: number, id2: number): boolean {
+  return Math.floor(id1 / 4) === Math.floor(id2 / 4)
+}
+function calculateAdditiveCardBonusRate(craftTargetCard: ICardData, additiveCard: ICardData) {
+  let exponent = additiveCard.rarity - craftTargetCard.rarity
+  if (!isSameChain(additiveCard.id, craftTargetCard.id)) {
+    exponent -= 1 // If the card is not in the same chain, reduce the exponent by 1
+  }
+  const baseSuccessRate = new BigNumber(0.1) // Base success rate for each additive card
+  const base = new BigNumber(2)
+  return baseSuccessRate.times(base.exponentiatedBy(exponent))
+}
+interface CardDataInBag {
+  card: ICardData
+  position: number
+}
 const Craft: React.FC = () => {
   const {
-    appStore: { userInfo },
+    appStore: { userInfo, cardsBag },
   } = useMobxStore()
   const navigate = useNavigate()
   const location: Location<FusionPathState> = useLocation()
-  const state = location.state
-  const [craftTargetCard, setCraftTargetCard] = useState<ICardData | undefined>(state?.card)
-  const [additiveCards, setAdditiveCards] = useState<Array<ICardData>>([])
-  const [successRate, setSuccessRate] = useState(0)
+  const craftTargetCard = location.state?.card
+  const [additiveCards, setAdditiveCards] = useState<Array<CardDataInBag>>([])
+  const [requiredCards, setRequiredCards] = useState<Array<CardDataInBag>>([])
+  const currentCraftRule = useMemo(
+    () => CraftRule.find((item) => item.targetRarity === craftTargetCard?.rarity),
+    [craftTargetCard?.rarity],
+  )
+  const successRate = useMemo(() => {
+    if (!currentCraftRule || !craftTargetCard) return 0
+    const baseSuccessRate = currentCraftRule.baseSuccessRate
+    const maxSuccessRate = currentCraftRule.maxSuccessRate
+    const additiveSuccessRate = additiveCards
+      .reduce((previousValue, currentValue) => {
+        return previousValue.plus(calculateAdditiveCardBonusRate(craftTargetCard, currentValue))
+      }, new BigNumber(0))
+      .toNumber()
+    return Math.min(maxSuccessRate, baseSuccessRate + additiveSuccessRate)
+  }, [additiveCards, craftTargetCard, currentCraftRule])
+  const userFaithAmountCheck = useMemo(() => {
+    if (!userInfo?.faithAmount || !currentCraftRule?.requiredFaithCoin) return false
+    return userInfo?.faithAmount >= currentCraftRule?.requiredFaithCoin
+  }, [currentCraftRule?.requiredFaithCoin, userInfo?.faithAmount])
 
   const handleTargetCardClick = () => {
     navigate(getGalleryPath(undefined), { state: { type: 'select', from: FUSION_PATH } })
   }
+
+  const handleCraftButtonClick = () => {
+    if (!userInfo?.faithAmount) return
+    if (userInfo.faithAmount < 110) {
+      toast.warning('Insufficient faith amount to craft!')
+    }
+  }
+
+  const handleRequiredCardClick = () => {}
+
+  useEffect(() => {
+    if (craftTargetCard && currentCraftRule) {
+      // Auto select required cards based on the current craft rule
+      const requiredCardsCount = currentCraftRule.requiredCards.count
+      const requiredCardsRarity = currentCraftRule.requiredCards.rarity
+      const availableCardsWithIndex = cardsBag
+        .map((card, idx) => ({ card, position: idx }))
+        .filter(
+          ({ card }) =>
+            card.rarity === requiredCardsRarity && isSameChain(card.id, craftTargetCard.id),
+        )
+      const selectedRequiredCards = availableCardsWithIndex.slice(0, requiredCardsCount)
+      setRequiredCards(selectedRequiredCards)
+    }
+  }, [craftTargetCard])
 
   return (
     <div className={styles.bodyContainer}>
@@ -31,34 +128,53 @@ const Craft: React.FC = () => {
         <div className={styles.title}>Checklist</div>
         <div className={styles.checklistTarget}>
           <div>Target</div>
-          {craftTargetCard ? <div className={styles.targetCard}></div> : <div>???</div>}
+          {craftTargetCard ? (
+            <div
+              className={classNames(
+                styles.cardRarityExample,
+                styles[`cardRarityExample${craftTargetCard.rarity}`],
+              )}
+            ></div>
+          ) : (
+            <div>???</div>
+          )}
         </div>
         <div className={styles.requiredContainer}>
           <div>Required</div>
           <div>
-            {craftTargetCard ? (
-              <div className={styles.requiredCardContainer}></div>
+            {currentCraftRule ? (
+              <div className={styles.requiredCardContainer}>
+                <div className={styles.requiredCardCount}>
+                  {currentCraftRule.requiredCards.count}x
+                </div>
+                <div
+                  className={classNames(
+                    styles.cardRarityExample,
+                    styles[`cardRarityExample${currentCraftRule.requiredCards.rarity}`],
+                  )}
+                ></div>
+              </div>
             ) : (
               <div>???</div>
             )}
-            {craftTargetCard ? (
-              true ? (
-                <div className={styles.clearThrough}></div>
+            {currentCraftRule ? (
+              requiredCards.length === currentCraftRule.requiredCards.count ? (
+                <div className={styles.inspectionPass}></div>
               ) : (
-                <div className={styles.notClearThrough}></div>
+                <div className={styles.inspectionNotPass}>×</div>
               )
             ) : null}
           </div>
           <div>
             <div>
-              {craftTargetCard ? 123 : '???'}
+              {currentCraftRule ? currentCraftRule.requiredFaithCoin : '???'}
               <div className={styles.requiredAssetIcon}></div>
             </div>
-            {craftTargetCard ? (
-              true ? (
-                <div className={styles.clearThrough}></div>
+            {currentCraftRule ? (
+              userFaithAmountCheck ? (
+                <div className={styles.inspectionPass}></div>
               ) : (
-                <div className={styles.notClearThrough}></div>
+                <div className={styles.inspectionNotPass}>×</div>
               )
             ) : null}
           </div>
@@ -104,17 +220,62 @@ const Craft: React.FC = () => {
             onClick={handleTargetCardClick}
           >
             {craftTargetCard ? (
-              <StaticCard width={178} card={craftTargetCard}></StaticCard>
+              <StaticCard width={CARD_WIDTH} card={craftTargetCard}></StaticCard>
             ) : (
               <div className={classNames(styles.targetCardTitle, 'text-shadow')}>Target</div>
             )}
           </div>
+          {new Array(currentCraftRule?.requiredCards.count || DEFAULT_REQUIRED_CARDS_COUNT)
+            .fill(null)
+            .map((_item, index) => {
+              return (
+                <div
+                  key={`${index}-${requiredCards[index]?.card?.id}`}
+                  className={classNames(
+                    styles.cardRequiredContainer,
+                    styles[`cardRequiredContainer${index + 1}`],
+                    {
+                      [styles.cardRequiredEmpty]: !requiredCards[index],
+                      button: !requiredCards[index],
+                    },
+                  )}
+                  onClick={handleRequiredCardClick}
+                >
+                  {requiredCards[index] ? (
+                    <StaticCard width={CARD_WIDTH} card={requiredCards[index].card}></StaticCard>
+                  ) : null}
+                </div>
+              )
+            })}
         </div>
-        <button className={classNames(styles.craftButton, 'button text-shadow')}>
+        <button
+          className={classNames(styles.craftButton, 'button text-shadow')}
+          onClick={handleCraftButtonClick}
+        >
           Craft 256<div className={styles.assetIcon}></div>
         </button>
       </div>
-      <div className={styles.additiveContainer}></div>
+      <div className={styles.additiveContainer}>
+        <div className={styles.additiveTitle}>Additive</div>
+        <div className={styles.additiveDescription}>Add more cards to get higher chance.</div>
+        <div className={styles.additiveCardsContainer}>
+          {AdditiveCardArray.map((_item, index) => {
+            return (
+              <div
+                className={classNames(styles.additiveCardContainer, {
+                  [styles.additiveCardContainerEmpty]: !additiveCards[index],
+                  button: !additiveCards[index],
+                })}
+                onClick={handleRequiredCardClick}
+              >
+                {additiveCards[index] ? (
+                  <StaticCard width={CARD_WIDTH} card={additiveCards[index]?.card}></StaticCard>
+                ) : null}
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }
