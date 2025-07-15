@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './GalleryPage.module.css'
 import { type Location, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { type GalleryPathState, getHomePath } from '@/navigation/routes.tsx'
+import { type GalleryPathState } from '@/navigation/routes.tsx'
 import { useQuery } from '@tanstack/react-query'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
@@ -89,7 +89,7 @@ const GalleryPage: React.FC = () => {
   }, [filteredCards.length, cardId])
 
   const handleBackButtonClick = () => {
-    navigate(getHomePath())
+    navigate(-1)
   }
 
   const renderCardAvgDuration = () => {

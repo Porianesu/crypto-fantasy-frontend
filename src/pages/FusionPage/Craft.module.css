@@ -55,12 +55,12 @@
         @apply flex flex-col items-center shrink-0 mb-6.5;
 
         .magicContainer {
-            @apply w-204 h-205.5 relative;
+            @apply w-204 h-205.5 relative z-0;
             @apply bg-[url(/src/assets/images/fusion_page/magic_background_1.png)] bg-contain bg-top-left bg-no-repeat;
         }
 
         .craftButton {
-            @apply w-102 h-25 text-4xl leading-10 font-normal text-white flex items-center justify-center;
+            @apply w-102 h-25 text-4xl leading-10 font-normal text-white flex items-center justify-center -mt-8.5 z-10;
             @apply bg-[url(/src/assets/images/common/block_button_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
         }
     }
