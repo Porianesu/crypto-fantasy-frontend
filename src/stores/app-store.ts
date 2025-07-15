@@ -197,7 +197,7 @@ export default class StoresStore {
     }>,
     successRate: number,
     costFaithCoin: number,
-  ) => {
+  ): void | { type: 'success' | 'fail'; cards: Array<ICardData> } => {
     if (!this.userInfo) return
     const cardDatabase = this.rootStoreRef.preloadStore.preloadQueue!.getResult(
       'cardsData',
@@ -239,6 +239,10 @@ export default class StoresStore {
       // 成功则添加新卡到背包
       this.cardsBag.push(targetCard)
       this.userInfo.faithAmount -= costFaithCoin
+      return {
+        type: 'success',
+        cards: [targetCard],
+      }
     } else {
       console.log('Craft Failed')
       // 失败则按规则添加一部分消耗的卡牌到背包
@@ -247,6 +251,10 @@ export default class StoresStore {
       this.cardsBag.push(returnRequiredCards.card)
       if (returnAdditiveCard) {
         this.cardsBag.push(returnAdditiveCard)
+      }
+      return {
+        type: 'fail',
+        cards: [returnRequiredCards.card, returnAdditiveCard].filter(Boolean) as Array<ICardData>,
       }
     }
   }

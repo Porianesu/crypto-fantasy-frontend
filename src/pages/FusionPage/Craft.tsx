@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './Craft.module.css'
 import classNames from 'classnames'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
@@ -10,11 +10,11 @@ import { type Location, useLocation, useNavigate } from 'react-router-dom'
 import { FUSION_PATH, type FusionPathState, getGalleryPath } from '@/navigation/routes.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
-import CardSelectModal, {
-  type IdModeCardData,
-  type PositionModeCardData,
-} from '@/components/CardSelectModal.tsx'
+import { type IdModeCardData, type PositionModeCardData } from '@/components/CardSelectModal.tsx'
 import { isCardsSameChain } from '@/utils/common.ts'
+
+const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
+const CraftResultModal = React.lazy(() => import('./CraftResultModal.tsx'))
 
 const ArrowArray = new Array(4).fill(null)
 const AdditiveCardArray = new Array(4).fill(null)
@@ -82,6 +82,15 @@ const Craft: React.FC = () => {
   const [craftTargetCard, setCraftTargetCard] = useState(location.state?.card)
   const [requiredCards, setRequiredCards] = useState<Array<CardDataWithBagPosition>>([])
   const [additiveCards, setAdditiveCards] = useState<Array<CardDataWithBagPosition>>([])
+  const [craftResultModalData, setCraftResultModalData] = useState<{
+    open: boolean
+    type: 'success' | 'fail'
+    cards: Array<ICardData>
+  }>({
+    open: false,
+    type: 'success',
+    cards: [],
+  })
   const cardSelectType = useRef<CARD_SELECT_TYPE>(CARD_SELECT_TYPE.REQUIRED)
   const selectedCardPositions = useMemo(() => {
     return requiredCards
@@ -123,7 +132,7 @@ const Craft: React.FC = () => {
     if (requiredCards.length < currentCraftRule.requiredCards.count) {
       toast.warning('Required cards are not enough!')
     }
-    craftCard(
+    const craftResult = craftCard(
       craftTargetCard,
       requiredCards,
       additiveCards,
@@ -131,6 +140,13 @@ const Craft: React.FC = () => {
       currentCraftRule.requiredFaithCoin,
     )
     setCraftTargetCard(undefined)
+    if (craftResult) {
+      setCraftResultModalData({
+        open: true,
+        type: craftResult.type,
+        cards: craftResult.cards,
+      })
+    }
   }
 
   const handleRequiredCardClick = () => {
@@ -176,6 +192,10 @@ const Craft: React.FC = () => {
         setAdditiveCards((prevState) => prevState.concat([{ card, position: card.bagPosition }]))
       }
     }
+  }
+
+  const handleCraftResultModalOpenChange = (open: boolean) => {
+    setCraftResultModalData((prevState) => ({ ...prevState, open }))
   }
 
   useEffect(() => {
@@ -358,13 +378,23 @@ const Craft: React.FC = () => {
           })}
         </div>
       </div>
-      <CardSelectModal
-        open={cardSelectModalOpen}
-        onOpenChange={setCardSelectModalOpen}
-        selectedCardPositions={selectedCardPositions}
-        handleCardSelect={handleCardSelect}
-        mode={'positon'}
-      ></CardSelectModal>
+      <Suspense fallback={null}>
+        <CardSelectModal
+          open={cardSelectModalOpen}
+          onOpenChange={setCardSelectModalOpen}
+          selectedCardPositions={selectedCardPositions}
+          handleCardSelect={handleCardSelect}
+          mode={'positon'}
+        ></CardSelectModal>
+      </Suspense>
+      <Suspense fallback={null}>
+        <CraftResultModal
+          open={craftResultModalData.open}
+          onOpenChange={handleCraftResultModalOpenChange}
+          type={craftResultModalData.type}
+          cards={craftResultModalData.cards}
+        ></CraftResultModal>
+      </Suspense>
     </div>
   )
 }

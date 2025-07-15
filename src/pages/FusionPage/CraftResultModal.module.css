@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+.overlay {
+    @apply fixed inset-0 z-50;
+}
+
+@supports (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply backdrop-blur-md;
+    }
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply bg-black/60;
+    }
+}
+
+.modalContentWrapper {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus-visible:outline-none;
+
+    .modalContentContainer {
+        @apply w-174 h-175.5 flex flex-col items-center justify-center text-white;
+
+        .backgroundImage {
+            @apply size-full inset-0 absolute;
+            @apply bg-[url(/src/assets/images/fusion_page/result_modal_background.png)] bg-contain bg-top-left bg-no-repeat;
+        }
+
+        .title {
+            @apply w-255 h-35 flex items-center justify-center text-center absolute -top-5 text-5xl leading-17.5;
+        }
+
+        .cardsContainer {
+            @apply flex items-center gap-x-15.5;
+        }
+
+        .button {
+            @apply -bottom-13 w-102 h-25 text-4xl leading-10 absolute;
+            @apply bg-[url(/src/assets/images/common/block_button_background.png)] bg-contain bg-top-left bg-no-repeat;
+        }
+    }
+}
