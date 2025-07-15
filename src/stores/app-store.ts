@@ -19,7 +19,7 @@ export interface UserInfo extends UserStorageInfo {
   expPercent: number
 }
 
-export interface IBagCardData extends ICardData {
+export interface ICardDataInBag extends ICardData {
   bagPosition: number
 }
 

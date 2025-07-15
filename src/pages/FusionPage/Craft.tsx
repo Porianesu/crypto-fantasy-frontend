@@ -11,7 +11,7 @@ import { FUSION_PATH, type FusionPathState, getGalleryPath } from '@/navigation/
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 import { isCardsSameChain } from '@/utils/common.ts'
-import type { IBagCardData, ICardDataWithCount } from '@/stores/app-store.ts'
+import type { ICardDataInBag, ICardDataWithCount } from '@/stores/app-store.ts'
 
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 const CraftResultModal = React.lazy(() => import('./CraftResultModal.tsx'))
@@ -159,8 +159,8 @@ const Craft: React.FC = () => {
     cardSelectType.current = CARD_SELECT_TYPE.ADDITIVE
   }
 
-  const handleCardSelect = (cardData: ICardDataWithCount | IBagCardData) => {
-    const card = cardData as IBagCardData
+  const handleCardSelect = (cardData: ICardDataWithCount | ICardDataInBag) => {
+    const card = cardData as ICardDataInBag
     if (!craftTargetCard || !currentCraftRule) return
     if (requiredCards.some((item) => item.position === card.bagPosition)) {
       return toast.warning('You can not remove a required card')
