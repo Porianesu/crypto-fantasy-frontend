@@ -80,7 +80,13 @@ const FusionPage: React.FC = () => {
   }
 
   return (
-    <div className={styles.pageContainer}>
+    <div
+      className={classNames(styles.pageContainer, {
+        [styles.craftPageContainer]: pageType === FUSION_PAGE_TYPE.CRAFT,
+        [styles.meltPageContainer]: pageType === FUSION_PAGE_TYPE.MELT,
+      })}
+    >
+      {pageType === FUSION_PAGE_TYPE.MELT ? <div className={styles.meltBackground}></div> : null}
       <div className={styles.header}>
         <button className={classNames(styles.backButton, 'button')} onClick={handleBack}></button>
         <div className={styles.typeButtons}>
@@ -102,7 +108,7 @@ const FusionPage: React.FC = () => {
         </div>
         <button className={classNames(styles.questionButton, 'button')}></button>
       </div>
-      <div className={'flex-1 flex items-stretch overflow-hidden relative'}>
+      <div className={'flex-1 flex items-stretch overflow-hidden relative z-20'}>
         <div className={'flex flex-col shrink-0 w-full'} ref={craftRenderRef}>
           {craftRender ? <Craft></Craft> : null}
         </div>

@@ -1,11 +1,24 @@
 @import "tailwindcss";
 
-.pageContainer {
-    @apply flex-1 overflow-hidden flex flex-col items-stretch justify-start;
+
+.craftPageContainer {
     @apply bg-[url(/src/assets/images/fusion_page/background.png)] bg-cover bg-top-left bg-no-repeat;
+}
+
+.meltPageContainer {
+    @apply bg-[url(/src/assets/images/fusion_page/melt_background.png)] bg-size-[auto_100%] bg-top-right bg-no-repeat;
+}
+
+.meltBackground {
+    @apply h-full w-290.5 absolute top-0 left-0 z-0;
+    @apply bg-[url(/src/assets/images/fusion_page/melt_background_2.png)] bg-size-[100%_100%] bg-top-right bg-no-repeat;
+}
+
+.pageContainer {
+    @apply flex-1 overflow-hidden flex flex-col items-stretch justify-start bg-[#151217] relative;
 
     .header {
-        @apply pl-22 pr-21 flex  justify-between;
+        @apply pl-22 pr-21 flex  justify-between z-20;
 
         .backButton {
             @apply size-22.5 mt-8;
