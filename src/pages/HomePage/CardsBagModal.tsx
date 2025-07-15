@@ -12,35 +12,19 @@ import {
 import classNames from 'classnames'
 import styles from './CardsBagModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { type ICardData } from '@/components/Card.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import StaticCard from '@/components/StaticCard.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getGalleryPath } from '@/navigation/routes.tsx'
 import RaritySelect, { type RARITY_SELECT_VALUE } from '@/components/RaritySelect.tsx'
-
-interface IBagCardData extends ICardData {
-  count: number
-}
+import type { ICardDataWithCount } from '@/stores/app-store.ts'
 
 const CardsBagContent: React.FC = observer(() => {
   const {
-    appStore: { cardsBag, cardsFormation, changeCardsFormation },
+    appStore: { formattedCardsBag, cardsFormation, changeCardsFormation },
     modalStore: { changeCardsBagModalData, cardsBagModalData },
   } = useMobxStore()
   const navigate = useNavigate()
-  const formattedCardsBag = useMemo<Array<IBagCardData>>(() => {
-    // 格式化卡牌背包数据，统计每张卡牌的数量
-    const cardCountMap: Record<string, IBagCardData> = {}
-    cardsBag?.forEach((card) => {
-      if (cardCountMap[card.id]) {
-        cardCountMap[card.id].count += 1
-      } else {
-        cardCountMap[card.id] = { ...card, count: 1 }
-      }
-    })
-    return Object.values(cardCountMap)
-  }, [cardsBag])
   const cardsListRef = useRef<HTMLDivElement>(null)
   const cardsGridRef = useRef<HTMLDivElement>(null)
   const [search, setSearch] = useState('')
@@ -71,7 +55,7 @@ const CardsBagContent: React.FC = observer(() => {
     [formattedCardsBag, rarity, search],
   )
 
-  const handleCardClick = (card: IBagCardData, selected?: boolean) => {
+  const handleCardClick = (card: ICardDataWithCount, selected?: boolean) => {
     if (isEdit) {
       if (!selected && selectedIds.length >= 5) {
         return
@@ -159,7 +143,7 @@ const CardsBagContent: React.FC = observer(() => {
               </div>
             )}
           </div>
-          {isEdit && cardsBag.length && (
+          {isEdit && formattedCardsBag.length && (
             <div className={styles.footerBar}>
               <button className={styles.confirmBtn} onClick={handleConfirmButtonClick}>
                 <div className={styles.confirmBtnText}>Confirm</div>

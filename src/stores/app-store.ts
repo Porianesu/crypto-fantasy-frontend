@@ -19,6 +19,14 @@ export interface UserInfo extends UserStorageInfo {
   expPercent: number
 }
 
+export interface IBagCardData extends ICardData {
+  bagPosition: number
+}
+
+export interface ICardDataWithCount extends ICardData {
+  count: number
+}
+
 export default class StoresStore {
   rootStoreRef: Store
 
@@ -28,7 +36,7 @@ export default class StoresStore {
 
   cardsFormation: Array<ICardData> = []
 
-  cardsBag: Array<ICardData> = []
+  _cardsBag: Array<ICardData> = []
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
@@ -41,7 +49,9 @@ export default class StoresStore {
       cardsFormation: observable,
       changeCardsFormation: action,
       userCardsFormationScore: computed,
-      cardsBag: observable,
+      _cardsBag: observable,
+      cardsBag: computed,
+      formattedCardsBag: computed,
       addCardsToBag: action,
       initNetwork: flow.bound,
       initData: flow.bound,
@@ -54,7 +64,7 @@ export default class StoresStore {
     this.isAppLoading = true
     this.userInfo = undefined
     this.cardsFormation = []
-    this.cardsBag = []
+    this._cardsBag = []
   };
 
   *initNetwork() {
@@ -75,7 +85,7 @@ export default class StoresStore {
         expPercent: 68,
       }
       this.cardsFormation = []
-      this.cardsBag = []
+      this._cardsBag = []
       this.rootStoreRef.preloadStore.preloadResult.networkPreloadProgress = 1
     } catch (e) {
       console.log('Error initializing network:', e)
@@ -113,8 +123,25 @@ export default class StoresStore {
     }, 0)
   }
 
+  get cardsBag() {
+    return this._cardsBag.map((card, index) => ({ ...card, bagPosition: index }))
+  }
+
+  get formattedCardsBag() {
+    // 格式化卡牌背包数据，统计每张卡牌的数量
+    const cardCountMap: Record<string, ICardDataWithCount> = {}
+    this._cardsBag.forEach((card) => {
+      if (cardCountMap[card.id]) {
+        cardCountMap[card.id].count += 1
+      } else {
+        cardCountMap[card.id] = { ...card, count: 1 }
+      }
+    })
+    return Object.values(cardCountMap)
+  }
+
   addCardsToBag = (cards: Array<ICardData>) => {
-    this.cardsBag = this.cardsBag.concat(cards)
+    this._cardsBag = this._cardsBag.concat(cards)
   }
 
   drawCards = () => {
@@ -232,11 +259,11 @@ export default class StoresStore {
     // 降序移除已消耗的卡牌
     const sortedPositions = costCardWithBagPositions.sort((a, b) => b - a)
     sortedPositions.forEach((index) => {
-      this.cardsBag.splice(index, 1)
+      this._cardsBag.splice(index, 1)
     })
     if (randomNumber.isGreaterThanOrEqualTo(successRate)) {
       // 成功则添加新卡到背包
-      this.cardsBag.push(targetCard)
+      this._cardsBag.push(targetCard)
       this.userInfo.faithAmount -= costFaithCoin
       return {
         type: 'success',
@@ -250,7 +277,7 @@ export default class StoresStore {
       if (returnAdditiveCard) {
         resultCards.push(returnAdditiveCard)
       }
-      this.cardsBag = this.cardsBag.concat(resultCards)
+      this._cardsBag = this._cardsBag.concat(resultCards)
       return {
         type: 'fail',
         cards: resultCards,
