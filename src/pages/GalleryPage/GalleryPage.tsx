@@ -18,7 +18,7 @@ import { toast } from 'react-toastify'
 
 dayjs.extend(duration)
 
-interface FormattedCardData extends ICardData {
+interface ICardDataWithProcessed extends ICardData {
   processed: boolean
 }
 
@@ -34,14 +34,14 @@ const GalleryPage: React.FC = () => {
     appStore: { cardsBag },
     modalStore: { changeViewDetailModalVisible, changeViewDetailModalData },
   } = useMobxStore()
-  const [selectedCard, setSelectedCard] = useState<FormattedCardData>()
+  const [selectedCard, setSelectedCard] = useState<ICardDataWithProcessed>()
   const [searchText, setSearchText] = useState('')
   const [rarityFilter, setRarityFilter] = useState<CARD_RARITY | 'all'>('all')
   const pageBodyRef = useRef<HTMLDivElement>(null)
   const cardsPartRef = useRef<HTMLDivElement>(null)
 
   const fetchCardDatabase = () => {
-    return new Promise<Array<FormattedCardData>>((resolve, reject) => {
+    return new Promise<Array<ICardDataWithProcessed>>((resolve, reject) => {
       if (!preloadQueue) reject(new Error('No preload queue'))
       const cardDatabase = preloadQueue!.getResult('cardsData') as Array<ICardData>
       const formattedCards = cardDatabase.map((card) => {
@@ -114,7 +114,7 @@ const GalleryPage: React.FC = () => {
     }
   }
 
-  const handleCardClick = (card: FormattedCardData) => {
+  const handleCardClick = (card: ICardDataWithProcessed) => {
     if (isSelectType) {
       if (card.rarity === CARD_RARITY.NORMAL) {
         return toast.warning('You cannot craft a common card.')
