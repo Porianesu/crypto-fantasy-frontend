@@ -2,8 +2,13 @@ import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import { preloadPages } from '@/navigation/routes.tsx'
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
-import { getCardImageById, getDefaultAvatar, getStorageItem } from '@/utils/common.ts'
-import type { ICardData } from '@/components/Card.tsx'
+import {
+  getCardImageById,
+  getDefaultAvatar,
+  getStorageItem,
+  isCardsSameChain,
+} from '@/utils/common.ts'
+import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 
@@ -41,6 +46,7 @@ export default class StoresStore {
       initNetwork: flow.bound,
       initData: flow.bound,
       drawCards: action,
+      craftCard: action,
     })
   }
 
@@ -65,7 +71,7 @@ export default class StoresStore {
         ...result,
         avatarUrl: getDefaultAvatar(),
         solAmount: 100,
-        faithAmount: 100,
+        faithAmount: 10000,
         expPercent: 68,
       }
       this.cardsFormation = []
@@ -177,5 +183,71 @@ export default class StoresStore {
         resolve(resultCards)
       }
     })
+  }
+
+  craftCard = (
+    targetCard: ICardData,
+    requiredCards: Array<{
+      card: ICardData
+      position: number
+    }>,
+    additiveCards: Array<{
+      card: ICardData
+      position: number
+    }>,
+    successRate: number,
+    costFaithCoin: number,
+  ) => {
+    if (!this.userInfo) return
+    const cardDatabase = this.rootStoreRef.preloadStore.preloadQueue!.getResult(
+      'cardsData',
+    ) as Array<ICardData>
+    if (!cardDatabase) {
+      return console.error('Card database not found')
+    }
+    let returnAdditiveCard
+    if (additiveCards.length) {
+      const maxRarity = Math.max(...additiveCards.map((item) => item.card.rarity))
+      const highestRarityAdditiveCards = additiveCards.filter(
+        (item) => item.card.rarity === maxRarity,
+      )
+      const randomAdditiveCardIndex = Math.floor(Math.random() * highestRarityAdditiveCards.length)
+      const beforeReturnAdditiveCard = highestRarityAdditiveCards[randomAdditiveCardIndex]
+      const targetRarity =
+        beforeReturnAdditiveCard.card.rarity === CARD_RARITY.NORMAL
+          ? CARD_RARITY.NORMAL
+          : beforeReturnAdditiveCard.card.rarity - 1
+      const returnAdditiveCard = cardDatabase.find(
+        (card) =>
+          card.rarity === targetRarity && isCardsSameChain(card, beforeReturnAdditiveCard.card),
+      )
+      if (!returnAdditiveCard) {
+        return console.error('No matching return additive card found')
+      }
+    }
+    const randomNumber = new BigNumber(Math.random())
+    const costCardWithBagPositions = requiredCards
+      .concat(additiveCards)
+      .map((item) => item.position)
+    // 降序移除已消耗的卡牌
+    const sortedPositions = costCardWithBagPositions.sort((a, b) => b - a)
+    sortedPositions.forEach((index) => {
+      this.cardsBag.splice(index, 1)
+    })
+    if (randomNumber.isGreaterThanOrEqualTo(successRate)) {
+      console.log('Craft Success')
+      // 成功则添加新卡到背包
+      this.cardsBag.push(targetCard)
+      this.userInfo.faithAmount -= costFaithCoin
+    } else {
+      console.log('Craft Failed')
+      // 失败则按规则添加一部分消耗的卡牌到背包
+      const randomRequiredCardIndex = Math.floor(Math.random() * requiredCards.length)
+      const returnRequiredCards = requiredCards[randomRequiredCardIndex]
+      this.cardsBag.push(returnRequiredCards.card)
+      if (returnAdditiveCard) {
+        this.cardsBag.push(returnAdditiveCard)
+      }
+    }
   }
 }

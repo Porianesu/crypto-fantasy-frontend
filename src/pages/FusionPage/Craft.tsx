@@ -14,6 +14,7 @@ import CardSelectModal, {
   type IdModeCardData,
   type PositionModeCardData,
 } from '@/components/CardSelectModal.tsx'
+import { isCardsSameChain } from '@/utils/common.ts'
 
 const ArrowArray = new Array(4).fill(null)
 const AdditiveCardArray = new Array(4).fill(null)
@@ -49,16 +50,13 @@ const CraftRule = [
     maxSuccessRate: 0.3,
   },
 ]
-const CARD_WIDTH = 178
+const REQUIRED_CARD_WIDTH = 178
+const ADDITIVE_CARD_WIDTH = 128
 const DEFAULT_REQUIRED_CARDS_COUNT = 2
-
-function isSameChain(id1: number, id2: number): boolean {
-  return Math.floor(id1 / 4) === Math.floor(id2 / 4)
-}
 
 function calculateAdditiveCardBonusRate(craftTargetCard: ICardData, additiveCard: ICardData) {
   let exponent = additiveCard.rarity - craftTargetCard.rarity
-  if (!isSameChain(additiveCard.id, craftTargetCard.id)) {
+  if (!isCardsSameChain(additiveCard, craftTargetCard)) {
     exponent -= 1 // If the card is not in the same chain, reduce the exponent by 1
   }
   const baseSuccessRate = new BigNumber(0.1) // Base success rate for each additive card
@@ -66,7 +64,7 @@ function calculateAdditiveCardBonusRate(craftTargetCard: ICardData, additiveCard
   return baseSuccessRate.times(base.exponentiatedBy(exponent))
 }
 
-interface CardDataInBag {
+interface CardDataWithBagPosition {
   card: ICardData
   position: number
 }
@@ -77,13 +75,13 @@ enum CARD_SELECT_TYPE {
 }
 const Craft: React.FC = () => {
   const {
-    appStore: { userInfo, cardsBag },
+    appStore: { userInfo, cardsBag, craftCard },
   } = useMobxStore()
   const navigate = useNavigate()
   const location: Location<FusionPathState> = useLocation()
-  const craftTargetCard = location.state?.card
-  const [requiredCards, setRequiredCards] = useState<Array<CardDataInBag>>([])
-  const [additiveCards, setAdditiveCards] = useState<Array<CardDataInBag>>([])
+  const [craftTargetCard, setCraftTargetCard] = useState(location.state?.card)
+  const [requiredCards, setRequiredCards] = useState<Array<CardDataWithBagPosition>>([])
+  const [additiveCards, setAdditiveCards] = useState<Array<CardDataWithBagPosition>>([])
   const cardSelectType = useRef<CARD_SELECT_TYPE>(CARD_SELECT_TYPE.REQUIRED)
   const selectedCardPositions = useMemo(() => {
     return requiredCards
@@ -118,10 +116,21 @@ const Craft: React.FC = () => {
   }
 
   const handleCraftButtonClick = () => {
-    if (!userInfo?.faithAmount) return
-    if (userInfo.faithAmount < 110) {
+    if (!userInfo || !currentCraftRule || !craftTargetCard) return
+    if (userInfo.faithAmount < currentCraftRule.requiredFaithCoin) {
       toast.warning('Insufficient faith amount to craft!')
     }
+    if (requiredCards.length < currentCraftRule.requiredCards.count) {
+      toast.warning('Required cards are not enough!')
+    }
+    craftCard(
+      craftTargetCard,
+      requiredCards,
+      additiveCards,
+      successRate,
+      currentCraftRule.requiredFaithCoin,
+    )
+    setCraftTargetCard(undefined)
   }
 
   const handleRequiredCardClick = () => {
@@ -136,16 +145,15 @@ const Craft: React.FC = () => {
 
   const handleCardSelect = (cardData: PositionModeCardData | IdModeCardData) => {
     const card = cardData as PositionModeCardData
-    console.log('Selected card:', card)
     if (!craftTargetCard || !currentCraftRule) return
     if (requiredCards.some((item) => item.position === card.bagPosition)) {
       return toast.warning('You can not remove a required card')
     }
     if (cardSelectType.current === CARD_SELECT_TYPE.REQUIRED) {
-      if (card.rarity !== currentCraftRule.requiredCards.rarity) {
-        return toast.warning('Required cards must be the same rarity as the target card.')
+      if (card.rarity + 1 !== currentCraftRule.requiredCards.rarity) {
+        return toast.warning('Required cards must be the same rarity as required.')
       }
-      if (!isSameChain(craftTargetCard.id, card.id)) {
+      if (!isCardsSameChain(craftTargetCard, card)) {
         return toast.warning('Required cards must be the same chain as the target card.')
       }
       if (selectedCardPositions.indexOf(card.bagPosition) !== -1) {
@@ -179,10 +187,13 @@ const Craft: React.FC = () => {
         .map((card, idx) => ({ card, position: idx }))
         .filter(
           ({ card }) =>
-            card.rarity === requiredCardsRarity && isSameChain(card.id, craftTargetCard.id),
+            card.rarity === requiredCardsRarity && isCardsSameChain(card, craftTargetCard),
         )
       const selectedRequiredCards = availableCardsWithIndex.slice(0, requiredCardsCount)
       setRequiredCards(selectedRequiredCards)
+    } else {
+      setRequiredCards([])
+      setAdditiveCards([])
     }
   }, [craftTargetCard])
 
@@ -256,7 +267,7 @@ const Craft: React.FC = () => {
             <div>
               <CountUp
                 start={undefined}
-                end={successRate}
+                end={successRate * 100}
                 decimals={2}
                 duration={1}
                 separator=","
@@ -284,7 +295,7 @@ const Craft: React.FC = () => {
             onClick={handleTargetCardClick}
           >
             {craftTargetCard ? (
-              <StaticCard width={CARD_WIDTH} card={craftTargetCard}></StaticCard>
+              <StaticCard width={REQUIRED_CARD_WIDTH} card={craftTargetCard}></StaticCard>
             ) : (
               <div className={classNames(styles.targetCardTitle, 'text-shadow')}>Target</div>
             )}
@@ -306,7 +317,10 @@ const Craft: React.FC = () => {
                   onClick={handleRequiredCardClick}
                 >
                   {requiredCards[index] ? (
-                    <StaticCard width={CARD_WIDTH} card={requiredCards[index].card}></StaticCard>
+                    <StaticCard
+                      width={REQUIRED_CARD_WIDTH}
+                      card={requiredCards[index].card}
+                    ></StaticCard>
                   ) : null}
                 </div>
               )
@@ -334,7 +348,10 @@ const Craft: React.FC = () => {
                 onClick={handleAdditiveCardClick}
               >
                 {additiveCards[index] ? (
-                  <StaticCard width={CARD_WIDTH} card={additiveCards[index]?.card}></StaticCard>
+                  <StaticCard
+                    width={ADDITIVE_CARD_WIDTH}
+                    card={additiveCards[index]?.card}
+                  ></StaticCard>
                 ) : null}
               </div>
             )

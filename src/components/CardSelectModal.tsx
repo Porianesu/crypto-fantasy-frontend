@@ -40,7 +40,6 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
   handleCardSelect,
   mode = 'id',
 }) => {
-  console.log('selectedCardPositions', selectedCardPositions)
   const {
     appStore: { cardsBag },
   } = useMobxStore()
@@ -140,16 +139,19 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
                 <div className={styles.emptyTip}>no cards</div>
               ) : (
                 <div className={styles.cardsGrid}>
-                  {filteredCards.map((card) => {
+                  {filteredCards.map((card, index) => {
                     const selectedIndex = isPositionMode
                       ? selectedCardPositions?.indexOf((card as PositionModeCardData).bagPosition)
                       : selectedCardIds?.findIndex((id) => id === card.id)
                     const currentCardFormationIndex =
                       selectedIndex === undefined ? -1 : selectedIndex
                     const selected = currentCardFormationIndex !== -1
+                    const key = isPositionMode
+                      ? `${card.id}-${(card as PositionModeCardData).bagPosition}-${index}`
+                      : `${card.id}-${index}`
                     return (
                       <div
-                        key={card.id}
+                        key={key}
                         className={classNames(styles.cardItem, selected && styles.selectedCard)}
                         onClick={() => handleCardSelect(card)}
                       >

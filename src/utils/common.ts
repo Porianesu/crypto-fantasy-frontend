@@ -1,4 +1,5 @@
 import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
+import type { ICardData } from '@/components/Card.tsx'
 
 const defaultAvatars = import.meta.glob<string>('../assets/images/avatars/*.png', {
   eager: true,
@@ -155,4 +156,8 @@ export const setStorageUserInfo = (params: Partial<UserStorageInfo>) => {
 export const checkHasAlreadyReadGuide = () => {
   const storageUserInfo = getStorageItem(USER_INFO_STORAGE_KEY) as UserStorageInfo | null
   return storageUserInfo?.hasAlreadyReadGuide
+}
+
+export const isCardsSameChain = (card1: ICardData, card2: ICardData) => {
+  return Math.floor(card1.id / 4) === Math.floor(card2.id / 4)
 }
