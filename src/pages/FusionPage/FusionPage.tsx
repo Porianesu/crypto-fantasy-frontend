@@ -1,11 +1,12 @@
 import { observer } from 'mobx-react-lite'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './FusionPage.module.css'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import Craft from '@/pages/FusionPage/Craft.tsx'
 import Melt from '@/pages/FusionPage/Melt.tsx'
+import { gsap } from 'gsap'
 
 enum FUSION_PAGE_TYPE {
   CRAFT = 'craft',
@@ -26,9 +27,56 @@ const PageType = [
 const FusionPage: React.FC = () => {
   const navigate = useNavigate()
   const [pageType, setPageType] = useState<FUSION_PAGE_TYPE>(FUSION_PAGE_TYPE.CRAFT)
+  const [craftRender, setCraftRender] = useState(true)
+  const craftRenderRef = useRef<HTMLDivElement>(null)
+  const [meltRender, setMeltRender] = useState(false)
+  const meltRenderRef = useRef<HTMLDivElement>(null)
+  const isAnimationRunning = useRef(false)
 
   const handleBack = () => {
     navigate(getHomePath())
+  }
+
+  const handlePageTypeChange = (type: FUSION_PAGE_TYPE) => {
+    if (isAnimationRunning.current) return
+    const tl = gsap.timeline({
+      onStart: () => {
+        isAnimationRunning.current = true
+        setMeltRender(true)
+        setCraftRender(true)
+      },
+      onComplete: () => {
+        setCraftRender(type === FUSION_PAGE_TYPE.CRAFT)
+        setMeltRender(type === FUSION_PAGE_TYPE.MELT)
+        setPageType(type)
+        isAnimationRunning.current = false
+      },
+    })
+    if (type === FUSION_PAGE_TYPE.CRAFT) {
+      tl.to(craftRenderRef.current, {
+        xPercent: 0,
+        duration: 0.4,
+      }).to(
+        meltRenderRef.current,
+        {
+          xPercent: 0,
+          duration: 0.4,
+        },
+        '0',
+      )
+    } else {
+      tl.to(meltRenderRef.current, {
+        xPercent: -100,
+        duration: 0.4,
+      }).to(
+        craftRenderRef.current,
+        {
+          xPercent: -100,
+          duration: 0.4,
+        },
+        '0',
+      )
+    }
   }
 
   return (
@@ -39,7 +87,7 @@ const FusionPage: React.FC = () => {
           {PageType.map((item) => (
             <button
               key={item.key}
-              onClick={() => setPageType(item.key)}
+              onClick={() => handlePageTypeChange(item.key)}
               className={classNames(
                 styles.typeButton,
                 {
@@ -54,7 +102,14 @@ const FusionPage: React.FC = () => {
         </div>
         <button className={classNames(styles.questionButton, 'button')}></button>
       </div>
-      {pageType === FUSION_PAGE_TYPE.CRAFT ? <Craft></Craft> : <Melt></Melt>}
+      <div className={'flex-1 flex items-stretch overflow-hidden relative'}>
+        <div className={'flex flex-col shrink-0 w-full'} ref={craftRenderRef}>
+          {craftRender ? <Craft></Craft> : null}
+        </div>
+        <div className={'flex flex-col shrink-0 w-full'} ref={meltRenderRef}>
+          {meltRender ? <Melt></Melt> : null}
+        </div>
+      </div>
     </div>
   )
 }

@@ -127,10 +127,10 @@ const Craft: React.FC = () => {
   const handleCraftButtonClick = () => {
     if (!userInfo || !currentCraftRule || !craftTargetCard) return
     if (userInfo.faithAmount < currentCraftRule.requiredFaithCoin) {
-      toast.warning('Insufficient faith amount to craft!')
+      return toast.warning('Insufficient faith amount to craft!')
     }
     if (requiredCards.length < currentCraftRule.requiredCards.count) {
-      toast.warning('Required cards are not enough!')
+      return toast.warning('Required cards are not enough!')
     }
     const craftResult = craftCard(
       craftTargetCard,

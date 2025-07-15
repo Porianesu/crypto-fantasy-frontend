@@ -39,6 +39,7 @@ export default class SystemStore {
         // 屏幕更宽
         targetWidth = (wh * 16) / 9
         container.style.width = `${targetWidth}px`
+        this.ratioContainerWidth = targetWidth
         container.style.height = `100vh`
       } else {
         // 屏幕更高
