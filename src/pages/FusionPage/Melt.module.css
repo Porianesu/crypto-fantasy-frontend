@@ -1,5 +1,40 @@
 @import "tailwindcss";
 
 .bodyContainer {
-    @apply flex-1 overflow-hidden;
+    @apply flex-1 overflow-hidden flex items-end justify-between pr-64.5;
+
+    .meltContainer {
+        @apply flex flex-col items-center mb-17.5;
+
+        .meltCard {
+            @apply mb-37;
+        }
+
+        .meltCardEmpty {
+            @apply w-39.5 h-61 mb-35;
+            @apply bg-[url(/src/assets/images/fusion_page/craft_required_card_empty_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        }
+
+        .meltDescriptionContainer {
+            @apply px-26 w-95.5 h-29 flex flex-col gap-y-2 items-center justify-center text-center text-2xl leading-10 text-[#C3AE99] mb-15;
+            @apply bg-[url(/src/assets/images/fusion_page/melt_description_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        }
+
+        .meltButton {
+            @apply w-102 h-25 text-4xl leading-10 font-normal text-white flex items-center justify-center;
+            @apply bg-[url(/src/assets/images/common/block_button_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        }
+    }
+}
+
+
+.meltDescriptionContainer {
+    .faithCoinContainer {
+        @apply flex items-center gap-x-4 font-sans italic text-4xl leading-10 text-white font-black;
+
+        .faithCoin {
+            @apply size-11;
+            @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        }
+    }
 }
