@@ -217,7 +217,7 @@ export default class StoresStore {
         beforeReturnAdditiveCard.card.rarity === CARD_RARITY.NORMAL
           ? CARD_RARITY.NORMAL
           : beforeReturnAdditiveCard.card.rarity - 1
-      const returnAdditiveCard = cardDatabase.find(
+      returnAdditiveCard = cardDatabase.find(
         (card) =>
           card.rarity === targetRarity && isCardsSameChain(card, beforeReturnAdditiveCard.card),
       )
@@ -235,7 +235,6 @@ export default class StoresStore {
       this.cardsBag.splice(index, 1)
     })
     if (randomNumber.isGreaterThanOrEqualTo(successRate)) {
-      console.log('Craft Success')
       // 成功则添加新卡到背包
       this.cardsBag.push(targetCard)
       this.userInfo.faithAmount -= costFaithCoin
@@ -244,17 +243,17 @@ export default class StoresStore {
         cards: [targetCard],
       }
     } else {
-      console.log('Craft Failed')
       // 失败则按规则添加一部分消耗的卡牌到背包
       const randomRequiredCardIndex = Math.floor(Math.random() * requiredCards.length)
       const returnRequiredCards = requiredCards[randomRequiredCardIndex]
-      this.cardsBag.push(returnRequiredCards.card)
+      const resultCards = [returnRequiredCards.card]
       if (returnAdditiveCard) {
-        this.cardsBag.push(returnAdditiveCard)
+        resultCards.push(returnAdditiveCard)
       }
+      this.cardsBag = this.cardsBag.concat(resultCards)
       return {
         type: 'fail',
-        cards: [returnRequiredCards.card, returnAdditiveCard].filter(Boolean) as Array<ICardData>,
+        cards: resultCards,
       }
     }
   }
