@@ -1,10 +1,14 @@
 @import "tailwindcss";
 
 .bodyContainer {
-    @apply flex-1 overflow-hidden flex items-end justify-between pr-64.5;
+    @apply flex-1 overflow-hidden flex items-stretch justify-between pr-64.5 z-10;
+
+    .selectContainer {
+        @apply w-290.5 self-end border border-red-800;
+    }
 
     .meltContainer {
-        @apply flex flex-col items-center mb-17.5;
+        @apply flex flex-col items-center mb-17.5 self-end;
 
         .meltCard {
             @apply mb-37;

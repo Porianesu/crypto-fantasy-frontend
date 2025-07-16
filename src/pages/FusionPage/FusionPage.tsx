@@ -80,13 +80,7 @@ const FusionPage: React.FC = () => {
   }
 
   return (
-    <div
-      className={classNames(styles.pageContainer, {
-        [styles.craftPageContainer]: pageType === FUSION_PAGE_TYPE.CRAFT,
-        [styles.meltPageContainer]: pageType === FUSION_PAGE_TYPE.MELT,
-      })}
-    >
-      {pageType === FUSION_PAGE_TYPE.MELT ? <div className={styles.meltBackground}></div> : null}
+    <div className={classNames(styles.pageContainer)}>
       <div className={styles.header}>
         <button className={classNames(styles.backButton, 'button')} onClick={handleBack}></button>
         <div className={styles.typeButtons}>
@@ -108,12 +102,23 @@ const FusionPage: React.FC = () => {
         </div>
         <button className={classNames(styles.questionButton, 'button')}></button>
       </div>
-      <div className={'flex-1 flex items-stretch overflow-hidden relative z-20'}>
-        <div className={'flex flex-col shrink-0 w-full'} ref={craftRenderRef}>
+      <div className={styles.swipeContainer}>
+        <div
+          className={classNames(styles.swipeSlideContainer, styles.craftPageContainer)}
+          ref={craftRenderRef}
+        >
           {craftRender ? <Craft></Craft> : null}
         </div>
-        <div className={'flex flex-col shrink-0 w-full'} ref={meltRenderRef}>
-          {meltRender ? <Melt></Melt> : null}
+        <div
+          className={classNames(styles.swipeSlideContainer, styles.meltPageContainer)}
+          ref={meltRenderRef}
+        >
+          {meltRender ? (
+            <>
+              <div className={styles.meltBackground}></div>
+              <Melt></Melt>
+            </>
+          ) : null}
         </div>
       </div>
     </div>

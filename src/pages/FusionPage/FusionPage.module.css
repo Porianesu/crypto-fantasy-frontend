@@ -18,7 +18,7 @@
     @apply flex-1 overflow-hidden flex flex-col items-stretch justify-start bg-[#151217] relative;
 
     .header {
-        @apply pl-22 pr-21 flex  justify-between z-20;
+        @apply pl-22 pr-21 flex justify-between z-10 absolute top-0 w-full;
 
         .backButton {
             @apply size-22.5 mt-8;
@@ -32,6 +32,14 @@
         .questionButton {
             @apply size-22.5 mt-8;
             @apply bg-[url(/src/assets/images/common/question_icon.png)] bg-cover bg-top-left bg-no-repeat;
+        }
+    }
+
+    .swipeContainer {
+        @apply flex-1 flex items-stretch overflow-hidden relative z-0;
+
+        .swipeSlideContainer {
+            @apply flex flex-row items-stretch shrink-0 w-full relative;
         }
     }
 }
