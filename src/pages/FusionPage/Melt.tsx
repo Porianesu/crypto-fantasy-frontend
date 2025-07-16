@@ -7,6 +7,7 @@ import type { ICardDataInBag } from '@/stores/app-store.ts'
 import classNames from 'classnames'
 import StaticCard from '@/components/StaticCard.tsx'
 import { RARITY_OPTIONS, type RARITY_SELECT_VALUE } from '@/components/RaritySelect.tsx'
+import MeltResultModal from '@/pages/FusionPage/MeltResultModal.tsx'
 
 const MeltRule = [
   {
@@ -28,10 +29,17 @@ const MeltRule = [
 ]
 const Melt: React.FC = () => {
   const {
-    appStore: { cardsBag, userInfo },
+    appStore: { cardsBag, userInfo, meltCard },
   } = useMobxStore()
   const [meltTargetCard, setMeltTargetCard] = useState<ICardDataInBag>()
   const [rarityFilter, setRarityFilter] = useState<RARITY_SELECT_VALUE>('all')
+  const [meltResultModalData, setMeltResultModalData] = useState<{
+    open: boolean
+    faithCoin: number
+  }>({
+    open: false,
+    faithCoin: 0,
+  })
   const filteredCards = useMemo(() => {
     if (rarityFilter === 'all') {
       return cardsBag
@@ -44,7 +52,15 @@ const Melt: React.FC = () => {
   )
 
   const handleMeltButtonClick = () => {
-    setMeltTargetCard(cardsBag[0])
+    if (!currentRule || !meltTargetCard) return
+    const meltResult = meltCard(meltTargetCard, currentRule.faithCoin)
+    if (meltResult === 'success') {
+      setMeltTargetCard(undefined)
+      setMeltResultModalData({
+        open: true,
+        faithCoin: currentRule.faithCoin,
+      })
+    }
   }
 
   return (
@@ -56,7 +72,11 @@ const Melt: React.FC = () => {
             <div className={styles.selectLimitContainer}>
               <div className={styles.selectLimitTextContainer}>
                 Limit:
-                <span className={styles.selectLimitRemainText}>
+                <span
+                  className={classNames(styles.selectLimitRemainText, {
+                    [styles.selectLimitRemainTextNotEnough]: userInfo.meltOpportunity.current <= 0,
+                  })}
+                >
                   {userInfo.meltOpportunity.current}remaining
                 </span>
                 <span className={styles.selectLimitMaxText}>/{userInfo.meltOpportunity.max}</span>
@@ -123,6 +143,13 @@ const Melt: React.FC = () => {
           Melt
         </div>
       </div>
+      <MeltResultModal
+        open={meltResultModalData.open}
+        onOpenChange={(open) => {
+          setMeltResultModalData((prevState) => ({ ...prevState, open }))
+        }}
+        faithCoin={meltResultModalData.faithCoin}
+      ></MeltResultModal>
     </div>
   )
 }

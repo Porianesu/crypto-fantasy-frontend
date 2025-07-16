@@ -49,6 +49,10 @@
             @apply text-[#41FF57] italic font-[FFDin] ml-5;
         }
 
+        .selectLimitRemainTextNotEnough {
+            @apply text-red-600;
+        }
+
         .selectLimitMaxText {
             @apply text-white italic font-[FFDin] ml-1;
         }

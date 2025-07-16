@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+.overlay {
+    @apply fixed inset-0 z-50;
+}
+
+@supports (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply backdrop-blur-md;
+    }
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply bg-black/60;
+    }
+}
+
+.modalContentWrapper {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus-visible:outline-none;
+
+    .modalContentContainer {
+        @apply w-174 h-175.5 flex flex-col items-center justify-start text-white;
+
+        .backgroundImage {
+            @apply size-full inset-0 absolute z-0;
+            @apply bg-[url(/src/assets/images/fusion_page/result_modal_background.png)] bg-contain bg-top-left bg-no-repeat;
+        }
+
+        .faithCoinPile {
+            @apply size-100 mt-35 z-10;
+            @apply bg-[url(/src/assets/images/fusion_page/faith_coin_pile.png)] bg-contain bg-top-left bg-no-repeat;
+        }
+
+        .faithCoinContainer {
+            @apply absolute bottom-37.5 flex items-center text-7xl font-black font-[FFDin] z-10;
+        }
+
+        .faithCoinIcon {
+            @apply size-14 mr-4.5;
+            @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-contain bg-top-left bg-no-repeat;
+        }
+
+        .title {
+            @apply w-255 h-35 flex items-center justify-center text-center absolute -top-5 text-5xl leading-17.5;
+        }
+
+        .button {
+            @apply -bottom-12.5 w-102 h-25 text-4xl leading-10 absolute;
+            @apply bg-[url(/src/assets/images/common/block_button_background.png)] bg-contain bg-top-left bg-no-repeat;
+        }
+    }
+}

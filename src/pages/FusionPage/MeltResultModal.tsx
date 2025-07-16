@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import React, { useRef } from 'react'
-import styles from './CraftResultModal.module.css'
-import classNames from 'classnames'
+import styles from './MeltResultModal.module.css'
 import {
   Close,
   Content,
@@ -11,36 +10,29 @@ import {
   Portal,
   Title,
 } from '@radix-ui/react-dialog'
-import type { ICardData } from '@/components/Card.tsx'
-import StaticCard from '@/components/StaticCard.tsx'
+import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 
-interface ICraftResultModalContentProps {
-  type: 'success' | 'fail'
-  cards: Array<ICardData>
+interface IMeltResultModalContentProps {
+  faithCoin: number
 }
 
-const CraftResultModalContent: React.FC<ICraftResultModalContentProps> = ({ type, cards }) => {
+const MeltResultModalContent: React.FC<IMeltResultModalContentProps> = ({ faithCoin }) => {
   const contentRef = useRef<HTMLDivElement>(null)
-  const cardsRef = useRef<Array<HTMLDivElement>>([])
   const backgroundRef = useRef<HTMLDivElement>(null)
 
   useGSAP(
     () => {
+      const tl = gsap.timeline()
       gsap.to(backgroundRef.current, {
         rotate: 360,
         duration: 5,
         ease: 'linear',
         repeat: -1,
       })
-      const tl = gsap.timeline()
       tl.from(backgroundRef.current, {
         scale: 0,
-        duration: 0.5,
-      }).from(cardsRef.current, {
-        scale: 0,
-        stagger: 0.2,
         duration: 0.5,
       })
     },
@@ -53,37 +45,24 @@ const CraftResultModalContent: React.FC<ICraftResultModalContentProps> = ({ type
   return (
     <div className={styles.modalContentContainer} ref={contentRef}>
       <div className={styles.backgroundImage} ref={backgroundRef}></div>
-      <Title className={styles.title}>
-        {type === 'success'
-          ? 'Congratulations! You’ve crafted a higher rarity card.'
-          : 'Fate sald no - but some materials have been retumed.'}
-      </Title>
+      <Title className={styles.title}>{'Congratulations! You’ve get Faithcoin as return.'}</Title>
       <Description className={'hidden'}></Description>
-      <div className={styles.cardsContainer}>
-        {cards.map((card, index) => (
-          <StaticCard
-            key={`${card.id}-${index}`}
-            card={card}
-            width={285}
-            ref={(el: HTMLDivElement) => {
-              if (el) {
-                cardsRef.current[index] = el
-              }
-            }}
-          ></StaticCard>
-        ))}
+      <div className={styles.faithCoinPile}></div>
+      <div className={styles.faithCoinContainer}>
+        {faithCoin}
+        <div className={styles.faithCoinIcon}></div>
       </div>
       <Close className={classNames(styles.button, 'text-shadow')}>OK</Close>
     </div>
   )
 }
 
-interface ICraftResultModalProps extends ICraftResultModalContentProps {
+interface IMeltResultModalProps extends IMeltResultModalContentProps {
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-const CraftResultModal: React.FC<ICraftResultModalProps> = ({
+const MeltResultModal: React.FC<IMeltResultModalProps> = ({
   open,
   onOpenChange,
   ...contentProps
@@ -98,11 +77,11 @@ const CraftResultModal: React.FC<ICraftResultModalProps> = ({
           )}
         >
           <Content className={styles.modalContentWrapper}>
-            <CraftResultModalContent {...contentProps}></CraftResultModalContent>
+            <MeltResultModalContent {...contentProps}></MeltResultModalContent>
           </Content>
         </DialogOverlay>
       </Portal>
     </Dialog>
   )
 }
-export default observer(CraftResultModal)
+export default observer(MeltResultModal)

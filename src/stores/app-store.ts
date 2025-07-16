@@ -61,6 +61,7 @@ export default class StoresStore {
       initData: flow.bound,
       drawCards: action,
       craftCard: action,
+      meltCard: action,
     })
   }
 
@@ -291,5 +292,18 @@ export default class StoresStore {
         cards: resultCards,
       }
     }
+  }
+
+  meltCard = (targetCard: ICardDataInBag, faithCoin: number): 'success' | 'fail' => {
+    if (!this.userInfo) return 'fail'
+    if (this.userInfo.meltOpportunity.current <= 0) {
+      toast.warn('No melt opportunities left!')
+      return 'fail'
+    }
+    this.userInfo.meltOpportunity.current -= 1
+    this.userInfo.faithAmount += faithCoin
+    this._cardsBag.splice(targetCard.bagPosition, 1)
+    toast.success(`Melted ${targetCard.name} successfully!`)
+    return 'success'
   }
 }
