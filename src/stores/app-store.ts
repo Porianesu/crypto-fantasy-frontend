@@ -17,6 +17,10 @@ export interface UserInfo extends UserStorageInfo {
   solAmount: number
   faithAmount: number
   expPercent: number
+  meltOpportunity: {
+    current: number
+    max: number
+  }
 }
 
 export interface ICardDataInBag extends ICardData {
@@ -83,6 +87,10 @@ export default class StoresStore {
         solAmount: 100,
         faithAmount: 10000,
         expPercent: 68,
+        meltOpportunity: {
+          max: 20,
+          current: 20,
+        },
       }
       this.cardsFormation = []
       this._cardsBag = []

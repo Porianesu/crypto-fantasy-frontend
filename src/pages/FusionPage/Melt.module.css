@@ -4,7 +4,7 @@
     @apply flex-1 overflow-hidden flex items-stretch justify-between pr-64.5 z-10;
 
     .selectContainer {
-        @apply w-290.5 self-end border border-red-800;
+        @apply w-290.5 flex flex-col items-stretch justify-end pl-18.5 pr-14 pb-17;
     }
 
     .meltContainer {
@@ -31,10 +31,54 @@
     }
 }
 
+.selectHeader {
+    @apply flex items-center justify-between border-b-3 border-b-[#534D3C] pb-6;
+
+    .selectHeaderTitle {
+        @apply text-[#FFC763] text-4xl leading-10;
+    }
+
+    .selectLimitContainer {
+        @apply flex items-center gap-x-5;
+
+        .selectLimitTextContainer {
+            @apply text-[#C3AE99] text-2xl leading-10;
+        }
+
+        .selectLimitRemainText {
+            @apply text-[#41FF57] italic font-[FFDin] ml-5;
+        }
+
+        .selectLimitMaxText {
+            @apply text-white italic font-[FFDin] ml-1;
+        }
+    }
+}
+
+.rarityContainer {
+    @apply flex items-center gap-x-3.5 justify-between py-6.5;
+
+    .rarityItem {
+        @apply flex-1 overflow-hidden h-15 rounded-full bg-[#443731] text-[#C3AE99] text-2xl leading-10 shrink-0;
+    }
+
+    .rarityItemSelected {
+        @apply text-[#FEF4D5] bg-linear-to-r from-[#88664C] to-[#E2C17C];
+    }
+}
+
+.cardsListWrapper {
+    @apply h-158 overflow-x-hidden overflow-y-auto flex flex-col items-stretch justify-start;
+
+    .cardsList {
+        @apply grid grid-cols-5 gap-x-12;
+    }
+}
+
 
 .meltDescriptionContainer {
     .faithCoinContainer {
-        @apply flex items-center gap-x-4 font-sans italic text-4xl leading-10 text-white font-black;
+        @apply flex items-start gap-x-4 font-[FFDin] italic text-4xl leading-10 text-white font-black;
 
         .faithCoin {
             @apply size-11;
