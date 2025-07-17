@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import styles from './Melt.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { CARD_RARITY } from '@/components/Card.tsx'
@@ -8,6 +8,10 @@ import classNames from 'classnames'
 import StaticCard from '@/components/StaticCard.tsx'
 import { RARITY_OPTIONS, type RARITY_SELECT_VALUE } from '@/components/RaritySelect.tsx'
 import MeltResultModal from '@/pages/FusionPage/MeltResultModal.tsx'
+import { gsap } from 'gsap'
+import { Flip } from 'gsap/Flip'
+
+gsap.registerPlugin(Flip)
 
 const MeltRule = [
   {
@@ -27,11 +31,13 @@ const MeltRule = [
     faithCoin: 1800,
   },
 ]
-const Melt: React.FC = () => {
+const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCardVideo }) => {
   const {
     appStore: { cardsBag, userInfo, meltCard },
   } = useMobxStore()
   const [meltTargetCard, setMeltTargetCard] = useState<ICardDataInBag>()
+  const bodyContainerRef = useRef<HTMLDivElement>(null)
+  const meltTargetCardRef = useRef<HTMLDivElement>(null)
   const [rarityFilter, setRarityFilter] = useState<RARITY_SELECT_VALUE>('all')
   const [meltResultModalData, setMeltResultModalData] = useState<{
     open: boolean
@@ -51,11 +57,12 @@ const Melt: React.FC = () => {
     [meltTargetCard?.rarity],
   )
 
-  const handleMeltButtonClick = () => {
-    if (!currentRule || !meltTargetCard) return
+  const handleMeltButtonClick = async () => {
+    if (!currentRule || !meltTargetCard || !meltTargetCardRef.current) return
     const meltResult = meltCard(meltTargetCard, currentRule.faithCoin)
     if (meltResult === 'success') {
       setMeltTargetCard(undefined)
+      await playMeltCardVideo()
       setMeltResultModalData({
         open: true,
         faithCoin: currentRule.faithCoin,
@@ -64,7 +71,7 @@ const Melt: React.FC = () => {
   }
 
   return (
-    <div className={styles.bodyContainer}>
+    <div className={styles.bodyContainer} ref={bodyContainerRef}>
       <div className={styles.selectContainer}>
         <div className={styles.selectHeader}>
           <div className={styles.selectHeaderTitle}>Select a card</div>
@@ -123,7 +130,12 @@ const Melt: React.FC = () => {
       </div>
       <div className={styles.meltContainer}>
         {meltTargetCard ? (
-          <StaticCard card={meltTargetCard} className={styles.meltCard} width={166}></StaticCard>
+          <StaticCard
+            card={meltTargetCard}
+            className={styles.meltCard}
+            width={166}
+            ref={meltTargetCardRef}
+          ></StaticCard>
         ) : (
           <div className={styles.meltCardEmpty}></div>
         )}

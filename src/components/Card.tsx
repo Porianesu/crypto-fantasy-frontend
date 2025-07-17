@@ -65,7 +65,6 @@ const Card: React.FC<ICardProps> = ({ style, card, type = 'animate', scale, unde
         const tl = gsap.timeline({
           onStart: () => {},
           onComplete: () => {
-            console.log('onComplete')
             cardIsFlipped.current = true
           },
         })

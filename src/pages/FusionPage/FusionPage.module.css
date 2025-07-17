@@ -14,6 +14,14 @@
     @apply bg-[url(/src/assets/images/fusion_page/melt_background_2.png)] bg-size-[100%_100%] bg-top-right bg-no-repeat;
 }
 
+.videoContainer {
+    @apply absolute inset-0 -z-10 invisible opacity-0 flex items-center justify-center bg-transparent backdrop-blur-md;
+
+    & > video {
+        @apply h-full w-full object-cover;
+    }
+}
+
 .pageContainer {
     @apply flex-1 overflow-hidden flex flex-col items-stretch justify-start bg-[#151217] relative;
 

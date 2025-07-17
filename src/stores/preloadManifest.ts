@@ -1,4 +1,5 @@
 import openPackVideo from '../assets/video/open_pack.webm'
+import meltCardVideo from '../assets/video/melt_card.webm'
 import bgm from '../assets/audio/background_music.mp3'
 import introductionSound from '../assets/audio/introduction.mp3'
 import drawCardSound from '../assets/audio/draw_card_final.mp3'
@@ -40,6 +41,11 @@ export default [
   {
     id: 'openPackVideo',
     src: openPackVideo,
+    type: 'video',
+  },
+  {
+    id: 'meltCardVideo',
+    src: meltCardVideo,
     type: 'video',
   },
   {

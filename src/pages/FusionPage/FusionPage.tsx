@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import Craft from '@/pages/FusionPage/Craft.tsx'
 import Melt from '@/pages/FusionPage/Melt.tsx'
 import { gsap } from 'gsap'
+import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
 
 enum FUSION_PAGE_TYPE {
   CRAFT = 'craft',
@@ -32,6 +33,7 @@ const FusionPage: React.FC = () => {
   const [meltRender, setMeltRender] = useState(false)
   const meltRenderRef = useRef<HTMLDivElement>(null)
   const isAnimationRunning = useRef(false)
+  const videoRef = useRef<IPreloadElementHandle>(null)
 
   const handleBack = () => {
     navigate(getHomePath())
@@ -79,8 +81,46 @@ const FusionPage: React.FC = () => {
     }
   }
 
+  const playMeltCardVideo = () => {
+    return new Promise<void>((resolve, reject) => {
+      if (videoRef.current) {
+        gsap.set(videoRef.current.getContainer(), {
+          zIndex: 20,
+          width: '100%',
+          height: '100%',
+        })
+        gsap.to(videoRef.current.getContainer(), {
+          autoAlpha: 1,
+          duration: 0.3,
+          onStart: () => {
+            const videoEl = videoRef.current!.getElement() as HTMLVideoElement
+            videoEl.loop = false
+            videoEl.onended = () => {
+              gsap.to(videoRef.current!.getContainer(), {
+                autoAlpha: 0,
+                duration: 0.3,
+                onStart: () => {
+                  gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
+                  resolve()
+                },
+              })
+            }
+            videoEl.play()
+          },
+        })
+      } else {
+        reject(new Error('Video element not found'))
+      }
+    })
+  }
+
   return (
     <div className={classNames(styles.pageContainer)}>
+      <PreloadElement
+        ref={videoRef}
+        id={'meltCardVideo'}
+        className={styles.videoContainer}
+      ></PreloadElement>
       <div className={styles.header}>
         <button className={classNames(styles.backButton, 'button')} onClick={handleBack}></button>
         <div className={styles.typeButtons}>
@@ -116,7 +156,7 @@ const FusionPage: React.FC = () => {
           {meltRender ? (
             <>
               <div className={styles.meltBackground}></div>
-              <Melt></Melt>
+              <Melt playMeltCardVideo={playMeltCardVideo}></Melt>
             </>
           ) : null}
         </div>

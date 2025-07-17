@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .bodyContainer {
-    @apply flex-1 overflow-hidden flex items-stretch justify-between pr-64.5 z-10;
+    @apply flex-1 overflow-hidden flex items-stretch justify-between pr-64.5 z-10 relative;
 
     .selectContainer {
         @apply w-290.5 flex flex-col items-stretch justify-end pl-18.5 pr-14 pb-17;
