@@ -59,7 +59,7 @@
         }
 
         .undetectedCardScorePosition {
-            @apply font-[FFDin];
+            @apply font-sans;
         }
     }
 

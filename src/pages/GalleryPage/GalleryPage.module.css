@@ -87,11 +87,15 @@
             }
 
             .loadingWrapper {
-                @apply h-125 flex items-center justify-center text-lg text-yellow-600;
+                @apply flex-1 overflow-hidden flex items-center justify-center text-lg text-yellow-600;
             }
 
             .cardListContainer {
                 @apply grid gap-x-0 justify-items-center gap-y-11 pt-11 pb-4 pl-17 pr-17;
+            }
+
+            .cardListEmptyContainer {
+                @apply flex-1 overflow-hidden flex items-center justify-center text-lg text-yellow-600;
             }
 
             .cardListContainerBrowseType {

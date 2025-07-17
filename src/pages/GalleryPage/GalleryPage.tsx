@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './GalleryPage.module.css'
 import { type Location, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { type GalleryPathState } from '@/navigation/routes.tsx'
@@ -9,7 +9,7 @@ import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import classNames from 'classnames'
 import ViewDetailModal from '@/pages/GalleryPage/ViewDetailModal.tsx'
-import { getCardImageById } from '@/utils/common.ts'
+import { getCardImageById, isCardsSameChain } from '@/utils/common.ts'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { BigNumber } from 'bignumber.js'
@@ -31,7 +31,7 @@ const GalleryPage: React.FC = () => {
   const isSelectType = state?.type === 'select'
   const {
     preloadStore: { preloadQueue },
-    appStore: { cardsBag },
+    appStore: { cardsBag, formattedCardsBag },
     modalStore: { changeViewDetailModalVisible, changeViewDetailModalData },
   } = useMobxStore()
   const [selectedCard, setSelectedCard] = useState<ICardDataWithProcessed>()
@@ -60,20 +60,33 @@ const GalleryPage: React.FC = () => {
     queryFn: fetchCardDatabase,
   })
 
+  const CardsRarityFilter = useCallback(
+    (card: ICardDataWithProcessed) => {
+      const matchesSearch = card.name.toLowerCase().includes(searchText.toLowerCase())
+      const matchesRarity = rarityFilter === 'all' ? true : card.rarity === rarityFilter
+      return matchesSearch && matchesRarity
+    },
+    [rarityFilter, searchText],
+  )
+
   const filteredCards = useMemo(() => {
     if (!cardData) return []
-    return cardData
-      .filter((card) => {
-        const matchesSearch = card.name.toLowerCase().includes(searchText.toLowerCase())
-        const matchesRarity = rarityFilter === 'all' ? true : card.rarity === rarityFilter
-        return matchesSearch && matchesRarity
-      })
-      .sort((a, b) => {
-        if (a.processed && !b.processed) return -1
-        if (!a.processed && b.processed) return 1
-        return a.id - b.id
-      })
-  }, [cardData, searchText, rarityFilter])
+    if (isSelectType) {
+      const filteredFormattedCardsBag = formattedCardsBag.filter((card) => card.count >= 2)
+      return cardData
+        .filter((card) =>
+          filteredFormattedCardsBag.some(
+            (myCard) => isCardsSameChain(myCard, card) && card.rarity === myCard.rarity + 1,
+          ),
+        )
+        .filter(CardsRarityFilter)
+    }
+    return cardData.filter(CardsRarityFilter).sort((a, b) => {
+      if (a.processed && !b.processed) return -1
+      if (!a.processed && b.processed) return 1
+      return a.id - b.id
+    })
+  }, [cardData, isSelectType, CardsRarityFilter, formattedCardsBag])
 
   useEffect(() => {
     if (filteredCards.length && !selectedCard) {
@@ -165,7 +178,7 @@ const GalleryPage: React.FC = () => {
         <div className={styles.cardsPart} ref={cardsPartRef}>
           {isLoading ? (
             <div className={styles.loadingWrapper}>Loading...</div>
-          ) : (
+          ) : filteredCards.length ? (
             <div
               className={classNames(styles.cardListContainer, {
                 [styles.cardListContainerSelectType]: isSelectType,
@@ -174,13 +187,19 @@ const GalleryPage: React.FC = () => {
             >
               {filteredCards.map((card) => (
                 <StaticCard
-                  undetected={!card.processed}
+                  undetected={isSelectType ? false : !card.processed}
                   width={258}
                   card={card}
                   key={card.id}
                   onClick={() => handleCardClick(card)}
                 ></StaticCard>
               ))}
+            </div>
+          ) : (
+            <div className={styles.cardListEmptyContainer}>
+              {isSelectType
+                ? "You don't have any cards that can be fused. Hurry up and draw some"
+                : null}
             </div>
           )}
         </div>
