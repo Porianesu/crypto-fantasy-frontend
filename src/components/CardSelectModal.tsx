@@ -143,7 +143,7 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
                             })}
                             type="button"
                           >
-                            {selected ? (isPositionMode ? '√' : currentCardFormationIndex + 1) : ''}
+                            {selected ? currentCardFormationIndex + 1 : ''}
                           </button>
                         }
                         <StaticCard width={202} card={card}></StaticCard>
