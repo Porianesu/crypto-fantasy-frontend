@@ -351,7 +351,8 @@ const Craft: React.FC = () => {
           className={classNames(styles.craftButton, 'button text-shadow')}
           onClick={handleCraftButtonClick}
         >
-          Craft 256<div className={styles.assetIcon}></div>
+          Craft {currentCraftRule?.requiredFaithCoin || ''}
+          <div className={styles.assetIcon}></div>
         </button>
       </div>
       <div className={styles.additiveContainer}>
