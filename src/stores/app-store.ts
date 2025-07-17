@@ -231,7 +231,7 @@ export default class StoresStore {
       card: ICardData
       position: number
     }>,
-    successRate: number,
+    successRate: BigNumber,
     costFaithCoin: number,
   ): void | { type: 'success' | 'fail'; cards: Array<ICardData> } => {
     if (!this.userInfo) return

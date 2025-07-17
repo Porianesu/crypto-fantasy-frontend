@@ -103,17 +103,18 @@ const Craft: React.FC = () => {
     [craftTargetCard?.rarity],
   )
   const successRate = useMemo(() => {
-    if (!currentCraftRule || !craftTargetCard) return 0
-    const baseSuccessRate = currentCraftRule.baseSuccessRate
-    const maxSuccessRate = currentCraftRule.maxSuccessRate
-    const additiveSuccessRate = additiveCards
-      .reduce((previousValue, currentValue) => {
-        return previousValue.plus(
-          calculateAdditiveCardBonusRate(craftTargetCard, currentValue.card),
-        )
-      }, new BigNumber(0))
-      .toNumber()
-    return Math.min(maxSuccessRate, baseSuccessRate + additiveSuccessRate)
+    if (!currentCraftRule || !craftTargetCard) return new BigNumber(0)
+    const baseSuccessRate = new BigNumber(currentCraftRule.baseSuccessRate)
+    const maxSuccessRate = new BigNumber(currentCraftRule.maxSuccessRate)
+    const additiveSuccessRate = additiveCards.reduce((previousValue, currentValue) => {
+      return previousValue.plus(calculateAdditiveCardBonusRate(craftTargetCard, currentValue.card))
+    }, new BigNumber(0))
+    const finalSuccessRate = new BigNumber(baseSuccessRate).plus(additiveSuccessRate)
+    if (finalSuccessRate.isGreaterThan(maxSuccessRate)) {
+      return maxSuccessRate
+    } else {
+      return finalSuccessRate
+    }
   }, [additiveCards, craftTargetCard, currentCraftRule])
   const userFaithAmountCheck = useMemo(() => {
     if (!userInfo?.faithAmount || !currentCraftRule?.requiredFaithCoin) return false
@@ -287,7 +288,7 @@ const Craft: React.FC = () => {
             <div>
               <CountUp
                 start={undefined}
-                end={successRate * 100}
+                end={successRate.times(100).toNumber()}
                 decimals={2}
                 duration={1}
                 separator=","
