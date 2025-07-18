@@ -95,7 +95,7 @@
             }
 
             .cardListEmptyContainer {
-                @apply flex-1 overflow-hidden flex items-center justify-center text-lg text-yellow-600;
+                @apply flex-1 overflow-hidden flex items-center justify-center text-lg text-yellow-600 whitespace-pre text-center;
             }
 
             .cardListContainerBrowseType {

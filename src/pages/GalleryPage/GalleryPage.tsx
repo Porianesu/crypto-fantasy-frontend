@@ -198,7 +198,7 @@ const GalleryPage: React.FC = () => {
           ) : (
             <div className={styles.cardListEmptyContainer}>
               {isSelectType
-                ? "You don't have the cards to craft. Please open the pack first"
+                ? "You don't have any cards that meet the crafting requirement.\nGo open a pack now."
                 : null}
             </div>
           )}
