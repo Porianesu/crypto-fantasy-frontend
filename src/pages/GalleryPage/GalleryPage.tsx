@@ -29,6 +29,13 @@ const GalleryPage: React.FC = () => {
   const location: Location<GalleryPathState> = useLocation()
   const state = location.state
   const isSelectType = state?.type === 'select'
+  const formatterRarityOptions = useMemo(() => {
+    if (isSelectType) {
+      return RARITY_OPTIONS.filter((option) => option.value !== CARD_RARITY.NORMAL)
+    } else {
+      return RARITY_OPTIONS
+    }
+  }, [isSelectType])
   const {
     preloadStore: { preloadQueue },
     appStore: { cardsBag, formattedCardsBag },
@@ -162,7 +169,7 @@ const GalleryPage: React.FC = () => {
       <div className={styles.pageBody} ref={pageBodyRef}>
         <div className={styles.toolContainer}>
           <div className={styles.season}>Season 1</div>
-          {RARITY_OPTIONS.map((select) => {
+          {formatterRarityOptions.map((select) => {
             const selected = rarityFilter === select.value
             return (
               <div
