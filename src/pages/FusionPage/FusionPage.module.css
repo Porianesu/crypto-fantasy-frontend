@@ -34,12 +34,7 @@
         }
 
         .typeButtons {
-            @apply flex items-start gap-x-5;
-        }
-
-        .questionButton {
-            @apply size-22.5 mt-8;
-            @apply bg-[url(/src/assets/images/common/question_icon.png)] bg-cover bg-top-left bg-no-repeat;
+            @apply absolute z-10 left-1/2 -translate-x-1/2 flex items-start gap-x-5;
         }
     }
 
@@ -48,6 +43,40 @@
 
         .swipeSlideContainer {
             @apply flex flex-row items-stretch shrink-0 w-full relative;
+        }
+    }
+}
+
+
+.headerRight {
+    @apply flex items-center gap-x-2.5;
+
+    .assetContainer {
+        @apply flex items-center justify-between w-67.5 h-16 pl-7 pr-2.5;
+        @apply bg-[url('/src/assets/images/home_page/asset_background.png')] bg-contain bg-top-left bg-no-repeat;
+
+        .assetIconContainer {
+            @apply size-11 flex items-center justify-center;
+
+            .assetIcon1 {
+                @apply size-11;
+                @apply bg-[url('/src/assets/images/common/asset_icon_sol.png')] bg-contain bg-top-left bg-no-repeat;
+            }
+
+            .assetIcon2 {
+                @apply size-11;
+                @apply bg-[url('/src/assets/images/common/asset_icon_faith.png')] bg-contain bg-top-left bg-no-repeat;
+            }
+        }
+
+
+        .assetAmount {
+            @apply text-white font-black text-3xl italic;
+        }
+
+        .assetPlusButton {
+            @apply size-13 cursor-pointer active:scale-95 transition-transform;
+            @apply bg-[url('/src/assets/images/home_page/asset_plus_button.png')] bg-contain bg-top-left bg-no-repeat;
         }
     }
 }

@@ -8,6 +8,8 @@ import Craft from '@/pages/FusionPage/Craft.tsx'
 import Melt from '@/pages/FusionPage/Melt.tsx'
 import { gsap } from 'gsap'
 import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import { toast } from 'react-toastify'
 
 enum FUSION_PAGE_TYPE {
   CRAFT = 'craft',
@@ -27,6 +29,9 @@ const PageType = [
 
 const FusionPage: React.FC = () => {
   const navigate = useNavigate()
+  const {
+    appStore: { userInfo },
+  } = useMobxStore()
   const [pageType, setPageType] = useState<FUSION_PAGE_TYPE>(FUSION_PAGE_TYPE.CRAFT)
   const [craftRender, setCraftRender] = useState(true)
   const craftRenderRef = useRef<HTMLDivElement>(null)
@@ -114,6 +119,10 @@ const FusionPage: React.FC = () => {
     })
   }
 
+  const comingSoon = () => {
+    toast.info('Coming Soon!')
+  }
+
   return (
     <div className={classNames(styles.pageContainer)}>
       <PreloadElement
@@ -140,7 +149,22 @@ const FusionPage: React.FC = () => {
             </button>
           ))}
         </div>
-        <button className={classNames(styles.questionButton, 'button')}></button>
+        <div className={styles.headerRight}>
+          <div className={styles.assetContainer}>
+            <div className={styles.assetIconContainer}>
+              <div className={styles.assetIcon1}></div>
+            </div>
+            <span className={styles.assetAmount}>{userInfo?.solAmount || 0}</span>
+            <div className={styles.assetPlusButton} onClick={comingSoon}></div>
+          </div>
+          <div className={styles.assetContainer}>
+            <div className={styles.assetIconContainer}>
+              <div className={styles.assetIcon2}></div>
+            </div>
+            <span className={styles.assetAmount}>{userInfo?.faithAmount || 0}</span>
+            <div className={styles.assetPlusButton} onClick={comingSoon}></div>
+          </div>
+        </div>
       </div>
       <div className={styles.swipeContainer}>
         <div
