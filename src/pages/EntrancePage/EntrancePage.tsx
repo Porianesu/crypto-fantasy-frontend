@@ -5,9 +5,6 @@ import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { useNavigate } from 'react-router-dom'
-import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
-import { checkHasAlreadyReadGuide, checkIsAuth } from '@/utils/common.ts'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
 const LoginModal = React.lazy(() => import('@/pages/EntrancePage/LoginModal.tsx'))
 
@@ -22,7 +19,6 @@ const EntrancePage: React.FC = () => {
   const progressBarWrapperRef = useRef<HTMLDivElement>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const startButtonRef = useRef<HTMLDivElement>(null)
-  const navigate = useNavigate()
 
   useEffect(() => {
     initData()
@@ -72,14 +68,6 @@ const EntrancePage: React.FC = () => {
         loop: -1,
         volume: 0.3,
       })
-    }
-    if (checkIsAuth()) {
-      const checkResult = checkHasAlreadyReadGuide()
-      if (checkResult) {
-        return navigate(getHomePath())
-      } else {
-        return navigate(getIntroductionPath())
-      }
     }
     changeLoginModalVisible(true)
   }

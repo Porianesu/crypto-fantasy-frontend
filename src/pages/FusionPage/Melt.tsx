@@ -81,12 +81,12 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
                 Limit:
                 <span
                   className={classNames(styles.selectLimitRemainText, {
-                    [styles.selectLimitRemainTextNotEnough]: userInfo.meltOpportunity.current <= 0,
+                    [styles.selectLimitRemainTextNotEnough]: userInfo.meltCurrent <= 0,
                   })}
                 >
-                  {userInfo.meltOpportunity.current}remaining
+                  {userInfo.meltCurrent}remaining
                 </span>
-                <span className={styles.selectLimitMaxText}>/{userInfo.meltOpportunity.max}</span>
+                <span className={styles.selectLimitMaxText}>/{userInfo.meltMax}</span>
               </div>
               <button className={classNames(styles.plusButton, 'button')}></button>
             </div>

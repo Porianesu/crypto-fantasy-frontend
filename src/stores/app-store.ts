@@ -1,26 +1,26 @@
 import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
-import { preloadPages } from '@/navigation/routes.tsx'
-import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
+import { getHomePath, getIntroductionPath, preloadPages } from '@/navigation/routes.tsx'
+import { type UserStorageInfo } from '@/utils/constant.ts'
 import {
+  checkHasAlreadyReadGuide,
   getCardImageById,
   getDefaultAvatar,
-  getStorageItem,
   isCardsSameChain,
 } from '@/utils/common.ts'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
+import API, { type ILoginAndRegisterResponse } from '@/axios/api.ts'
 
 export interface UserInfo extends UserStorageInfo {
+  email: string
   avatarUrl: string
   solAmount: number
   faithAmount: number
   expPercent: number
-  meltOpportunity: {
-    current: number
-    max: number
-  }
+  meltCurrent: number
+  meltMax: number
 }
 
 export interface ICardDataInBag extends ICardData {
@@ -49,6 +49,7 @@ export default class StoresStore {
       resetStore: action,
       isAppLoading: observable,
       setIsAppLoading: action,
+      loginAndRegister: flow.bound,
       userInfo: observable,
       cardsFormation: observable,
       changeCardsFormation: action,
@@ -72,27 +73,26 @@ export default class StoresStore {
     this._cardsBag = []
   };
 
+  *loginAndRegister(email: string, password: string) {
+    if (!email) return toast.warn('Please enter your email.')
+    if (!password) return toast.warn('Please enter your password.')
+    const result: ILoginAndRegisterResponse = yield API.loginAndRegister({ email, password })
+    if (result.email === email) {
+      this.userInfo = result
+      if (!result.avatarUrl) {
+        this.userInfo.avatarUrl = getDefaultAvatar()
+      }
+      const checkResult = checkHasAlreadyReadGuide()
+      if (checkResult) {
+        return getHomePath()
+      } else {
+        return getIntroductionPath()
+      }
+    }
+  }
+
   *initNetwork() {
     try {
-      // Simulate network initialization
-      const result: UserStorageInfo = yield new Promise((resolve) =>
-        setTimeout(() => {
-          const storageUserInfo = getStorageItem(USER_INFO_STORAGE_KEY)
-          resolve(storageUserInfo)
-        }, 1000),
-      )
-      console.log('Network initialized with user info:', result)
-      this.userInfo = {
-        ...result,
-        avatarUrl: getDefaultAvatar(),
-        solAmount: 100,
-        faithAmount: 10000,
-        expPercent: 68,
-        meltOpportunity: {
-          max: 20,
-          current: 20,
-        },
-      }
       this.cardsFormation = []
       this._cardsBag = []
       this.rootStoreRef.preloadStore.preloadResult.networkPreloadProgress = 1
@@ -297,11 +297,11 @@ export default class StoresStore {
 
   meltCard = (targetCard: ICardDataInBag, faithCoin: number): 'success' | 'fail' => {
     if (!this.userInfo) return 'fail'
-    if (this.userInfo.meltOpportunity.current <= 0) {
+    if (this.userInfo.meltCurrent <= 0) {
       toast.warn('No melt opportunities left!')
       return 'fail'
     }
-    this.userInfo.meltOpportunity.current -= 1
+    this.userInfo.meltCurrent -= 1
     this.userInfo.faithAmount += faithCoin
     this._cardsBag.splice(targetCard.bagPosition, 1)
     toast.success(`Melted ${targetCard.name} successfully!`)

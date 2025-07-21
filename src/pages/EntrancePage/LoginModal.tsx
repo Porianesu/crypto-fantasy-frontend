@@ -1,40 +1,32 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useState } from 'react'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { Content, Description, Dialog, Portal, Title, DialogOverlay } from '@radix-ui/react-dialog'
 import styles from './LoginModal.module.css'
 import classNames from 'classnames'
-import { checkHasAlreadyReadGuide, setStorageUserInfo } from '@/utils/common.ts'
 import { useNavigate } from 'react-router-dom'
-import { getHomePath, getIntroductionPath } from '@/navigation/routes.tsx'
-import { toast } from 'react-toastify'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover'
 
 const LoginModal: React.FC = () => {
   const {
+    appStore: { loginAndRegister },
     modalStore: { loginModalVisible, changeLoginModalVisible },
   } = useMobxStore()
   const navigate = useNavigate()
+  const [loginButtonLoading, setLoginButtonLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoginButtonLoading(true)
     const formData = new FormData(e.currentTarget)
-    const email = formData.get('email')
-    if (!email) return toast.warn('Please enter your email.')
-    const password = formData.get('password')
-    if (!password) return toast.warn('Please enter your password.')
-    if (email !== 'fantasydemo') return toast.error('Wrong account!')
-    if (password !== 'fantasy666') return toast.error('Wrong password!')
-    setStorageUserInfo({
-      email: email as string,
-    })
-    changeLoginModalVisible(false)
-    const checkResult = checkHasAlreadyReadGuide()
-    if (checkResult) {
-      return navigate(getHomePath())
-    } else {
-      return navigate(getIntroductionPath())
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    const result = await loginAndRegister(email, password)
+    setLoginButtonLoading(false)
+    if (result) {
+      changeLoginModalVisible(false)
+      navigate(result as unknown as string)
     }
   }
 
@@ -86,7 +78,13 @@ const LoginModal: React.FC = () => {
                   placeholder={'Please enter your Password'}
                 />
               </div>
-              <button className={styles.submitButton} type={'submit'}>
+              <button
+                className={classNames(styles.submitButton, {
+                  button: !loginButtonLoading,
+                })}
+                type={'submit'}
+                disabled={loginButtonLoading}
+              >
                 Confirm
               </button>
             </form>
