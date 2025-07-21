@@ -10,11 +10,9 @@ const request = axios.create({
 
 request.interceptors.response.use(
   (response) => {
-    console.log('response', response)
     return response
   },
   (error) => {
-    console.log('API request error:', error)
     if (error?.response?.data?.error) {
       toast.error(error.response.data.error)
     }

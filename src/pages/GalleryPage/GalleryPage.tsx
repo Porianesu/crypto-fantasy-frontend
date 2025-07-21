@@ -15,6 +15,7 @@ import duration from 'dayjs/plugin/duration'
 import { BigNumber } from 'bignumber.js'
 import { RARITY_OPTIONS } from '@/components/RaritySelect.tsx'
 import { toast } from 'react-toastify'
+import API from '@/axios/api.ts'
 
 dayjs.extend(duration)
 
@@ -37,7 +38,6 @@ const GalleryPage: React.FC = () => {
     }
   }, [isSelectType])
   const {
-    preloadStore: { preloadQueue },
     appStore: { cardsBag, formattedCardsBag },
     modalStore: { changeViewDetailModalVisible, changeViewDetailModalData },
   } = useMobxStore()
@@ -47,20 +47,17 @@ const GalleryPage: React.FC = () => {
   const pageBodyRef = useRef<HTMLDivElement>(null)
   const cardsPartRef = useRef<HTMLDivElement>(null)
 
-  const fetchCardDatabase = () => {
-    return new Promise<Array<ICardDataWithProcessed>>((resolve, reject) => {
-      if (!preloadQueue) reject(new Error('No preload queue'))
-      const cardDatabase = preloadQueue!.getResult('cardsData') as Array<ICardData>
-      const formattedCards = cardDatabase.map((card) => {
+  const fetchCardDatabase = async () => {
+    const result = await API.fetchCardsPage(1, 200)
+    if (result?.data?.data?.length) {
+      return result.data.data.map((card) => {
         return {
           ...card,
           processed: cardsBag.some((myCard) => myCard.id === card.id),
         }
       })
-      setTimeout(() => {
-        resolve(formattedCards)
-      }, 500)
-    })
+    }
+    return []
   }
   const { data: cardData, isLoading } = useQuery({
     queryKey: ['cardDatabase'],
