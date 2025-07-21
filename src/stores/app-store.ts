@@ -12,6 +12,7 @@ import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 import API, { type ILoginAndRegisterResponse } from '@/axios/api.ts'
+import type { AxiosResponse } from 'axios'
 
 export interface UserInfo extends UserStorageInfo {
   email: string
@@ -76,10 +77,20 @@ export default class StoresStore {
   *loginAndRegister(email: string, password: string) {
     if (!email) return toast.warn('Please enter your email.')
     if (!password) return toast.warn('Please enter your password.')
-    const result: ILoginAndRegisterResponse = yield API.loginAndRegister({ email, password })
-    if (result.email === email) {
-      this.userInfo = result
-      if (!result.avatarUrl) {
+    const result: AxiosResponse<ILoginAndRegisterResponse> = yield API.loginAndRegister({
+      email,
+      password,
+    })
+    if (result?.data?.type) {
+      if (result.data.type === 'register') {
+        toast.success('Registration successful!')
+      } else {
+        toast.success('Login successful!')
+      }
+    }
+    if (result?.data?.email === email) {
+      this.userInfo = { ...result.data, expPercent: 20 }
+      if (!result.data.avatarUrl) {
         this.userInfo.avatarUrl = getDefaultAvatar()
       }
       const checkResult = checkHasAlreadyReadGuide()

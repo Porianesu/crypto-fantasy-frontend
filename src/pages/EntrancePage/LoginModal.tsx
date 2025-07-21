@@ -50,7 +50,7 @@ const LoginModal: React.FC = () => {
                 Please join the waitlist to get a demo account.
               </PopoverContent>
             </Popover>
-            <Title className={styles.modalTitle}>Login</Title>
+            <Title className={styles.modalTitle}>Login/Register</Title>
             <Description></Description>
             <form
               onSubmit={handleSubmit}
