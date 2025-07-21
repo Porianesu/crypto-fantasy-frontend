@@ -15,13 +15,17 @@ import API, { type ILoginAndRegisterResponse } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 
 export interface UserInfo extends UserStorageInfo {
+  avatar: string
+  cardsBag: Array<number>
+  createdAt: string
   email: string
-  avatarUrl: string
-  solAmount: number
-  faithAmount: number
   expPercent: number
+  faithAmount: number
+  id: number
   meltCurrent: number
   meltMax: number
+  solAmount: number
+  updatedAt: string
 }
 
 export interface ICardDataInBag extends ICardData {
@@ -90,8 +94,8 @@ export default class StoresStore {
     }
     if (result?.data?.email === email) {
       this.userInfo = { ...result.data, expPercent: 20 }
-      if (!result.data.avatarUrl) {
-        this.userInfo.avatarUrl = getDefaultAvatar()
+      if (!result.data.avatar) {
+        this.userInfo.avatar = getDefaultAvatar()
       }
       const checkResult = checkHasAlreadyReadGuide()
       if (checkResult) {

@@ -115,7 +115,7 @@ function HomePage() {
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             <div className={styles.avatarContainer}>
-              <img src={userInfo.avatarUrl} alt="avatar" className={styles.avatar} />
+              <img src={userInfo.avatar} alt="avatar" className={styles.avatar} />
             </div>
             <div className={styles.userInfoContainer}>
               <div className={styles.username}>{userInfo?.email}</div>
