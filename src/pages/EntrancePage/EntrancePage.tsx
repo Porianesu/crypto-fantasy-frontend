@@ -6,14 +6,17 @@ import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
+import { useNavigate } from 'react-router-dom'
+import { getHomePath } from '@/navigation/routes.tsx'
 const LoginModal = React.lazy(() => import('@/pages/EntrancePage/LoginModal.tsx'))
 
 const EntrancePage: React.FC = () => {
   const {
     preloadStore: { preloadProgress, audioInstanceMap },
-    appStore: { initData },
+    appStore: { initData, userInfo },
     modalStore: { changeLoginModalVisible },
   } = useMobxStore()
+  const navigate = useNavigate()
   const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const containerRef = useRef<HTMLDivElement>(null)
   const progressBarWrapperRef = useRef<HTMLDivElement>(null)
@@ -69,7 +72,11 @@ const EntrancePage: React.FC = () => {
         volume: 0.3,
       })
     }
-    changeLoginModalVisible(true)
+    if (userInfo?.email) {
+      navigate(getHomePath())
+    } else {
+      changeLoginModalVisible(true)
+    }
   }
 
   return (

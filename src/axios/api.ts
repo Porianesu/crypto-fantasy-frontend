@@ -8,6 +8,10 @@ export interface ILoginAndRegisterResponse {
   user: UserInfo
 }
 
+export interface ILoginWithAccessTokenResponse {
+  user: UserInfo
+}
+
 export interface IFetchCardsPageResponse {
   data: Array<ICardData>
   total: number
@@ -18,6 +22,7 @@ export interface IFetchCardsPageResponse {
 const API = {
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
+  loginWithAccessToken: async () => request.get<ILoginWithAccessTokenResponse>('/auth-me'),
   fetchCard: async (cardId: number) => request.get<ICardData>('/cards', { params: { id: cardId } }),
   fetchCards: async (cardId: Array<number>) =>
     request.get<Array<ICardData>>('/cards', { params: { ids: cardId.join(',') } }),

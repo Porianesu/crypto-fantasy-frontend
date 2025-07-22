@@ -120,7 +120,7 @@ export const generateFantasyEnglishName = () => {
   return name
 }
 
-export const setStorageItem = (key: string, value: any) => {
+const setStorageItem = (key: string, value: any) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value))
   } catch (e) {
@@ -128,7 +128,7 @@ export const setStorageItem = (key: string, value: any) => {
   }
 }
 
-export const getStorageItem = (key: string) => {
+const getStorageItem = (key: string) => {
   try {
     const value = window.localStorage.getItem(key)
     if (value) {
@@ -145,7 +145,7 @@ export const setAccessToken = (token: string) => {
   return setStorageItem(ACCESS_TOKEN_STORAGE_KEY, token)
 }
 
-export const checkIsAuth = () => {
+export const getAccessToken = () => {
   return getStorageItem(ACCESS_TOKEN_STORAGE_KEY)
 }
 

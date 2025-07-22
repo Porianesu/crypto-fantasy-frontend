@@ -4,6 +4,7 @@ import { getHomePath, getIntroductionPath, preloadPages } from '@/navigation/rou
 import { type UserStorageInfo } from '@/utils/constant.ts'
 import {
   checkHasAlreadyReadGuide,
+  getAccessToken,
   getCardImageById,
   getDefaultAvatar,
   isCardsSameChain,
@@ -12,7 +13,10 @@ import {
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
-import API, { type ILoginAndRegisterResponse } from '@/axios/api.ts'
+import API, {
+  type ILoginAndRegisterResponse,
+  type ILoginWithAccessTokenResponse,
+} from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 
 export interface UserInfo extends UserStorageInfo {
@@ -58,6 +62,7 @@ export default class StoresStore {
       userInfo: observable,
       updateUserInfo: flow.bound,
       loginAndRegister: flow.bound,
+      loginWithAccessToken: flow.bound,
       cardsFormation: observable,
       changeCardsFormation: action,
       userCardsFormationScore: computed,
@@ -82,7 +87,11 @@ export default class StoresStore {
 
   *updateUserInfo(userInfo: UserInfo) {
     if (!userInfo) return
-    this.userInfo = userInfo
+    this.userInfo = {
+      ...userInfo,
+      avatar: getDefaultAvatar(),
+      expPercent: 60,
+    }
     if (this.userInfo.cardsBag.length) {
       const result: AxiosResponse<Array<ICardData>> = yield API.fetchCards(this.userInfo.cardsBag)
       if (result.data.length) {
@@ -109,24 +118,29 @@ export default class StoresStore {
       if (result.data.token) {
         setAccessToken(result.data.token)
       }
-      const newUserInfo: UserInfo = { ...result.data.user, expPercent: 20 }
-      if (!newUserInfo.avatar) {
-        newUserInfo.avatar = getDefaultAvatar()
-      }
-      yield this.updateUserInfo(newUserInfo)
+      yield this.updateUserInfo(result.data.user)
       const checkResult = checkHasAlreadyReadGuide()
       if (checkResult) {
         return getHomePath()
       } else {
         return getIntroductionPath()
       }
-    } else {
-      toast.error('Login failed, please try again.')
+    }
+  }
+
+  *loginWithAccessToken() {
+    const accessToken = getAccessToken()
+    if (!accessToken) return
+    const result: AxiosResponse<ILoginWithAccessTokenResponse> = yield API.loginWithAccessToken()
+    if (result.data.user) {
+      toast.success('Welcome back! Adventure awaits!')
+      this.updateUserInfo(result.data.user)
     }
   }
 
   *initNetwork() {
     try {
+      yield this.loginWithAccessToken()
       this.cardsFormation = []
       this._cardsBag = []
       this.rootStoreRef.preloadStore.preloadResult.networkPreloadProgress = 1
