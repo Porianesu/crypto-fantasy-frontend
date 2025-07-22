@@ -6,3 +6,4 @@ export interface UserStorageInfo {
 }
 export const ACCESS_TOKEN_STORAGE_KEY = 'access_token'
 export const myQueryClient = new QueryClient()
+export const CARD_DATA_BASE_REQUEST_KEY = 'card_database'

@@ -1,7 +1,11 @@
 import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import { getHomePath, getIntroductionPath, preloadPages } from '@/navigation/routes.tsx'
-import { myQueryClient, type UserStorageInfo } from '@/utils/constant.ts'
+import {
+  CARD_DATA_BASE_REQUEST_KEY,
+  myQueryClient,
+  type UserStorageInfo,
+} from '@/utils/constant.ts'
 import {
   checkHasAlreadyReadGuide,
   getAccessToken,
@@ -71,7 +75,7 @@ export default class StoresStore {
       formattedCardsBag: computed,
       addCardsToBag: action,
       initNetwork: flow.bound,
-      initData: flow.bound,
+      initData: action,
       drawCards: action,
       craftCard: action,
       meltCard: action,
@@ -93,10 +97,28 @@ export default class StoresStore {
       expPercent: 60,
     }
     if (this.userInfo.cardsBag.length) {
-      const result: AxiosResponse<Array<ICardData>> = yield API.fetchCards(this.userInfo.cardsBag)
-      if (result.data.length) {
-        this._cardsBag = result.data
+      // 只对 cardsBag 去重用于请求
+      const uniqueCardIdsArray = Array.from(new Set(this.userInfo.cardsBag))
+      const cachedCardsDataBase = myQueryClient.getQueryData([
+        CARD_DATA_BASE_REQUEST_KEY,
+      ]) as AxiosResponse<Array<ICardData>> | null
+      const filteredUniqueCardIds = cachedCardsDataBase?.data?.length
+        ? uniqueCardIdsArray.filter(
+            (id) => !cachedCardsDataBase.data.some((card) => card.id === id),
+          )
+        : uniqueCardIdsArray
+      let remoteCardsDataBase: AxiosResponse<Array<ICardData>> | null = null
+      if (filteredUniqueCardIds.length) {
+        remoteCardsDataBase = yield API.fetchCards(filteredUniqueCardIds)
       }
+      // 生成卡牌映射表
+      const cardMap = new Map<number, ICardData>()
+      cachedCardsDataBase?.data?.forEach((card) => cardMap.set(card.id, card))
+      remoteCardsDataBase?.data?.forEach((card) => cardMap.set(card.id, card))
+      // _cardsBag 保持和 cardsBag 顺序、数量一致
+      this._cardsBag = this.userInfo.cardsBag
+        .map((id) => cardMap.get(id))
+        .filter(Boolean) as Array<ICardData>
     }
   }
 
@@ -141,7 +163,7 @@ export default class StoresStore {
   *initNetwork() {
     try {
       yield myQueryClient.prefetchQuery({
-        queryKey: ['cardDatabase'],
+        queryKey: [CARD_DATA_BASE_REQUEST_KEY],
         queryFn: () => API.fetchCardsPage(1, 200),
       })
       yield this.loginWithAccessToken()
@@ -153,7 +175,7 @@ export default class StoresStore {
     }
   }
 
-  *initData() {
+  initData = () => {
     if (!this.isAppLoading) return
     this.isAppLoading = true
     try {

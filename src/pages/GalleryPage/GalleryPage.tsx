@@ -16,6 +16,7 @@ import { BigNumber } from 'bignumber.js'
 import { RARITY_OPTIONS } from '@/components/RaritySelect.tsx'
 import { toast } from 'react-toastify'
 import API from '@/axios/api.ts'
+import { CARD_DATA_BASE_REQUEST_KEY } from '@/utils/constant.ts'
 
 dayjs.extend(duration)
 
@@ -48,7 +49,7 @@ const GalleryPage: React.FC = () => {
   const cardsPartRef = useRef<HTMLDivElement>(null)
 
   const { data: fetchCardDataBaseResult, isLoading } = useQuery({
-    queryKey: ['cardDatabase'],
+    queryKey: [CARD_DATA_BASE_REQUEST_KEY],
     queryFn: () => API.fetchCardsPage(1, 200),
   })
 
