@@ -288,7 +288,7 @@ const Craft: React.FC = () => {
             <div>
               <CountUp
                 start={undefined}
-                end={successRate.times(100).toNumber()}
+                end={successRate.times(100).decimalPlaces(2, BigNumber.ROUND_HALF_UP).toNumber()}
                 decimals={2}
                 duration={1}
                 separator=","
