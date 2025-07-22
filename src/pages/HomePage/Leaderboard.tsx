@@ -23,7 +23,7 @@ const Leaderboard: React.FC = () => {
     const finalData = data.concat({
       name: userInfo.email,
       score: userCardsFormationScore,
-      avatar: userInfo.avatarUrl,
+      avatar: userInfo.avatar,
     })
     return finalData
       .sort((a, b) => b.score - a.score)
