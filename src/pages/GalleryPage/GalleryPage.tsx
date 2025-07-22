@@ -47,10 +47,14 @@ const GalleryPage: React.FC = () => {
   const pageBodyRef = useRef<HTMLDivElement>(null)
   const cardsPartRef = useRef<HTMLDivElement>(null)
 
-  const fetchCardDatabase = async () => {
-    const result = await API.fetchCardsPage(1, 200)
-    if (result?.data?.data?.length) {
-      return result.data.data.map((card) => {
+  const { data: fetchCardDataBaseResult, isLoading } = useQuery({
+    queryKey: ['cardDatabase'],
+    queryFn: () => API.fetchCardsPage(1, 200),
+  })
+
+  const cardData = useMemo(() => {
+    if (fetchCardDataBaseResult?.data?.data?.length) {
+      return fetchCardDataBaseResult.data.data.map((card) => {
         return {
           ...card,
           processed: cardsBag.some((myCard) => myCard.id === card.id),
@@ -58,11 +62,7 @@ const GalleryPage: React.FC = () => {
       })
     }
     return []
-  }
-  const { data: cardData, isLoading } = useQuery({
-    queryKey: ['cardDatabase'],
-    queryFn: fetchCardDatabase,
-  })
+  }, [cardsBag, fetchCardDataBaseResult?.data?.data])
 
   const CardsRarityFilter = useCallback(
     (card: ICardDataWithProcessed) => {
