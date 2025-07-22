@@ -54,8 +54,9 @@ export default class StoresStore {
       resetStore: action,
       isAppLoading: observable,
       setIsAppLoading: action,
-      loginAndRegister: flow.bound,
       userInfo: observable,
+      updateUserInfo: flow.bound,
+      loginAndRegister: flow.bound,
       cardsFormation: observable,
       changeCardsFormation: action,
       userCardsFormationScore: computed,
@@ -78,6 +79,17 @@ export default class StoresStore {
     this._cardsBag = []
   };
 
+  *updateUserInfo(userInfo: UserInfo) {
+    if (!userInfo) return
+    this.userInfo = userInfo
+    if (this.userInfo.cardsBag.length) {
+      const result: AxiosResponse<Array<ICardData>> = yield API.fetchCards(this.userInfo.cardsBag)
+      if (result.data.length) {
+        this._cardsBag = result.data
+      }
+    }
+  }
+
   *loginAndRegister(email: string, password: string) {
     if (!email) return toast.warn('Please enter your email.')
     if (!password) return toast.warn('Please enter your password.')
@@ -93,10 +105,11 @@ export default class StoresStore {
       }
     }
     if (result?.data?.email === email) {
-      this.userInfo = { ...result.data, expPercent: 20 }
-      if (!result.data.avatar) {
-        this.userInfo.avatar = getDefaultAvatar()
+      const newUserInfo: UserInfo = { ...result.data, expPercent: 20 }
+      if (!newUserInfo.avatar) {
+        newUserInfo.avatar = getDefaultAvatar()
       }
+      yield this.updateUserInfo(newUserInfo)
       const checkResult = checkHasAlreadyReadGuide()
       if (checkResult) {
         return getHomePath()
