@@ -1,7 +1,7 @@
 import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import { getHomePath, getIntroductionPath, preloadPages } from '@/navigation/routes.tsx'
-import { type UserStorageInfo } from '@/utils/constant.ts'
+import { myQueryClient, type UserStorageInfo } from '@/utils/constant.ts'
 import {
   checkHasAlreadyReadGuide,
   getAccessToken,
@@ -140,6 +140,10 @@ export default class StoresStore {
 
   *initNetwork() {
     try {
+      yield myQueryClient.prefetchQuery({
+        queryKey: ['cardDatabase'],
+        queryFn: () => API.fetchCardsPage(1, 200),
+      })
       yield this.loginWithAccessToken()
       this.cardsFormation = []
       this._cardsBag = []

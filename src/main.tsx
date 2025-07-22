@@ -20,15 +20,15 @@ import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
 import PageContainer from '@/components/PageContainer.tsx'
 import EntrancePage from '@/pages/EntrancePage/EntrancePage.tsx'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { ToastContainer } from 'react-toastify'
+import { myQueryClient } from '@/utils/constant.ts'
+
 const HomePage = React.lazy(() => import('@/pages/HomePage/HomePage.tsx'))
 const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx'))
 const IntroductionPage = React.lazy(() => import('@/pages/IntroductionPage/IntroductionPage.tsx'))
 const TournamentPage = React.lazy(() => import('@/pages/TournamentPage/TournamentPage.tsx'))
 const FusionPage = React.lazy(() => import('@/pages/FusionPage/FusionPage.tsx'))
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ToastContainer } from 'react-toastify'
-
-const queryClient = new QueryClient()
 
 const CommonPageSuspense: React.FC<PropsWithChildren> = ({ children }) => {
   return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
@@ -108,7 +108,7 @@ export const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StoreProvider initialState={null}>
     <TransitionProvider>
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={myQueryClient}>
         <RouterProvider router={router} />
         <ToastContainer
           position={'top-right'}
