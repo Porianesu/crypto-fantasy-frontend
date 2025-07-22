@@ -99,6 +99,10 @@ html:active, body:active, *:active {
     cursor: url('/src/assets/images/entrance_page/cursor_active.png'), auto;
 }
 
+body {
+    @apply select-none;
+}
+
 /* pointer 状态也强制自定义鼠标 */
 *:hover, *:focus, *[style*="cursor: pointer"], .cursor-pointer {
     cursor: url('/src/assets/images/entrance_page/cursor.png'), auto !important;
