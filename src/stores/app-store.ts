@@ -287,7 +287,7 @@ export default class StoresStore {
     })
     // 无论失败还是成功都需要消耗信仰币
     this.userInfo.faithAmount -= costFaithCoin
-    if (randomNumber.isGreaterThanOrEqualTo(successRate)) {
+    if (randomNumber.isLessThanOrEqualTo(successRate)) {
       // 成功则添加新卡到背包
       this._cardsBag.push(targetCard)
       return {

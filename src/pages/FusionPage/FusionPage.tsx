@@ -38,7 +38,8 @@ const FusionPage: React.FC = () => {
   const [meltRender, setMeltRender] = useState(false)
   const meltRenderRef = useRef<HTMLDivElement>(null)
   const isAnimationRunning = useRef(false)
-  const videoRef = useRef<IPreloadElementHandle>(null)
+  const meltVideoRef = useRef<IPreloadElementHandle>(null)
+  const craftVideoRef = useRef<IPreloadElementHandle>(null)
 
   const handleBack = () => {
     navigate(getHomePath())
@@ -88,24 +89,57 @@ const FusionPage: React.FC = () => {
 
   const playMeltCardVideo = () => {
     return new Promise<void>((resolve, reject) => {
-      if (videoRef.current) {
-        gsap.set(videoRef.current.getContainer(), {
+      if (meltVideoRef.current) {
+        gsap.set(meltVideoRef.current.getContainer(), {
           zIndex: 20,
           width: '100%',
           height: '100%',
         })
-        gsap.to(videoRef.current.getContainer(), {
+        gsap.to(meltVideoRef.current.getContainer(), {
           autoAlpha: 1,
           duration: 0.3,
           onStart: () => {
-            const videoEl = videoRef.current!.getElement() as HTMLVideoElement
+            const videoEl = meltVideoRef.current!.getElement() as HTMLVideoElement
             videoEl.loop = false
             videoEl.onended = () => {
-              gsap.to(videoRef.current!.getContainer(), {
+              gsap.to(meltVideoRef.current!.getContainer(), {
                 autoAlpha: 0,
                 duration: 0.3,
                 onStart: () => {
-                  gsap.set(videoRef.current!.getContainer(), { zIndex: -1 })
+                  gsap.set(meltVideoRef.current!.getContainer(), { zIndex: -1 })
+                  resolve()
+                },
+              })
+            }
+            videoEl.play()
+          },
+        })
+      } else {
+        reject(new Error('Video element not found'))
+      }
+    })
+  }
+
+  const playCraftCardVideo = () => {
+    return new Promise<void>((resolve, reject) => {
+      if (craftVideoRef.current) {
+        gsap.set(craftVideoRef.current.getContainer(), {
+          zIndex: 20,
+          width: '100%',
+          height: '100%',
+        })
+        gsap.to(craftVideoRef.current.getContainer(), {
+          autoAlpha: 1,
+          duration: 0.3,
+          onStart: () => {
+            const videoEl = craftVideoRef.current!.getElement() as HTMLVideoElement
+            videoEl.loop = false
+            videoEl.onended = () => {
+              gsap.to(craftVideoRef.current!.getContainer(), {
+                autoAlpha: 0,
+                duration: 0.3,
+                onStart: () => {
+                  gsap.set(craftVideoRef.current!.getContainer(), { zIndex: -1 })
                   resolve()
                 },
               })
@@ -126,8 +160,13 @@ const FusionPage: React.FC = () => {
   return (
     <div className={classNames(styles.pageContainer)}>
       <PreloadElement
-        ref={videoRef}
+        ref={meltVideoRef}
         id={'meltCardVideo'}
+        className={styles.videoContainer}
+      ></PreloadElement>
+      <PreloadElement
+        ref={craftVideoRef}
+        id={'craftCardVideo'}
         className={styles.videoContainer}
       ></PreloadElement>
       <div className={styles.header}>
@@ -171,7 +210,7 @@ const FusionPage: React.FC = () => {
           className={classNames(styles.swipeSlideContainer, styles.craftPageContainer)}
           ref={craftRenderRef}
         >
-          {craftRender ? <Craft></Craft> : null}
+          {craftRender ? <Craft playCraftCardVideo={playCraftCardVideo}></Craft> : null}
         </div>
         <div
           className={classNames(styles.swipeSlideContainer, styles.meltPageContainer)}

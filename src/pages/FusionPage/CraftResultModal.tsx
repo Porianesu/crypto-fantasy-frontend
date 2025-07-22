@@ -92,10 +92,7 @@ const CraftResultModal: React.FC<ICraftResultModalProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <Portal>
         <DialogOverlay
-          className={classNames(
-            'data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out',
-            styles.overlay,
-          )}
+          className={classNames('data-[state=closed]:animate-fade-out', styles.overlay)}
         >
           <Content className={styles.modalContentWrapper}>
             <CraftResultModalContent {...contentProps}></CraftResultModalContent>
