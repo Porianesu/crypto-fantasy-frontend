@@ -156,9 +156,9 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
               return winCenterY - elCenterY
             },
             scale: 0,
-            duration: 1.6,
+            duration: 1.2,
             ease: 'power1.in',
-            stagger: 0.4,
+            stagger: 0.3,
           },
         )
       } else {
