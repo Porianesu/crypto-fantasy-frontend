@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 import { isCardsSameChain } from '@/utils/common.ts'
 import type { ICardDataInBag, ICardDataWithCount } from '@/stores/app-store.ts'
+import { gsap } from 'gsap'
 
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 const CraftResultModal = React.lazy(() => import('./CraftResultModal.tsx'))
@@ -73,7 +74,7 @@ enum CARD_SELECT_TYPE {
   REQUIRED = 'required',
   ADDITIVE = 'additive',
 }
-const Craft: React.FC = () => {
+const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraftCardVideo }) => {
   const {
     appStore: { userInfo, cardsBag, craftCard },
   } = useMobxStore()
@@ -120,12 +121,53 @@ const Craft: React.FC = () => {
     if (!userInfo?.faithAmount || !currentCraftRule?.requiredFaithCoin) return false
     return userInfo?.faithAmount >= currentCraftRule?.requiredFaithCoin
   }, [currentCraftRule?.requiredFaithCoin, userInfo?.faithAmount])
+  const requiredCardsRef = useRef<Array<HTMLDivElement>>([])
+  const additiveCardsRef = useRef<Array<HTMLDivElement>>([])
+  const moveCardsToCenterTimeline = useRef<gsap.core.Timeline>(null)
 
   const handleTargetCardClick = () => {
     navigate(getGalleryPath(undefined), { state: { type: 'select', from: FUSION_PATH } })
   }
 
-  const handleCraftButtonClick = () => {
+  const handleMoveCardsToCenter = () => {
+    return new Promise<void>((resolve) => {
+      if (!requiredCardsRef.current?.length) {
+        resolve()
+      }
+      if (!moveCardsToCenterTimeline.current) {
+        moveCardsToCenterTimeline.current = gsap.timeline({
+          onComplete: () => {
+            resolve()
+          },
+        })
+        moveCardsToCenterTimeline.current.to(
+          requiredCardsRef.current.concat(additiveCardsRef.current),
+          {
+            x: (_index, cardRef) => {
+              const rect = cardRef.getBoundingClientRect()
+              const elCenterX = rect.left + rect.width / 2
+              const winCenterX = window.innerWidth / 2
+              return winCenterX - elCenterX
+            },
+            y: (_index, cardRef) => {
+              const rect = cardRef.getBoundingClientRect()
+              const elCenterY = rect.top + rect.height / 2
+              const winCenterY = window.innerHeight / 2
+              return winCenterY - elCenterY
+            },
+            scale: 0,
+            duration: 1.6,
+            ease: 'power1.in',
+            stagger: 0.4,
+          },
+        )
+      } else {
+        moveCardsToCenterTimeline.current.restart()
+      }
+    })
+  }
+
+  const handleCraftButtonClick = async () => {
     if (!userInfo || !currentCraftRule || !craftTargetCard) return
     if (userInfo.faithAmount < currentCraftRule.requiredFaithCoin) {
       return toast.warning('Insufficient faith amount to craft!')
@@ -140,7 +182,12 @@ const Craft: React.FC = () => {
       successRate,
       currentCraftRule.requiredFaithCoin,
     )
+    await handleMoveCardsToCenter()
+    await playCraftCardVideo()
     setCraftTargetCard(undefined)
+    if (moveCardsToCenterTimeline.current) {
+      moveCardsToCenterTimeline.current.revert()
+    }
     if (craftResult) {
       setCraftResultModalData({
         open: true,
@@ -336,6 +383,11 @@ const Craft: React.FC = () => {
                     },
                   )}
                   onClick={handleRequiredCardClick}
+                  ref={(el) => {
+                    if (el) {
+                      requiredCardsRef.current[index] = el
+                    }
+                  }}
                 >
                   {requiredCards[index] ? (
                     <StaticCard
@@ -368,6 +420,11 @@ const Craft: React.FC = () => {
                   button: !additiveCards[index],
                 })}
                 onClick={handleAdditiveCardClick}
+                ref={(el) => {
+                  if (el) {
+                    additiveCardsRef.current[index] = el
+                  }
+                }}
               >
                 {additiveCards[index] ? (
                   <StaticCard
