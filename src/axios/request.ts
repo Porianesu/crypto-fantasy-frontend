@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { getStorageItem } from '@/utils/common.ts'
+import { ACCESS_TOKEN_STORAGE_KEY } from '@/utils/constant.ts'
 
 const request = axios.create({
   baseURL: 'https://crypto-fantasy-backend.vercel.app/api',
@@ -7,6 +9,18 @@ const request = axios.create({
     'Content-Type': 'application/json',
   },
 })
+
+request.interceptors.request.use(
+  (config) => {
+    const token = getStorageItem(ACCESS_TOKEN_STORAGE_KEY)
+    if (token) {
+      config.headers = config.headers || {}
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => error,
+)
 
 request.interceptors.response.use(
   (response) => {

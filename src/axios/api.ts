@@ -2,8 +2,10 @@ import request from '@/axios/request.ts'
 import type { UserInfo } from '@/stores/app-store.ts'
 import type { ICardData } from '@/components/Card.tsx'
 
-export interface ILoginAndRegisterResponse extends UserInfo {
+export interface ILoginAndRegisterResponse {
   type: 'login' | 'register'
+  token: string
+  user: UserInfo
 }
 
 export interface IFetchCardsPageResponse {

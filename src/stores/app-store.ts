@@ -7,6 +7,7 @@ import {
   getCardImageById,
   getDefaultAvatar,
   isCardsSameChain,
+  setAccessToken,
 } from '@/utils/common.ts'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
@@ -104,8 +105,11 @@ export default class StoresStore {
         toast.success('Login successful!')
       }
     }
-    if (result?.data?.email === email) {
-      const newUserInfo: UserInfo = { ...result.data, expPercent: 20 }
+    if (result?.data?.user?.email === email) {
+      if (result.data.token) {
+        setAccessToken(result.data.token)
+      }
+      const newUserInfo: UserInfo = { ...result.data.user, expPercent: 20 }
       if (!newUserInfo.avatar) {
         newUserInfo.avatar = getDefaultAvatar()
       }
@@ -116,6 +120,8 @@ export default class StoresStore {
       } else {
         return getIntroductionPath()
       }
+    } else {
+      toast.error('Login failed, please try again.')
     }
   }
 

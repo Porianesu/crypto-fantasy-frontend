@@ -1,4 +1,8 @@
-import { USER_INFO_STORAGE_KEY, type UserStorageInfo } from '@/utils/constant.ts'
+import {
+  ACCESS_TOKEN_STORAGE_KEY,
+  USER_INFO_STORAGE_KEY,
+  type UserStorageInfo,
+} from '@/utils/constant.ts'
 import type { ICardData } from '@/components/Card.tsx'
 
 const defaultAvatars = import.meta.glob<string>('../assets/images/avatars/*.png', {
@@ -137,8 +141,12 @@ export const getStorageItem = (key: string) => {
   }
 }
 
+export const setAccessToken = (token: string) => {
+  return setStorageItem(ACCESS_TOKEN_STORAGE_KEY, token)
+}
+
 export const checkIsAuth = () => {
-  return getStorageItem(USER_INFO_STORAGE_KEY)
+  return getStorageItem(ACCESS_TOKEN_STORAGE_KEY)
 }
 
 export const setStorageUserInfo = (params: Partial<UserStorageInfo>) => {
