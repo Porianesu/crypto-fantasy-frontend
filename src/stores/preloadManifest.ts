@@ -5,6 +5,11 @@ import bgm from '../assets/audio/background_music.mp3'
 import introductionSound from '../assets/audio/introduction.mp3'
 import drawCardSound from '../assets/audio/draw_card_final.mp3'
 import flipCardSound from '../assets/audio/flip_card_final.mp3'
+import craftSound from '../assets/audio/craft_animation.mp3'
+import craftSuccessSound from '../assets/audio/craft_success.mp3'
+import craftFailedSound from '../assets/audio/craft_failed.mp3'
+import meltSound from '../assets/audio/melt_animation.mp3'
+
 const avatars = import.meta.glob('../assets/images/avatars/*.png', {
   eager: true,
   import: 'default',
@@ -69,6 +74,22 @@ export default [
   {
     id: 'introductionSound',
     src: introductionSound,
+  },
+  {
+    id: 'craftSound',
+    src: craftSound,
+  },
+  {
+    id: 'craftSuccessSound',
+    src: craftSuccessSound,
+  },
+  {
+    id: 'craftFailedSound',
+    src: craftFailedSound,
+  },
+  {
+    id: 'meltSound',
+    src: meltSound,
   },
   ...Object.keys(avatars).map((key) => ({
     src: avatars[key],
