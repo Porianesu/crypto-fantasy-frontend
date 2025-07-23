@@ -329,7 +329,8 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
       </div>
       <div className={styles.middleContainer}>
         <div className={styles.magicContainer}>
-          <div className={styles.magicBackground}></div>
+          <div className={styles.magicBackground1}></div>
+          <div className={styles.magicBackground2}></div>
           <div className={styles.successRateContainer}>
             <div className={styles.successRateTitle}>Success Rate</div>
             <div>
