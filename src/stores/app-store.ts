@@ -18,6 +18,7 @@ import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 import API, {
+  type IFetchCardsPageResponse,
   type ILoginAndRegisterResponse,
   type ILoginWithAccessTokenResponse,
 } from '@/axios/api.ts'
@@ -101,10 +102,10 @@ export default class StoresStore {
       const uniqueCardIdsArray = Array.from(new Set(this.userInfo.cardsBag))
       const cachedCardsDataBase = myQueryClient.getQueryData([
         CARD_DATA_BASE_REQUEST_KEY,
-      ]) as AxiosResponse<Array<ICardData>> | null
-      const filteredUniqueCardIds = cachedCardsDataBase?.data?.length
+      ]) as AxiosResponse<IFetchCardsPageResponse> | null
+      const filteredUniqueCardIds = cachedCardsDataBase?.data?.data?.length
         ? uniqueCardIdsArray.filter(
-            (id) => !cachedCardsDataBase.data.some((card) => card.id === id),
+            (id) => !cachedCardsDataBase.data.data.some((card) => card.id === id),
           )
         : uniqueCardIdsArray
       let remoteCardsDataBase: AxiosResponse<Array<ICardData>> | null = null
@@ -113,7 +114,7 @@ export default class StoresStore {
       }
       // 生成卡牌映射表
       const cardMap = new Map<number, ICardData>()
-      cachedCardsDataBase?.data?.forEach((card) => cardMap.set(card.id, card))
+      cachedCardsDataBase?.data?.data?.forEach((card) => cardMap.set(card.id, card))
       remoteCardsDataBase?.data?.forEach((card) => cardMap.set(card.id, card))
       // _cardsBag 保持和 cardsBag 顺序、数量一致
       this._cardsBag = this.userInfo.cardsBag
