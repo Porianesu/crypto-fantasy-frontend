@@ -140,27 +140,27 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
             resolve()
           },
         })
-        moveCardsToCenterTimeline.current.to(
-          requiredCardsRef.current.concat(additiveCardsRef.current),
-          {
-            x: (_index, cardRef) => {
-              const rect = cardRef.getBoundingClientRect()
-              const elCenterX = rect.left + rect.width / 2
-              const winCenterX = window.innerWidth / 2
-              return winCenterX - elCenterX
-            },
-            y: (_index, cardRef) => {
-              const rect = cardRef.getBoundingClientRect()
-              const elCenterY = rect.top + rect.height / 2
-              const winCenterY = window.innerHeight / 2
-              return winCenterY - elCenterY
-            },
-            scale: 0,
-            duration: 1.2,
-            ease: 'power1.in',
-            stagger: 0.3,
-          },
+        const needMoveTarget = requiredCardsRef.current.concat(
+          additiveCardsRef.current.filter((_item, index) => Boolean(additiveCards[index])),
         )
+        moveCardsToCenterTimeline.current.to(needMoveTarget, {
+          x: (_index, cardRef) => {
+            const rect = cardRef.getBoundingClientRect()
+            const elCenterX = rect.left + rect.width / 2
+            const winCenterX = window.innerWidth / 2
+            return winCenterX - elCenterX
+          },
+          y: (_index, cardRef) => {
+            const rect = cardRef.getBoundingClientRect()
+            const elCenterY = rect.top + rect.height / 2
+            const winCenterY = window.innerHeight / 2
+            return winCenterY - elCenterY
+          },
+          scale: 0,
+          duration: 1.2,
+          ease: 'power1.in',
+          stagger: 0.3,
+        })
       } else {
         moveCardsToCenterTimeline.current.restart()
       }
