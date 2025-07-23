@@ -10,6 +10,7 @@ import { gsap } from 'gsap'
 import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { toast } from 'react-toastify'
+import { AudioInstanceId } from '@/stores/preload-store.ts'
 
 enum FUSION_PAGE_TYPE {
   CRAFT = 'craft',
@@ -30,8 +31,11 @@ const PageType = [
 const FusionPage: React.FC = () => {
   const navigate = useNavigate()
   const {
+    preloadStore: { audioInstanceMap },
     appStore: { userInfo },
   } = useMobxStore()
+  const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
+  const craftSound = audioInstanceMap.get(AudioInstanceId.CraftSound)
   const [pageType, setPageType] = useState<FUSION_PAGE_TYPE>(FUSION_PAGE_TYPE.CRAFT)
   const [craftRender, setCraftRender] = useState(true)
   const craftRenderRef = useRef<HTMLDivElement>(null)
@@ -135,6 +139,9 @@ const FusionPage: React.FC = () => {
             const videoEl = craftVideoRef.current!.getElement() as HTMLVideoElement
             videoEl.loop = false
             videoEl.onended = () => {
+              if (bgmSound) {
+                bgmSound.volume = 0.5
+              }
               gsap.to(craftVideoRef.current!.getContainer(), {
                 autoAlpha: 0,
                 duration: 0.3,
@@ -142,6 +149,14 @@ const FusionPage: React.FC = () => {
                   gsap.set(craftVideoRef.current!.getContainer(), { zIndex: -1 })
                   resolve()
                 },
+              })
+            }
+            if (bgmSound) {
+              bgmSound.volume = 0.2
+            }
+            if (craftSound) {
+              craftSound.play({
+                volume: 1,
               })
             }
             videoEl.play()

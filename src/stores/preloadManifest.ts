@@ -5,10 +5,10 @@ import bgm from '../assets/audio/background_music.mp3'
 import introductionSound from '../assets/audio/introduction.mp3'
 import drawCardSound from '../assets/audio/draw_card_final.mp3'
 import flipCardSound from '../assets/audio/flip_card_final.mp3'
-import craftSound from '../assets/audio/craft_animation.mp3'
-import craftSuccessSound from '../assets/audio/craft_success.mp3'
-import craftFailedSound from '../assets/audio/craft_failed.mp3'
-import meltSound from '../assets/audio/melt_animation.mp3'
+import craftSound from '../assets/audio/craft_sound.mp3'
+import craftSuccessSound from '../assets/audio/craft_success_sound.mp3'
+import craftFailedSound from '../assets/audio/craft_failed_sound.mp3'
+import meltSound from '../assets/audio/melt_sound.mp3'
 
 const avatars = import.meta.glob('../assets/images/avatars/*.png', {
   eager: true,

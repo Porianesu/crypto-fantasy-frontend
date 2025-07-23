@@ -13,6 +13,10 @@ export enum AudioInstanceId {
   BGM = 'bgm',
   DrawCardSound = 'drawCardSound',
   IntroductionSound = 'introductionSound',
+  CraftSound = 'craftSound',
+  CraftSuccessSound = 'craftSuccessSound',
+  CraftFailedSound = 'craftFailedSound',
+  MeltSound = 'meltSound',
 }
 export default class PreloadStore {
   rootStoreRef: Store

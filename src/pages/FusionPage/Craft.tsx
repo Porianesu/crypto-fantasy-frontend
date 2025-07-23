@@ -13,6 +13,7 @@ import { BigNumber } from 'bignumber.js'
 import { isCardsSameChain } from '@/utils/common.ts'
 import type { ICardDataInBag, ICardDataWithCount } from '@/stores/app-store.ts'
 import { gsap } from 'gsap'
+import { AudioInstanceId } from '@/stores/preload-store.ts'
 
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 const CraftResultModal = React.lazy(() => import('./CraftResultModal.tsx'))
@@ -76,8 +77,11 @@ enum CARD_SELECT_TYPE {
 }
 const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraftCardVideo }) => {
   const {
+    preloadStore: { audioInstanceMap },
     appStore: { userInfo, cardsBag, craftCard },
   } = useMobxStore()
+  const craftSuccessSound = audioInstanceMap.get(AudioInstanceId.CraftSuccessSound)
+  const craftFailSound = audioInstanceMap.get(AudioInstanceId.CraftFailedSound)
   const navigate = useNavigate()
   const location: Location<FusionPathState> = useLocation()
   const [craftTargetCard, setCraftTargetCard] = useState(location.state?.card)
@@ -189,6 +193,15 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
       moveCardsToCenterTimeline.current.revert()
     }
     if (craftResult) {
+      if (craftResult.type === 'success') {
+        if (craftSuccessSound) {
+          craftSuccessSound.play({ volume: 1 })
+        }
+      } else {
+        if (craftFailSound) {
+          craftFailSound.play({ volume: 1 })
+        }
+      }
       setCraftResultModalData({
         open: true,
         type: craftResult.type,
