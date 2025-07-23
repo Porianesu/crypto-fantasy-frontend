@@ -18,6 +18,7 @@ import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
 import { BigNumber } from 'bignumber.js'
 import API, {
+  type IDrawCardsResponse,
   type IFetchCardsPageResponse,
   type ILoginAndRegisterResponse,
   type ILoginWithAccessTokenResponse,
@@ -74,10 +75,9 @@ export default class StoresStore {
       _cardsBag: observable,
       cardsBag: computed,
       formattedCardsBag: computed,
-      addCardsToBag: action,
       initNetwork: flow.bound,
       initData: action,
-      drawCards: action,
+      drawCards: flow.bound,
       craftCard: action,
       meltCard: action,
     })
@@ -169,7 +169,6 @@ export default class StoresStore {
       })
       yield this.loginWithAccessToken()
       this.cardsFormation = []
-      this._cardsBag = []
       this.rootStoreRef.preloadStore.preloadResult.networkPreloadProgress = 1
     } catch (e) {
       console.log('Error initializing network:', e)
@@ -224,76 +223,40 @@ export default class StoresStore {
     return Object.values(cardCountMap)
   }
 
-  addCardsToBag = (cards: Array<ICardData>) => {
-    this._cardsBag = this._cardsBag.concat(cards)
-  }
-
-  drawCards = () => {
-    return new Promise<Array<ICardData>>((resolve, reject) => {
-      if (!this.userInfo || this.userInfo.solAmount <= 0.1)
-        return toast.warn('Insufficient Balance!')
-      const cardsData = this.rootStoreRef.preloadStore.preloadQueue?.getResult(
-        'cardsData',
-      ) as Array<ICardData>
-      if (!cardsData) reject(new Error('未找到卡片数据'))
-      // 先生成所有可用的 cardTypeIndex
-      const cardTypeCount = cardsData.length / 4
-      const availableIndexes = Array.from({ length: cardTypeCount }, (_, i) => i)
-      // 随机抽取5个不重复的 cardTypeIndex
-      for (let i = availableIndexes.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[availableIndexes[i], availableIndexes[j]] = [availableIndexes[j], availableIndexes[i]]
-      }
-      const selectedIndexes = availableIndexes.slice(0, 5)
-      const resultCards = selectedIndexes.map((cardTypeIndex) => {
-        const baseIndex = cardTypeIndex * 4
-        const cardRaritySeed = Math.random()
-        if (cardRaritySeed >= 0.995) {
-          // 0.5%概率抽到SSR
-          return cardsData[baseIndex + 3]
-        } else if (cardRaritySeed >= 0.95) {
-          // 4.5%概率抽到SR
-          return cardsData[baseIndex + 2]
-        } else if (cardRaritySeed >= 0.75) {
-          // 20%概率抽到R
-          return cardsData[baseIndex + 1]
-        } else {
-          // 75%概率抽到N
-          return cardsData[baseIndex]
+  *drawCards() {
+    if (!this.userInfo || this.userInfo.solAmount <= 0.1) {
+      toast.warn('Insufficient Balance!')
+      return
+    }
+    const result: AxiosResponse<IDrawCardsResponse> = yield API.drawCards()
+    if (result?.data?.user?.email !== this.userInfo.email) return
+    this.updateUserInfo(result.data.user)
+    const preloadImageList = result.data.cards.reduce<Array<{ id: string; src: string }>>(
+      (previousValue, currentValue) => {
+        if (currentValue.imageUrl) {
+          previousValue.push({
+            id: `cardImage${currentValue.id}${currentValue.rarity}`,
+            src: getCardImageById(currentValue.id),
+          })
         }
+        return previousValue
+      },
+      [],
+    )
+    if (preloadImageList.length) {
+      const cardsImagesPreloadQueue = new window.createjs.LoadQueue(true)
+      cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
+      cardsImagesPreloadQueue.on('complete', () => {
+        console.debug('当次抽卡卡片图片预加载完成')
       })
-      const preloadImageList = resultCards.reduce<Array<{ id: string; src: string }>>(
-        (previousValue, currentValue) => {
-          if (currentValue.imageUrl) {
-            previousValue.push({
-              id: `cardImage${currentValue.id}${currentValue.rarity}`,
-              src: getCardImageById(currentValue.id),
-            })
-          }
-          return previousValue
-        },
-        [],
-      )
-      if (preloadImageList.length) {
-        const cardsImagesPreloadQueue = new window.createjs.LoadQueue(true)
-        cardsImagesPreloadQueue.installPlugin(window.createjs.Sound)
-        cardsImagesPreloadQueue.on('complete', () => {
-          console.debug('当次抽卡卡片图片预加载完成')
-          this.userInfo!.solAmount = new BigNumber(this.userInfo!.solAmount).minus(0.1).toNumber()
-          resolve(resultCards)
-        })
-        cardsImagesPreloadQueue.on('error', () => {
-          console.error('当次抽卡卡片图片预加载失败')
-          this.userInfo!.solAmount = new BigNumber(this.userInfo!.solAmount).minus(0.1).toNumber()
-          resolve(resultCards)
-        })
-        cardsImagesPreloadQueue.loadManifest(preloadImageList)
-      } else {
-        console.debug('当次抽卡卡片图片预加载列表为空，直接返回结果')
-        this.userInfo!.solAmount = new BigNumber(this.userInfo!.solAmount).minus(0.1).toNumber()
-        resolve(resultCards)
-      }
-    })
+      cardsImagesPreloadQueue.on('error', () => {
+        console.error('当次抽卡卡片图片预加载失败')
+      })
+      cardsImagesPreloadQueue.loadManifest(preloadImageList)
+    } else {
+      console.debug('当次抽卡卡片图片预加载列表为空，直接返回结果')
+    }
+    return result.data.cards
   }
 
   craftCard = (

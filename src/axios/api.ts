@@ -19,6 +19,11 @@ export interface IFetchCardsPageResponse {
   pageSize: number
 }
 
+export interface IDrawCardsResponse {
+  cards: Array<ICardData>
+  user: UserInfo
+}
+
 const API = {
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
@@ -34,6 +39,7 @@ const API = {
       },
     })
   },
+  drawCards: async () => request.post<IDrawCardsResponse>('/draw-cards'),
 }
 
 export default API

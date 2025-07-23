@@ -16,7 +16,9 @@ const CardsPart: React.FC<IDrawCardsModalProps> = ({ cards }) => {
   const cardsRef = useRef<Array<HTMLDivElement | null>>([])
   const cardsContainerRef = useRef<HTMLDivElement>(null)
   const addCard = (ref: HTMLDivElement | null, index: number) => {
-    cardsRef.current[index] = ref
+    if (ref) {
+      cardsRef.current[index] = ref
+    }
   }
 
   useGSAP(
@@ -76,7 +78,7 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
           <Description></Description>
           <Content className={styles.modalContent} onInteractOutside={(e) => e.preventDefault()}>
             <div className={styles.description}>Click to flip your card</div>
-            {drawCardsModalVisible ? <CardsPart cards={cards}></CardsPart> : null}
+            <CardsPart cards={cards}></CardsPart>
             <div className={styles.closeBtn} onClick={handleClose}></div>
           </Content>
         </DialogOverlay>
