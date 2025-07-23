@@ -36,6 +36,7 @@ const FusionPage: React.FC = () => {
   } = useMobxStore()
   const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const craftSound = audioInstanceMap.get(AudioInstanceId.CraftSound)
+  const meltSound = audioInstanceMap.get(AudioInstanceId.MeltSound)
   const [pageType, setPageType] = useState<FUSION_PAGE_TYPE>(FUSION_PAGE_TYPE.CRAFT)
   const [craftRender, setCraftRender] = useState(true)
   const craftRenderRef = useRef<HTMLDivElement>(null)
@@ -106,6 +107,9 @@ const FusionPage: React.FC = () => {
             const videoEl = meltVideoRef.current!.getElement() as HTMLVideoElement
             videoEl.loop = false
             videoEl.onended = () => {
+              if (bgmSound) {
+                bgmSound.volume = 0.5
+              }
               gsap.to(meltVideoRef.current!.getContainer(), {
                 autoAlpha: 0,
                 duration: 0.3,
@@ -113,6 +117,14 @@ const FusionPage: React.FC = () => {
                   gsap.set(meltVideoRef.current!.getContainer(), { zIndex: -1 })
                   resolve()
                 },
+              })
+            }
+            if (bgmSound) {
+              bgmSound.volume = 0.2
+            }
+            if (meltSound) {
+              meltSound.play({
+                volume: 1,
               })
             }
             videoEl.play()
