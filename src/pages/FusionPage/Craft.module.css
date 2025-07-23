@@ -1,25 +1,20 @@
 @import "tailwindcss";
 
-@keyframes magic-rotate-scale-fade {
+@keyframes magic-rotate {
     0% {
         transform: rotate(0deg) scale(0.95);
-        opacity: 1;
     }
     25% {
         transform: rotate(90deg) scale(1);
-        opacity: 0.7;
     }
     50% {
         transform: rotate(180deg) scale(1.05);
-        opacity: 0.4;
     }
     75% {
         transform: rotate(270deg) scale(1);
-        opacity: 0.7;
     }
     100% {
         transform: rotate(360deg) scale(0.95);
-        opacity: 1;
     }
 }
 
@@ -56,7 +51,6 @@
 
         .magicContainer {
             @apply w-204 h-205.5 relative z-0;
-            @apply bg-[url(/src/assets/images/fusion_page/magic_background_1.png)] bg-contain bg-top-left bg-no-repeat;
         }
 
         .craftButton {
@@ -110,14 +104,19 @@
 
 
 .magicContainer {
-    .magicBackground {
-        @apply size-156 absolute z-0 inset-24.5;
+    .magicBackground1 {
+        @apply size-full absolute z-0 inset-0;
+        @apply bg-[url(/src/assets/images/fusion_page/magic_background_1.png)] bg-contain bg-top-left bg-no-repeat;
+        animation: magic-rotate 12s linear infinite;
+    }
+
+    .magicBackground2 {
+        @apply size-156 absolute z-10 inset-24.5;
         @apply bg-[url(/src/assets/images/fusion_page/magic_background_2.png)] bg-contain bg-top-left bg-no-repeat;
-        animation: magic-rotate-scale-fade 12s linear infinite;
     }
 
     .successRateContainer {
-        @apply font-[FFDin] size-71.5 absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center font-black italic text-4xl;
+        @apply font-[FFDin] size-71.5 absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center font-black italic text-4xl;
         @apply bg-[url(/src/assets/images/fusion_page/magic_background_3.png)] bg-contain bg-top-left bg-no-repeat;
 
         .successRateTitle {
@@ -126,7 +125,7 @@
     }
 
     .targetCardContainer {
-        @apply absolute top-0 left-1/2 -translate-x-1/2 w-55 h-63 flex flex-col items-center justify-start z-10;
+        @apply absolute top-0 left-1/2 -translate-x-1/2 w-55 h-63 flex flex-col items-center justify-start z-20;
 
         .targetCardTitle {
             @apply text-2xl leading-10 mt-16;
@@ -138,7 +137,7 @@
     }
 
     .cardRequiredContainer {
-        @apply absolute w-39.5 h-61 z-30 flex items-center justify-center;
+        @apply absolute w-39.5 h-61 z-40 flex items-center justify-center;
     }
 
     .cardRequiredContainer1 {
@@ -154,7 +153,7 @@
     }
 
     .arrow {
-        @apply absolute bg-contain bg-top-left bg-no-repeat z-20;
+        @apply absolute bg-contain bg-top-left bg-no-repeat z-30;
     }
 
     .arrow1 {
