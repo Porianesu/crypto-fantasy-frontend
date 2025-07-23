@@ -189,7 +189,7 @@ export const fetchPrizePoolLeaderboard = async (pool: IPrizePool, userInfo: User
       originalData.push({
         name: userInfo.email || 'You',
         deckPower: userDeckPower,
-        avatar: userInfo.avatarUrl || getDefaultAvatar(99),
+        avatar: userInfo.avatar || getDefaultAvatar(99),
       })
     }
     // 排序，生成rank
