@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+.pageContainer {
+    @apply h-screen w-screen flex items-center  justify-center bg-black  overflow-hidden;
+}
+
+.loadingMask {
+    @apply fixed size-full z-[9999] bg-transparent cursor-progress;
+}
+
+.ratioContainer {
+    @apply flex flex-col items-stretch;
+}
+
+.normalStyle {
+    cursor: url('/src/assets/images/entrance_page/cursor.png'), auto;
+}
+
+.globalLoadingStyle {
+    cursor: progress;
+}

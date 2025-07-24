@@ -52,6 +52,8 @@ export default class StoresStore {
 
   isAppLoading = true
 
+  globalLoading = false
+
   userInfo: UserInfo | undefined = undefined
 
   cardsFormation: Array<ICardData> = []
@@ -64,7 +66,8 @@ export default class StoresStore {
       rootStoreRef: observable,
       resetStore: action,
       isAppLoading: observable,
-      setIsAppLoading: action,
+      globalLoading: observable,
+      changeGlobalLoading: action,
       userInfo: observable,
       updateUserInfo: action,
       updateUserCardsBag: flow.bound,
@@ -86,6 +89,7 @@ export default class StoresStore {
 
   resetStore = () => {
     this.isAppLoading = true
+    this.globalLoading = false
     this.userInfo = undefined
     this.cardsFormation = []
     this._cardsBag = []
@@ -204,8 +208,8 @@ export default class StoresStore {
     this.isAppLoading = false
   }
 
-  setIsAppLoading = (newValue: boolean) => {
-    this.isAppLoading = newValue
+  changeGlobalLoading = (newValue: boolean) => {
+    this.globalLoading = newValue
   }
 
   changeCardsFormation = (cards: Array<ICardData>) => {
@@ -353,13 +357,16 @@ export default class StoresStore {
       toast.warn('No melt opportunities left!')
       return 'fail'
     }
+    this.changeGlobalLoading(true)
     const result: AxiosResponse<IMeltCardResponse> = yield API.meltCard(targetCard.id)
     if (result?.data?.user?.email !== this.userInfo.email) {
+      this.changeGlobalLoading(false)
       return 'fail'
     }
     this.updateUserInfo(result.data.user)
     this._cardsBag.splice(targetCard.bagPosition, 1)
     toast.success(`Melted ${targetCard.name} successfully!`)
+    this.changeGlobalLoading(false)
     return 'success'
   }
 }
