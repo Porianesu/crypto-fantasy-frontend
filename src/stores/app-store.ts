@@ -27,7 +27,6 @@ import type { AxiosResponse } from 'axios'
 
 export interface UserInfo extends UserStorageInfo {
   avatar: string
-  cardsBag: Array<number>
   createdAt: string
   email: string
   expPercent: number
@@ -66,7 +65,8 @@ export default class StoresStore {
       isAppLoading: observable,
       setIsAppLoading: action,
       userInfo: observable,
-      updateUserInfo: flow.bound,
+      updateUserInfo: action,
+      updateUserCardsBag: flow.bound,
       loginAndRegister: flow.bound,
       loginWithAccessToken: flow.bound,
       cardsFormation: observable,
@@ -90,38 +90,47 @@ export default class StoresStore {
     this._cardsBag = []
   };
 
-  *updateUserInfo(userInfo: UserInfo) {
+  *updateUserCardsBag() {
+    try {
+      const userAllCards: Array<number> = yield API.fetchUserAllCards()
+      if (userAllCards.length) {
+        // 只对 cardsBag 去重用于请求
+        const uniqueCardIdsArray = Array.from(new Set(userAllCards))
+        const cachedCardsDataBase = myQueryClient.getQueryData([
+          CARD_DATA_BASE_REQUEST_KEY,
+        ]) as AxiosResponse<IFetchCardsPageResponse> | null
+        const filteredUniqueCardIds = cachedCardsDataBase?.data?.data?.length
+          ? uniqueCardIdsArray.filter(
+              (id) => !cachedCardsDataBase.data.data.some((card) => card.id === id),
+            )
+          : uniqueCardIdsArray
+        let remoteCardsDataBase: AxiosResponse<Array<ICardData>> | null = null
+        if (filteredUniqueCardIds.length) {
+          remoteCardsDataBase = yield API.fetchCards(filteredUniqueCardIds)
+        }
+        // 生成卡牌映射表
+        const cardMap = new Map<number, ICardData>()
+        cachedCardsDataBase?.data?.data?.forEach((card) => cardMap.set(card.id, card))
+        remoteCardsDataBase?.data?.forEach((card) => cardMap.set(card.id, card))
+        // _cardsBag 保持和 cardsBag 顺序、数量一致
+        this._cardsBag = userAllCards
+          .map((id) => cardMap.get(id))
+          .filter(Boolean) as Array<ICardData>
+      }
+    } catch (error) {
+      console.log('Error updating user cards bag:', error)
+      toast.error('Failed to update cards bag. Please try again later.')
+    }
+  }
+
+  updateUserInfo = (userInfo: UserInfo) => {
     if (!userInfo) return
     this.userInfo = {
       ...userInfo,
       avatar: getDefaultAvatar(),
       expPercent: 60,
     }
-    if (this.userInfo.cardsBag.length) {
-      // 只对 cardsBag 去重用于请求
-      const uniqueCardIdsArray = Array.from(new Set(this.userInfo.cardsBag))
-      const cachedCardsDataBase = myQueryClient.getQueryData([
-        CARD_DATA_BASE_REQUEST_KEY,
-      ]) as AxiosResponse<IFetchCardsPageResponse> | null
-      const filteredUniqueCardIds = cachedCardsDataBase?.data?.data?.length
-        ? uniqueCardIdsArray.filter(
-            (id) => !cachedCardsDataBase.data.data.some((card) => card.id === id),
-          )
-        : uniqueCardIdsArray
-      let remoteCardsDataBase: AxiosResponse<Array<ICardData>> | null = null
-      if (filteredUniqueCardIds.length) {
-        remoteCardsDataBase = yield API.fetchCards(filteredUniqueCardIds)
-      }
-      // 生成卡牌映射表
-      const cardMap = new Map<number, ICardData>()
-      cachedCardsDataBase?.data?.data?.forEach((card) => cardMap.set(card.id, card))
-      remoteCardsDataBase?.data?.forEach((card) => cardMap.set(card.id, card))
-      // _cardsBag 保持和 cardsBag 顺序、数量一致
-      this._cardsBag = this.userInfo.cardsBag
-        .map((id) => cardMap.get(id))
-        .filter(Boolean) as Array<ICardData>
-    }
-  }
+  };
 
   *loginAndRegister(email: string, password: string) {
     if (!email) return toast.warn('Please enter your email.')
@@ -141,7 +150,8 @@ export default class StoresStore {
       if (result.data.token) {
         setAccessToken(result.data.token)
       }
-      yield this.updateUserInfo(result.data.user)
+      this.updateUserInfo(result.data.user)
+      yield this.updateUserCardsBag()
       const checkResult = checkHasAlreadyReadGuide()
       if (checkResult) {
         return getHomePath()
@@ -158,6 +168,7 @@ export default class StoresStore {
     if (result.data.user) {
       toast.success('Welcome back! Adventure awaits!')
       this.updateUserInfo(result.data.user)
+      yield this.updateUserCardsBag()
     }
   }
 
@@ -231,6 +242,8 @@ export default class StoresStore {
     const result: AxiosResponse<IDrawCardsResponse> = yield API.drawCards()
     if (result?.data?.user?.email !== this.userInfo.email) return
     this.updateUserInfo(result.data.user)
+    // 本地直接更新，避免重复请求
+    this._cardsBag = this._cardsBag.concat(result.data.cards)
     const preloadImageList = result.data.cards.reduce<Array<{ id: string; src: string }>>(
       (previousValue, currentValue) => {
         if (currentValue.imageUrl) {

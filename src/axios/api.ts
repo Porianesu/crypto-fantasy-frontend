@@ -24,6 +24,13 @@ export interface IDrawCardsResponse {
   user: UserInfo
 }
 
+export interface IFetchUserCardsPageResponse {
+  total: number
+  page: number
+  pageSize: number
+  cardIds: Array<number>
+}
+
 const API = {
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
@@ -40,6 +47,26 @@ const API = {
     })
   },
   drawCards: async () => request.post<IDrawCardsResponse>('/draw-cards'),
+  fetchUserCardsPage: async (page: number, pageSize: number) =>
+    request.get<IFetchUserCardsPageResponse>('/user-cards', {
+      params: {
+        page,
+        pageSize,
+      },
+    }),
+  fetchUserAllCards: async () => {
+    let page = 1
+    const pageSize = 50
+    let allCardIds: number[] = []
+    let total = 0
+    do {
+      const { data: res } = await API.fetchUserCardsPage(page, pageSize)
+      if (page === 1) total = res.total
+      allCardIds = allCardIds.concat(res.cardIds)
+      page++
+    } while (allCardIds.length < total)
+    return allCardIds
+  },
 }
 
 export default API
