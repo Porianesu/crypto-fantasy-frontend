@@ -56,7 +56,7 @@ const API = {
     }),
   fetchUserAllCards: async () => {
     let page = 1
-    const pageSize = 50
+    const pageSize = 200
     let allCardIds: number[] = []
     let total = 0
     do {
