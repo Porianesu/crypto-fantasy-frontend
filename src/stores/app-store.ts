@@ -22,6 +22,7 @@ import API, {
   type IFetchCardsPageResponse,
   type ILoginAndRegisterResponse,
   type ILoginWithAccessTokenResponse,
+  type IMeltCardResponse,
 } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 
@@ -79,7 +80,7 @@ export default class StoresStore {
       initData: action,
       drawCards: flow.bound,
       craftCard: action,
-      meltCard: action,
+      meltCard: flow.bound,
     })
   }
 
@@ -344,16 +345,19 @@ export default class StoresStore {
         cards: resultCards,
       }
     }
-  }
+  };
 
-  meltCard = (targetCard: ICardDataInBag, faithCoin: number): 'success' | 'fail' => {
+  *meltCard(targetCard: ICardDataInBag) {
     if (!this.userInfo) return 'fail'
     if (this.userInfo.meltCurrent <= 0) {
       toast.warn('No melt opportunities left!')
       return 'fail'
     }
-    this.userInfo.meltCurrent -= 1
-    this.userInfo.faithAmount += faithCoin
+    const result: AxiosResponse<IMeltCardResponse> = yield API.meltCard(targetCard.id)
+    if (result?.data?.user?.email !== this.userInfo.email) {
+      return 'fail'
+    }
+    this.updateUserInfo(result.data.user)
     this._cardsBag.splice(targetCard.bagPosition, 1)
     toast.success(`Melted ${targetCard.name} successfully!`)
     return 'success'

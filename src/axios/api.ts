@@ -31,6 +31,10 @@ export interface IFetchUserCardsPageResponse {
   cardIds: Array<number>
 }
 
+export interface IMeltCardResponse {
+  user: UserInfo
+}
+
 const API = {
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
@@ -67,6 +71,7 @@ const API = {
     } while (allCardIds.length < total)
     return allCardIds
   },
+  meltCard: async (cardId: number) => request.post<IMeltCardResponse>('/melt-card', { cardId }),
 }
 
 export default API

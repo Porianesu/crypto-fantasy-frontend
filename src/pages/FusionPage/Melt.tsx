@@ -35,6 +35,7 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
   const {
     appStore: { cardsBag, userInfo, meltCard },
   } = useMobxStore()
+  const [meltButtonLoading, setMeltButtonLoading] = useState(false)
   const [meltTargetCard, setMeltTargetCard] = useState<ICardDataInBag>()
   const bodyContainerRef = useRef<HTMLDivElement>(null)
   const meltTargetCardRef = useRef<HTMLDivElement>(null)
@@ -59,8 +60,9 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
 
   const handleMeltButtonClick = async () => {
     if (!currentRule || !meltTargetCard || !meltTargetCardRef.current) return
-    const meltResult = meltCard(meltTargetCard, currentRule.faithCoin)
-    if (meltResult === 'success') {
+    setMeltButtonLoading(true)
+    const meltResult = await meltCard(meltTargetCard)
+    if ((meltResult as unknown as string) === 'success') {
       setMeltTargetCard(undefined)
       await playMeltCardVideo()
       setMeltResultModalData({
@@ -68,6 +70,7 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
         faithCoin: currentRule.faithCoin,
       })
     }
+    setMeltButtonLoading(false)
   }
 
   return (
@@ -148,12 +151,15 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
             </div>
           ) : null}
         </div>
-        <div
-          className={classNames(styles.meltButton, 'button text-shadow')}
+        <button
+          className={classNames(styles.meltButton, 'text-shadow', {
+            button: !meltButtonLoading,
+          })}
+          disabled={meltButtonLoading}
           onClick={handleMeltButtonClick}
         >
           Melt
-        </div>
+        </button>
       </div>
       <MeltResultModal
         open={meltResultModalData.open}

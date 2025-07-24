@@ -75,7 +75,7 @@
     @apply h-158 overflow-x-hidden overflow-y-auto flex flex-col items-stretch justify-start;
 
     .cardsList {
-        @apply grid grid-cols-5 gap-x-12;
+        @apply grid grid-cols-5 gap-x-12 gap-y-8;
     }
 }
 
