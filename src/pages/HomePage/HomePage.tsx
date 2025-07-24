@@ -30,6 +30,7 @@ function HomePage() {
   } = useMobxStore()
   const navigate = useNavigate()
   const pageContainerRef = useRef<HTMLDivElement>(null)
+  const [openPackLoading, setOpenPackLoading] = useState(false)
   const openPackRef = useRef<IOpenPackHandle>(null)
   const [cardsFormationModalVisible, setCardsFormationModalVisible] = useState(false)
   const selectedCards = useMemo(() => cardsFormation.map((card) => card.id), [cardsFormation])
@@ -52,10 +53,12 @@ function HomePage() {
     toast.info('Coming Soon!')
   }
 
-  const handleOpenPack = () => {
+  const handleOpenPack = async () => {
+    setOpenPackLoading(true)
     if (openPackRef.current) {
-      openPackRef.current.handleOpenPack()
+      await openPackRef.current.handleOpenPack()
     }
+    setOpenPackLoading(false)
   }
 
   // footer按钮配置
@@ -106,10 +109,16 @@ function HomePage() {
     <div className={styles.pageContainer} ref={pageContainerRef}>
       <div className={styles.drawCardsEntranceContainer}>
         <div className={styles.drawCardsImage}></div>
-        <div className={styles.drawCardsButton} onClick={handleOpenPack}>
+        <button
+          disabled={openPackLoading}
+          className={classNames(styles.drawCardsButton, {
+            button: !openPackLoading,
+          })}
+          onClick={handleOpenPack}
+        >
           Open Pack 0.1
           <div></div>
-        </div>
+        </button>
       </div>
       {userInfo ? (
         <div className={styles.header}>
