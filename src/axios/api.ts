@@ -72,6 +72,8 @@ const API = {
     return allCardIds
   },
   meltCard: async (cardId: number) => request.post<IMeltCardResponse>('/melt-card', { cardId }),
+  craftCard: async (data: { craftCardId: number; additiveCardIds?: Array<number> }) =>
+    request.post<{ user: UserInfo; resultCards: Array<ICardData> }>('/craft-card', data),
 }
 
 export default API
