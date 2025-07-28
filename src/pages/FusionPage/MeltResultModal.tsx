@@ -47,7 +47,12 @@ const MeltResultModalContent: React.FC<IMeltResultModalContentProps> = ({ faithC
       <div className={styles.backgroundImage} ref={backgroundRef}></div>
       <Title className={styles.title}>{'Congratulations! You’ve get Faithcoin as return.'}</Title>
       <Description className={'hidden'}></Description>
-      <div className={styles.faithCoinPile}></div>
+      <div
+        className={classNames(styles.faithCoinPile, {
+          [styles.faithCoinPileLarge]: faithCoin >= 100,
+          [styles.faithCoinPileSmall]: faithCoin < 100,
+        })}
+      ></div>
       <div className={styles.faithCoinContainer}>
         {faithCoin}
         <div className={styles.faithCoinIcon}></div>

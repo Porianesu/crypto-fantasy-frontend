@@ -29,7 +29,15 @@
 
         .faithCoinPile {
             @apply size-100 mt-35 z-10;
-            @apply bg-[url(/src/assets/images/fusion_page/faith_coin_pile.png)] bg-contain bg-top-left bg-no-repeat;
+            @apply bg-contain bg-top-left bg-no-repeat;
+        }
+
+        .faithCoinPileLarge {
+            @apply bg-[url(/src/assets/images/fusion_page/faith_coin_pile_large.png)];
+        }
+
+        .faithCoinPileSmall {
+            @apply bg-[url(/src/assets/images/fusion_page/faith_coin_pile_large.png)];
         }
 
         .faithCoinContainer {
