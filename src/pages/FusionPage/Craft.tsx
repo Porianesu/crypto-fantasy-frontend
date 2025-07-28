@@ -171,6 +171,11 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     })
   }
 
+  const playCraftAnimation = async () => {
+    await handleMoveCardsToCenter()
+    await playCraftCardVideo()
+  }
+
   const handleCraftButtonClick = async () => {
     if (!userInfo || !currentCraftRule || !craftTargetCard) return
     if (userInfo.faithAmount < currentCraftRule.requiredFaithCoin) {
@@ -179,35 +184,35 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     if (requiredCards.length < currentCraftRule.requiredCards.count) {
       return toast.warning('Required cards are not enough!')
     }
-    const craftResult = craftCard(
-      craftTargetCard,
-      requiredCards,
-      additiveCards,
-      successRate,
-      currentCraftRule.requiredFaithCoin,
-    )
-    await handleMoveCardsToCenter()
-    await playCraftCardVideo()
+    const [craftResult] = await Promise.all([
+      craftCard(craftTargetCard, requiredCards, additiveCards),
+      playCraftAnimation(),
+    ])
     setCraftTargetCard(undefined)
     if (moveCardsToCenterTimeline.current) {
       moveCardsToCenterTimeline.current.revert()
     }
-    if (craftResult) {
-      if (craftResult.type === 'success') {
-        if (craftSuccessSound) {
-          craftSuccessSound.play({ volume: 1 })
-        }
-      } else {
-        if (craftFailSound) {
-          craftFailSound.play({ volume: 1 })
-        }
-      }
-      setCraftResultModalData({
-        open: true,
-        type: craftResult.type,
-        cards: craftResult.cards,
-      })
+    if (!craftResult) {
+      return
     }
+    if (
+      (craftResult as unknown as { type: 'success' | 'fail'; cards: Array<ICardData> }).type ===
+      'success'
+    ) {
+      if (craftSuccessSound) {
+        craftSuccessSound.play({ volume: 1 })
+      }
+    } else {
+      if (craftFailSound) {
+        craftFailSound.play({ volume: 1 })
+      }
+    }
+    setCraftResultModalData({
+      open: true,
+      type: (craftResult as unknown as { type: 'success' | 'fail'; cards: Array<ICardData> }).type,
+      cards: (craftResult as unknown as { type: 'success' | 'fail'; cards: Array<ICardData> })
+        .cards,
+    })
   }
 
   const handleRequiredCardClick = () => {

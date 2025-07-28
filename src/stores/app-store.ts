@@ -11,13 +11,12 @@ import {
   getAccessToken,
   getCardImageById,
   getDefaultAvatar,
-  isCardsSameChain,
   setAccessToken,
 } from '@/utils/common.ts'
-import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
+import { type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
-import { BigNumber } from 'bignumber.js'
 import API, {
+  type ICraftCardResponse,
   type IDrawCardsResponse,
   type IFetchCardsPageResponse,
   type ILoginAndRegisterResponse,
@@ -82,7 +81,7 @@ export default class StoresStore {
       initNetwork: flow.bound,
       initData: action,
       drawCards: flow.bound,
-      craftCard: action,
+      craftCard: flow.bound,
       meltCard: flow.bound,
     })
   }
@@ -277,7 +276,7 @@ export default class StoresStore {
     return result.data.cards
   }
 
-  craftCard = (
+  *craftCard(
     targetCard: ICardData,
     requiredCards: Array<{
       card: ICardData
@@ -287,37 +286,13 @@ export default class StoresStore {
       card: ICardData
       position: number
     }>,
-    successRate: BigNumber,
-    costFaithCoin: number,
-  ): void | { type: 'success' | 'fail'; cards: Array<ICardData> } => {
+  ) {
     if (!this.userInfo) return
-    const cardDatabase = this.rootStoreRef.preloadStore.preloadQueue!.getResult(
-      'cardsData',
-    ) as Array<ICardData>
-    if (!cardDatabase) {
-      return console.error('Card database not found')
-    }
-    let returnAdditiveCard
-    if (additiveCards.length) {
-      const maxRarity = Math.max(...additiveCards.map((item) => item.card.rarity))
-      const highestRarityAdditiveCards = additiveCards.filter(
-        (item) => item.card.rarity === maxRarity,
-      )
-      const randomAdditiveCardIndex = Math.floor(Math.random() * highestRarityAdditiveCards.length)
-      const beforeReturnAdditiveCard = highestRarityAdditiveCards[randomAdditiveCardIndex]
-      const targetRarity =
-        beforeReturnAdditiveCard.card.rarity === CARD_RARITY.NORMAL
-          ? CARD_RARITY.NORMAL
-          : beforeReturnAdditiveCard.card.rarity - 1
-      returnAdditiveCard = cardDatabase.find(
-        (card) =>
-          card.rarity === targetRarity && isCardsSameChain(card, beforeReturnAdditiveCard.card),
-      )
-      if (!returnAdditiveCard) {
-        return console.error('No matching return additive card found')
-      }
-    }
-    const randomNumber = new BigNumber(Math.random())
+    const result: AxiosResponse<ICraftCardResponse> = yield API.craftCard({
+      craftCardId: targetCard.id,
+      additiveCardIds: additiveCards.map((item) => item.card.id),
+    })
+    if (result?.data?.user?.email !== this.userInfo.email) return
     const costCardWithBagPositions = requiredCards
       .concat(additiveCards)
       .map((item) => item.position)
@@ -326,30 +301,15 @@ export default class StoresStore {
     sortedPositions.forEach((index) => {
       this._cardsBag.splice(index, 1)
     })
-    // 无论失败还是成功都需要消耗信仰币
-    this.userInfo.faithAmount -= costFaithCoin
-    if (randomNumber.isLessThanOrEqualTo(successRate)) {
-      // 成功则添加新卡到背包
-      this._cardsBag.push(targetCard)
-      return {
-        type: 'success',
-        cards: [targetCard],
-      }
-    } else {
-      // 失败则按规则添加一部分消耗的卡牌到背包
-      const randomRequiredCardIndex = Math.floor(Math.random() * requiredCards.length)
-      const returnRequiredCards = requiredCards[randomRequiredCardIndex]
-      const resultCards = [returnRequiredCards.card]
-      if (returnAdditiveCard) {
-        resultCards.push(returnAdditiveCard)
-      }
-      this._cardsBag = this._cardsBag.concat(resultCards)
-      return {
-        type: 'fail',
-        cards: resultCards,
-      }
+    if (Array.isArray(result.data.resultCards)) {
+      this._cardsBag = this._cardsBag.concat()
     }
-  };
+    this.updateUserInfo(result.data.user)
+    return {
+      type: result.data.success ? 'success' : 'fail',
+      cards: result.data.resultCards,
+    }
+  }
 
   *meltCard(targetCard: ICardDataInBag) {
     if (!this.userInfo) return 'fail'

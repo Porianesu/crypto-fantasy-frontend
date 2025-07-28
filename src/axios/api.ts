@@ -35,6 +35,12 @@ export interface IMeltCardResponse {
   user: UserInfo
 }
 
+export interface ICraftCardResponse {
+  success: boolean
+  user: UserInfo
+  resultCards: Array<ICardData>
+}
+
 const API = {
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
@@ -73,7 +79,7 @@ const API = {
   },
   meltCard: async (cardId: number) => request.post<IMeltCardResponse>('/melt-card', { cardId }),
   craftCard: async (data: { craftCardId: number; additiveCardIds?: Array<number> }) =>
-    request.post<{ user: UserInfo; resultCards: Array<ICardData> }>('/craft-card', data),
+    request.post<ICraftCardResponse>('/craft-card', data),
 }
 
 export default API
