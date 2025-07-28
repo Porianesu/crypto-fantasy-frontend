@@ -37,7 +37,7 @@
         }
 
         .faithCoinPileSmall {
-            @apply bg-[url(/src/assets/images/fusion_page/faith_coin_pile_large.png)];
+            @apply bg-[url(/src/assets/images/fusion_page/faith_coin_pile_little.png)];
         }
 
         .faithCoinContainer {
