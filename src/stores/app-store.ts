@@ -195,13 +195,13 @@ export default class StoresStore {
     if (!this.isAppLoading) return
     this.isAppLoading = true
     try {
+      this.initNetwork()
       preloadPages().then(() => {
         this.rootStoreRef.preloadStore.preloadResult.pagesPreloadProgress = 1
       })
       this.rootStoreRef.preloadStore.loadCreateJS().then(() => {
         this.rootStoreRef.preloadStore.preloadAssets()
       })
-      this.initNetwork()
     } catch (e) {
       console.log('Error preloading assets:', e)
     }
