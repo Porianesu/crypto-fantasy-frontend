@@ -142,7 +142,10 @@ export default class StoresStore {
         this.userInfo.deckCardIds,
       )
       if (Array.isArray(fetchCardsResult.data)) {
-        this.cardsFormation = fetchCardsResult.data
+        const idMap = new Map(fetchCardsResult.data.map((card) => [card.id, card]))
+        this.cardsFormation = this.userInfo.deckCardIds
+          .map((id) => idMap.get(id))
+          .filter(Boolean) as ICardData[]
       }
     }
   }
