@@ -41,6 +41,12 @@ export interface ICraftCardResponse {
   resultCards: Array<ICardData>
 }
 
+export interface ISetDeckResponse {
+  success: boolean
+  deckCardIds: Array<number>
+  deckPower: number
+}
+
 const API = {
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
@@ -80,6 +86,8 @@ const API = {
   meltCard: async (cardId: number) => request.post<IMeltCardResponse>('/melt-card', { cardId }),
   craftCard: async (data: { craftCardId: number; additiveCardIds?: Array<number> }) =>
     request.post<ICraftCardResponse>('/craft-card', data),
+  setDeck: async (cardIds: Array<number>) =>
+    request.post<ISetDeckResponse>('/set-deck', { cardIds }),
 }
 
 export default API

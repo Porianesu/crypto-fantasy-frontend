@@ -36,6 +36,8 @@ export interface UserInfo extends UserStorageInfo {
   meltMax: number
   solAmount: number
   updatedAt: string
+  deckCardIds: Array<number>
+  deckPower: number
 }
 
 export interface ICardDataInBag extends ICardData {
