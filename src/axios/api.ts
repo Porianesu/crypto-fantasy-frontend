@@ -86,8 +86,8 @@ const API = {
   meltCard: async (cardId: number) => request.post<IMeltCardResponse>('/melt-card', { cardId }),
   craftCard: async (data: { craftCardId: number; additiveCardIds?: Array<number> }) =>
     request.post<ICraftCardResponse>('/craft-card', data),
-  setDeck: async (cardIds: Array<number>) =>
-    request.post<ISetDeckResponse>('/set-deck', { cardIds }),
+  setDeck: async (cardIds: Array<number>, signal?: AbortSignal) =>
+    request.post<ISetDeckResponse>('/set-deck', { cardIds }, { signal }),
 }
 
 export default API

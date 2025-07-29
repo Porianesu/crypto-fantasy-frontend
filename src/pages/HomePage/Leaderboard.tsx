@@ -9,7 +9,7 @@ import { fetchHomeLeaderboard } from '@/utils/mockHelper.ts'
 
 const Leaderboard: React.FC = () => {
   const {
-    appStore: { userInfo, userCardsFormationScore },
+    appStore: { userInfo },
   } = useMobxStore()
   const { data, isLoading: leaderboardLoading } = useQuery({
     queryKey: ['leaderboard'],
@@ -22,13 +22,13 @@ const Leaderboard: React.FC = () => {
     if (!data || !userInfo) return []
     const finalData = data.concat({
       name: userInfo.email,
-      score: userCardsFormationScore,
+      score: userInfo.deckPower || 0,
       avatar: userInfo.avatar,
     })
     return finalData
       .sort((a, b) => b.score - a.score)
       .map((item, idx) => ({ ...item, rank: idx + 1 }))
-  }, [data, userCardsFormationScore, userInfo])
+  }, [data, userInfo])
 
   const renderCurrentUserRank = () => {
     if (!userInfo) return null

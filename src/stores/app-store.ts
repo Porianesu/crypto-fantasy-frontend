@@ -22,6 +22,7 @@ import API, {
   type ILoginAndRegisterResponse,
   type ILoginWithAccessTokenResponse,
   type IMeltCardResponse,
+  type ISetDeckResponse,
 } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 
@@ -61,6 +62,8 @@ export default class StoresStore {
 
   _cardsBag: Array<ICardData> = []
 
+  _setDeckAbortController?: AbortController
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
@@ -75,8 +78,8 @@ export default class StoresStore {
       loginAndRegister: flow.bound,
       loginWithAccessToken: flow.bound,
       cardsFormation: observable,
-      changeCardsFormation: action,
-      userCardsFormationScore: computed,
+      changeCardsFormation: flow.bound,
+      updateCardsFormation: flow.bound,
       _cardsBag: observable,
       cardsBag: computed,
       formattedCardsBag: computed,
@@ -129,13 +132,29 @@ export default class StoresStore {
     }
   }
 
-  updateUserInfo = (userInfo: UserInfo) => {
+  *updateCardsFormation() {
+    if (!this?.userInfo?.deckCardIds) return
+    const deckCardIdsString = this.userInfo.deckCardIds?.join(',')
+    if (!deckCardIdsString) return
+    const cardFormationIdsString = this.cardsFormation?.map((card) => card.id).join(',')
+    if (deckCardIdsString !== cardFormationIdsString) {
+      const fetchCardsResult: AxiosResponse<Array<ICardData>> = yield API.fetchCards(
+        this.userInfo.deckCardIds,
+      )
+      if (Array.isArray(fetchCardsResult.data)) {
+        this.cardsFormation = fetchCardsResult.data
+      }
+    }
+  }
+
+  updateUserInfo = (userInfo: UserInfo | undefined) => {
     if (!userInfo) return
     this.userInfo = {
       ...userInfo,
       avatar: getDefaultAvatar(),
       expPercent: 60,
     }
+    this.updateCardsFormation()
   };
 
   *loginAndRegister(email: string, password: string) {
@@ -185,7 +204,6 @@ export default class StoresStore {
         queryFn: () => API.fetchCardsPage(1, 200),
       })
       yield this.loginWithAccessToken()
-      this.cardsFormation = []
       this.rootStoreRef.preloadStore.preloadResult.networkPreloadProgress = 1
     } catch (e) {
       console.log('Error initializing network:', e)
@@ -211,16 +229,44 @@ export default class StoresStore {
 
   changeGlobalLoading = (newValue: boolean) => {
     this.globalLoading = newValue
-  }
+  };
 
-  changeCardsFormation = (cards: Array<ICardData>) => {
+  *changeCardsFormation(cards: Array<ICardData>) {
+    if (!this.userInfo) return
+    // 保存快照用于回滚
+    const prevFormation = [...this.cardsFormation]
+    // 立即更新页面
     this.cardsFormation = cards
-  }
-
-  get userCardsFormationScore() {
-    return this.cardsFormation.reduce((total, card) => {
-      return total + card.score
-    }, 0)
+    // 取消上一次未完成的请求
+    if (this._setDeckAbortController) {
+      this._setDeckAbortController.abort()
+    }
+    // 创建新的 AbortController
+    const controller = new AbortController()
+    this._setDeckAbortController = controller
+    try {
+      const res: AxiosResponse<ISetDeckResponse> = yield API.setDeck(
+        cards.map((card) => card.id),
+        controller.signal,
+      )
+      // 只处理未被取消的请求
+      if (controller.signal.aborted) return
+      if (!res?.data?.success) {
+        this.cardsFormation = prevFormation
+        toast.error('Save formation failed, please try again!')
+      } else {
+        this.updateUserInfo({
+          ...this.userInfo,
+          deckCardIds: res.data.deckCardIds,
+          deckPower: res.data.deckPower,
+        })
+      }
+    } catch {
+      // 只处理未被取消的请求
+      if (controller.signal.aborted) return
+      this.cardsFormation = prevFormation
+      toast.error('Save formation failed, please try again!')
+    }
   }
 
   get cardsBag() {
