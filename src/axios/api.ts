@@ -1,5 +1,5 @@
 import request from '@/axios/request.ts'
-import type { UserInfo } from '@/stores/app-store.ts'
+import type { ICardDataInBag, UserInfo } from '@/stores/app-store.ts'
 import type { ICardData } from '@/components/Card.tsx'
 
 export interface ILoginAndRegisterResponse {
@@ -20,15 +20,19 @@ export interface IFetchCardsPageResponse {
 }
 
 export interface IDrawCardsResponse {
-  cards: Array<ICardData>
+  cards: Array<ICardDataInBag>
   user: UserInfo
 }
 
+export interface IFetchCardsPageData {
+  userCardId: number
+  cardId: number
+}
 export interface IFetchUserCardsPageResponse {
   total: number
   page: number
   pageSize: number
-  cardIds: Array<number>
+  data: Array<IFetchCardsPageData>
 }
 
 export interface IMeltCardResponse {
@@ -38,7 +42,7 @@ export interface IMeltCardResponse {
 export interface ICraftCardResponse {
   success: boolean
   user: UserInfo
-  resultCards: Array<ICardData>
+  resultCards: Array<ICardDataInBag>
 }
 
 export interface ISetDeckResponse {
@@ -85,15 +89,15 @@ const API = {
   fetchUserAllCards: async () => {
     let page = 1
     const pageSize = 200
-    let allCardIds: number[] = []
+    let allData: Array<IFetchCardsPageData> = []
     let total = 0
     do {
       const { data: res } = await API.fetchUserCardsPage(page, pageSize)
       if (page === 1) total = res.total
-      allCardIds = allCardIds.concat(res.cardIds)
+      allData = allData.concat(res.data)
       page++
-    } while (allCardIds.length < total)
-    return allCardIds
+    } while (allData.length < total)
+    return allData
   },
   meltCard: async (cardId: number) => request.post<IMeltCardResponse>('/melt-card', { cardId }),
   craftCard: async (data: { craftCardId: number; additiveCardIds?: Array<number> }) =>

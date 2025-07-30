@@ -15,14 +15,14 @@ import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { CARD_RARITY } from '@/components/Card.tsx'
 import StaticCard from '@/components/StaticCard.tsx'
 import RaritySelect from '@/components/RaritySelect.tsx'
-import type { ICardDataInBag, ICardDataWithCount } from '@/stores/app-store.ts'
+import type { ICardDataWithBagPosition, ICardDataWithCount } from '@/stores/app-store.ts'
 
 interface ICardSelectModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   selectedCardIds?: Array<number>
   selectedCardPositions?: Array<number>
-  handleCardSelect: (card: ICardDataInBag | ICardDataWithCount) => void
+  handleCardSelect: (card: ICardDataWithBagPosition | ICardDataWithCount) => void
   mode?: 'id' | 'positon'
 }
 
@@ -40,7 +40,7 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
   const [search, setSearch] = useState('')
   const [rarity, setRarity] = useState<CARD_RARITY | 'all'>('all')
   const isPositionMode = useMemo(() => mode === 'positon', [mode])
-  const formattedCardsBag = useMemo<Array<ICardDataInBag | ICardDataWithCount>>(() => {
+  const formattedCardsBag = useMemo<Array<ICardDataWithBagPosition | ICardDataWithCount>>(() => {
     if (isPositionMode) {
       return cardsBag
     } else {
@@ -62,11 +62,11 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
         .sort((a, b) => {
           const indexA =
             (isPositionMode
-              ? selectedCardPositionsBeforeModalOpen?.indexOf((a as ICardDataInBag).bagPosition)
+              ? selectedCardPositionsBeforeModalOpen?.indexOf((a as ICardDataWithBagPosition).bagPosition)
               : selectedCardIdsBeforeModalOpen?.indexOf(a.id)) || 0
           const indexB =
             (isPositionMode
-              ? selectedCardPositionsBeforeModalOpen?.indexOf((b as ICardDataInBag).bagPosition)
+              ? selectedCardPositionsBeforeModalOpen?.indexOf((b as ICardDataWithBagPosition).bagPosition)
               : selectedCardIdsBeforeModalOpen?.indexOf(b.id)) || 0
           if (indexA !== -1 && indexB !== -1) {
             return indexA - indexB
@@ -122,13 +122,13 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
                 <div className={styles.cardsGrid}>
                   {filteredCards.map((card, index) => {
                     const selectedIndex = isPositionMode
-                      ? selectedCardPositions?.indexOf((card as ICardDataInBag).bagPosition)
+                      ? selectedCardPositions?.indexOf((card as ICardDataWithBagPosition).bagPosition)
                       : selectedCardIds?.findIndex((id) => id === card.id)
                     const currentCardFormationIndex =
                       selectedIndex === undefined ? -1 : selectedIndex
                     const selected = currentCardFormationIndex !== -1
                     const key = isPositionMode
-                      ? `${card.id}-${(card as ICardDataInBag).bagPosition}-${index}`
+                      ? `${card.id}-${(card as ICardDataWithBagPosition).bagPosition}-${index}`
                       : `${card.id}-${index}`
                     return (
                       <div

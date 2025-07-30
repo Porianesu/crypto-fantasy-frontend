@@ -3,7 +3,7 @@ import React, { useMemo, useRef, useState } from 'react'
 import styles from './Melt.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { CARD_RARITY } from '@/components/Card.tsx'
-import type { ICardDataInBag } from '@/stores/app-store.ts'
+import type { ICardDataWithBagPosition } from '@/stores/app-store.ts'
 import classNames from 'classnames'
 import StaticCard from '@/components/StaticCard.tsx'
 import { RARITY_OPTIONS, type RARITY_SELECT_VALUE } from '@/components/RaritySelect.tsx'
@@ -36,7 +36,7 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
     appStore: { cardsBag, userInfo, meltCard },
   } = useMobxStore()
   const [meltButtonLoading, setMeltButtonLoading] = useState(false)
-  const [meltTargetCard, setMeltTargetCard] = useState<ICardDataInBag>()
+  const [meltTargetCard, setMeltTargetCard] = useState<ICardDataWithBagPosition>()
   const bodyContainerRef = useRef<HTMLDivElement>(null)
   const meltTargetCardRef = useRef<HTMLDivElement>(null)
   const [rarityFilter, setRarityFilter] = useState<RARITY_SELECT_VALUE>('all')

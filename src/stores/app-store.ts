@@ -18,6 +18,7 @@ import { toast } from 'react-toastify'
 import API, {
   type ICraftCardResponse,
   type IDrawCardsResponse,
+  type IFetchCardsPageData,
   type IFetchCardsPageResponse,
   type ILoginAndRegisterResponse,
   type ILoginWithAccessTokenResponse,
@@ -38,10 +39,18 @@ export interface UserInfo extends UserStorageInfo {
   solAmount: number
   updatedAt: string
   deckCardIds: Array<number>
+  deckCards: Array<{
+    cardId: number
+    userCardId: number
+  }>
   deckPower: number
 }
 
 export interface ICardDataInBag extends ICardData {
+  userCardId: number
+}
+
+export interface ICardDataWithBagPosition extends ICardData {
   bagPosition: number
 }
 
@@ -58,9 +67,9 @@ export default class StoresStore {
 
   userInfo: UserInfo | undefined = undefined
 
-  cardsFormation: Array<ICardData> = []
+  cardsFormation: Array<ICardDataInBag> = []
 
-  _cardsBag: Array<ICardData> = []
+  _cardsBag: Array<ICardDataInBag> = []
 
   _setDeckAbortController?: AbortController
 
@@ -101,10 +110,10 @@ export default class StoresStore {
 
   *updateUserCardsBag() {
     try {
-      const userAllCards: Array<number> = yield API.fetchUserAllCards()
+      const userAllCards: Array<IFetchCardsPageData> = yield API.fetchUserAllCards()
       if (userAllCards.length) {
         // 只对 cardsBag 去重用于请求
-        const uniqueCardIdsArray = Array.from(new Set(userAllCards))
+        const uniqueCardIdsArray = Array.from(new Set(userAllCards.map((item) => item.cardId)))
         const cachedCardsDataBase = myQueryClient.getQueryData([
           CARD_DATA_BASE_REQUEST_KEY,
         ]) as AxiosResponse<IFetchCardsPageResponse> | null
@@ -123,8 +132,12 @@ export default class StoresStore {
         remoteCardsDataBase?.data?.forEach((card) => cardMap.set(card.id, card))
         // _cardsBag 保持和 cardsBag 顺序、数量一致
         this._cardsBag = userAllCards
-          .map((id) => cardMap.get(id))
-          .filter(Boolean) as Array<ICardData>
+          .map((item) =>
+            cardMap.has(item.cardId)
+              ? { ...cardMap.get(item.cardId), userCardId: item.userCardId }
+              : undefined,
+          )
+          .filter(Boolean) as Array<ICardDataInBag>
       }
     } catch (error) {
       console.log('Error updating user cards bag:', error)
@@ -234,7 +247,7 @@ export default class StoresStore {
     this.globalLoading = newValue
   };
 
-  *changeCardsFormation(cards: Array<ICardData>) {
+  *changeCardsFormation(cards: Array<ICardDataInBag>) {
     if (!this.userInfo) return
     // 保存快照用于回滚
     const prevFormation = [...this.cardsFormation]
@@ -360,7 +373,7 @@ export default class StoresStore {
     }
   }
 
-  *meltCard(targetCard: ICardDataInBag) {
+  *meltCard(targetCard: ICardDataWithBagPosition) {
     if (!this.userInfo) return 'fail'
     if (this.userInfo.meltCurrent <= 0) {
       toast.warn('No melt opportunities left!')
