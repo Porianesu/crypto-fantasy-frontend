@@ -353,7 +353,7 @@ export default class StoresStore {
       this._cardsBag.splice(index, 1)
     })
     if (Array.isArray(result.data.resultCards)) {
-      this._cardsBag = this._cardsBag.concat()
+      this._cardsBag = this._cardsBag.concat(result.data.resultCards)
     }
     this.updateUserInfo(result.data.user)
     return {
