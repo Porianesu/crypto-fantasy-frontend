@@ -256,7 +256,6 @@ export default class StoresStore {
       if (controller.signal.aborted) return
       if (!res?.data?.success) {
         this.cardsFormation = prevFormation
-        toast.error('Save formation failed, please try again!')
       } else {
         this.updateUserInfo({
           ...this.userInfo,
@@ -268,7 +267,6 @@ export default class StoresStore {
       // 只处理未被取消的请求
       if (controller.signal.aborted) return
       this.cardsFormation = prevFormation
-      toast.error('Save formation failed, please try again!')
     }
   }
 

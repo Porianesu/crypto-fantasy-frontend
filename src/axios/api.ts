@@ -47,6 +47,18 @@ export interface ISetDeckResponse {
   deckPower: number
 }
 
+export interface IDeckLeaderboardResponse {
+  leaderboard: Array<{
+    id: number
+    email: string
+    avatar: string
+    deckCardIds: Array<number>
+    deckPower: number
+  }>
+  myDeckPower: number
+  myRank: number
+}
+
 const API = {
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
@@ -88,6 +100,7 @@ const API = {
     request.post<ICraftCardResponse>('/craft-card', data),
   setDeck: async (cardIds: Array<number>, signal?: AbortSignal) =>
     request.post<ISetDeckResponse>('/set-deck', { cardIds }, { signal }),
+  deckLeaderboard: async () => request.get<IDeckLeaderboardResponse>('/deck-leaderboard'),
 }
 
 export default API

@@ -5,7 +5,8 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import classNames from 'classnames'
-import { fetchHomeLeaderboard } from '@/utils/mockHelper.ts'
+import API from '@/axios/api.ts'
+import { getDefaultAvatar } from '@/utils/common.ts'
 
 const Leaderboard: React.FC = () => {
   const {
@@ -13,44 +14,39 @@ const Leaderboard: React.FC = () => {
   } = useMobxStore()
   const { data, isLoading: leaderboardLoading } = useQuery({
     queryKey: ['leaderboard'],
-    queryFn: fetchHomeLeaderboard,
-    refetchInterval: 10000, // 5分钟
+    queryFn: API.deckLeaderboard,
+    refetchInterval: 10000,
     refetchOnWindowFocus: false,
   })
-
   const leaderboardData = useMemo(() => {
-    if (!data || !userInfo) return []
-    const finalData = data.concat({
-      name: userInfo.email,
-      score: userInfo.deckPower || 0,
-      avatar: userInfo.avatar,
-    })
-    return finalData
-      .sort((a, b) => b.score - a.score)
-      .map((item, idx) => ({ ...item, rank: idx + 1 }))
-  }, [data, userInfo])
+    return data?.data?.leaderboard
+      ? data.data.leaderboard.map((item, index) => ({
+          ...item,
+          avatar: item.avatar || getDefaultAvatar(index),
+        }))
+      : []
+  }, [data])
 
   const renderCurrentUserRank = () => {
     if (!userInfo) return null
-    const item = leaderboardData.find((item) => item.name === userInfo.email)
-    if (!item) return null
+    if (!data?.data) return null
     let rankContent: React.ReactNode
-    if (item.rank <= 3) {
+    if (data.data.myRank <= 3) {
       rankContent = (
-        <div className={classNames(styles.rankContent, styles[`rank${item.rank}`])}></div>
+        <div className={classNames(styles.rankContent, styles[`rank${data.data.myRank}`])}></div>
       )
     } else {
-      rankContent = item.rank
+      rankContent = data.data.myRank
     }
     return (
       <div className={classNames(styles.leaderboardCurrentUserBar)}>
         <div className={styles.leaderboardRankContainer}>{rankContent}</div>
         <div className={styles.leaderboardInfo}>
-          <img alt={'user_avatar'} src={item.avatar} className={styles.leaderboardAvatar}></img>
+          <img alt={'user_avatar'} src={userInfo.avatar} className={styles.leaderboardAvatar}></img>
           <div className={styles.leaderboardUserInfo}>
-            <div className={styles.leaderboardUserName}>{item.name}</div>
+            <div className={styles.leaderboardUserName}>{userInfo.email}</div>
             <div className={styles.leaderboardUserScore}>
-              Score: <span className="text-[#B80001]">{item.score}</span>
+              Score: <span className="text-[#B80001]">{userInfo.deckPower}</span>
             </div>
           </div>
         </div>
@@ -69,17 +65,18 @@ const Leaderboard: React.FC = () => {
           </div>
         ) : (
           <div className={styles.leaderboardContent}>
-            {leaderboardData?.map((item) => {
+            {leaderboardData.map((item, index) => {
+              const rank = index + 1
               let rankContent: React.ReactNode
-              if (item.rank <= 3) {
+              if (rank <= 3) {
                 rankContent = (
-                  <div className={classNames(styles.rankContent, styles[`rank${item.rank}`])}></div>
+                  <div className={classNames(styles.rankContent, styles[`rank${rank}`])}></div>
                 )
               } else {
-                rankContent = item.rank
+                rankContent = rank
               }
               return (
-                <div key={item.rank} className={styles.leaderboardItem}>
+                <div key={rank} className={styles.leaderboardItem}>
                   <div className={styles.leaderboardRankContainer}>{rankContent}</div>
                   <div className={styles.leaderboardInfo}>
                     <img
@@ -88,9 +85,9 @@ const Leaderboard: React.FC = () => {
                       className={styles.leaderboardAvatar}
                     ></img>
                     <div className={styles.leaderboardUserInfo}>
-                      <div className={styles.leaderboardUserName}>{item.name}</div>
+                      <div className={styles.leaderboardUserName}>{item.email}</div>
                       <div className={styles.leaderboardUserScore}>
-                        Score: <span className="text-[#B80001]">{item.score}</span>
+                        Score: <span className="text-[#B80001]">{item.deckPower}</span>
                       </div>
                     </div>
                   </div>
