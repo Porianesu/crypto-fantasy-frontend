@@ -38,7 +38,6 @@ export interface UserInfo extends UserStorageInfo {
   meltMax: number
   solAmount: number
   updatedAt: string
-  deckCardIds: Array<number>
   deckCards: Array<{
     cardId: number
     userCardId: number
@@ -146,19 +145,26 @@ export default class StoresStore {
   }
 
   *updateCardsFormation() {
-    if (!this?.userInfo?.deckCardIds) return
-    const deckCardIdsString = this.userInfo.deckCardIds?.join(',')
+    if (!this?.userInfo?.deckCards) return
+    const deckCardIdsString = this.userInfo.deckCards.map((item) => item.cardId)?.join(',')
     if (!deckCardIdsString) return
     const cardFormationIdsString = this.cardsFormation?.map((card) => card.id).join(',')
     if (deckCardIdsString !== cardFormationIdsString) {
       const fetchCardsResult: AxiosResponse<Array<ICardData>> = yield API.fetchCards(
-        this.userInfo.deckCardIds,
+        this.userInfo.deckCards.map((item) => item.cardId),
       )
       if (Array.isArray(fetchCardsResult.data)) {
         const idMap = new Map(fetchCardsResult.data.map((card) => [card.id, card]))
-        this.cardsFormation = this.userInfo.deckCardIds
-          .map((id) => idMap.get(id))
-          .filter(Boolean) as ICardData[]
+        this.cardsFormation = this.userInfo.deckCards
+          .map((item) =>
+            idMap.has(item.cardId)
+              ? {
+                  ...idMap.get(item.cardId),
+                  userCardId: item.userCardId,
+                }
+              : undefined,
+          )
+          .filter(Boolean) as ICardDataInBag[]
       }
     }
   }
@@ -262,7 +268,12 @@ export default class StoresStore {
     this._setDeckAbortController = controller
     try {
       const res: AxiosResponse<ISetDeckResponse> = yield API.setDeck(
-        cards.map((card) => card.id),
+        cards.map((card) => {
+          return {
+            cardId: card.id,
+            userCardId: card.userCardId,
+          }
+        }),
         controller.signal,
       )
       // 只处理未被取消的请求
@@ -272,7 +283,7 @@ export default class StoresStore {
       } else {
         this.updateUserInfo({
           ...this.userInfo,
-          deckCardIds: res.data.deckCardIds,
+          deckCards: res.data.deckCards,
           deckPower: res.data.deckPower,
         })
       }
