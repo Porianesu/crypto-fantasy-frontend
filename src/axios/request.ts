@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { getAccessToken } from '@/utils/common.ts'
+import { ENTRANCE_PATH } from '@/navigation/routes.tsx'
 
 const request = axios.create({
   baseURL: 'https://crypto-fantasy-backend.vercel.app/api',
@@ -21,8 +22,20 @@ request.interceptors.request.use(
   (error) => error,
 )
 
+let isRedirecting = false
 request.interceptors.response.use(
   (response) => {
+    if (response.status === 401) {
+      // 清除本地缓存
+      localStorage.clear()
+      sessionStorage.clear()
+      // 判断当前路由
+      const location = window.location.pathname
+      if (!isRedirecting && location !== ENTRANCE_PATH) {
+        isRedirecting = true
+        window.location.replace(ENTRANCE_PATH)
+      }
+    }
     return response
   },
   (error) => {
