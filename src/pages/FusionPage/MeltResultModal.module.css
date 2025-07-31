@@ -45,7 +45,7 @@
         }
 
         .faithCoinIcon {
-            @apply size-14 mr-4.5;
+            @apply size-14 ml-4.5;
             @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-contain bg-top-left bg-no-repeat;
         }
 

@@ -62,6 +62,16 @@ export interface IDeckLeaderboardResponse {
   myRank: number
 }
 
+export interface RedeemCodeReward {
+  solAmount: number
+  faithAmount: number
+}
+
+export interface IRedeemCodeResponse {
+  success: boolean
+  reward: RedeemCodeReward
+}
+
 const API = {
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
@@ -113,6 +123,7 @@ const API = {
     signal?: AbortSignal,
   ) => request.post<ISetDeckResponse>('/set-deck', { deckCards }, { signal }),
   deckLeaderboard: async () => request.get<IDeckLeaderboardResponse>('/deck-leaderboard'),
+  redeemCode: async (code: string) => request.post<IRedeemCodeResponse>('/redeem-code', { code }),
 }
 
 export default API

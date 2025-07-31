@@ -1,38 +1,86 @@
 @import "tailwindcss";
 
 .overlay {
-  @apply fixed inset-0 z-50;
+    @apply fixed inset-0 z-50;
 }
 
 @supports (backdrop-filter: blur(12px)) {
-  .overlay {
-    @apply backdrop-blur-md;
-  }
+    .overlay {
+        @apply backdrop-blur-md;
+    }
 }
 
 @supports not (backdrop-filter: blur(12px)) {
-  .overlay {
-    @apply bg-black/60;
-  }
+    .overlay {
+        @apply bg-black/60;
+    }
 }
 
 .modalContent {
-  @apply max-w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none;
-  @apply bg-gradient-to-br from-[#232b38] via-[#2c3e50] to-[#1a2636] rounded-2xl shadow-2xl p-8 w-full max-w-md flex flex-col items-center gap-6 border-4 border-[#c8b560];
+    @apply max-w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none;
 }
 
-.title {
-  @apply text-2xl font-bold text-[#c8b560] mb-2 drop-shadow;
+.contentContainer {
+    @apply bg-gradient-to-br from-[#232b38] via-[#2c3e50] to-[#1a2636] rounded-2xl shadow-2xl p-8 w-112 flex flex-col items-center gap-6 border-4 border-[#c8b560];
+
+    .title {
+        @apply text-2xl font-bold text-[#c8b560] mb-2 drop-shadow;
+    }
+
+    .description {
+        @apply w-full flex flex-col items-center;
+    }
+
+    .input {
+        @apply w-full px-4 py-3 border-2 border-[#c8b560] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c8b560] text-lg text-[#232b38] bg-[#f8f4e6] font-semibold shadow;
+    }
+
+    .confirmBtn {
+        @apply w-full mt-4 py-3 px-6 bg-[#c8b560] text-[#232b38] font-bold rounded-lg shadow-lg hover:bg-[#e6d47a] transition disabled:bg-gray-400 disabled:text-gray-700;
+    }
 }
 
-.description {
-  @apply w-full flex flex-col items-center;
-}
+.modalContentContainer {
+    @apply w-174 h-175.5 flex flex-col items-center justify-start text-white;
 
-.input {
-  @apply w-full px-4 py-3 border-2 border-[#c8b560] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#c8b560] text-lg text-[#232b38] bg-[#f8f4e6] font-semibold shadow;
-}
+    .backgroundImage {
+        @apply size-full inset-0 absolute z-0;
+        @apply bg-[url(/src/assets/images/fusion_page/result_modal_background.png)] bg-contain bg-top-left bg-no-repeat;
+    }
 
-.confirmBtn {
-  @apply w-full mt-4 py-3 px-6 bg-[#c8b560] text-[#232b38] font-bold rounded-lg shadow-lg hover:bg-[#e6d47a] transition disabled:bg-gray-400 disabled:text-gray-700;
+    .faithCoinPile {
+        @apply size-100 mt-35 z-10;
+        @apply bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .faithCoinPileLarge {
+        @apply bg-[url(/src/assets/images/fusion_page/faith_coin_pile_large.png)];
+    }
+
+    .rewardContainer {
+        @apply absolute bottom-37.5 flex items-center gap-x-4 text-7xl font-black font-[FFDin] z-10;
+
+        & > div {
+            @apply flex items-center gap-x-4.5;
+        }
+    }
+
+    .faithCoinIcon {
+        @apply size-14;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .solCoinIcon {
+        @apply size-14;
+        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .title {
+        @apply w-255 h-35 flex items-center justify-center text-center absolute -top-5 text-5xl leading-17.5;
+    }
+
+    .button {
+        @apply -bottom-12.5 w-102 h-25 text-4xl leading-10 absolute;
+        @apply bg-[url(/src/assets/images/common/block_button_background.png)] bg-contain bg-top-left bg-no-repeat;
+    }
 }

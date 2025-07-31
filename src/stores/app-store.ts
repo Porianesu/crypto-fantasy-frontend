@@ -23,6 +23,7 @@ import API, {
   type ILoginAndRegisterResponse,
   type ILoginWithAccessTokenResponse,
   type IMeltCardResponse,
+  type IRedeemCodeResponse,
   type ISetDeckResponse,
 } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
@@ -92,6 +93,7 @@ export default class StoresStore {
       drawCards: flow.bound,
       craftCard: flow.bound,
       meltCard: flow.bound,
+      redeemCode: flow.bound,
     })
   }
 
@@ -388,5 +390,22 @@ export default class StoresStore {
     toast.success(`Melted ${targetCard.name} successfully!`)
     this.changeGlobalLoading(false)
     return 'success'
+  }
+
+  *redeemCode(code: string) {
+    if (!this.userInfo) return
+    if (!code || code.length !== 10) {
+      toast.warn('Invalid code format!')
+      return
+    }
+    const result: AxiosResponse<IRedeemCodeResponse> = yield API.redeemCode(code)
+    if (result?.data?.success) {
+      this.updateUserInfo({
+        ...this.userInfo,
+        solAmount: this.userInfo.solAmount + result.data.reward.solAmount,
+        faithAmount: this.userInfo.faithAmount + result.data.reward.faithAmount,
+      })
+      return result.data
+    }
   }
 }
