@@ -49,11 +49,7 @@ export interface ICardDataInBag extends ICardData {
   userCardId: number
 }
 
-export interface ICardDataWithBagPosition extends ICardData {
-  bagPosition: number
-}
-
-export interface ICardDataWithCount extends ICardData {
+export interface ICardDataWithCount extends ICardDataInBag {
   count: number
 }
 
@@ -295,7 +291,7 @@ export default class StoresStore {
   }
 
   get cardsBag() {
-    return this._cardsBag.map((card, index) => ({ ...card, bagPosition: index }))
+    return this._cardsBag
   }
 
   get formattedCardsBag() {
@@ -351,29 +347,19 @@ export default class StoresStore {
 
   *craftCard(
     targetCard: ICardData,
-    requiredCards: Array<{
-      card: ICardData
-      position: number
-    }>,
-    additiveCards: Array<{
-      card: ICardData
-      position: number
-    }>,
+    requiredCards: Array<ICardDataInBag>,
+    additiveCards: Array<ICardDataInBag>,
   ) {
     if (!this.userInfo) return
     const result: AxiosResponse<ICraftCardResponse> = yield API.craftCard({
       craftCardId: targetCard.id,
-      additiveCardIds: additiveCards.map((item) => item.card.id),
+      additiveCardIds: additiveCards.map((item) => item.id),
     })
     if (result?.data?.user?.email !== this.userInfo.email) return
-    const costCardWithBagPositions = requiredCards
-      .concat(additiveCards)
-      .map((item) => item.position)
-    // 降序移除已消耗的卡牌
-    const sortedPositions = costCardWithBagPositions.sort((a, b) => b - a)
-    sortedPositions.forEach((index) => {
-      this._cardsBag.splice(index, 1)
-    })
+    const totalCostCardUserIds = requiredCards.concat(additiveCards).map((item) => item.userCardId)
+    this._cardsBag = this._cardsBag.filter(
+      (card) => !totalCostCardUserIds.includes(card.userCardId),
+    )
     if (Array.isArray(result.data.resultCards)) {
       this._cardsBag = this._cardsBag.concat(result.data.resultCards)
     }
@@ -384,7 +370,7 @@ export default class StoresStore {
     }
   }
 
-  *meltCard(targetCard: ICardDataWithBagPosition) {
+  *meltCard(targetCard: ICardDataInBag) {
     if (!this.userInfo) return 'fail'
     if (this.userInfo.meltCurrent <= 0) {
       toast.warn('No melt opportunities left!')
@@ -397,7 +383,7 @@ export default class StoresStore {
       return 'fail'
     }
     this.updateUserInfo(result.data.user)
-    this._cardsBag.splice(targetCard.bagPosition, 1)
+    this._cardsBag = this._cardsBag.filter((card) => card.userCardId !== targetCard.userCardId)
     toast.success(`Melted ${targetCard.name} successfully!`)
     this.changeGlobalLoading(false)
     return 'success'
