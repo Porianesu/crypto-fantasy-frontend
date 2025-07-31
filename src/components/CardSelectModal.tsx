@@ -35,8 +35,12 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
   mode = 'cardId',
 }) => {
   const {
-    appStore: { cardsBag, formattedCardsBag: cardsBagWithCount },
+    appStore: { userInfo, cardsBag, formattedCardsBag: cardsBagWithCount },
   } = useMobxStore()
+  const deckUserCardIds = useMemo(
+    () => userInfo?.deckCards?.map((item) => item.userCardId) || [],
+    [userInfo?.deckCards],
+  )
   const [search, setSearch] = useState('')
   const [rarity, setRarity] = useState<CARD_RARITY | 'all'>('all')
   const isUserCardIdMode = useMemo(() => mode === 'userCardId', [mode])
@@ -146,7 +150,11 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
                             {selected ? currentCardFormationIndex + 1 : ''}
                           </button>
                         }
-                        <StaticCard width={202} card={card}></StaticCard>
+                        <StaticCard
+                          width={202}
+                          card={card}
+                          disable={deckUserCardIds.includes(card.userCardId)}
+                        ></StaticCard>
                       </div>
                     )
                   })}

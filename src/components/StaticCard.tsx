@@ -9,13 +9,14 @@ interface IStaticCardProps extends HTMLAttributes<HTMLDivElement> {
   card: ICardData
   width: number
   undetected?: boolean
+  disable?: boolean
 }
 
 const CARD_DESIGN_WIDTH = 286
 const CARD_DESIGN_HEIGHT = 413
 
 const StaticCard = React.forwardRef<HTMLDivElement, IStaticCardProps>(
-  ({ card, width, className, style, undetected = false, ...otherProps }, ref) => {
+  ({ card, width, className, style, undetected = false, disable = false, ...otherProps }, ref) => {
     const {
       systemStore: { fontSizeScaleRate },
     } = useMobxStore()
@@ -33,8 +34,8 @@ const StaticCard = React.forwardRef<HTMLDivElement, IStaticCardProps>(
       <div
         ref={ref}
         className={classNames('flex items-center justify-center', className, {
-          grayscale: undetected,
-          'contrast-[0.8]': undetected,
+          grayscale: undetected || disable,
+          'contrast-[0.8]': undetected || disable,
         })}
         style={{ width: `${scaledWidth}px`, height: `${height}px`, ...style }}
         {...otherProps}

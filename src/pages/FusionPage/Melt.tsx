@@ -10,6 +10,7 @@ import MeltResultModal from '@/pages/FusionPage/MeltResultModal.tsx'
 import { gsap } from 'gsap'
 import { Flip } from 'gsap/Flip'
 import type { ICardDataInBag } from '@/stores/app-store.ts'
+import { toast } from 'react-toastify'
 
 gsap.registerPlugin(Flip)
 
@@ -47,12 +48,18 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
     open: false,
     faithCoin: 0,
   })
+  const deckUserCardIds = useMemo(
+    () => userInfo?.deckCards?.map((item) => item.userCardId) || [],
+    [userInfo?.deckCards],
+  )
   const filteredCards = useMemo(() => {
     if (rarityFilter === 'all') {
       return cardsBag
     }
-    return cardsBag.filter((card) => card.rarity === rarityFilter)
-  }, [cardsBag, rarityFilter])
+    return cardsBag.filter(
+      (card) => card.rarity === rarityFilter && !deckUserCardIds.includes(card.userCardId),
+    )
+  }, [cardsBag, deckUserCardIds, rarityFilter])
   const currentRule = useMemo(
     () => MeltRule.find((item) => item.rarity === meltTargetCard?.rarity),
     [meltTargetCard?.rarity],
@@ -60,6 +67,10 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
 
   const handleMeltButtonClick = async () => {
     if (!currentRule || !meltTargetCard || !meltTargetCardRef.current) return
+    if (deckUserCardIds.includes(meltTargetCard.userCardId)) {
+      toast.warning('You cannot melt a card that is in your deck.')
+      return
+    }
     setMeltButtonLoading(true)
     const meltResult = await meltCard(meltTargetCard)
     if ((meltResult as unknown as string) === 'success') {
@@ -71,6 +82,14 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
       })
     }
     setMeltButtonLoading(false)
+  }
+
+  const handleCardClick = (card: ICardDataInBag) => {
+    if (deckUserCardIds.includes(card.userCardId)) {
+      toast.warning('This card is in your deck, please remove it first.')
+      return
+    }
+    setMeltTargetCard(card)
   }
 
   return (
@@ -124,7 +143,7 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
                 card={card}
                 width={178}
                 onClick={() => {
-                  setMeltTargetCard(card)
+                  handleCardClick(card)
                 }}
               ></StaticCard>
             ))}

@@ -96,6 +96,10 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     () => requiredCards.concat(additiveCards).map((card) => card.userCardId),
     [additiveCards, requiredCards],
   )
+  const deckUserCardIds = useMemo(
+    () => userInfo?.deckCards?.map((item) => item.userCardId) || [],
+    [userInfo?.deckCards],
+  )
   const [cardSelectModalOpen, setCardSelectModalOpen] = useState(false)
   const currentCraftRule = useMemo(
     () => CraftRule.find((item) => item.targetRarity === craftTargetCard?.rarity),
@@ -178,6 +182,9 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     if (requiredCards.length < currentCraftRule.requiredCards.count) {
       return toast.warning('Required cards are not enough!')
     }
+    if (selectedUserCardIds.some((id) => deckUserCardIds.includes(id))) {
+      return toast.warning('Some cards are in your deck, please remove them first.')
+    }
     const [craftResult] = await Promise.all([
       craftCard(craftTargetCard, requiredCards, additiveCards),
       playCraftAnimation(),
@@ -228,6 +235,9 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
           prevState.filter((item) => item.userCardId !== card.userCardId),
         )
       } else {
+        if (deckUserCardIds.includes(card.userCardId)) {
+          return toast.warning('You cannot select a card that is in your deck.')
+        }
         if (requiredCards.length >= currentCraftRule.requiredCards.count) {
           return toast.warning('You have already selected the required number of cards.')
         }
@@ -245,6 +255,9 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
           prevState.filter((item) => item.userCardId !== card.userCardId),
         )
       } else {
+        if (deckUserCardIds.includes(card.userCardId)) {
+          return toast.warning('You cannot select a card that is in your deck.')
+        }
         if (additiveCards.length >= 4) {
           return toast.warning('You can only add up to 4 additive cards.')
         }
@@ -258,13 +271,16 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
   }
 
   useEffect(() => {
+    if (!userInfo) return
     if (craftTargetCard && currentCraftRule) {
       // Auto select required cards based on the current craft rule
       const requiredCardsCount = currentCraftRule.requiredCards.count
       const requiredCardsRarity = currentCraftRule.requiredCards.rarity
-      const availableCardsWithIndex = cardsBag.filter(
-        (card) => card.rarity === requiredCardsRarity && isCardsSameChain(card, craftTargetCard),
-      )
+      const availableCardsWithIndex = cardsBag.filter((card) => {
+        if (card.rarity !== requiredCardsRarity) return false
+        if (!isCardsSameChain(card, craftTargetCard)) return false
+        return !deckUserCardIds.includes(card.userCardId)
+      })
       const selectedRequiredCards = availableCardsWithIndex.slice(0, requiredCardsCount)
       setRequiredCards(selectedRequiredCards)
     } else {
