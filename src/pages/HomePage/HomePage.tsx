@@ -16,7 +16,7 @@ import battleIcon from '../../../src/assets/images/home_page/footer_button_battl
 import rewardIcon from '../../../src/assets/images/home_page/footer_button_reward.png'
 import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.png'
 import { type IOpenPackHandle } from '@/components/OpenPack.tsx'
-import type { ICardData } from '@/components/Card.tsx'
+import type { ICardDataInBag } from '@/stores/app-store.ts'
 
 const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
@@ -35,7 +35,7 @@ function HomePage() {
   const [cardsFormationModalVisible, setCardsFormationModalVisible] = useState(false)
   const selectedCards = useMemo(() => cardsFormation.map((card) => card.id), [cardsFormation])
 
-  const handleCardSelect = (card: ICardData) => {
+  const handleCardSelect = (card: ICardDataInBag) => {
     const findIndex = cardsFormation.findIndex((c) => c.id === card.id)
     if (findIndex !== -1) {
       // If the card is already selected, remove it from the formation
