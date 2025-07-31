@@ -223,12 +223,6 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     const card = cardData as ICardDataInBag
     if (!craftTargetCard || !currentCraftRule) return
     if (cardSelectType.current === CARD_SELECT_TYPE.REQUIRED) {
-      if (card.rarity + 1 !== currentCraftRule.requiredCards.rarity) {
-        return toast.warning('Required cards must be the same rarity as required.')
-      }
-      if (!isCardsSameChain(craftTargetCard, card)) {
-        return toast.warning('Required cards must be the same chain as the target card.')
-      }
       if (requiredCards.map((item) => item.userCardId).indexOf(card.userCardId) !== -1) {
         setRequiredCards((prevState) =>
           prevState.filter((item) => item.userCardId !== card.userCardId),
@@ -236,6 +230,12 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
       } else {
         if (requiredCards.length >= currentCraftRule.requiredCards.count) {
           return toast.warning('You have already selected the required number of cards.')
+        }
+        if (card.rarity !== currentCraftRule.requiredCards.rarity) {
+          return toast.warning('Required cards must be the same rarity as required.')
+        }
+        if (!isCardsSameChain(craftTargetCard, card)) {
+          return toast.warning('Required cards must be the same chain as the target card.')
         }
         setRequiredCards((prevState) => prevState.concat([card]))
       }
