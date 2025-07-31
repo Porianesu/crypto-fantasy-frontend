@@ -16,7 +16,7 @@ const RedeemCodeModal: React.FC<IRedeemCodeModalProps> = ({ open, onOpenChange }
         <DialogOverlay className={classNames(styles.overlay)}>
           <Content className={styles.modalContent}>
             <Title></Title>
-            <Description></Description>
+            <Description></Description>123
           </Content>
         </DialogOverlay>
       </Portal>

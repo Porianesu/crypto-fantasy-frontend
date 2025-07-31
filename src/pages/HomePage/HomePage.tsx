@@ -22,6 +22,7 @@ const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
 const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
+const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
 
 function HomePage() {
   const {
@@ -34,6 +35,7 @@ function HomePage() {
   const openPackRef = useRef<IOpenPackHandle>(null)
   const [cardsFormationModalVisible, setCardsFormationModalVisible] = useState(false)
   const selectedCards = useMemo(() => cardsFormation.map((card) => card.id), [cardsFormation])
+  const [redeemCodeModalVisible, setRedeemCodeModalVisible] = useState(false)
 
   const handleCardSelect = (card: ICardDataInBag) => {
     const findIndex = cardsFormation.findIndex((c) => c.id === card.id)
@@ -105,6 +107,10 @@ function HomePage() {
     },
   ]
 
+  const openRedeemCodeModal = () => {
+    setRedeemCodeModalVisible(true)
+  }
+
   return (
     <div className={styles.pageContainer} ref={pageContainerRef}>
       <div className={styles.drawCardsEntranceContainer}>
@@ -149,14 +155,14 @@ function HomePage() {
                 <div className={styles.assetIcon1}></div>
               </div>
               <span className={styles.assetAmount}>{userInfo.solAmount}</span>
-              <div className={styles.assetPlusButton} onClick={comingSoon}></div>
+              <div className={styles.assetPlusButton} onClick={openRedeemCodeModal}></div>
             </div>
             <div className={styles.assetContainer}>
               <div className={styles.assetIconContainer}>
                 <div className={styles.assetIcon2}></div>
               </div>
               <span className={styles.assetAmount}>{userInfo.faithAmount}</span>
-              <div className={styles.assetPlusButton} onClick={comingSoon}></div>
+              <div className={styles.assetPlusButton} onClick={openRedeemCodeModal}></div>
             </div>
           </div>
         </div>
@@ -213,6 +219,12 @@ function HomePage() {
       </Suspense>
       <Suspense fallback={null}>
         <BattleModal></BattleModal>
+      </Suspense>
+      <Suspense fallback={null}>
+        <RedeemCodeModal
+          open={redeemCodeModalVisible}
+          onOpenChange={setRedeemCodeModalVisible}
+        ></RedeemCodeModal>
       </Suspense>
     </div>
   )
