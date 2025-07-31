@@ -98,9 +98,13 @@ const API = {
     } while (allData.length < total)
     return allData
   },
-  meltCard: async (cardId: number) => request.post<IMeltCardResponse>('/melt-card', { cardId }),
-  craftCard: async (data: { craftCardId: number; additiveCardIds?: Array<number> }) =>
-    request.post<ICraftCardResponse>('/craft-card', data),
+  meltCard: async (userCardId: number) =>
+    request.post<IMeltCardResponse>('/melt-card', { userCardId }),
+  craftCard: async (data: {
+    craftCardId: number
+    requiredUserCardIds: Array<number>
+    additiveUserCardIds?: Array<number>
+  }) => request.post<ICraftCardResponse>('/craft-card', data),
   setDeck: async (
     deckCards: Array<{
       cardId: number

@@ -353,7 +353,8 @@ export default class StoresStore {
     if (!this.userInfo) return
     const result: AxiosResponse<ICraftCardResponse> = yield API.craftCard({
       craftCardId: targetCard.id,
-      additiveCardIds: additiveCards.map((item) => item.id),
+      requiredUserCardIds: requiredCards.map((card) => card.userCardId),
+      additiveUserCardIds: additiveCards.map((card) => card.userCardId),
     })
     if (result?.data?.user?.email !== this.userInfo.email) return
     const totalCostCardUserIds = requiredCards.concat(additiveCards).map((item) => item.userCardId)
@@ -377,7 +378,7 @@ export default class StoresStore {
       return 'fail'
     }
     this.changeGlobalLoading(true)
-    const result: AxiosResponse<IMeltCardResponse> = yield API.meltCard(targetCard.id)
+    const result: AxiosResponse<IMeltCardResponse> = yield API.meltCard(targetCard.userCardId)
     if (result?.data?.user?.email !== this.userInfo.email) {
       this.changeGlobalLoading(false)
       return 'fail'
