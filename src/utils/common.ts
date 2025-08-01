@@ -5,20 +5,21 @@ import {
 } from '@/utils/constant.ts'
 import type { ICardData } from '@/components/Card.tsx'
 
-const defaultAvatars = import.meta.glob<string>('../assets/images/avatars/*.png', {
-  eager: true,
-  import: 'default',
-})
+const defaultAvatars = [
+  '/defaultAvatars/player_female_1.png',
+  '/defaultAvatars/player_female_2.png',
+  '/defaultAvatars/player_male_1.png',
+  '/defaultAvatars/player_male_2.png',
+]
 
 export const getCardImageById = (cardId: number) => `/cards/${cardId}.png`
 export const getDefaultAvatar = (index?: number) => {
-  const avatarKeys = Object.keys(defaultAvatars)
-  if (index !== undefined && index >= 0 && index < avatarKeys.length) {
-    return defaultAvatars[avatarKeys[index]]
+  if (index !== undefined && index >= 0 && index < defaultAvatars.length) {
+    return defaultAvatars[index]
   }
   // 随机返回一个默认头像
-  const randomIndex = Math.floor(Math.random() * avatarKeys.length)
-  return defaultAvatars[avatarKeys[randomIndex]]
+  const randomIndex = Math.floor(Math.random() * defaultAvatars.length)
+  return defaultAvatars[randomIndex]
 }
 
 export const generateFantasyEnglishName = () => {

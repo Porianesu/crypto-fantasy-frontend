@@ -10,10 +10,6 @@ import craftSuccessSound from '../assets/audio/craft_success_sound.mp3'
 import craftFailedSound from '../assets/audio/craft_failed_sound.mp3'
 import meltSound from '../assets/audio/melt_sound.mp3'
 
-const avatars = import.meta.glob('../assets/images/avatars/*.png', {
-  eager: true,
-  import: 'default',
-})
 const cardImages = import.meta.glob('../assets/images/cards/*.png', {
   eager: true,
   import: 'default',
@@ -91,9 +87,6 @@ export default [
     id: 'meltSound',
     src: meltSound,
   },
-  ...Object.keys(avatars).map((key) => ({
-    src: avatars[key],
-  })),
   ...Object.keys(cardImages).map((key) => ({
     src: cardImages[key],
   })),
