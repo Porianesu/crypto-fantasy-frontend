@@ -310,7 +310,7 @@ export default class StoresStore {
   }
 
   *drawCards() {
-    if (!this.userInfo || this.userInfo.solAmount <= 0.1) {
+    if (!this.userInfo || this.userInfo.solAmount < 0.1) {
       toast.warn('Insufficient Balance!')
       return
     }
