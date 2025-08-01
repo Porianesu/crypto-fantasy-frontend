@@ -134,7 +134,7 @@ const RedeemCodeModal: React.FC<IRedeemCodeModalProps> = ({ open, onOpenChange }
                 >
                   Confirm
                 </button>
-                <a>Want to get a new code for free?</a>
+                <a className={styles.link}>Want to get a new code for free?</a>
               </div>
             )}
           </Content>

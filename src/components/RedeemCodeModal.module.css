@@ -21,7 +21,7 @@
 }
 
 .contentContainer {
-    @apply bg-gradient-to-br from-[#232b38] via-[#2c3e50] to-[#1a2636] rounded-2xl shadow-2xl p-8 w-112 flex flex-col items-center gap-6 border-4 border-[#c8b560];
+    @apply bg-gradient-to-br from-[#232b38] via-[#2c3e50] to-[#1a2636] rounded-2xl shadow-2xl px-8 pt-8 pb-4 w-112 flex flex-col items-center gap-6 border-4 border-[#c8b560];
 
     .title {
         @apply text-2xl font-bold text-[#c8b560] mb-2 drop-shadow;
@@ -37,6 +37,11 @@
 
     .confirmBtn {
         @apply w-full mt-4 py-3 px-6 bg-[#c8b560] text-[#232b38] font-bold rounded-lg shadow-lg hover:bg-[#e6d47a] transition disabled:bg-gray-400 disabled:text-gray-700;
+    }
+
+    .link {
+        @apply mt-2 text-base font-semibold text-yellow-200 underline underline-offset-4 cursor-pointer transition hover:text-yellow-100 hover:drop-shadow-lg;
+        text-shadow: 0 1px 6px #b97a2a, 0 0 8px #fff2b2;
     }
 }
 
