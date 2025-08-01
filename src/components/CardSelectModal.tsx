@@ -153,7 +153,7 @@ const CardSelectModal: React.FC<ICardSelectModalProps> = ({
                         <StaticCard
                           width={202}
                           card={card}
-                          disable={deckUserCardIds.includes(card.userCardId)}
+                          disable={isUserCardIdMode && deckUserCardIds.includes(card.userCardId)}
                         ></StaticCard>
                       </div>
                     )
