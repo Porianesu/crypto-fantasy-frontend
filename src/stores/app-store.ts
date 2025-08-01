@@ -171,7 +171,6 @@ export default class StoresStore {
     if (!userInfo) return
     this.userInfo = {
       ...userInfo,
-      avatar: getDefaultAvatar(),
       expPercent: 60,
     }
     this.updateCardsFormation()
