@@ -51,7 +51,7 @@ const RedeemResultModalContent: React.FC<{
   return (
     <div className={styles.modalContentContainer} ref={contentRef}>
       <div className={styles.backgroundImage} ref={backgroundRef}></div>
-      <Title className={styles.title}>{'Redeem Success!'}</Title>
+      <Title className={styles.title}>{'Redeem Successfully!'}</Title>
       <Description className={'hidden'}></Description>
       <div className={classNames(styles.faithCoinPile, styles.faithCoinPileLarge)}></div>
       <div className={styles.rewardContainer}>
@@ -115,12 +115,12 @@ const RedeemCodeModal: React.FC<IRedeemCodeModalProps> = ({ open, onOpenChange }
               <RedeemResultModalContent reward={reward}></RedeemResultModalContent>
             ) : (
               <div className={styles.contentContainer}>
-                <Title className={styles.title}>Redeem Code</Title>
+                <Title className={styles.title}>Redeem gift Code</Title>
                 <Description className={styles.description}>
                   <input
                     className={styles.input}
                     type="text"
-                    placeholder="Enter your code"
+                    placeholder="Enter the code here"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                   />
@@ -134,6 +134,7 @@ const RedeemCodeModal: React.FC<IRedeemCodeModalProps> = ({ open, onOpenChange }
                 >
                   Confirm
                 </button>
+                <a>Want to get a new code for free?</a>
               </div>
             )}
           </Content>
