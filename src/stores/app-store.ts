@@ -10,7 +10,6 @@ import {
   checkHasAlreadyReadGuide,
   getAccessToken,
   getCardImageById,
-  getDefaultAvatar,
   setAccessToken,
 } from '@/utils/common.ts'
 import { type ICardData } from '@/components/Card.tsx'
