@@ -25,7 +25,13 @@ request.interceptors.request.use(
 let isRedirecting = false
 request.interceptors.response.use(
   (response) => {
-    if (response.status === 401) {
+    return response
+  },
+  (error) => {
+    if (error?.response?.data?.error) {
+      toast.error(error.response.data.error)
+    }
+    if (error.status === 401) {
       // 清除本地缓存
       localStorage.clear()
       sessionStorage.clear()
@@ -34,13 +40,10 @@ request.interceptors.response.use(
       if (!isRedirecting && location !== ENTRANCE_PATH) {
         isRedirecting = true
         window.location.replace(ENTRANCE_PATH)
+      } else {
+        isRedirecting = true
+        window.location.reload()
       }
-    }
-    return response
-  },
-  (error) => {
-    if (error?.response?.data?.error) {
-      toast.error(error.response.data.error)
     }
     return error
   },
