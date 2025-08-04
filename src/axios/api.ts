@@ -54,7 +54,7 @@ export interface ISetDeckResponse {
 export interface IDeckLeaderboardResponse {
   leaderboard: Array<{
     id: number
-    email: string
+    nickname: string
     avatar: string
     deckPower: number
   }>

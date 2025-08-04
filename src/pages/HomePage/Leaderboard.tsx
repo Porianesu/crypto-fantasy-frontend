@@ -44,7 +44,7 @@ const Leaderboard: React.FC = () => {
         <div className={styles.leaderboardInfo}>
           <img alt={'user_avatar'} src={userInfo.avatar} className={styles.leaderboardAvatar}></img>
           <div className={styles.leaderboardUserInfo}>
-            <div className={styles.leaderboardUserName}>{userInfo.email}</div>
+            <div className={styles.leaderboardUserName}>{userInfo.nickname}</div>
             <div className={styles.leaderboardUserScore}>
               Score: <span className="text-[#B80001]">{userInfo.deckPower}</span>
             </div>
@@ -85,7 +85,7 @@ const Leaderboard: React.FC = () => {
                       className={styles.leaderboardAvatar}
                     ></img>
                     <div className={styles.leaderboardUserInfo}>
-                      <div className={styles.leaderboardUserName}>{item.email}</div>
+                      <div className={styles.leaderboardUserName}>{item.nickname}</div>
                       <div className={styles.leaderboardUserScore}>
                         Score: <span className="text-[#B80001]">{item.deckPower}</span>
                       </div>

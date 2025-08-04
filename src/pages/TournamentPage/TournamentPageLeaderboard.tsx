@@ -74,8 +74,8 @@ const TournamentPageLeaderboard: React.FC<ITournamentPageLeaderboardProps> = ({
   // 当前用户排行榜信息
   const currentUserLeaderboardInfo = useMemo(() => {
     if (!displayLeaderboard) return undefined
-    return displayLeaderboard.find((item) => item.name === userInfo?.email)
-  }, [displayLeaderboard, userInfo?.email])
+    return displayLeaderboard.find((item) => item.name === userInfo?.nickname)
+  }, [displayLeaderboard, userInfo?.nickname])
 
   return (
     <div className={styles.leaderboardContainer}>

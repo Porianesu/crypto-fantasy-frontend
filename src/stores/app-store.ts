@@ -32,6 +32,7 @@ export interface UserInfo extends UserStorageInfo {
   avatar: string
   createdAt: string
   email: string
+  nickname: string
   expPercent: number
   faithAmount: number
   id: number

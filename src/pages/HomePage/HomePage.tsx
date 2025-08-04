@@ -133,7 +133,7 @@ function HomePage() {
               <img src={userInfo.avatar} alt="avatar" className={styles.avatar} />
             </div>
             <div className={styles.userInfoContainer}>
-              <div className={styles.username}>{userInfo?.email}</div>
+              <div className={styles.username}>{userInfo?.nickname}</div>
               <div className={styles.expBarBg}>
                 <div className={styles.expBarFill} style={{ width: `${userInfo.expPercent}%` }} />
               </div>
