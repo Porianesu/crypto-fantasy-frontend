@@ -19,6 +19,7 @@ import API, {
   type IDrawCardsResponse,
   type IFetchCardsPageData,
   type IFetchCardsPageResponse,
+  type IGetConfigResponse,
   type ILoginAndRegisterResponse,
   type ILoginWithAccessTokenResponse,
   type IMeltCardResponse,
@@ -60,6 +61,8 @@ export default class StoresStore {
 
   globalLoading = false
 
+  appConfig: IGetConfigResponse | undefined = undefined
+
   userInfo: UserInfo | undefined = undefined
 
   cardsFormation: Array<ICardDataInBag> = []
@@ -78,6 +81,8 @@ export default class StoresStore {
       changeGlobalLoading: action,
       userInfo: observable,
       updateUserInfo: action,
+      appConfig: observable,
+      getAppConfig: flow.bound,
       updateUserCardsBag: flow.bound,
       loginAndRegister: flow.bound,
       loginWithAccessToken: flow.bound,
@@ -175,6 +180,13 @@ export default class StoresStore {
     this.updateCardsFormation()
   };
 
+  *getAppConfig() {
+    const result: AxiosResponse<IGetConfigResponse> = yield API.getConfig()
+    if (result?.data?.DefaultAvatars && Array.isArray(result.data.DefaultAvatars)) {
+      this.appConfig = result.data
+    }
+  }
+
   *loginAndRegister(email: string, password: string) {
     if (!email) return toast.warn('Please enter your email.')
     if (!password) return toast.warn('Please enter your password.')
@@ -221,7 +233,7 @@ export default class StoresStore {
         queryKey: [CARD_DATA_BASE_REQUEST_KEY],
         queryFn: () => API.fetchCardsPage(1, 200),
       })
-      yield this.loginWithAccessToken()
+      yield Promise.all([this.getAppConfig(), this.loginWithAccessToken()])
       this.rootStoreRef.preloadStore.preloadResult.networkPreloadProgress = 1
     } catch (e) {
       console.log('Error initializing network:', e)

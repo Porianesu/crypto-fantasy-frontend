@@ -2,39 +2,16 @@ import { observer } from 'mobx-react-lite'
 import React, { useMemo, useRef, useState } from 'react'
 import styles from './Melt.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { CARD_RARITY } from '@/components/Card.tsx'
 import classNames from 'classnames'
 import StaticCard from '@/components/StaticCard.tsx'
 import { RARITY_OPTIONS, type RARITY_SELECT_VALUE } from '@/components/RaritySelect.tsx'
 import MeltResultModal from '@/pages/FusionPage/MeltResultModal.tsx'
-import { gsap } from 'gsap'
-import { Flip } from 'gsap/Flip'
 import type { ICardDataInBag } from '@/stores/app-store.ts'
 import { toast } from 'react-toastify'
 
-gsap.registerPlugin(Flip)
-
-const MeltRule = [
-  {
-    rarity: CARD_RARITY.NORMAL,
-    faithCoin: 12,
-  },
-  {
-    rarity: CARD_RARITY.RARE,
-    faithCoin: 45,
-  },
-  {
-    rarity: CARD_RARITY.EPIC,
-    faithCoin: 200,
-  },
-  {
-    rarity: CARD_RARITY.LEGENDARY,
-    faithCoin: 1800,
-  },
-]
 const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCardVideo }) => {
   const {
-    appStore: { cardsBag, userInfo, meltCard },
+    appStore: { appConfig, cardsBag, userInfo, meltCard },
   } = useMobxStore()
   const [meltButtonLoading, setMeltButtonLoading] = useState(false)
   const [meltTargetCard, setMeltTargetCard] = useState<ICardDataInBag>()
@@ -61,8 +38,8 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
     )
   }, [cardsBag, deckUserCardIds, rarityFilter])
   const currentRule = useMemo(
-    () => MeltRule.find((item) => item.rarity === meltTargetCard?.rarity),
-    [meltTargetCard?.rarity],
+    () => appConfig?.MeltRule?.find((item) => item.rarity === meltTargetCard?.rarity),
+    [appConfig?.MeltRule, meltTargetCard?.rarity],
   )
 
   const handleMeltButtonClick = async () => {

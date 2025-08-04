@@ -1,6 +1,6 @@
 import request from '@/axios/request.ts'
 import type { ICardDataInBag, UserInfo } from '@/stores/app-store.ts'
-import type { ICardData } from '@/components/Card.tsx'
+import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 
 export interface ILoginAndRegisterResponse {
   type: 'login' | 'register'
@@ -72,7 +72,28 @@ export interface IRedeemCodeResponse {
   reward: RedeemCodeReward
 }
 
+export interface ICraftRule {
+  targetRarity: CARD_RARITY
+  requiredCards: {
+    rarity: CARD_RARITY
+    count: number
+  }
+  requiredFaithCoin: number
+  baseSuccessRate: number // 基础成功率
+  maxSuccessRate: number // 最大成功率
+}
+
+export interface IGetConfigResponse {
+  DefaultAvatars: Array<string>
+  CraftRule: Array<ICraftRule>
+  MeltRule: Array<{
+    rarity: CARD_RARITY
+    faithCoin: number
+  }>
+}
+
 const API = {
+  getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: { email: string; password: string }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
   loginWithAccessToken: async () => request.get<ILoginWithAccessTokenResponse>('/auth-me'),

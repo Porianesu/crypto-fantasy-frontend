@@ -4,22 +4,25 @@ import {
   type UserStorageInfo,
 } from '@/utils/constant.ts'
 import type { ICardData } from '@/components/Card.tsx'
-
-const defaultAvatars = [
-  '/defaultAvatars/player_female_1.png',
-  '/defaultAvatars/player_female_2.png',
-  '/defaultAvatars/player_male_1.png',
-  '/defaultAvatars/player_male_2.png',
-]
+import { getStoreRef } from '@/stores/StoreProvider.tsx'
 
 export const getCardImageById = (cardId: number) => `/cards/${cardId}.png`
 export const getDefaultAvatar = (index?: number) => {
-  if (index !== undefined && index >= 0 && index < defaultAvatars.length) {
-    return defaultAvatars[index]
+  const mobxStore = getStoreRef()
+  if (mobxStore) {
+    const {
+      appStore: { appConfig },
+    } = mobxStore
+    if (!appConfig) return undefined
+    if (index !== undefined && index >= 0 && index < appConfig.DefaultAvatars.length) {
+      return appConfig.DefaultAvatars[index]
+    }
+    // 随机返回一个默认头像
+    const randomIndex = Math.floor(Math.random() * appConfig.DefaultAvatars.length)
+    return appConfig.DefaultAvatars[randomIndex]
+  } else {
+    return undefined
   }
-  // 随机返回一个默认头像
-  const randomIndex = Math.floor(Math.random() * defaultAvatars.length)
-  return defaultAvatars[randomIndex]
 }
 
 export const generateFantasyEnglishName = () => {
