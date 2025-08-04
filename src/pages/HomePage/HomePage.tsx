@@ -23,10 +23,11 @@ const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.ts
 const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
+const ProfileModal = React.lazy(() => import('@/pages/HomePage/ProfileModal.tsx'))
 
 function HomePage() {
   const {
-    appStore: { userInfo, cardsFormation, changeCardsFormation },
+    appStore: { userInfo, appConfig, cardsFormation, changeCardsFormation },
     modalStore: { changeCardsBagModalData, changeBattleModalVisible },
   } = useMobxStore()
   const navigate = useNavigate()
@@ -36,6 +37,7 @@ function HomePage() {
   const [cardsFormationModalVisible, setCardsFormationModalVisible] = useState(false)
   const selectedCards = useMemo(() => cardsFormation.map((card) => card.id), [cardsFormation])
   const [redeemCodeModalVisible, setRedeemCodeModalVisible] = useState(false)
+  const [profileModalVisible, setProfileModalVisible] = useState(false)
 
   const handleCardSelect = (card: ICardDataInBag) => {
     const findIndex = cardsFormation.findIndex((c) => c.id === card.id)
@@ -111,6 +113,10 @@ function HomePage() {
     setRedeemCodeModalVisible(true)
   }
 
+  const openProfileModal = () => {
+    setProfileModalVisible(true)
+  }
+
   return (
     <div className={styles.pageContainer} ref={pageContainerRef}>
       <div className={styles.drawCardsEntranceContainer}>
@@ -144,7 +150,7 @@ function HomePage() {
                 ></div>
                 <div
                   className={classNames(styles.iconBtn, styles.settingBtn)}
-                  onClick={comingSoon}
+                  onClick={openProfileModal}
                 ></div>
               </div>
             </div>
@@ -226,6 +232,14 @@ function HomePage() {
           onOpenChange={setRedeemCodeModalVisible}
         ></RedeemCodeModal>
       </Suspense>
+      {userInfo && appConfig ? (
+        <Suspense fallback={null}>
+          <ProfileModal
+            open={profileModalVisible}
+            onOpenChange={setProfileModalVisible}
+          ></ProfileModal>
+        </Suspense>
+      ) : null}
     </div>
   )
 }
