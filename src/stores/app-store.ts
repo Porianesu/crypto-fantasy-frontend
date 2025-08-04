@@ -321,10 +321,7 @@ export default class StoresStore {
   }
 
   *drawCards() {
-    if (!this.userInfo || this.userInfo.solAmount < 0.1) {
-      toast.warn('Insufficient Balance!')
-      return
-    }
+    if (!this.userInfo) return
     const result: AxiosResponse<IDrawCardsResponse> = yield API.drawCards()
     if (result?.data?.user?.email !== this.userInfo.email) return
     this.updateUserInfo(result.data.user)

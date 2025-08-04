@@ -7,6 +7,7 @@ import { gsap } from 'gsap'
 import type { ICardData } from '@/components/Card.tsx'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import { toast } from 'react-toastify'
 
 export interface IOpenPackHandle {
   handleOpenPack: () => Promise<Array<ICardData> | void>
@@ -15,7 +16,7 @@ export interface IOpenPackHandle {
 const OpenPack = React.forwardRef<IOpenPackHandle, any>((_props, ref) => {
   const {
     preloadStore: { audioInstanceMap },
-    appStore: { drawCards },
+    appStore: { drawCards, userInfo },
     modalStore: { changeDrawCardsModalVisible },
   } = useMobxStore()
   const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
@@ -67,6 +68,10 @@ const OpenPack = React.forwardRef<IOpenPackHandle, any>((_props, ref) => {
   }, [bgmSound, drawCardSound])
 
   const handleOpenPack = useCallback(async () => {
+    if (!userInfo || userInfo.solAmount < 0.1) {
+      toast.warn('Insufficient Balance!')
+      return
+    }
     // 重置卡牌元素避免gsap索引不生效
     setCards([])
     const [cards] = await Promise.all([drawCards(), playOpenPackAnimation()])
@@ -75,7 +80,7 @@ const OpenPack = React.forwardRef<IOpenPackHandle, any>((_props, ref) => {
       changeDrawCardsModalVisible(true)
       return cards
     }
-  }, [changeDrawCardsModalVisible, drawCards, playOpenPackAnimation])
+  }, [changeDrawCardsModalVisible, drawCards, playOpenPackAnimation, userInfo])
 
   useImperativeHandle(
     ref,
