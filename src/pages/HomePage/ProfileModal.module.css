@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+.overlay {
+    @apply fixed inset-0 z-50;
+}
+
+@supports (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply backdrop-blur-md;
+    }
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply bg-black/60;
+    }
+}
+
+.modalContent {
+    @apply max-w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none bg-gradient-to-br from-yellow-900 via-yellow-700 to-orange-700 border-4 border-yellow-800 rounded-2xl shadow-lg p-8;
+
+    .title {
+        @apply text-3xl font-bold text-yellow-200 mb-6 drop-shadow-sm;
+    }
+
+    .formContainer {
+        @apply flex flex-col gap-4;
+
+        .label {
+            @apply font-bold text-yellow-100;
+        }
+
+        .nicknameInput {
+            @apply border-2 border-yellow-700 rounded-lg px-3 py-2 w-full bg-yellow-100 text-yellow-900 focus:outline-none focus:border-orange-500 text-lg;
+        }
+
+        .avatarsContainer {
+            @apply grid grid-cols-4 gap-2 bg-yellow-200 p-2 rounded-lg border border-yellow-700;
+        }
+
+        .saveButton {
+            @apply mt-4 bg-orange-600 text-yellow-100 px-4 py-2 rounded-lg font-bold hover:bg-orange-700 transition text-xl;
+        }
+    }
+}
+
+
+.avatarContainer {
+    @apply rounded p-1 bg-white hover:border-orange-500 border-4 relative cursor-pointer shadow-md;
+
+    & > img {
+        @apply size-22 object-cover rounded-lg;
+    }
+}
+
+.avatarContainerSelected {
+    @apply border-4 border-orange-500 ring-4 ring-yellow-400 scale-105 z-10 shadow-xl;
+}
+
+.avatarContainerUnselected {
+    @apply border-gray-300 opacity-80;
+}

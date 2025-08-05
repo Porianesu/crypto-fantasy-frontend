@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
-import styles from './Profile.module.css'
+import styles from './ProfileModal.module.css'
 import { Content, Description, Dialog, DialogOverlay, Portal, Title } from '@radix-ui/react-dialog'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
@@ -23,15 +23,24 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
   const { updateUserInfo } = appStore
   const userInfo = appStore.userInfo!
   const appConfig = appStore.appConfig!
+  const [confirmButtonLoading, setConfirmButtonLoading] = useState(false)
 
-  const { control, handleSubmit } = useForm<FormValues>({
+  const { control, handleSubmit, setValue } = useForm<FormValues>({
     defaultValues: {
       nickname: userInfo.nickname,
       avatar: userInfo.avatar,
     },
   })
 
+  useEffect(() => {
+    if (open && userInfo) {
+      setValue('avatar', userInfo.avatar)
+      setValue('nickname', userInfo.nickname)
+    }
+  }, [open])
+
   const onValid: SubmitHandler<FormValues> = async (data) => {
+    setConfirmButtonLoading(true)
     const res = await API.patchUserInfo(data)
     if (res?.data?.user?.email === userInfo.email) {
       // 更新用户信息
@@ -39,6 +48,7 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
       toast.success('Profile updated successfully')
       onOpenChange(false)
     }
+    setConfirmButtonLoading(false)
   }
 
   const onSubmit = handleSubmit(onValid)
@@ -60,13 +70,22 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
               <Controller
                 name="nickname"
                 control={control}
-                rules={{ required: true, maxLength: 20, minLength: 2 }}
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    className={styles.nicknameInput}
-                    placeholder="Enter your nickname"
-                  />
+                rules={{
+                  required: { value: true, message: 'Nickname is required.' },
+                  maxLength: { value: 20, message: 'Nickname must be at most 20 characters.' },
+                  minLength: { value: 2, message: 'Nickname must be at least 2 characters.' },
+                }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <input
+                      {...field}
+                      className={styles.nicknameInput}
+                      placeholder="Enter your nickname"
+                    />
+                    {fieldState.error && (
+                      <span className="text-red-500 text-sm mt-1">{fieldState.error.message}</span>
+                    )}
+                  </>
                 )}
               />
               <label className={styles.label}>Avatar</label>
@@ -93,7 +112,13 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
                   </div>
                 )}
               />
-              <button type="submit" className={styles.saveButton}>
+              <button
+                type="submit"
+                className={classNames(styles.saveButton, {
+                  button: !confirmButtonLoading,
+                })}
+                disabled={confirmButtonLoading}
+              >
                 Save
               </button>
             </form>
