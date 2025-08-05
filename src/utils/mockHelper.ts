@@ -5,19 +5,6 @@ import { BigNumber } from 'bignumber.js'
 import type { UserInfo } from '@/stores/app-store.ts'
 import { CARD_RARITY } from '@/components/Card.tsx'
 
-export const fetchHomeLeaderboard = async () => {
-  const originalData = Array.from({ length: 20 }).map((_, i) => ({
-    name: generateFantasyEnglishName(),
-    score: Math.floor(Math.random() * 450),
-    avatar: getDefaultAvatar(i),
-  }))
-  return new Promise<Array<{ name: string; score: number; avatar: string }>>((resolve) => {
-    setTimeout(() => {
-      resolve(originalData)
-    }, 1000)
-  })
-}
-
 const getRandomFormation = (
   rules: {
     totalCrystal: number
@@ -165,7 +152,7 @@ export const fetchPrizePoolLeaderboard = async (pool: IPrizePool, userInfo: User
     Array<{
       name: string
       deckPower: number
-      avatar: string
+      avatar?: string
       rank: number
       prize: {
         sol: number
