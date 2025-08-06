@@ -168,7 +168,7 @@ function HomePage() {
                 <div className={styles.assetIcon2}></div>
               </div>
               <span className={styles.assetAmount}>{userInfo.faithAmount}</span>
-              <div className={styles.assetPlusButton} onClick={openRedeemCodeModal}></div>
+              <div className={styles.assetFaithPlusButton}></div>
             </div>
           </div>
         </div>

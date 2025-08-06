@@ -120,6 +120,10 @@
             @apply size-13 cursor-pointer active:scale-95 transition-transform;
             @apply bg-[url('/src/assets/images/home_page/asset_plus_button.png')] bg-contain bg-top-left bg-no-repeat;
         }
+
+        .assetFaithPlusButton {
+            @apply size-13;
+        }
     }
 }
 

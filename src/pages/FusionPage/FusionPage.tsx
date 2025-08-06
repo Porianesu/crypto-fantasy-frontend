@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { Suspense, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './FusionPage.module.css'
 import { useNavigate } from 'react-router-dom'
 import { getHomePath } from '@/navigation/routes.tsx'
@@ -10,8 +10,6 @@ import { gsap } from 'gsap'
 import PreloadElement, { type IPreloadElementHandle } from '@/components/PreloadElement.tsx'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
-
-const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
 
 enum FUSION_PAGE_TYPE {
   CRAFT = 'craft',
@@ -35,7 +33,6 @@ const FusionPage: React.FC = () => {
     preloadStore: { audioInstanceMap },
     appStore: { userInfo },
   } = useMobxStore()
-  const [redeemCodeModalVisible, setRedeemCodeModalVisible] = useState(false)
   const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const craftSound = audioInstanceMap.get(AudioInstanceId.CraftSound)
   const meltSound = audioInstanceMap.get(AudioInstanceId.MeltSound)
@@ -47,10 +44,6 @@ const FusionPage: React.FC = () => {
   const isAnimationRunning = useRef(false)
   const meltVideoRef = useRef<IPreloadElementHandle>(null)
   const craftVideoRef = useRef<IPreloadElementHandle>(null)
-
-  const openRedeemCodeModal = () => {
-    setRedeemCodeModalVisible(true)
-  }
 
   const handleBack = () => {
     navigate(getHomePath())
@@ -223,14 +216,12 @@ const FusionPage: React.FC = () => {
               <div className={styles.assetIcon1}></div>
             </div>
             <span className={styles.assetAmount}>{userInfo?.solAmount || 0}</span>
-            <div className={styles.assetPlusButton} onClick={openRedeemCodeModal}></div>
           </div>
           <div className={styles.assetContainer}>
             <div className={styles.assetIconContainer}>
               <div className={styles.assetIcon2}></div>
             </div>
             <span className={styles.assetAmount}>{userInfo?.faithAmount || 0}</span>
-            <div className={styles.assetPlusButton} onClick={openRedeemCodeModal}></div>
           </div>
         </div>
       </div>
@@ -253,12 +244,6 @@ const FusionPage: React.FC = () => {
           ) : null}
         </div>
       </div>
-      <Suspense fallback={null}>
-        <RedeemCodeModal
-          open={redeemCodeModalVisible}
-          onOpenChange={setRedeemCodeModalVisible}
-        ></RedeemCodeModal>
-      </Suspense>
     </div>
   )
 }

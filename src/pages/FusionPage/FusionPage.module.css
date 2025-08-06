@@ -52,11 +52,11 @@
     @apply flex items-center gap-x-2.5;
 
     .assetContainer {
-        @apply flex items-center justify-between w-67.5 h-16 pl-7 pr-2.5;
+        @apply flex items-center justify-center w-67.5 h-16 pl-7 pr-2.5 relative;
         @apply bg-[url('/src/assets/images/home_page/asset_background.png')] bg-contain bg-top-left bg-no-repeat;
 
         .assetIconContainer {
-            @apply size-11 flex items-center justify-center;
+            @apply absolute left-7 size-11 flex items-center justify-center;
 
             .assetIcon1 {
                 @apply size-11;
@@ -72,11 +72,6 @@
 
         .assetAmount {
             @apply text-white font-black text-3xl italic;
-        }
-
-        .assetPlusButton {
-            @apply size-13 cursor-pointer active:scale-95 transition-transform;
-            @apply bg-[url('/src/assets/images/home_page/asset_plus_button.png')] bg-contain bg-top-left bg-no-repeat;
         }
     }
 }
