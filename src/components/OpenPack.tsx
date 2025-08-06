@@ -68,7 +68,7 @@ const OpenPack = React.forwardRef<IOpenPackHandle, any>((_props, ref) => {
   }, [bgmSound, drawCardSound])
 
   const handleOpenPack = useCallback(async () => {
-    if (!userInfo || userInfo.solAmount < 0.1) {
+    if (!userInfo || userInfo.solAmount < 1) {
       toast.warn('Insufficient Balance!')
       return
     }

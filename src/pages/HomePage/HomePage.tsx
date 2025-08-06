@@ -128,8 +128,7 @@ function HomePage() {
           })}
           onClick={handleOpenPack}
         >
-          Open Pack 0.1
-          <div></div>
+          Open Pack 1<div></div>
         </button>
       </div>
       {userInfo ? (
