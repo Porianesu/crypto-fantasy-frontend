@@ -11,7 +11,7 @@
         }
 
         .formationSquareBackgroundSpin {
-            @apply animate-[spin_5s_linear_infinite];
+            @apply animate-[spin_8.4s_linear_infinite];
         }
 
         .formationCard {
