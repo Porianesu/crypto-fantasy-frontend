@@ -85,12 +85,6 @@ const CardsBagContent: React.FC = observer(() => {
       <div className={styles.contentBody}>
         <div className={styles.sidebar}>
           <button className={classNames(styles.sidebarBtn, styles.active)}>Cards</button>
-          <button className={styles.sidebarBtn} disabled>
-            Item
-          </button>
-          <button className={styles.sidebarBtn} disabled>
-            Materials
-          </button>
         </div>
         <div className={styles.mainContent}>
           <div className={styles.cardsHeader}>
