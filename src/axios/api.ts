@@ -151,6 +151,7 @@ const API = {
   ) => request.post<ISetDeckResponse>('/set-deck', { deckCards }, { signal }),
   deckLeaderboard: async () => request.get<IDeckLeaderboardResponse>('/deck-leaderboard'),
   redeemCode: async (code: string) => request.post<IRedeemCodeResponse>('/redeem-code', { code }),
+  getShopItems: async () => request.get('/shop-items'),
 }
 
 export default API

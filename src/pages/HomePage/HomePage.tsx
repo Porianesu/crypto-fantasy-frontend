@@ -24,6 +24,7 @@ const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
 const ProfileModal = React.lazy(() => import('@/pages/HomePage/ProfileModal.tsx'))
+const ShopModal = React.lazy(() => import('@/pages/HomePage/ShopModal.tsx'))
 
 function HomePage() {
   const {
@@ -38,6 +39,7 @@ function HomePage() {
   const selectedCards = useMemo(() => cardsFormation.map((card) => card.id), [cardsFormation])
   const [redeemCodeModalVisible, setRedeemCodeModalVisible] = useState(false)
   const [profileModalVisible, setProfileModalVisible] = useState(false)
+  const [shopModalVisible, setShopModalVisible] = useState(false)
 
   const handleCardSelect = (card: ICardDataInBag) => {
     const findIndex = cardsFormation.findIndex((c) => c.id === card.id)
@@ -105,7 +107,7 @@ function HomePage() {
       key: 'shop',
       icon: shopIcon,
       className: 'w-43 h-44',
-      onClick: comingSoon,
+      onClick: () => setShopModalVisible(true),
     },
   ]
 
@@ -239,6 +241,9 @@ function HomePage() {
           ></ProfileModal>
         </Suspense>
       ) : null}
+      <Suspense>
+        <ShopModal open={shopModalVisible} onOpenChange={setShopModalVisible}></ShopModal>
+      </Suspense>
     </div>
   )
 }
