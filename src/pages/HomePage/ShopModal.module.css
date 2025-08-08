@@ -19,3 +19,15 @@
 .modalContent {
     @apply max-w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none;
 }
+
+.contentContainer {
+    @apply grid grid-cols-5 gap-x-4 gap-y-2;
+
+    .itemContainer {
+        @apply flex flex-col items-center gap-x-2;
+
+        .itemImage {
+            @apply size-22 rounded-lg border-2 border-[#e0c97a] shadow-lg bg-cover bg-center;
+        }
+    }
+}

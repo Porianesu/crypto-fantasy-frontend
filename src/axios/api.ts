@@ -96,6 +96,28 @@ export interface IPatchUserInfoResponse {
   user: UserInfo
 }
 
+export interface ShopItem {
+  id: number
+  key: string
+  name: string
+  price: number
+  rewardSol: number
+  rewardFaith: number
+  rewardMeltTimes: number
+  dailyLimit: number
+  image: string
+  todayPurchased: number // 今日已购买数量
+}
+
+export interface IGetShopItemsResponse {
+  items: Array<ShopItem>
+}
+
+export interface IBuyShopItemResponse {
+  success: boolean
+  user: UserInfo
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: { email: string; password: string }) =>
@@ -151,7 +173,9 @@ const API = {
   ) => request.post<ISetDeckResponse>('/set-deck', { deckCards }, { signal }),
   deckLeaderboard: async () => request.get<IDeckLeaderboardResponse>('/deck-leaderboard'),
   redeemCode: async (code: string) => request.post<IRedeemCodeResponse>('/redeem-code', { code }),
-  getShopItems: async () => request.get('/shop-items'),
+  getShopItems: async () => request.get<IGetShopItemsResponse>('/shop-items'),
+  buyShopItem: async (shopItemId: number) =>
+    request.post<IBuyShopItemResponse>('/shop-items', { shopItemId }),
 }
 
 export default API
