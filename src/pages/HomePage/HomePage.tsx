@@ -240,7 +240,7 @@ function HomePage() {
             open={profileModalVisible}
             onOpenChange={setProfileModalVisible}
           ></ProfileModal>
-      ) : null}
+        ) : null}
       </Suspense>
       <Suspense>
         <ShopModal open={shopModalVisible} onOpenChange={setShopModalVisible}></ShopModal>
