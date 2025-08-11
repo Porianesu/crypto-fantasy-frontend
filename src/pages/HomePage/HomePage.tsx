@@ -234,14 +234,14 @@ function HomePage() {
           onOpenChange={setRedeemCodeModalVisible}
         ></RedeemCodeModal>
       </Suspense>
-      {userInfo && appConfig ? (
-        <Suspense fallback={null}>
+      <Suspense fallback={null}>
+        {userInfo && appConfig ? (
           <ProfileModal
             open={profileModalVisible}
             onOpenChange={setProfileModalVisible}
           ></ProfileModal>
-        </Suspense>
       ) : null}
+      </Suspense>
       <Suspense>
         <ShopModal open={shopModalVisible} onOpenChange={setShopModalVisible}></ShopModal>
       </Suspense>
