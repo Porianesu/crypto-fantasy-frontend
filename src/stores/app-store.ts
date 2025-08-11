@@ -45,6 +45,7 @@ export interface UserInfo extends UserStorageInfo {
     userCardId: number
   }>
   deckPower: number
+  newbieRewardClaimed: boolean
 }
 
 export interface ICardDataInBag extends ICardData {

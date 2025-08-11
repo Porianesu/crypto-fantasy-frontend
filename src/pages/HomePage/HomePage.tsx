@@ -68,48 +68,52 @@ function HomePage() {
   }
 
   // footer按钮配置
-  const footerButtons = [
-    {
-      key: 'fusion',
-      icon: fusionIcon,
-      className: 'w-43 h-44',
-      onClick: () => navigate(getFusionPath()),
-    },
-    {
-      key: 'gallery',
-      icon: galleryIcon,
-      className: 'w-43 h-44',
-      onClick: () => navigate(getGalleryPath()),
-    },
-    {
-      key: 'bag',
-      icon: bagIcon,
-      className: 'w-43.5 h-43.5',
-      onClick: () =>
-        changeCardsBagModalData({
-          visible: true,
-          type: ICardsBagModalType.VIEW,
-        }),
-    },
-    {
-      key: 'battle',
-      icon: battleIcon,
-      className: 'w-43 h-41',
-      onClick: () => changeBattleModalVisible(true),
-    },
-    {
-      key: 'reward',
-      icon: rewardIcon,
-      className: 'w-44 h-41',
-      onClick: comingSoon,
-    },
-    {
-      key: 'shop',
-      icon: shopIcon,
-      className: 'w-43 h-44',
-      onClick: () => setShopModalVisible(true),
-    },
-  ]
+  const footerButtons = useMemo(
+    () => [
+      {
+        key: 'fusion',
+        icon: fusionIcon,
+        className: 'w-43 h-44',
+        onClick: () => navigate(getFusionPath()),
+      },
+      {
+        key: 'gallery',
+        icon: galleryIcon,
+        className: 'w-43 h-44',
+        onClick: () => navigate(getGalleryPath()),
+      },
+      {
+        key: 'bag',
+        icon: bagIcon,
+        className: 'w-43.5 h-43.5',
+        onClick: () =>
+          changeCardsBagModalData({
+            visible: true,
+            type: ICardsBagModalType.VIEW,
+          }),
+      },
+      {
+        key: 'battle',
+        icon: battleIcon,
+        className: 'w-43 h-41',
+        onClick: () => changeBattleModalVisible(true),
+      },
+      {
+        key: 'reward',
+        icon: rewardIcon,
+        className: 'w-44 h-41',
+        onClick: comingSoon,
+        redDot: userInfo?.newbieRewardClaimed === false,
+      },
+      {
+        key: 'shop',
+        icon: shopIcon,
+        className: 'w-43 h-44',
+        onClick: () => setShopModalVisible(true),
+      },
+    ],
+    [changeBattleModalVisible, changeCardsBagModalData, navigate, userInfo?.newbieRewardClaimed],
+  )
 
   const openRedeemCodeModal = () => {
     setRedeemCodeModalVisible(true)
@@ -118,6 +122,19 @@ function HomePage() {
   const openProfileModal = () => {
     setProfileModalVisible(true)
   }
+
+  const renderFooterButton = (btn: (typeof footerButtons)[number]) => (
+    <div
+      key={btn.key}
+      className={classNames(styles.footerBtn, btn.className)}
+      style={{
+        backgroundImage: `url(${btn.icon})`,
+      }}
+      onClick={btn.onClick}
+    >
+      {btn.redDot ? <div className={styles.footerRedDot}></div> : null}
+    </div>
+  )
 
   return (
     <div className={styles.pageContainer} ref={pageContainerRef}>
@@ -186,28 +203,10 @@ function HomePage() {
       </div>
       <div className={styles.footer}>
         <div className={styles.footerBtnGroup}>
-          {footerButtons.slice(0, 3).map((btn) => (
-            <div
-              key={btn.key}
-              className={classNames(styles.footerBtn, btn.className)}
-              style={{
-                backgroundImage: `url(${btn.icon})`,
-              }}
-              onClick={btn.onClick}
-            ></div>
-          ))}
+          {footerButtons.slice(0, 3).map(renderFooterButton)}
         </div>
         <div className={styles.footerBtnGroup}>
-          {footerButtons.slice(3).map((btn) => (
-            <div
-              key={btn.key}
-              className={classNames(styles.footerBtn, btn.className)}
-              style={{
-                backgroundImage: `url(${btn.icon})`,
-              }}
-              onClick={btn.onClick}
-            ></div>
-          ))}
+          {footerButtons.slice(3).map(renderFooterButton)}
         </div>
       </div>
       <Suspense fallback={null}>

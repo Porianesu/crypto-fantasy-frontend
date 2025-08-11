@@ -147,8 +147,12 @@
     }
 
     .footerBtn {
-        @apply hover:scale-105 cursor-pointer active:scale-95 transition-transform;
+        @apply hover:scale-105 cursor-pointer active:scale-95 transition-transform relative;
         @apply bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .footerRedDot {
+        @apply absolute top-4 right-4 size-5 rounded-full bg-red-500 border-2 border-white;
     }
 }
 
