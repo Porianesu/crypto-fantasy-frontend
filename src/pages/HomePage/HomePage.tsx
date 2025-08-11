@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/HomePage/Leaderboard.tsx'
-import React, { Suspense, useCallback, useMemo, useRef, useState } from 'react'
+import React, { Suspense, useMemo, useRef, useState } from 'react'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
@@ -17,7 +17,6 @@ import rewardIcon from '../../../src/assets/images/home_page/footer_button_rewar
 import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.png'
 import { type IOpenPackHandle } from '@/components/OpenPack.tsx'
 import type { ICardDataInBag } from '@/stores/app-store.ts'
-import API from '@/axios/api.ts'
 
 const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
@@ -26,10 +25,11 @@ const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.ts
 const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
 const ProfileModal = React.lazy(() => import('@/pages/HomePage/ProfileModal.tsx'))
 const ShopModal = React.lazy(() => import('@/pages/HomePage/ShopModal.tsx'))
+const RewardModal = React.lazy(() => import('@/pages/HomePage/RewardModal.tsx'))
 
 function HomePage() {
   const {
-    appStore: { userInfo, appConfig, cardsFormation, changeCardsFormation, updateUserInfo },
+    appStore: { userInfo, appConfig, cardsFormation, changeCardsFormation },
     modalStore: { changeCardsBagModalData, changeBattleModalVisible },
   } = useMobxStore()
   const navigate = useNavigate()
@@ -41,6 +41,7 @@ function HomePage() {
   const [redeemCodeModalVisible, setRedeemCodeModalVisible] = useState(false)
   const [profileModalVisible, setProfileModalVisible] = useState(false)
   const [shopModalVisible, setShopModalVisible] = useState(false)
+  const [rewardModalVisible, setRewardModalVisible] = useState(false)
 
   const handleCardSelect = (card: ICardDataInBag) => {
     const findIndex = cardsFormation.findIndex((c) => c.id === card.id)
@@ -67,17 +68,6 @@ function HomePage() {
     }
     setOpenPackLoading(false)
   }
-
-  const handleNewbieRewardClaim = useCallback(async () => {
-    if (!userInfo) return
-    const result = await API.claimNewbieReward()
-    if (result?.data?.success && result.data.user) {
-      updateUserInfo({
-        ...userInfo,
-        ...result.data.user,
-      })
-    }
-  }, [updateUserInfo, userInfo])
 
   // footer按钮配置
   const footerButtons = useMemo(
@@ -114,7 +104,7 @@ function HomePage() {
         key: 'reward',
         icon: rewardIcon,
         className: 'w-44 h-41',
-        onClick: handleNewbieRewardClaim,
+        onClick: () => setRewardModalVisible(true),
         redDot: userInfo?.newbieRewardClaimed === false,
       },
       {
@@ -124,13 +114,7 @@ function HomePage() {
         onClick: () => setShopModalVisible(true),
       },
     ],
-    [
-      changeBattleModalVisible,
-      changeCardsBagModalData,
-      handleNewbieRewardClaim,
-      navigate,
-      userInfo?.newbieRewardClaimed,
-    ],
+    [changeBattleModalVisible, changeCardsBagModalData, navigate, userInfo?.newbieRewardClaimed],
   )
 
   const openRedeemCodeModal = () => {
@@ -260,6 +244,9 @@ function HomePage() {
       ) : null}
       <Suspense>
         <ShopModal open={shopModalVisible} onOpenChange={setShopModalVisible}></ShopModal>
+      </Suspense>
+      <Suspense fallback={null}>
+        <RewardModal open={rewardModalVisible} onOpenChange={setRewardModalVisible}></RewardModal>
       </Suspense>
     </div>
   )
