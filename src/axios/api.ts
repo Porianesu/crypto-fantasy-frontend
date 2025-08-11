@@ -118,6 +118,15 @@ export interface IBuyShopItemResponse {
   user: UserInfo
 }
 
+export interface IClaimNewbieRewardResponse {
+  success: boolean
+  user: {
+    solAmount: number
+    faithAmount: number
+    newbieRewardClaimed: boolean
+  }
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: { email: string; password: string }) =>
@@ -176,6 +185,7 @@ const API = {
   getShopItems: async () => request.get<IGetShopItemsResponse>('/shop-items'),
   buyShopItem: async (shopItemId: number) =>
     request.post<IBuyShopItemResponse>('/shop-items', { shopItemId }),
+  claimNewbieReward: async () => request.post<IClaimNewbieRewardResponse>('/reward/claim-newbie'),
 }
 
 export default API
