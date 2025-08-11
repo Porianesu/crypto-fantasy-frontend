@@ -127,6 +127,25 @@ export interface IClaimNewbieRewardResponse {
   }
 }
 
+export interface SignInStatus {
+  date: string
+  reward: { sol: number; faith: number }
+  signed: boolean
+}
+
+export interface IGetSignInStatusResponse {
+  signInStatus: Array<SignInStatus>
+}
+
+export interface ISignInResponse {
+  signDate: string
+  success: boolean
+  reward: {
+    solAmount: number
+    faithAmount: number
+  }
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: { email: string; password: string }) =>
@@ -186,6 +205,8 @@ const API = {
   buyShopItem: async (shopItemId: number) =>
     request.post<IBuyShopItemResponse>('/shop-items', { shopItemId }),
   claimNewbieReward: async () => request.post<IClaimNewbieRewardResponse>('/reward/claim-newbie'),
+  getSignInStatus: async () => request.get<IGetSignInStatusResponse>('/reward/sign-in'),
+  signIn: async () => request.post<ISignInResponse>('/reward/sign-in'),
 }
 
 export default API
