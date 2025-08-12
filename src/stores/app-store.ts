@@ -94,7 +94,8 @@ export default class StoresStore {
       _cardsBag: observable,
       cardsBag: computed,
       formattedCardsBag: computed,
-      initNetwork: flow.bound,
+      initNetworkBeforeLogin: flow.bound,
+      initNetworkAfterLogin: flow.bound,
       initData: action,
       drawCards: flow.bound,
       craftCard: flow.bound,
@@ -210,6 +211,7 @@ export default class StoresStore {
       this.updateUserInfo(result.data.user)
       yield this.updateUserCardsBag()
       const checkResult = checkHasAlreadyReadGuide()
+      this.initNetworkAfterLogin()
       if (checkResult) {
         return getHomePath()
       } else {
@@ -229,7 +231,7 @@ export default class StoresStore {
     }
   }
 
-  *initNetwork() {
+  *initNetworkBeforeLogin() {
     try {
       yield myQueryClient.prefetchQuery({
         queryKey: [CARD_DATA_BASE_REQUEST_KEY],
@@ -239,10 +241,16 @@ export default class StoresStore {
       this.rootStoreRef.preloadStore.updatePreloadResult({
         networkPreloadProgress: 1,
       })
-      // Not necessary to wait for this to complete
-      this.rootStoreRef.rewardStore.initData()
+      this.initNetworkAfterLogin()
     } catch (e) {
       console.log('Error initializing network:', e)
+    }
+  }
+
+  *initNetworkAfterLogin() {
+    if (getAccessToken()) {
+      // Not necessary to wait for this to complete
+      yield this.rootStoreRef.rewardStore.initData()
     }
   }
 
@@ -250,7 +258,7 @@ export default class StoresStore {
     if (!this.isAppLoading) return
     this.isAppLoading = true
     try {
-      this.initNetwork()
+      this.initNetworkBeforeLogin()
       preloadPages().then(() => {
         this.rootStoreRef.preloadStore.updatePreloadResult({
           pagesPreloadProgress: 1,
