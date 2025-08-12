@@ -236,7 +236,9 @@ export default class StoresStore {
         queryFn: () => API.fetchCardsPage(1, 200),
       })
       yield Promise.all([this.getAppConfig(), this.loginWithAccessToken()])
-      this.rootStoreRef.preloadStore.preloadResult.networkPreloadProgress = 1
+      this.rootStoreRef.preloadStore.updatePreloadResult({
+        networkPreloadProgress: 1,
+      })
       // Not necessary to wait for this to complete
       this.rootStoreRef.rewardStore.initData()
     } catch (e) {
@@ -250,7 +252,9 @@ export default class StoresStore {
     try {
       this.initNetwork()
       preloadPages().then(() => {
-        this.rootStoreRef.preloadStore.preloadResult.pagesPreloadProgress = 1
+        this.rootStoreRef.preloadStore.updatePreloadResult({
+          pagesPreloadProgress: 1,
+        })
       })
       this.rootStoreRef.preloadStore.loadCreateJS().then(() => {
         this.rootStoreRef.preloadStore.preloadAssets()

@@ -26,7 +26,9 @@ export default class RewardStore {
     })
   }
 
-  resetStore = () => {};
+  resetStore = () => {
+    this.signInStatus = []
+  };
 
   *initData() {
     yield Promise.all([this.initSignInStatus()])

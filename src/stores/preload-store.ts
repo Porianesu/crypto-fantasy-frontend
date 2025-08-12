@@ -37,6 +37,7 @@ export default class PreloadStore {
       rootStoreRef: observable,
       resetStore: action,
       preloadResult: observable,
+      updatePreloadResult: action,
       preloadProgress: computed,
       handlePreloadProgress: action,
     })
@@ -51,6 +52,13 @@ export default class PreloadStore {
     }
   }
 
+  updatePreloadResult = (params: Partial<typeof this.preloadResult>) => {
+    this.preloadResult = {
+      ...this.preloadResult,
+      ...params,
+    }
+  }
+
   get preloadProgress() {
     return new BigNumber(this.preloadResult.assetPreloadProgress)
       .plus(this.preloadResult.pagesPreloadProgress)
@@ -61,7 +69,9 @@ export default class PreloadStore {
   }
 
   handlePreloadProgress = (event: object) => {
-    this.preloadResult.assetPreloadProgress = (event as unknown as PreloadProgressEvent).progress
+    this.updatePreloadResult({
+      assetPreloadProgress: (event as unknown as PreloadProgressEvent).progress,
+    })
   }
 
   loadCreateJS = (): Promise<void> => {
