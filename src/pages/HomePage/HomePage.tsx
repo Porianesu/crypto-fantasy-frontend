@@ -31,6 +31,7 @@ function HomePage() {
   const {
     appStore: { userInfo, appConfig, cardsFormation, changeCardsFormation },
     modalStore: { changeCardsBagModalData, changeBattleModalVisible },
+    rewardStore: { showRedDot },
   } = useMobxStore()
   const navigate = useNavigate()
   const pageContainerRef = useRef<HTMLDivElement>(null)
@@ -105,7 +106,7 @@ function HomePage() {
         icon: rewardIcon,
         className: 'w-44 h-41',
         onClick: () => setRewardModalVisible(true),
-        redDot: userInfo?.newbieRewardClaimed === false,
+        redDot: showRedDot,
       },
       {
         key: 'shop',
@@ -114,7 +115,7 @@ function HomePage() {
         onClick: () => setShopModalVisible(true),
       },
     ],
-    [changeBattleModalVisible, changeCardsBagModalData, navigate, userInfo?.newbieRewardClaimed],
+    [changeBattleModalVisible, changeCardsBagModalData, navigate, showRedDot],
   )
 
   const openRedeemCodeModal = () => {

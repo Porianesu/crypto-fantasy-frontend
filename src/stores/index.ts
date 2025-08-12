@@ -4,6 +4,7 @@ import AppStore from './app-store.ts'
 import ModalStore from '@/stores/modal-store.ts'
 import PreloadStore from '@/stores/preload-store.ts'
 import SystemStore from '@/stores/system-store.ts'
+import RewardStore from '@/stores/reward-store.ts'
 
 enableStaticRendering(typeof window === 'undefined')
 
@@ -18,17 +19,21 @@ export class Store {
 
   modalStore: ModalStore
 
+  rewardStore: RewardStore
+
   constructor() {
     this.systemStore = new SystemStore(this)
     this.appStore = new AppStore(this)
     this.modalStore = new ModalStore(this)
     this.preloadStore = new PreloadStore(this)
+    this.rewardStore = new RewardStore(this)
     makeObservable(this, {
       hydrate: action,
       systemStore: observable,
       appStore: observable,
       modalStore: observable,
       preloadStore: observable,
+      rewardStore: observable,
     })
   }
 
@@ -47,5 +52,6 @@ export class Store {
     this.appStore.resetStore()
     this.preloadStore.resetStore()
     this.modalStore.resetStore()
+    this.rewardStore.resetStore()
   }
 }

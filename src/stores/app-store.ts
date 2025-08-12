@@ -237,6 +237,8 @@ export default class StoresStore {
       })
       yield Promise.all([this.getAppConfig(), this.loginWithAccessToken()])
       this.rootStoreRef.preloadStore.preloadResult.networkPreloadProgress = 1
+      // Not necessary to wait for this to complete
+      this.rootStoreRef.rewardStore.initData()
     } catch (e) {
       console.log('Error initializing network:', e)
     }
