@@ -129,7 +129,7 @@ export interface IClaimNewbieRewardResponse {
 
 export interface SignInStatus {
   date: string
-  reward: { sol: number; faith: number }
+  reward: { solAmount: number; faithAmount: number }
   signed: boolean
 }
 
