@@ -26,6 +26,7 @@ const ShopPage: React.FC = () => {
   const navigate = useNavigate()
   const {
     appStore: { userInfo },
+    rewardStore: { buyItem },
   } = useMobxStore()
   const { data, isLoading } = useQuery({
     queryKey: ['shopItems'],
@@ -56,6 +57,18 @@ const ShopPage: React.FC = () => {
 
   const handleBack = () => {
     navigate(getHomePath())
+  }
+
+  const handleBuyItem = async (item: ShopItem) => {
+    const result = await buyItem(item)
+    if (result === 'success') {
+      // 更新今日已购买数量
+      setShopItems((prevItems) =>
+        prevItems.map((i) =>
+          i.id === item.id ? { ...i, todayPurchased: i.todayPurchased + 1 } : i,
+        ),
+      )
+    }
   }
 
   const renderDailyGiftItem = (item: ShopItem) => {
@@ -113,7 +126,11 @@ const ShopPage: React.FC = () => {
         <button
           className={classNames(styles.claimButton, {
             button: isItemClaimable,
+            [styles.claimButtonAvailable]: isItemClaimable,
+            [styles.claimButtonDisabled]: !isItemClaimable,
           })}
+          disabled={!isItemClaimable}
+          onClick={() => handleBuyItem(item)}
         >
           {isItemClaimable ? 'Get it now' : 'Claimed'}
         </button>

@@ -91,8 +91,12 @@
         @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
 
         .claimButton {
-            @apply h-22 text-[#E2BD7E] text-3xl leading-10 font-normal;
+            @apply h-22  text-3xl leading-10 font-normal;
             @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        }
+
+        .claimButtonAvailable {
+            @apply text-[#E2BD7E];
         }
 
         .rewardContainer {
@@ -108,6 +112,10 @@
             @apply bg-[url(/src/assets/images/shop_page/daily_gift_coin_button_background.png)];
         }
 
+        .claimButtonDisabled {
+            @apply text-[#45445A];
+        }
+
         .rewardContainer {
             @apply bg-[url(/src/assets/images/shop_page/daily_gift_coin_reward_background.png)];
         }
@@ -118,6 +126,10 @@
 
         .claimButton {
             @apply bg-[url(/src/assets/images/shop_page/daily_gift_item_button_background.png)];
+        }
+
+        .claimButtonDisabled {
+            @apply text-[#664927];
         }
 
         .rewardContainer {

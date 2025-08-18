@@ -1,17 +1,22 @@
 import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import API, {
+  type IBuyShopItemResponse,
   type IGetSignInStatusResponse,
   type ISignInResponse,
+  type ShopItem,
   type SignInStatus,
 } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 import dayjs from 'dayjs'
+import { type Id, toast } from 'react-toastify'
 
 export default class RewardStore {
   rootStoreRef: Store
 
   signInStatus: Array<SignInStatus> = []
+
+  buyItemTimer: ReturnType<typeof setTimeout> | null = null
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
@@ -23,11 +28,13 @@ export default class RewardStore {
       initSignInStatus: flow.bound,
       signIn: flow.bound,
       showRedDot: computed,
+      buyItem: action,
     })
   }
 
   resetStore = () => {
     this.signInStatus = []
+    this.buyItemTimer = null
   };
 
   *initData() {
@@ -74,6 +81,29 @@ export default class RewardStore {
     return this.signInStatus.some((status) => {
       const targetDate = dayjs(status.date)
       return today.isSame(targetDate, 'day') && !status.signed
+    })
+  }
+
+  buyItem = (item: ShopItem): undefined | Id | Promise<'success' | void> => {
+    if (!this.rootStoreRef.appStore.userInfo) return
+    if (this.rootStoreRef.appStore.userInfo.solAmount < item.price) {
+      return toast.error('Insufficient balance to buy this item.')
+    }
+    if (item.dailyLimit > 0 && item.todayPurchased >= item.dailyLimit) {
+      return toast.error('You have reached the daily purchase limit for this item.')
+    }
+    if (this.buyItemTimer) clearTimeout(this.buyItemTimer)
+    return new Promise((resolve) => {
+      this.buyItemTimer = setTimeout(async () => {
+        const result: AxiosResponse<IBuyShopItemResponse> = await API.buyShopItem(item.id)
+        if (result?.data?.user?.email === this.rootStoreRef.appStore.userInfo!.email) {
+          this.rootStoreRef.appStore.updateUserInfo(result.data.user)
+          toast.success(`Successfully purchased ${item.name}!`)
+          resolve('success')
+        } else {
+          resolve()
+        }
+      }, 500)
     })
   }
 }
