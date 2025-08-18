@@ -69,20 +69,6 @@ interface IShopModalProps {
 }
 
 const ShopModal: React.FC<IShopModalProps> = ({ open, onOpenChange }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: ['shopItems'],
-    queryFn: API.getShopItems,
-    refetchInterval: 5 * 60 * 1000, // 每5分钟刷新一次
-    refetchOnWindowFocus: false,
-  })
-
-  const [shopItems, setShopItems] = useState<Array<ShopItem>>([])
-
-  useEffect(() => {
-    if (!isLoading && data?.data?.items && Array.isArray(data.data.items)) {
-      setShopItems(data.data.items)
-    }
-  }, [data?.data?.items, isLoading])
 
   return shopItems.length ? (
     <Dialog open={open} onOpenChange={onOpenChange}>

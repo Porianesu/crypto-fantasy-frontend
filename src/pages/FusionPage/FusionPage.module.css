@@ -49,7 +49,7 @@
 
 
 .headerRight {
-    @apply flex items-center gap-x-2.5;
+    @apply flex items-center gap-x-2.5 font-[FFDin];
 
     .assetContainer {
         @apply flex items-center justify-center w-67.5 h-16 pl-7 pr-2.5 relative;

@@ -16,6 +16,7 @@ export type FusionPathState = {
   card?: ICardData
 } | null
 export const FUSION_PATH = '/fusion'
+export const SHOP_PATH = '/shop'
 
 export const getHomePath = () => {
   return generatePath(HOME_PATH)
@@ -39,6 +40,10 @@ export const getTournamentPath = () => {
 
 export const getFusionPath = () => {
   return generatePath(FUSION_PATH)
+}
+
+export const getShopPath = () => {
+  return generatePath(SHOP_PATH)
 }
 
 const checkIsAppLoading = () => {
@@ -74,6 +79,13 @@ export const tournamentPageLoader = () => {
 }
 
 export const fusionPageLoader = () => {
+  if (checkIsAppLoading()) {
+    return redirect(getEntrancePath())
+  }
+  return null
+}
+
+export const shopPageLoader = () => {
   if (checkIsAppLoading()) {
     return redirect(getEntrancePath())
   }

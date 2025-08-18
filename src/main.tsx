@@ -15,6 +15,8 @@ import {
   tournamentPageLoader,
   FUSION_PATH,
   fusionPageLoader,
+  SHOP_PATH,
+  shopPageLoader,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
@@ -29,6 +31,7 @@ const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx
 const IntroductionPage = React.lazy(() => import('@/pages/IntroductionPage/IntroductionPage.tsx'))
 const TournamentPage = React.lazy(() => import('@/pages/TournamentPage/TournamentPage.tsx'))
 const FusionPage = React.lazy(() => import('@/pages/FusionPage/FusionPage.tsx'))
+const ShopPage = React.lazy(() => import('@/pages/ShopPage/ShopPage.tsx'))
 
 const CommonPageSuspense: React.FC<PropsWithChildren> = ({ children }) => {
   return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
@@ -94,6 +97,15 @@ export const router = createBrowserRouter([
         element: (
           <CommonPageSuspense>
             <FusionPage></FusionPage>
+          </CommonPageSuspense>
+        ),
+      },
+      {
+        path: SHOP_PATH,
+        loader: shopPageLoader,
+        element: (
+          <CommonPageSuspense>
+            <ShopPage></ShopPage>
           </CommonPageSuspense>
         ),
       },

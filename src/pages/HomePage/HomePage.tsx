@@ -6,7 +6,7 @@ import React, { Suspense, useMemo, useRef, useState } from 'react'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
-import { getFusionPath, getGalleryPath } from '@/navigation/routes.tsx'
+import { getFusionPath, getGalleryPath, getShopPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import fusionIcon from '../../..../../../src/assets/images/home_page/footer_button_fusion.png'
@@ -24,7 +24,6 @@ const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
 const ProfileModal = React.lazy(() => import('@/pages/HomePage/ProfileModal.tsx'))
-const ShopModal = React.lazy(() => import('@/pages/HomePage/ShopModal.tsx'))
 const RewardModal = React.lazy(() => import('@/pages/HomePage/RewardModal.tsx'))
 
 function HomePage() {
@@ -41,7 +40,6 @@ function HomePage() {
   const selectedCards = useMemo(() => cardsFormation.map((card) => card.id), [cardsFormation])
   const [redeemCodeModalVisible, setRedeemCodeModalVisible] = useState(false)
   const [profileModalVisible, setProfileModalVisible] = useState(false)
-  const [shopModalVisible, setShopModalVisible] = useState(false)
   const [rewardModalVisible, setRewardModalVisible] = useState(false)
 
   const handleCardSelect = (card: ICardDataInBag) => {
@@ -112,7 +110,7 @@ function HomePage() {
         key: 'shop',
         icon: shopIcon,
         className: 'w-43 h-44',
-        onClick: () => setShopModalVisible(true),
+        onClick: () => navigate(getShopPath()),
       },
     ],
     [changeBattleModalVisible, changeCardsBagModalData, navigate, showRedDot],
@@ -242,9 +240,6 @@ function HomePage() {
             onOpenChange={setProfileModalVisible}
           ></ProfileModal>
         ) : null}
-      </Suspense>
-      <Suspense>
-        <ShopModal open={shopModalVisible} onOpenChange={setShopModalVisible}></ShopModal>
       </Suspense>
       <Suspense fallback={null}>
         <RewardModal open={rewardModalVisible} onOpenChange={setRewardModalVisible}></RewardModal>
