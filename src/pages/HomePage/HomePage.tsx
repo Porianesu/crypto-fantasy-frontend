@@ -103,7 +103,7 @@ function HomePage() {
         key: 'reward',
         icon: rewardIcon,
         className: 'w-44 h-41',
-        onClick: () => setRewardModalVisible(true),
+        onClick: comingSoon,
         redDot: showRedDot,
       },
       {
