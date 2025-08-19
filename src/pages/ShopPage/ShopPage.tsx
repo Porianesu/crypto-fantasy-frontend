@@ -8,6 +8,7 @@ import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { useQuery } from '@tanstack/react-query'
 import API, { type ShopItem } from '@/axios/api.ts'
 import { GiftIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import { BigNumber } from 'bignumber.js'
 
 const Tabs = [
   {
@@ -51,7 +52,11 @@ const ShopPage: React.FC = () => {
 
   useEffect(() => {
     if (!isLoading && data?.data?.items && Array.isArray(data.data.items)) {
-      setShopItems(data.data.items)
+      setShopItems(
+        data.data.items.sort((a, b) => {
+          return a.price - b.price
+        }),
+      )
     }
   }, [data?.data?.items, isLoading])
 
@@ -104,7 +109,7 @@ const ShopPage: React.FC = () => {
         <div className={styles.dailyGiftDescriptionContainer}>Claim the gift for free!</div>
         <div className={styles.rewardsContainer}>
           {rewardArray.map((reward) => (
-            <div className={styles.rewardContainer}>
+            <div className={styles.rewardContainer} key={reward.type}>
               <div
                 className={classNames(styles.rewardImageContainer, {
                   [styles.rewardImageContainerYellow]: reward.type === 'sol',
@@ -133,6 +138,42 @@ const ShopPage: React.FC = () => {
           onClick={() => handleBuyItem(item)}
         >
           {isItemClaimable ? 'Get it now' : 'Claimed'}
+        </button>
+      </div>
+    )
+  }
+
+  const renderRechargeItem = (item: ShopItem, index: number) => {
+    const itemValue = new BigNumber(item.price).times(100)
+    const discount = new BigNumber(item.rewardFaith).minus(itemValue).div(itemValue).times(100)
+    return (
+      <div key={item.id} className={styles.rechargeItemContainer}>
+        {discount.isZero() ? null : (
+          <div className={styles.rechargeItemDiscountContainer}>
+            <div className={styles.rechargeItemDiscountIcon}></div>
+            <div className={styles.rechargeItemDiscountText}>
+              {discount.toFormat({
+                prefix: '+',
+                suffix: '%',
+              })}
+            </div>
+          </div>
+        )}
+        <div className={styles.rechargeItemHeader}>
+          <div className={styles.rechargeItemPriceIcon}></div>
+          <div>{item.rewardFaith}</div>
+        </div>
+        <div className={styles.rechargeItemBody}>
+          <div
+            className={classNames(styles.rechargeItemReward, styles[`rechargeItemReward_${index}`])}
+          ></div>
+        </div>
+        <button
+          className={classNames(styles.rechargeItemButton, 'button')}
+          onClick={() => handleBuyItem(item)}
+        >
+          {item.price}
+          <div className={styles.rechargeItemButtonIcon}></div>
         </button>
       </div>
     )
@@ -185,8 +226,8 @@ const ShopPage: React.FC = () => {
           })}
         >
           {filteredShopItems.length ? (
-            filteredShopItems.map((item) =>
-              isDailyGiftTab ? renderDailyGiftItem(item) : <div>123</div>,
+            filteredShopItems.map((item, index) =>
+              isDailyGiftTab ? renderDailyGiftItem(item) : renderRechargeItem(item, index),
             )
           ) : (
             <div className={styles.loadingText}>Loading . . .</div>

@@ -85,56 +85,56 @@
 
 .shopItemsContainer {
     @apply flex-1 overflow-hidden;
+}
 
-    .dailyGiftContainer {
-        @apply w-137.5 h-192 relative py-8.5 px-8 flex flex-col items-stretch justify-end;
+.dailyGiftContainer {
+    @apply w-137.5 h-192 relative py-8.5 px-8 flex flex-col items-stretch justify-end;
+    @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+
+    .claimButton {
+        @apply h-22  text-3xl leading-10 font-normal;
         @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
-
-        .claimButton {
-            @apply h-22  text-3xl leading-10 font-normal;
-            @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
-        }
-
-        .claimButtonAvailable {
-            @apply text-[#E2BD7E];
-        }
-
-        .rewardContainer {
-            @apply flex-1 overflow-hidden h-62 flex flex-col items-center justify-end text-[#CCB27B] font-normal text-2xl leading-10 pb-2 gap-y-7.5;
-            @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
-        }
     }
 
-    .dailyGiftContainerCoin {
-        @apply bg-[url(/src/assets/images/shop_page/daily_gift_coin_background.png)];
-
-        .claimButton {
-            @apply bg-[url(/src/assets/images/shop_page/daily_gift_coin_button_background.png)];
-        }
-
-        .claimButtonDisabled {
-            @apply text-[#45445A];
-        }
-
-        .rewardContainer {
-            @apply bg-[url(/src/assets/images/shop_page/daily_gift_coin_reward_background.png)];
-        }
+    .claimButtonAvailable {
+        @apply text-[#E2BD7E];
     }
 
-    .dailyGiftContainerItem {
-        @apply bg-[url(/src/assets/images/shop_page/daily_gift_item_background.png)];
+    .rewardContainer {
+        @apply flex-1 overflow-hidden h-62 flex flex-col items-center justify-end text-[#CCB27B] font-normal text-2xl leading-10 pb-2 gap-y-7.5;
+        @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+}
 
-        .claimButton {
-            @apply bg-[url(/src/assets/images/shop_page/daily_gift_item_button_background.png)];
-        }
+.dailyGiftContainerCoin {
+    @apply bg-[url(/src/assets/images/shop_page/daily_gift_coin_background.png)];
 
-        .claimButtonDisabled {
-            @apply text-[#664927];
-        }
+    .claimButton {
+        @apply bg-[url(/src/assets/images/shop_page/daily_gift_coin_button_background.png)];
+    }
 
-        .rewardContainer {
-            @apply bg-[url(/src/assets/images/shop_page/daily_gift_item_reward_background.png)]
-        }
+    .claimButtonDisabled {
+        @apply text-[#45445A];
+    }
+
+    .rewardContainer {
+        @apply bg-[url(/src/assets/images/shop_page/daily_gift_coin_reward_background.png)];
+    }
+}
+
+.dailyGiftContainerItem {
+    @apply bg-[url(/src/assets/images/shop_page/daily_gift_item_background.png)];
+
+    .claimButton {
+        @apply bg-[url(/src/assets/images/shop_page/daily_gift_item_button_background.png)];
+    }
+
+    .claimButtonDisabled {
+        @apply text-[#664927];
+    }
+
+    .rewardContainer {
+        @apply bg-[url(/src/assets/images/shop_page/daily_gift_item_reward_background.png)]
     }
 }
 
@@ -220,4 +220,84 @@
 
 .shopItemsContainerDailyGift {
     @apply flex items-center pl-30 pr-45 gap-x-19;
+}
+
+.shopItemsContainerRecharge {
+    @apply grid grid-cols-3 gap-x-10 gap-y-20 pl-13 items-center;
+}
+
+.rechargeItemContainer {
+    @apply flex flex-col items-stretch justify-start w-103 h-85.5 bg-red-50 relative;
+    @apply bg-[url(/src/assets/images/shop_page/recharge_item_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+
+    .rechargeItemHeader {
+        @apply flex items-center justify-end h-19.5 gap-x-3 pr-5 text-[#D1BE99] text-4xl font-normal leading-10 shrink-0;
+    }
+
+    .rechargeItemPriceIcon {
+        @apply size-11;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .rechargeItemBody {
+        @apply flex-1 overflow-hidden flex items-start justify-center z-0;
+
+        .rechargeItemReward {
+            @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        }
+    }
+
+    .rechargeItemButton {
+        @apply h-13.5 flex items-center justify-center gap-x-2 text-4xl font-normal leading-10 text-[#6B1C00] shrink-0 z-10;
+        @apply bg-[url(/src/assets/images/shop_page/recharge_item_button_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .rechargeItemButtonIcon {
+        @apply w-11 h-10.5;
+        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+}
+
+.rechargeItemDiscountContainer {
+    @apply absolute w-35 h-33.5 -top-2.5 -left-3.5;
+    @apply bg-[url(/src/assets/images/shop_page/recharge_item_discount_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+
+    .rechargeItemDiscountIcon {
+        @apply size-10 absolute top-6 left-11.5;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .rechargeItemDiscountText {
+        @apply text-[#FFDE82] font-normal text-4xl -rotate-6 absolute top-16.5 left-5;
+    }
+}
+
+.rechargeItemReward_0 {
+    @apply w-46 h-31 mt-7;
+    @apply bg-[url(/src/assets/images/shop_page/recharge_item_reward_0.png)];
+}
+
+.rechargeItemReward_1 {
+    @apply w-43.5 h-36.5 mt-5.5;
+    @apply bg-[url(/src/assets/images/shop_page/recharge_item_reward_1.png)];
+}
+
+.rechargeItemReward_2 {
+    @apply w-53 h-35 mt-7;
+    @apply bg-[url(/src/assets/images/shop_page/recharge_item_reward_2.png)];
+}
+
+.rechargeItemReward_3 {
+    @apply w-50.5 h-31.5 mt-7;
+    @apply bg-[url(/src/assets/images/shop_page/recharge_item_reward_3.png)];
+}
+
+.rechargeItemReward_4 {
+    @apply w-59 h-34 mt-7.5;
+    @apply bg-[url(/src/assets/images/shop_page/recharge_item_reward_4.png)];
+}
+
+.rechargeItemReward_5 {
+    @apply w-72 h-52 mt-1;
+    @apply bg-[url(/src/assets/images/shop_page/recharge_item_reward_5.png)];
 }

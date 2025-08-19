@@ -103,7 +103,7 @@ export default class RewardStore {
         } else {
           resolve()
         }
-      }, 500)
+      }, 300)
     })
   }
 }
