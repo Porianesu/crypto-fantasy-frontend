@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { Suspense, useEffect, useMemo, useState } from 'react'
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './ShopPage.module.css'
 import classNames from 'classnames'
 import { getHomePath } from '@/navigation/routes.tsx'
@@ -10,6 +10,8 @@ import API, { type ShopItem } from '@/axios/api.ts'
 import { GiftIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import { BigNumber } from 'bignumber.js'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
+import { useGSAP } from '@gsap/react'
+import { gsap } from 'gsap'
 
 const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
@@ -60,6 +62,9 @@ const ShopPage: React.FC = () => {
     faithAmount?: number
     melt?: number
   }>({})
+  const shopItemsContainerRef = useRef<HTMLDivElement>(null)
+  const dailyGiftRefs = useRef<Array<HTMLDivElement>>([])
+  const rechargeRefs = useRef<Array<HTMLDivElement>>([])
 
   useEffect(() => {
     if (!isLoading && data?.data?.items && Array.isArray(data.data.items)) {
@@ -70,6 +75,28 @@ const ShopPage: React.FC = () => {
       )
     }
   }, [data?.data?.items, isLoading])
+
+  useGSAP(
+    () => {
+      if (selectedTab === 'daily_gift') {
+        gsap.fromTo(
+          dailyGiftRefs.current,
+          { x: (i) => (i === 0 ? '-100%' : '100%'), opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out' },
+        )
+      } else {
+        gsap.fromTo(
+          rechargeRefs.current,
+          { y: 100, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'back.out(1.7)' },
+        )
+      }
+    },
+    {
+      dependencies: [selectedTab],
+      scope: shopItemsContainerRef,
+    },
+  )
 
   const handleBack = () => {
     navigate(getHomePath())
@@ -98,7 +125,7 @@ const ShopPage: React.FC = () => {
     }
   }
 
-  const renderDailyGiftItem = (item: ShopItem) => {
+  const renderDailyGiftItem = (item: ShopItem, index: number) => {
     const isItemClaimable = item.todayPurchased < item.dailyLimit
     const isCoinGift = item.key === 'daily_gift_coin'
     const rewardArray = [
@@ -113,6 +140,11 @@ const ShopPage: React.FC = () => {
           [styles.dailyGiftContainerCoin]: isCoinGift,
           [styles.dailyGiftContainerItem]: !isCoinGift,
         })}
+        ref={(el) => {
+          if (el) {
+            dailyGiftRefs.current[index] = el
+          }
+        }}
       >
         <div
           className={classNames(styles.dailyGiftPoster, {
@@ -175,7 +207,15 @@ const ShopPage: React.FC = () => {
     const itemValue = new BigNumber(item.price).times(100)
     const discount = new BigNumber(item.rewardFaith).minus(itemValue).div(itemValue).times(100)
     return (
-      <div key={item.id} className={styles.rechargeItemContainer}>
+      <div
+        key={item.id}
+        className={styles.rechargeItemContainer}
+        ref={(el) => {
+          if (el) {
+            rechargeRefs.current[index] = el
+          }
+        }}
+      >
         {discount.isZero() ? null : (
           <div className={styles.rechargeItemDiscountContainer}>
             <div className={styles.rechargeItemDiscountIcon}></div>
@@ -252,10 +292,11 @@ const ShopPage: React.FC = () => {
             [styles.shopItemsContainerDailyGift]: isDailyGiftTab,
             [styles.shopItemsContainerRecharge]: !isDailyGiftTab,
           })}
+          ref={shopItemsContainerRef}
         >
           {filteredShopItems.length ? (
             filteredShopItems.map((item, index) =>
-              isDailyGiftTab ? renderDailyGiftItem(item) : renderRechargeItem(item, index),
+              isDailyGiftTab ? renderDailyGiftItem(item, index) : renderRechargeItem(item, index),
             )
           ) : (
             <div className={styles.loadingText}>Loading . . .</div>
