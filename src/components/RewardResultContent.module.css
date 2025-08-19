@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+.modalContentContainer {
+    @apply w-174 h-175.5 flex flex-col items-center justify-start text-white;
+
+    .backgroundImage {
+        @apply size-full inset-0 absolute z-0;
+        @apply bg-[url(/src/assets/images/fusion_page/result_modal_background.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .faithCoinPile {
+        @apply size-100 mt-35 z-10;
+        @apply bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .faithCoinPileLarge {
+        @apply bg-[url(/src/assets/images/fusion_page/faith_coin_pile_large.png)];
+    }
+
+    .rewardContainer {
+        @apply absolute bottom-37.5 flex items-center gap-x-4 text-7xl font-black font-[FFDin] z-10;
+
+        & > div {
+            @apply flex items-center gap-x-4.5;
+        }
+    }
+
+    .faithCoinIcon {
+        @apply size-14;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .solCoinIcon {
+        @apply size-14;
+        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .meltIcon {
+        @apply size-14;
+        @apply bg-[url(/src/assets/images/common/asset_icon_melt.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .title {
+        @apply w-255 h-35 flex items-center justify-center text-center absolute -top-5 text-5xl leading-17.5;
+    }
+
+    .button {
+        @apply -bottom-12.5 w-102 h-25 text-4xl leading-10 absolute;
+        @apply bg-[url(/src/assets/images/common/block_button_background.png)] bg-contain bg-top-left bg-no-repeat;
+    }
+}

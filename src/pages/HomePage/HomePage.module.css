@@ -113,7 +113,7 @@
 
 
         .assetAmount {
-            @apply text-white font-black text-3xl italic;
+            @apply text-white font-black text-3xl italic font-[FFDin];
         }
 
         .assetPlusButton {
