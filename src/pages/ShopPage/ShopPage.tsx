@@ -144,7 +144,13 @@ const ShopPage: React.FC = () => {
                     [styles.rewardImageFaith]: reward.type === 'faith',
                     [styles.rewardImageMelt]: reward.type === 'melt',
                   })}
-                ></div>
+                >
+                  {reward.type === 'melt' ? (
+                    <div className={styles.rewardDescription}>
+                      Increase the card dismantling limit.
+                    </div>
+                  ) : null}
+                </div>
               </div>
               <div>x{reward.amount}</div>
             </div>

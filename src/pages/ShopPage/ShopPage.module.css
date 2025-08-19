@@ -183,7 +183,11 @@
     @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
 
     .rewardImage {
-        @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+        @apply bg-size-[100%_100%] bg-top-left bg-no-repeat relative flex flex-col items-center;
+    }
+
+    .rewardDescription {
+        @apply font-normal text-xs text-white absolute -bottom-6 text-center w-42 font-[FFDin];
     }
 
     .rewardImageSol {
