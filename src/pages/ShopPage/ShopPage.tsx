@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { Suspense, useEffect, useMemo, useState } from 'react'
 import styles from './ShopPage.module.css'
 import classNames from 'classnames'
 import { getHomePath } from '@/navigation/routes.tsx'
@@ -9,6 +9,9 @@ import { useQuery } from '@tanstack/react-query'
 import API, { type ShopItem } from '@/axios/api.ts'
 import { GiftIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import { BigNumber } from 'bignumber.js'
+import { AudioInstanceId } from '@/stores/preload-store.ts'
+
+const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
 const Tabs = [
   {
@@ -28,6 +31,7 @@ const ShopPage: React.FC = () => {
   const {
     appStore: { userInfo },
     rewardStore: { buyItem },
+    preloadStore: { audioInstanceMap },
   } = useMobxStore()
   const { data, isLoading } = useQuery({
     queryKey: ['shopItems'],
@@ -35,6 +39,7 @@ const ShopPage: React.FC = () => {
     refetchInterval: 5 * 60 * 1000, // 每5分钟刷新一次
     refetchOnWindowFocus: false,
   })
+  const successSound = audioInstanceMap.get(AudioInstanceId.CraftSuccessSound)
   const [selectedTab, setSelectedTab] = useState<string>(Tabs[0].key)
   const [shopItems, setShopItems] = useState<Array<ShopItem>>([])
   const isDailyGiftTab = useMemo(() => selectedTab === 'daily_gift', [selectedTab])
@@ -49,6 +54,12 @@ const ShopPage: React.FC = () => {
       }),
     [isDailyGiftTab, shopItems],
   )
+  const [rewardResultModalVisible, setRewardResultModalVisible] = useState<boolean>(false)
+  const [rewardResultModalData, setRewardResultModalData] = useState<{
+    solAmount?: number
+    faithAmount?: number
+    melt?: number
+  }>({})
 
   useEffect(() => {
     if (!isLoading && data?.data?.items && Array.isArray(data.data.items)) {
@@ -73,6 +84,17 @@ const ShopPage: React.FC = () => {
           i.id === item.id ? { ...i, todayPurchased: i.todayPurchased + 1 } : i,
         ),
       )
+      if (successSound) {
+        successSound.play({
+          volume: 1,
+        })
+      }
+      setRewardResultModalVisible(true)
+      setRewardResultModalData({
+        solAmount: item.rewardSol || 0,
+        faithAmount: item.rewardFaith || 0,
+        melt: item.rewardMeltTimes || 0,
+      })
     }
   }
 
@@ -234,6 +256,14 @@ const ShopPage: React.FC = () => {
           )}
         </div>
       </div>
+      <Suspense fallback={null}>
+        <RewardResultModal
+          open={rewardResultModalVisible}
+          onOpenChange={setRewardResultModalVisible}
+          title={'Congratulations! You got rewards!'}
+          reward={rewardResultModalData}
+        ></RewardResultModal>
+      </Suspense>
     </div>
   )
 }

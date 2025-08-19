@@ -98,7 +98,6 @@ export default class RewardStore {
         const result: AxiosResponse<IBuyShopItemResponse> = await API.buyShopItem(item.id)
         if (result?.data?.user?.email === this.rootStoreRef.appStore.userInfo!.email) {
           this.rootStoreRef.appStore.updateUserInfo(result.data.user)
-          toast.success(`Successfully purchased ${item.name}!`)
           resolve('success')
         } else {
           resolve()
