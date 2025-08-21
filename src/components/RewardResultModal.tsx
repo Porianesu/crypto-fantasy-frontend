@@ -5,15 +5,17 @@ import classNames from 'classnames'
 import { Content, Dialog, DialogOverlay, Portal } from '@radix-ui/react-dialog'
 import RewardResultContent from '@/components/RewardResultContent.tsx'
 
+export interface RewardResultModalData {
+  solAmount?: number
+  faithAmount?: number
+  melt?: number
+}
+
 interface IRewardResultModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   title?: string
-  reward: {
-    solAmount?: number
-    faithAmount?: number
-    melt?: number
-  }
+  reward: RewardResultModalData
 }
 
 const RewardResultModal: React.FC<IRewardResultModalProps> = ({

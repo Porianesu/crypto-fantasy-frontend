@@ -2,6 +2,7 @@ import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import API, {
   type IBuyShopItemResponse,
+  type IClaimNewbieRewardResponse,
   type IGetSignInStatusResponse,
   type ISignInResponse,
   type ShopItem,
@@ -9,14 +10,16 @@ import API, {
 } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 import dayjs from 'dayjs'
-import { type Id, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 export default class RewardStore {
   rootStoreRef: Store
 
   signInStatus: Array<SignInStatus> = []
 
-  buyItemTimer: ReturnType<typeof setTimeout> | null = null
+  buyItemNetworkFlag = false
+
+  claimNewbieRewardNetworkFlag = false
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
@@ -28,13 +31,16 @@ export default class RewardStore {
       initSignInStatus: flow.bound,
       signIn: flow.bound,
       showRedDot: computed,
-      buyItem: action,
+      buyItem: flow.bound,
+      claimNewbieRewardNetworkFlag: observable,
+      claimNewbieReward: flow.bound,
     })
   }
 
   resetStore = () => {
     this.signInStatus = []
-    this.buyItemTimer = null
+    this.buyItemNetworkFlag = false
+    this.claimNewbieRewardNetworkFlag = false
   };
 
   *initData() {
@@ -84,7 +90,7 @@ export default class RewardStore {
     })
   }
 
-  buyItem = (item: ShopItem): undefined | Id | Promise<'success' | void> => {
+  *buyItem(item: ShopItem) {
     if (!this.rootStoreRef.appStore.userInfo) return
     if (this.rootStoreRef.appStore.userInfo.solAmount < item.price) {
       return toast.error('Insufficient balance to buy this item.')
@@ -92,17 +98,38 @@ export default class RewardStore {
     if (item.dailyLimit > 0 && item.todayPurchased >= item.dailyLimit) {
       return toast.error('You have reached the daily purchase limit for this item.')
     }
-    if (this.buyItemTimer) clearTimeout(this.buyItemTimer)
-    return new Promise((resolve) => {
-      this.buyItemTimer = setTimeout(async () => {
-        const result: AxiosResponse<IBuyShopItemResponse> = await API.buyShopItem(item.id)
-        if (result?.data?.user?.email === this.rootStoreRef.appStore.userInfo!.email) {
-          this.rootStoreRef.appStore.updateUserInfo(result.data.user)
-          resolve('success')
-        } else {
-          resolve()
+    if (this.buyItemNetworkFlag) return
+    try {
+      this.buyItemNetworkFlag = true
+      const result: AxiosResponse<IBuyShopItemResponse> = yield API.buyShopItem(item.id)
+      if (result?.data?.user?.email === this.rootStoreRef.appStore.userInfo!.email) {
+        this.rootStoreRef.appStore.updateUserInfo(result.data.user)
+        return 'success'
+      }
+    } finally {
+      this.buyItemNetworkFlag = false
+    }
+  }
+
+  *claimNewbieReward() {
+    if (!this.rootStoreRef.appStore.userInfo) return
+    if (this.rootStoreRef.appStore.userInfo.newbieRewardClaimed) return
+    if (this.claimNewbieRewardNetworkFlag) return
+    try {
+      this.claimNewbieRewardNetworkFlag = true
+      const result: AxiosResponse<IClaimNewbieRewardResponse> = yield API.claimNewbieReward()
+      if (result?.data?.success) {
+        const newUserInfo = {
+          ...this.rootStoreRef.appStore.userInfo,
+          solAmount: result.data.user.solAmount,
+          faithAmount: result.data.user.faithAmount,
+          newbieRewardClaimed: result.data.user.newbieRewardClaimed,
         }
-      }, 300)
-    })
+        this.rootStoreRef.appStore.updateUserInfo(newUserInfo)
+        return result.data
+      }
+    } finally {
+      this.claimNewbieRewardNetworkFlag = false
+    }
   }
 }

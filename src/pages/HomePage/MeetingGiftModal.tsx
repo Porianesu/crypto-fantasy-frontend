@@ -16,11 +16,17 @@ import { useMobxStore } from '@/stores/StoreProvider.tsx'
 interface IMeetingGiftModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  handleClaimNewbieReward: () => Promise<void>
 }
 
-const MeetingGiftModal: React.FC<IMeetingGiftModalProps> = ({ open, onOpenChange }) => {
+const MeetingGiftModal: React.FC<IMeetingGiftModalProps> = ({
+  open,
+  onOpenChange,
+  handleClaimNewbieReward,
+}) => {
   const {
     appStore: { appConfig },
+    rewardStore: { claimNewbieRewardNetworkFlag },
   } = useMobxStore()
   if (!appConfig?.NewbieReward) return null
 
@@ -42,7 +48,15 @@ const MeetingGiftModal: React.FC<IMeetingGiftModalProps> = ({ open, onOpenChange
               <div className={styles.backgroundCharacter}></div>
               <div className={styles.coinPile1}></div>
               <div className={styles.coinPile2}></div>
-              <button className={classNames(styles.claimButton, 'button')}>Claim Now</button>
+              <button
+                className={classNames(styles.claimButton, {
+                  button: !claimNewbieRewardNetworkFlag,
+                })}
+                disabled={claimNewbieRewardNetworkFlag}
+                onClick={handleClaimNewbieReward}
+              >
+                Claim Now
+              </button>
               <div className={styles.rewardsContainer}>
                 {Object.keys(appConfig.NewbieReward).map((rewardKey) => {
                   return (

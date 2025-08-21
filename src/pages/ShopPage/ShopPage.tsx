@@ -12,6 +12,7 @@ import { BigNumber } from 'bignumber.js'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
+import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
 
 const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
@@ -57,11 +58,7 @@ const ShopPage: React.FC = () => {
     [isDailyGiftTab, shopItems],
   )
   const [rewardResultModalVisible, setRewardResultModalVisible] = useState<boolean>(false)
-  const [rewardResultModalData, setRewardResultModalData] = useState<{
-    solAmount?: number
-    faithAmount?: number
-    melt?: number
-  }>({})
+  const [rewardResultModalData, setRewardResultModalData] = useState<RewardResultModalData>({})
   const shopItemsContainerRef = useRef<HTMLDivElement>(null)
   const dailyGiftRefs = useRef<Array<HTMLDivElement>>([])
   const rechargeRefs = useRef<Array<HTMLDivElement>>([])
@@ -104,7 +101,7 @@ const ShopPage: React.FC = () => {
 
   const handleBuyItem = async (item: ShopItem) => {
     const result = await buyItem(item)
-    if (result === 'success') {
+    if ((result as unknown as string) === 'success') {
       // 更新今日已购买数量
       setShopItems((prevItems) =>
         prevItems.map((i) =>

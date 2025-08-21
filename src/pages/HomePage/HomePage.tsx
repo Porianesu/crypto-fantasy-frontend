@@ -17,6 +17,9 @@ import rewardIcon from '../../../src/assets/images/home_page/footer_button_rewar
 import shopIcon from '../../../src/assets/images/home_page/footer_button_shop.png'
 import { type IOpenPackHandle } from '@/components/OpenPack.tsx'
 import type { ICardDataInBag } from '@/stores/app-store.ts'
+import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
+import type { IClaimNewbieRewardResponse } from '@/axios/api.ts'
+import { AudioInstanceId } from '@/stores/preload-store.ts'
 
 const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
@@ -26,12 +29,14 @@ const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.ts
 const ProfileModal = React.lazy(() => import('@/pages/HomePage/ProfileModal.tsx'))
 const RewardModal = React.lazy(() => import('@/pages/HomePage/RewardModal.tsx'))
 const MeetingGiftModal = React.lazy(() => import('@/pages/HomePage/MeetingGiftModal.tsx'))
+const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
 function HomePage() {
   const {
     appStore: { userInfo, appConfig, cardsFormation, changeCardsFormation },
     modalStore: { changeCardsBagModalData, changeBattleModalVisible },
-    rewardStore: { showRedDot },
+    rewardStore: { showRedDot, claimNewbieReward },
+    preloadStore: { audioInstanceMap },
   } = useMobxStore()
   const navigate = useNavigate()
   const pageContainerRef = useRef<HTMLDivElement>(null)
@@ -43,12 +48,32 @@ function HomePage() {
   const [profileModalVisible, setProfileModalVisible] = useState(false)
   const [rewardModalVisible, setRewardModalVisible] = useState(false)
   const [meetingGiftModalVisible, setMeetingGiftModalVisible] = useState(false)
+  const [rewardResultModalVisible, setRewardResultModalVisible] = useState<boolean>(false)
+  const [rewardResultModalData, setRewardResultModalData] = useState<RewardResultModalData>({})
+  const successSound = audioInstanceMap.get(AudioInstanceId.CraftSuccessSound)
 
   useEffect(() => {
     if (userInfo && !userInfo.newbieRewardClaimed) {
       setMeetingGiftModalVisible(true)
     }
   }, [])
+
+  const handleClaimNewbieReward = async () => {
+    const claimResult = (await claimNewbieReward()) as unknown as IClaimNewbieRewardResponse
+    if (claimResult?.success) {
+      if (successSound) {
+        successSound.play({
+          volume: 1,
+        })
+      }
+      setMeetingGiftModalVisible(false)
+      setRewardResultModalVisible(true)
+      setRewardResultModalData({
+        solAmount: appConfig?.NewbieReward.solAmount,
+        faithAmount: appConfig?.NewbieReward.faithAmount,
+      })
+    }
+  }
 
   const handleCardSelect = (card: ICardDataInBag) => {
     const findIndex = cardsFormation.findIndex((c) => c.id === card.id)
@@ -256,7 +281,16 @@ function HomePage() {
         <MeetingGiftModal
           open={meetingGiftModalVisible}
           onOpenChange={setMeetingGiftModalVisible}
+          handleClaimNewbieReward={handleClaimNewbieReward}
         ></MeetingGiftModal>
+      </Suspense>
+      <Suspense fallback={null}>
+        <RewardResultModal
+          open={rewardResultModalVisible}
+          onOpenChange={setRewardResultModalVisible}
+          title={'Congratulations! You got rewards!'}
+          reward={rewardResultModalData}
+        ></RewardResultModal>
       </Suspense>
     </div>
   )
