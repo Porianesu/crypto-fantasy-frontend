@@ -134,7 +134,7 @@
     }
 
     .rewardContainer {
-        @apply bg-[url(/src/assets/images/shop_page/daily_gift_item_reward_background.png)]
+        @apply bg-[url(/src/assets/images/common/reward_background.png)]
     }
 }
 
@@ -207,11 +207,11 @@
 }
 
 .rewardImageContainerYellow {
-    @apply bg-[url(/src/assets/images/shop_page/daily_gift_reward_image_background_yellow.png)];
+    @apply bg-[url(/src/assets/images/common/reward_image_background_yellow.png)];
 }
 
 .rewardImageContainerPurple {
-    @apply bg-[url(/src/assets/images/shop_page/daily_gift_reward_image_background_purple.png)];
+    @apply bg-[url(/src/assets/images/common/reward_image_background_purple.png)];
 }
 
 .shopItemsContainerLoading {

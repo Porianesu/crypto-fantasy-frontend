@@ -22,6 +22,17 @@ const homePageImages = import.meta.glob('../assets/images/home_page/*.png', {
   eager: true,
   import: 'default',
 })
+const commonImages = import.meta.glob('../assets/images/common/*.png', {
+  eager: true,
+  import: 'default',
+})
+const meetingGiftModalImages = import.meta.glob(
+  '../assets/images/home_page/meeting_gift_modal/*.png',
+  {
+    eager: true,
+    import: 'default',
+  },
+)
 const battleModalImages = import.meta.glob('../assets/images/home_page/battle_modal/*.png', {
   eager: true,
   import: 'default',
@@ -95,6 +106,12 @@ export default [
   })),
   ...Object.keys(homePageImages).map((key) => ({
     src: homePageImages[key],
+  })),
+  ...Object.keys(commonImages).map((key) => ({
+    src: commonImages[key],
+  })),
+  ...Object.keys(meetingGiftModalImages).map((key) => ({
+    src: meetingGiftModalImages[key],
   })),
   ...Object.keys(battleModalImages).map((key) => ({
     src: battleModalImages[key],

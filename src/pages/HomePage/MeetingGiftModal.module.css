@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+.overlay {
+    @apply fixed inset-0 z-50;
+}
+
+@supports (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply backdrop-blur-md;
+    }
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+    .overlay {
+        @apply bg-black/60;
+    }
+}
+
+.modalContent {
+    @apply max-w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none;
+}
+
+
+.contentContainer {
+    @apply h-162.5 w-245.5 relative;
+
+    .closeButton {
+        @apply absolute left-258 bottom-110 w-18.5 h-19.5 z-10;
+        @apply bg-[url(/src/assets/images/home_page/meeting_gift_modal/close_icon.png)] bg-size-[100%_100%] bg-center bg-no-repeat;
+    }
+
+    .backgroundImage {
+        @apply absolute left-0 bottom-0 w-301.5 h-216 z-0;
+        @apply bg-[url(/src/assets/images/home_page/meeting_gift_modal/background.png)] bg-size-[100%_100%] bg-center bg-no-repeat;
+    }
+
+    .backgroundCharacter {
+        @apply absolute -left-45.5 -bottom-24 w-129.5 h-183 z-10;
+        @apply bg-[url(/src/assets/images/home_page/meeting_gift_modal/background_character.png)] bg-size-[100%_100%] bg-center bg-no-repeat;
+    }
+
+    .coinPile1 {
+        @apply absolute left-9 -bottom-34.5 w-95 h-56.5 z-20;
+        @apply bg-[url(/src/assets/images/home_page/meeting_gift_modal/coin_pile_1.png)] bg-size-[100%_100%] bg-center bg-no-repeat;
+    }
+
+    .coinPile2 {
+        @apply absolute left-185.5 -bottom-28 w-103 h-62 z-20;
+        @apply bg-[url(/src/assets/images/home_page/meeting_gift_modal/coin_pile_2.png)] bg-size-[100%_100%] bg-center bg-no-repeat;
+    }
+
+    .rewardsContainer {
+        @apply absolute left-86.25 bottom-20 z-40 flex items-center gap-x-10;
+    }
+
+    .claimButton {
+        @apply absolute left-77 -bottom-29 w-133 h-46 z-30 font-normal text-white text-5xl flex flex-col items-center justify-start pt-15.5;
+        @apply bg-[url(/src/assets/images/home_page/meeting_gift_modal/claim_button_background.png)] bg-size-[100%_100%] bg-center bg-no-repeat;
+        text-shadow: -3px -3px 0 #28A4B3,
+        3px -3px 0 #28A4B3,
+        -3px 3px 0 #28A4B3,
+        3px 3px 0 #28A4B3,
+        0 -3px 0 #28A4B3,
+        0 3px 0 #28A4B3,
+        -3px 0 0 #28A4B3,
+        3px 0 0 #28A4B3;
+    }
+}
+
+.rewardContainer {
+    @apply flex flex-col items-center justify-end w-54 h-62 text-[#CCB27B] font-normal text-4xl leading-10 pb-2 gap-y-7.5;
+    @apply bg-[url(/src/assets/images/common/reward_background.png)] bg-size-[100%_100%] bg-center bg-no-repeat;
+
+    .rewardImageContainer {
+        @apply w-29 h-32 flex items-start justify-center pt-6;
+        @apply bg-size-[100%_100%] bg-center bg-no-repeat;
+    }
+
+    .rewardImage {
+        @apply bg-size-[100%_100%] bg-center bg-no-repeat;
+    }
+}
+
+
+.rewardContainer_solAmount {
+    .rewardImageContainer {
+        @apply bg-[url(/src/assets/images/common/reward_image_background_yellow.png)];
+    }
+
+    .rewardImage {
+        @apply w-20.25 h-19;
+        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)];
+    }
+}
+
+.rewardContainer_faithAmount {
+    .rewardImageContainer {
+        @apply bg-[url(/src/assets/images/common/reward_image_background_purple.png)];
+    }
+
+    .rewardImage {
+        @apply w-20.25 h-19;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)];
+    }
+}
+
+

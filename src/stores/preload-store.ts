@@ -109,6 +109,7 @@ export default class PreloadStore {
       if (!window.createjs?.PreloadJS) reject(new Error('Failed to load CreateJS'))
       const queue = new window.createjs.LoadQueue(true)
       queue.installPlugin(window.createjs.Sound)
+      queue.setMaxConnections(4)
       queue.on(
         'complete',
         (event) => {

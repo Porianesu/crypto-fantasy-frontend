@@ -90,6 +90,10 @@ export interface IGetConfigResponse {
     rarity: CARD_RARITY
     faithCoin: number
   }>
+  NewbieReward: {
+    solAmount: number
+    faithAmount: number
+  }
 }
 
 export interface IPatchUserInfoResponse {

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import styles from './HomePage.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import Leaderboard from '@/pages/HomePage/Leaderboard.tsx'
-import React, { Suspense, useMemo, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
@@ -25,6 +25,7 @@ const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.ts
 const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
 const ProfileModal = React.lazy(() => import('@/pages/HomePage/ProfileModal.tsx'))
 const RewardModal = React.lazy(() => import('@/pages/HomePage/RewardModal.tsx'))
+const MeetingGiftModal = React.lazy(() => import('@/pages/HomePage/MeetingGiftModal.tsx'))
 
 function HomePage() {
   const {
@@ -41,6 +42,13 @@ function HomePage() {
   const [redeemCodeModalVisible, setRedeemCodeModalVisible] = useState(false)
   const [profileModalVisible, setProfileModalVisible] = useState(false)
   const [rewardModalVisible, setRewardModalVisible] = useState(false)
+  const [meetingGiftModalVisible, setMeetingGiftModalVisible] = useState(false)
+
+  useEffect(() => {
+    if (userInfo && !userInfo.newbieRewardClaimed) {
+      setMeetingGiftModalVisible(true)
+    }
+  }, [])
 
   const handleCardSelect = (card: ICardDataInBag) => {
     const findIndex = cardsFormation.findIndex((c) => c.id === card.id)
@@ -243,6 +251,12 @@ function HomePage() {
       </Suspense>
       <Suspense fallback={null}>
         <RewardModal open={rewardModalVisible} onOpenChange={setRewardModalVisible}></RewardModal>
+      </Suspense>
+      <Suspense fallback={null}>
+        <MeetingGiftModal
+          open={meetingGiftModalVisible}
+          onOpenChange={setMeetingGiftModalVisible}
+        ></MeetingGiftModal>
       </Suspense>
     </div>
   )
