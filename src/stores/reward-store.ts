@@ -113,7 +113,10 @@ export default class RewardStore {
 
   *claimNewbieReward() {
     if (!this.rootStoreRef.appStore.userInfo) return
-    if (this.rootStoreRef.appStore.userInfo.newbieRewardClaimed) return
+    if (this.rootStoreRef.appStore.userInfo.newbieRewardClaimed) {
+      toast.error('You have already claimed the newbie reward.')
+      return
+    }
     if (this.claimNewbieRewardNetworkFlag) return
     try {
       this.claimNewbieRewardNetworkFlag = true
