@@ -29,6 +29,18 @@
         @apply bg-[url(/src/assets/images/home_page/meeting_gift_modal/close_icon.png)] bg-size-[100%_100%] bg-center bg-no-repeat;
     }
 
+    .title {
+        @apply absolute left-95.5 bottom-102 text-6xl font-normal text-[#F4C800] z-20;
+        text-shadow: -2px -2px 0 #FFFDAC,
+        2px -2px 0 #FFFDAC,
+        -2px 2px 0 #FFFDAC,
+        2px 2px 0 #FFFDAC,
+        0 -2px 0 #FFFDAC,
+        0 2px 0 #FFFDAC,
+        -2px 0 0 #FFFDAC,
+        2px 0 0 #FFFDAC;
+    }
+
     .backgroundImage {
         @apply absolute left-0 bottom-0 w-301.5 h-216 z-0;
         @apply bg-[url(/src/assets/images/home_page/meeting_gift_modal/background.png)] bg-size-[100%_100%] bg-center bg-no-repeat;

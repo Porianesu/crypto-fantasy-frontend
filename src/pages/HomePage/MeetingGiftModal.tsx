@@ -39,11 +39,11 @@ const MeetingGiftModal: React.FC<IMeetingGiftModalProps> = ({
             styles.overlay,
           )}
         >
-          <Title></Title>
-          <Description></Description>
           <Content className={styles.modalContent} onInteractOutside={(e) => e.preventDefault()}>
             <div className={styles.contentContainer}>
               <Close className={classNames(styles.closeButton, 'button')}></Close>
+              <Title className={styles.title}>Meeting Gift</Title>
+              <Description></Description>
               <div className={styles.backgroundImage}></div>
               <div className={styles.backgroundCharacter}></div>
               <div className={styles.coinPile1}></div>
