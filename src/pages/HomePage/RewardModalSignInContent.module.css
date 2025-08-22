@@ -1,9 +1,0 @@
-@import "tailwindcss";
-
-.contentContainer {
-    @apply flex items-center justify-center gap-x-2;
-
-    & > div {
-        @apply flex flex-col items-center gap-y-2;
-    }
-}

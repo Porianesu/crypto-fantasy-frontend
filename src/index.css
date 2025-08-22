@@ -79,7 +79,7 @@
 }
 
 html {
-    @apply font-duvall tracking-wider;
+    @apply font-duvall tracking-normal;
 }
 
 :root {

@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+.contentContainer {
+    @apply w-332 h-202 flex flex-col items-end justify-end;
+    @apply bg-[url(/src/assets/images/reward_page/check_in_background.png)] bg-size-[100%_auto] bg-top-left bg-no-repeat;
+
+    .title {
+        @apply font-normal text-7xl bg-clip-text text-transparent bg-linear-to-b from-[#C0C0C0] to-[#F4F4F4] mb-9 mr-8;
+    }
+
+    .count {
+        @apply text-white text-4xl leading-17.5 mb-18 mr-8;
+
+        & > span {
+            @apply text-[#ffc431];
+        }
+    }
+
+    .description {
+        @apply w-137.5 h-14 flex items-center justify-center text-white text-xl mb-7 tracking-normal mr-12;
+        @apply bg-[url(/src/assets/images/reward_page/check_in_description_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+}
+
+.checkInContainer {
+    @apply flex items-center justify-center gap-x-3 mr-12;
+}
+
+.checkInItemContainerToday {
+    @apply border-[#DD5E26] from-[#46281B] to-[#2F1806];
+}
+
+.checkInItemContainerNotToday {
+    @apply border-[#463729] from-[#150E0E] to-[#2F1806];
+}
+
+.checkInItemContainer {
+    @apply flex flex-col items-center w-40.5 h-97 rounded-xl border-3  bg-linear-to-b ;
+
+    .checkInItemDate {
+        @apply text-[#ACA591] font-[FFDin]  font-black italic text-5xl leading-17.5 mb-4;
+
+        & > span {
+            @apply text-[#A2461A] text-2xl;
+        }
+    }
+
+    .claimText {
+        @apply leading-17.5 text-2xl;
+    }
+
+    .claimTextClaimable {
+        @apply text-white;
+    }
+
+    .claimTextNotClaimable {
+        @apply text-[#633206];
+    }
+}
+
+.checkInItemRewardContainer {
+    @apply w-28 h-26 flex flex-col items-center justify-end border bg-linear-to-b;
+
+    .checkInItemRewardImage {
+        @apply mb-1;
+        @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .checkInItemRewardAmount {
+        @apply text-white text-3xl h-7 self-stretch bg-linear-to-r from-[#00000033] to-[#070707CC] flex items-center justify-center;
+    }
+}
+
+.checkInItemRewardContainerSol {
+    @apply border-[#BCA784] from-[#89683A] to-[#B59C5C] mb-4;
+
+    .checkInItemRewardImage {
+        @apply w-16.5 h-15.5;
+        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)];
+    }
+}
+
+.checkInItemRewardContainerFaith {
+    @apply border-[#9C7FC1] from-[#513E69] to-[#8565A9] mb-4;
+
+    .checkInItemRewardImage {
+        @apply size-16;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)];
+    }
+}

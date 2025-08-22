@@ -15,11 +15,15 @@ import { toast } from 'react-toastify'
 export default class RewardStore {
   rootStoreRef: Store
 
+  totalSignInCount = 0
+
   signInStatus: Array<SignInStatus> = []
 
   buyItemNetworkFlag = false
 
   claimNewbieRewardNetworkFlag = false
+
+  signInNetworkFlag = false
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
@@ -27,6 +31,7 @@ export default class RewardStore {
       rootStoreRef: observable,
       resetStore: action,
       initData: flow.bound,
+      totalSignInCount: observable,
       signInStatus: observable,
       initSignInStatus: flow.bound,
       signIn: flow.bound,
@@ -38,6 +43,7 @@ export default class RewardStore {
   }
 
   resetStore = () => {
+    this.totalSignInCount = 0
     this.signInStatus = []
     this.buyItemNetworkFlag = false
     this.claimNewbieRewardNetworkFlag = false
@@ -50,32 +56,40 @@ export default class RewardStore {
   *initSignInStatus() {
     const result: AxiosResponse<IGetSignInStatusResponse> = yield API.getSignInStatus()
     if (result?.data?.signInStatus && Array.isArray(result.data.signInStatus)) {
+      this.totalSignInCount = result.data.totalSignInCount
       this.signInStatus = result.data.signInStatus
     }
   }
 
   *signIn() {
     if (!this.rootStoreRef.appStore.userInfo) return
-    const result: AxiosResponse<ISignInResponse> = yield API.signIn()
-    if (result?.data?.success) {
-      this.signInStatus = this.signInStatus.map((status) => {
-        const isToday = dayjs(status.date).isSame(dayjs(result.data.signDate), 'day')
-        if (isToday) {
-          return {
-            ...status,
-            signed: true,
+    if (this.signInNetworkFlag) return
+    try {
+      const result: AxiosResponse<ISignInResponse> = yield API.signIn()
+      if (result?.data?.success) {
+        this.totalSignInCount += 1
+        this.signInStatus = this.signInStatus.map((status) => {
+          const isToday = dayjs(status.date).isSame(dayjs(result.data.signDate), 'day')
+          if (isToday) {
+            return {
+              ...status,
+              signed: true,
+            }
           }
+          return status
+        })
+        const newUserInfo = {
+          ...this.rootStoreRef.appStore.userInfo,
+          solAmount:
+            (this.rootStoreRef.appStore.userInfo.solAmount || 0) + result.data.reward.solAmount,
+          faithAmount:
+            (this.rootStoreRef.appStore.userInfo.faithAmount || 0) + result.data.reward.faithAmount,
         }
-        return status
-      })
-      const newUserInfo = {
-        ...this.rootStoreRef.appStore.userInfo,
-        solAmount:
-          (this.rootStoreRef.appStore.userInfo.solAmount || 0) + result.data.reward.solAmount,
-        faithAmount:
-          (this.rootStoreRef.appStore.userInfo.faithAmount || 0) + result.data.reward.faithAmount,
+        this.rootStoreRef.appStore.updateUserInfo(newUserInfo)
+        return result.data
       }
-      this.rootStoreRef.appStore.updateUserInfo(newUserInfo)
+    } finally {
+      this.signInNetworkFlag = false
     }
   }
 

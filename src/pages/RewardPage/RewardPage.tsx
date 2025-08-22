@@ -1,23 +1,53 @@
 import { observer } from 'mobx-react-lite'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import CommonPageLayout from '@/components/CommonPageLayout.tsx'
 import { EnvelopeOpenIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
+import styles from './RewardPage.module.css'
+import RewardModalCheckInContent from '@/pages/RewardPage/RewardPageCheckInContent.tsx'
+import classNames from 'classnames'
+import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
+import { AudioInstanceId } from '@/stores/preload-store.ts'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
+
+const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
 const Tabs = [
-  {
-    label: 'Invite',
-    key: 'invite',
-    icon: (className: string) => <EnvelopeOpenIcon className={className} />,
-  },
   {
     label: 'Check in',
     key: 'check_in',
     icon: (className: string) => <CalendarDaysIcon className={className} />,
   },
+  {
+    label: 'Invite',
+    key: 'invite',
+    icon: (className: string) => <EnvelopeOpenIcon className={className} />,
+  },
 ]
 
 const RewardPage: React.FC = () => {
+  const {
+    preloadStore: { audioInstanceMap },
+  } = useMobxStore()
   const [selectedTab, setSelectedTab] = useState<string>(Tabs[0].key)
+  const [rewardResultModalVisible, setRewardResultModalVisible] = useState<boolean>(false)
+  const [rewardResultModalData, setRewardResultModalData] = useState<RewardResultModalData>({})
+  const [rewardResultModalTitle, setRewardResultModalTitle] = useState<string>(
+    'Congratulations! You got rewards!',
+  )
+  const successSound = audioInstanceMap.get(AudioInstanceId.CraftSuccessSound)
+
+  const openRewardResultModal = (data: RewardResultModalData, title?: string) => {
+    if (successSound) {
+      successSound.play({
+        volume: 1,
+      })
+    }
+    setRewardResultModalData(data)
+    if (title) {
+      setRewardResultModalTitle(title)
+    }
+    setRewardResultModalVisible(true)
+  }
 
   return (
     <CommonPageLayout
@@ -25,8 +55,25 @@ const RewardPage: React.FC = () => {
       Tabs={Tabs}
       selectedTab={selectedTab}
       setSelectedTab={setSelectedTab}
+      containerClassName={styles.pageContainer}
     >
-      <div>123</div>
+      <div
+        className={classNames(styles.body, { [styles.bodyCheckIn]: selectedTab === 'check_in' })}
+      >
+        {selectedTab === 'check_in' ? (
+          <RewardModalCheckInContent
+            openRewardResultModal={openRewardResultModal}
+          ></RewardModalCheckInContent>
+        ) : null}
+      </div>
+      <Suspense fallback={null}>
+        <RewardResultModal
+          open={rewardResultModalVisible}
+          onOpenChange={setRewardResultModalVisible}
+          title={rewardResultModalTitle}
+          reward={rewardResultModalData}
+        ></RewardResultModal>
+      </Suspense>
     </CommonPageLayout>
   )
 }

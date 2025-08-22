@@ -138,6 +138,7 @@ export interface SignInStatus {
 }
 
 export interface IGetSignInStatusResponse {
+  totalSignInCount: number
   signInStatus: Array<SignInStatus>
 }
 

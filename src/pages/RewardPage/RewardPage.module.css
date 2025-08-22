@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+.pageContainer {
+    @apply bg-[url(/src/assets/images/reward_page/background.png)] bg-cover bg-top-left bg-no-repeat;
+}
+
+.body {
+    @apply flex-1 overflow-hidden;
+}
+
+.bodyCheckIn {
+    @apply flex items-start justify-end pr-20 pt-7.5;
+}
