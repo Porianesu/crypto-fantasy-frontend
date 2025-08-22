@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { Suspense, useState } from 'react'
 import CommonPageLayout from '@/components/CommonPageLayout.tsx'
-import { EnvelopeOpenIcon, CalendarDaysIcon } from '@heroicons/react/24/outline'
+import { CalendarDaysIcon } from '@heroicons/react/24/outline'
 import styles from './RewardPage.module.css'
 import RewardModalCheckInContent from '@/pages/RewardPage/RewardPageCheckInContent.tsx'
 import classNames from 'classnames'
@@ -17,11 +17,11 @@ const Tabs = [
     key: 'check_in',
     icon: (className: string) => <CalendarDaysIcon className={className} />,
   },
-  {
-    label: 'Invite',
-    key: 'invite',
-    icon: (className: string) => <EnvelopeOpenIcon className={className} />,
-  },
+  // {
+  //   label: 'Invite',
+  //   key: 'invite',
+  //   icon: (className: string) => <EnvelopeOpenIcon className={className} />,
+  // },
 ]
 
 const RewardPage: React.FC = () => {
