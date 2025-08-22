@@ -1,11 +1,13 @@
 import { observer } from 'mobx-react-lite'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import styles from './RewardPageCheckInContent.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import dayjs from 'dayjs'
 import classNames from 'classnames'
 import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
 import type { ISignInResponse } from '@/axios/api.ts'
+import { useGSAP } from '@gsap/react'
+import { gsap } from 'gsap'
 
 interface IRewardPageCheckInContentProps {
   openRewardResultModal: (data: RewardResultModalData, title?: string) => void
@@ -19,6 +21,29 @@ const RewardPageCheckInContent: React.FC<IRewardPageCheckInContentProps> = ({
   } = useMobxStore()
   const [buttonLoading, setButtonLoading] = useState(false)
   const today = useMemo(() => dayjs(), [])
+  const contentContainerRef = useRef<HTMLDivElement>(null)
+  const signInItemRefs = useRef<Array<HTMLDivElement>>([])
+
+  useGSAP(
+    () => {
+      if (!signInItemRefs.current.length) return
+      gsap.fromTo(
+        signInItemRefs.current,
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power3.out',
+        },
+      )
+    },
+    {
+      scope: contentContainerRef,
+      dependencies: [],
+    },
+  )
 
   const handleSignIn = async () => {
     if (buttonLoading) return
@@ -45,9 +70,9 @@ const RewardPageCheckInContent: React.FC<IRewardPageCheckInContentProps> = ({
         <span>{totalSignInCount}</span> cumulative check-ins
       </div>
       <div className={styles.description}>Rewards can be claimed at 00:00(UTC) daily.</div>
-      <div className={styles.checkInContainer}>
-        {signInStatus.length ? (
-          signInStatus.map((item) => {
+      {signInStatus.length ? (
+        <div className={styles.checkInContainer} ref={contentContainerRef}>
+          {signInStatus.map((item, index) => {
             const targetDate = dayjs(item.date)
             const isToday = targetDate.isSame(today, 'day')
             const todayUnsigned = !item.signed && isToday
@@ -61,6 +86,11 @@ const RewardPageCheckInContent: React.FC<IRewardPageCheckInContentProps> = ({
                   [styles.checkInItemContainerToday]: isToday,
                   [styles.checkInItemContainerNotToday]: !isToday,
                 })}
+                ref={(el) => {
+                  if (el) {
+                    signInItemRefs.current[index] = el
+                  }
+                }}
               >
                 <div className={styles.checkInItemDate}>
                   0{displayDay}
@@ -99,11 +129,11 @@ const RewardPageCheckInContent: React.FC<IRewardPageCheckInContentProps> = ({
                 )}
               </div>
             )
-          })
-        ) : (
-          <div>Loading</div>
-        )}
-      </div>
+          })}
+        </div>
+      ) : (
+        <div className={styles.loading}>Loading . . .</div>
+      )}
     </div>
   )
 }

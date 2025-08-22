@@ -20,6 +20,10 @@
         @apply w-137.5 h-14 flex items-center justify-center text-white text-xl mb-7 tracking-normal mr-12;
         @apply bg-[url(/src/assets/images/reward_page/check_in_description_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
     }
+
+    .loading {
+        @apply flex items-center justify-center h-95.5 self-stretch text-[#633206] text-3xl;
+    }
 }
 
 .checkInContainer {
