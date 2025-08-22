@@ -2,8 +2,6 @@ import { observer } from 'mobx-react-lite'
 import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './ShopPage.module.css'
 import classNames from 'classnames'
-import { getHomePath } from '@/navigation/routes.tsx'
-import { useNavigate } from 'react-router-dom'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { useQuery } from '@tanstack/react-query'
 import API, { type ShopItem } from '@/axios/api.ts'
@@ -13,6 +11,7 @@ import { AudioInstanceId } from '@/stores/preload-store.ts'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
+import CommonPageLayout from '@/components/CommonPageLayout.tsx'
 
 const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
@@ -30,9 +29,7 @@ const Tabs = [
 ]
 
 const ShopPage: React.FC = () => {
-  const navigate = useNavigate()
   const {
-    appStore: { userInfo },
     rewardStore: { buyItem },
     preloadStore: { audioInstanceMap },
   } = useMobxStore()
@@ -94,10 +91,6 @@ const ShopPage: React.FC = () => {
       scope: shopItemsContainerRef,
     },
   )
-
-  const handleBack = () => {
-    navigate(getHomePath())
-  }
 
   const handleBuyItem = async (item: ShopItem) => {
     const result = await buyItem(item)
@@ -245,60 +238,28 @@ const ShopPage: React.FC = () => {
   }
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <button className={classNames(styles.backButton, 'button')} onClick={handleBack}></button>
-          <div className={styles.title}>Game Shop</div>
-        </div>
-        <div className={styles.headerRight}>
-          <div className={styles.assetContainer}>
-            <div className={styles.assetIconContainer}>
-              <div className={styles.assetIcon1}></div>
-            </div>
-            <span className={styles.assetAmount}>{userInfo?.solAmount || 0}</span>
-          </div>
-          <div className={styles.assetContainer}>
-            <div className={styles.assetIconContainer}>
-              <div className={styles.assetIcon2}></div>
-            </div>
-            <span className={styles.assetAmount}>{userInfo?.faithAmount || 0}</span>
-          </div>
-        </div>
-      </div>
-      <div className={styles.body}>
-        <div className={styles.tabsContainer}>
-          {Tabs.map((tab) => (
-            <div
-              key={tab.key}
-              className={classNames(styles.tabContainer, 'button', {
-                [styles.tabContainerSelected]: selectedTab === tab.key,
-                [styles.tabContainerUnselected]: selectedTab !== tab.key,
-              })}
-              onClick={() => setSelectedTab(tab.key)}
-            >
-              {tab.icon(classNames(styles.tabIcon))}
-              {tab.label}
-            </div>
-          ))}
-        </div>
-        <div className={styles.line}></div>
-        <div
-          className={classNames(styles.shopItemsContainer, {
-            [styles.shopItemsContainerLoading]: !filteredShopItems?.length,
-            [styles.shopItemsContainerDailyGift]: isDailyGiftTab,
-            [styles.shopItemsContainerRecharge]: !isDailyGiftTab,
-          })}
-          ref={shopItemsContainerRef}
-        >
-          {filteredShopItems.length ? (
-            filteredShopItems.map((item, index) =>
-              isDailyGiftTab ? renderDailyGiftItem(item, index) : renderRechargeItem(item, index),
-            )
-          ) : (
-            <div className={styles.loadingText}>Loading . . .</div>
-          )}
-        </div>
+    <CommonPageLayout
+      title={'Game Shop'}
+      Tabs={Tabs}
+      selectedTab={selectedTab}
+      setSelectedTab={setSelectedTab}
+      containerClassName={styles.pageContainer}
+    >
+      <div
+        className={classNames(styles.shopItemsContainer, {
+          [styles.shopItemsContainerLoading]: !filteredShopItems?.length,
+          [styles.shopItemsContainerDailyGift]: isDailyGiftTab,
+          [styles.shopItemsContainerRecharge]: !isDailyGiftTab,
+        })}
+        ref={shopItemsContainerRef}
+      >
+        {filteredShopItems.length ? (
+          filteredShopItems.map((item, index) =>
+            isDailyGiftTab ? renderDailyGiftItem(item, index) : renderRechargeItem(item, index),
+          )
+        ) : (
+          <div className={styles.loadingText}>Loading . . .</div>
+        )}
       </div>
       <Suspense fallback={null}>
         <RewardResultModal
@@ -308,7 +269,7 @@ const ShopPage: React.FC = () => {
           reward={rewardResultModalData}
         ></RewardResultModal>
       </Suspense>
-    </div>
+    </CommonPageLayout>
   )
 }
 export default observer(ShopPage)

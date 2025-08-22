@@ -80,9 +80,6 @@ export default class RewardStore {
   }
 
   get showRedDot() {
-    if (this.rootStoreRef.appStore.userInfo?.newbieRewardClaimed === false) {
-      return true
-    }
     const today = dayjs()
     return this.signInStatus.some((status) => {
       const targetDate = dayjs(status.date)

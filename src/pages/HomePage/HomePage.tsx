@@ -6,7 +6,7 @@ import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
-import { getFusionPath, getGalleryPath, getShopPath } from '@/navigation/routes.tsx'
+import { getFusionPath, getGalleryPath, getRewardPath, getShopPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import fusionIcon from '../../..../../../src/assets/images/home_page/footer_button_fusion.png'
@@ -134,7 +134,7 @@ function HomePage() {
         key: 'reward',
         icon: rewardIcon,
         className: 'w-44 h-41',
-        onClick: comingSoon,
+        onClick: () => navigate(getRewardPath()),
         redDot: showRedDot,
       },
       {

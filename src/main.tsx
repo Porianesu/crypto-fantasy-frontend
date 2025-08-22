@@ -3,20 +3,16 @@ import './index.css'
 import { StoreProvider } from '@/stores/StoreProvider.tsx'
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom'
 import {
+  commonPageLoader,
   GALLERY_PATH,
-  galleryPageLoader,
   ENTRANCE_PATH,
   HOME_PATH,
-  homePageLoader,
   INTRODUCTION_PATH,
-  introductionPageLoader,
   ROOT_PATH,
   TOURNAMENT_PATH,
-  tournamentPageLoader,
   FUSION_PATH,
-  fusionPageLoader,
   SHOP_PATH,
-  shopPageLoader,
+  REWARD_PATH,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
@@ -32,6 +28,7 @@ const IntroductionPage = React.lazy(() => import('@/pages/IntroductionPage/Intro
 const TournamentPage = React.lazy(() => import('@/pages/TournamentPage/TournamentPage.tsx'))
 const FusionPage = React.lazy(() => import('@/pages/FusionPage/FusionPage.tsx'))
 const ShopPage = React.lazy(() => import('@/pages/ShopPage/ShopPage.tsx'))
+const RewardPage = React.lazy(() => import('@/pages/RewardPage/RewardPage.tsx'))
 
 const CommonPageSuspense: React.FC<PropsWithChildren> = ({ children }) => {
   return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
@@ -57,7 +54,7 @@ export const router = createBrowserRouter([
       },
       {
         path: HOME_PATH,
-        loader: homePageLoader,
+        loader: commonPageLoader,
         element: (
           <CommonPageSuspense>
             <HomePage></HomePage>
@@ -66,7 +63,7 @@ export const router = createBrowserRouter([
       },
       {
         path: GALLERY_PATH,
-        loader: galleryPageLoader,
+        loader: commonPageLoader,
         element: (
           <CommonPageSuspense>
             <GalleryPage></GalleryPage>
@@ -75,7 +72,7 @@ export const router = createBrowserRouter([
       },
       {
         path: INTRODUCTION_PATH,
-        loader: introductionPageLoader,
+        loader: commonPageLoader,
         element: (
           <CommonPageSuspense>
             <IntroductionPage></IntroductionPage>
@@ -84,7 +81,7 @@ export const router = createBrowserRouter([
       },
       {
         path: TOURNAMENT_PATH,
-        loader: tournamentPageLoader,
+        loader: commonPageLoader,
         element: (
           <CommonPageSuspense>
             <TournamentPage></TournamentPage>
@@ -93,7 +90,7 @@ export const router = createBrowserRouter([
       },
       {
         path: FUSION_PATH,
-        loader: fusionPageLoader,
+        loader: commonPageLoader,
         element: (
           <CommonPageSuspense>
             <FusionPage></FusionPage>
@@ -102,10 +99,19 @@ export const router = createBrowserRouter([
       },
       {
         path: SHOP_PATH,
-        loader: shopPageLoader,
+        loader: commonPageLoader,
         element: (
           <CommonPageSuspense>
             <ShopPage></ShopPage>
+          </CommonPageSuspense>
+        ),
+      },
+      {
+        path: REWARD_PATH,
+        loader: commonPageLoader,
+        element: (
+          <CommonPageSuspense>
+            <RewardPage></RewardPage>
           </CommonPageSuspense>
         ),
       },

@@ -17,6 +17,7 @@ export type FusionPathState = {
 } | null
 export const FUSION_PATH = '/fusion'
 export const SHOP_PATH = '/shop'
+export const REWARD_PATH = '/reward'
 
 export const getHomePath = () => {
   return generatePath(HOME_PATH)
@@ -46,46 +47,15 @@ export const getShopPath = () => {
   return generatePath(SHOP_PATH)
 }
 
+export const getRewardPath = () => {
+  return generatePath(REWARD_PATH)
+}
+
 const checkIsAppLoading = () => {
   return getStoreRef()?.appStore?.isAppLoading ?? true
 }
 
-export const homePageLoader = () => {
-  if (checkIsAppLoading()) {
-    return redirect(getEntrancePath())
-  }
-  return null
-}
-
-export const galleryPageLoader = () => {
-  if (checkIsAppLoading()) {
-    return redirect(getEntrancePath())
-  }
-  return null
-}
-
-export const introductionPageLoader = () => {
-  if (checkIsAppLoading()) {
-    return redirect(getEntrancePath())
-  }
-  return null
-}
-
-export const tournamentPageLoader = () => {
-  if (checkIsAppLoading()) {
-    return redirect(getEntrancePath())
-  }
-  return null
-}
-
-export const fusionPageLoader = () => {
-  if (checkIsAppLoading()) {
-    return redirect(getEntrancePath())
-  }
-  return null
-}
-
-export const shopPageLoader = () => {
+export const commonPageLoader = () => {
   if (checkIsAppLoading()) {
     return redirect(getEntrancePath())
   }
