@@ -27,7 +27,6 @@ const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
 const ProfileModal = React.lazy(() => import('@/pages/HomePage/ProfileModal.tsx'))
-const RewardModal = React.lazy(() => import('@/pages/HomePage/RewardModal.tsx'))
 const MeetingGiftModal = React.lazy(() => import('@/pages/HomePage/MeetingGiftModal.tsx'))
 const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
@@ -46,7 +45,6 @@ function HomePage() {
   const selectedCards = useMemo(() => cardsFormation.map((card) => card.id), [cardsFormation])
   const [redeemCodeModalVisible, setRedeemCodeModalVisible] = useState(false)
   const [profileModalVisible, setProfileModalVisible] = useState(false)
-  const [rewardModalVisible, setRewardModalVisible] = useState(false)
   const [meetingGiftModalVisible, setMeetingGiftModalVisible] = useState(false)
   const [rewardResultModalVisible, setRewardResultModalVisible] = useState<boolean>(false)
   const [rewardResultModalData, setRewardResultModalData] = useState<RewardResultModalData>({})
@@ -273,9 +271,6 @@ function HomePage() {
             onOpenChange={setProfileModalVisible}
           ></ProfileModal>
         ) : null}
-      </Suspense>
-      <Suspense fallback={null}>
-        <RewardModal open={rewardModalVisible} onOpenChange={setRewardModalVisible}></RewardModal>
       </Suspense>
       <Suspense fallback={null}>
         <MeetingGiftModal
