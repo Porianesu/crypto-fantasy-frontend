@@ -151,6 +151,37 @@ export interface ISignInResponse {
   }
 }
 
+export enum ACHIEVEMENT_STATUS {
+  UNCOMPLETED = 0,
+  COMPLETED = 1,
+  REWARD_CLAIMED = 2,
+}
+
+export interface IAchievement {
+  completedAt: string | null
+  createdAt: string
+  description: string
+  id: number
+  isActive: boolean
+  progress: number
+  rewardFaithAmount: number
+  rewardSolAmount: number
+  status: ACHIEVEMENT_STATUS
+  subType: string
+  target: number
+  type: string
+}
+
+export interface IGetAchievementsResponse {
+  achievements: Array<IAchievement>
+}
+
+export interface IClaimAchievementResponse {
+  success: boolean
+  solAmount: number
+  faithAmount: number
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: { email: string; password: string }) =>
@@ -212,6 +243,9 @@ const API = {
   claimNewbieReward: async () => request.post<IClaimNewbieRewardResponse>('/reward/claim-newbie'),
   getSignInStatus: async () => request.get<IGetSignInStatusResponse>('/reward/sign-in'),
   signIn: async () => request.post<ISignInResponse>('/reward/sign-in'),
+  getAchievements: async () => request.get<IGetAchievementsResponse>('/reward/achievements'),
+  claimAchievement: async (achievementId: number) =>
+    request.post<IClaimAchievementResponse>('/reward/achievements', { achievementId }),
 }
 
 export default API

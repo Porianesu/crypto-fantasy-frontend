@@ -1,17 +1,23 @@
 import { observer } from 'mobx-react-lite'
 import React, { Suspense, useState } from 'react'
 import CommonPageLayout from '@/components/CommonPageLayout.tsx'
-import { CalendarDaysIcon } from '@heroicons/react/24/outline'
+import { CalendarDaysIcon, StarIcon } from '@heroicons/react/24/outline'
 import styles from './RewardPage.module.css'
 import RewardModalCheckInContent from '@/pages/RewardPage/RewardPageCheckInContent.tsx'
 import classNames from 'classnames'
 import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import RewardPageAchievementContent from '@/pages/RewardPage/RewardPageAchievementContent.tsx'
 
 const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
 const Tabs = [
+  {
+    label: 'Achievements',
+    key: 'achievements',
+    icon: (className: string) => <StarIcon className={className} />,
+  },
   {
     label: 'Check in',
     key: 'check_in',
@@ -49,6 +55,25 @@ const RewardPage: React.FC = () => {
     setRewardResultModalVisible(true)
   }
 
+  const renderContent = () => {
+    switch (selectedTab) {
+      case 'achievements':
+        return (
+          <RewardPageAchievementContent
+            openRewardResultModal={openRewardResultModal}
+          ></RewardPageAchievementContent>
+        )
+      case 'check_in':
+        return (
+          <RewardModalCheckInContent
+            openRewardResultModal={openRewardResultModal}
+          ></RewardModalCheckInContent>
+        )
+      default:
+        return null
+    }
+  }
+
   return (
     <CommonPageLayout
       title={'Reward'}
@@ -58,13 +83,12 @@ const RewardPage: React.FC = () => {
       containerClassName={styles.pageContainer}
     >
       <div
-        className={classNames(styles.body, { [styles.bodyCheckIn]: selectedTab === 'check_in' })}
+        className={classNames(styles.body, {
+          [styles.bodyCheckIn]: selectedTab === 'check_in',
+          [styles.bodyAchievement]: selectedTab === 'achievements',
+        })}
       >
-        {selectedTab === 'check_in' ? (
-          <RewardModalCheckInContent
-            openRewardResultModal={openRewardResultModal}
-          ></RewardModalCheckInContent>
-        ) : null}
+        {renderContent()}
       </div>
       <Suspense fallback={null}>
         <RewardResultModal

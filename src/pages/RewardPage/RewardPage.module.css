@@ -11,3 +11,7 @@
 .bodyCheckIn {
     @apply flex items-start justify-end pr-20 pt-7.5;
 }
+
+.bodyAchievement {
+    @apply flex items-start justify-start p-4;
+}

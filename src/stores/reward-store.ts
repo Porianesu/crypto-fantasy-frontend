@@ -1,8 +1,12 @@
 import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import API, {
+  ACHIEVEMENT_STATUS,
+  type IAchievement,
   type IBuyShopItemResponse,
+  type IClaimAchievementResponse,
   type IClaimNewbieRewardResponse,
+  type IGetAchievementsResponse,
   type IGetSignInStatusResponse,
   type ISignInResponse,
   type ShopItem,
@@ -25,6 +29,10 @@ export default class RewardStore {
 
   signInNetworkFlag = false
 
+  achievements: Array<IAchievement> = []
+
+  claimAchievementNetworkFlag = false
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
@@ -39,6 +47,10 @@ export default class RewardStore {
       buyItem: flow.bound,
       claimNewbieRewardNetworkFlag: observable,
       claimNewbieReward: flow.bound,
+      achievements: observable,
+      initAchievements: flow.bound,
+      claimAchievement: flow.bound,
+      claimAchievementNetworkFlag: observable,
     })
   }
 
@@ -47,10 +59,12 @@ export default class RewardStore {
     this.signInStatus = []
     this.buyItemNetworkFlag = false
     this.claimNewbieRewardNetworkFlag = false
+    this.achievements = []
+    this.claimAchievementNetworkFlag = false
   };
 
   *initData() {
-    yield Promise.all([this.initSignInStatus()])
+    yield Promise.all([this.initSignInStatus(), this.initAchievements()])
   }
 
   *initSignInStatus() {
@@ -95,10 +109,12 @@ export default class RewardStore {
 
   get showRedDot() {
     const today = dayjs()
-    return this.signInStatus.some((status) => {
+    const isSignInAvailable = this.signInStatus.some((status) => {
       const targetDate = dayjs(status.date)
       return today.isSame(targetDate, 'day') && !status.signed
     })
+    if (isSignInAvailable) return true
+    return this.achievements.some((ach) => ach.status === ACHIEVEMENT_STATUS.COMPLETED)
   }
 
   *buyItem(item: ShopItem) {
@@ -144,6 +160,51 @@ export default class RewardStore {
       }
     } finally {
       this.claimNewbieRewardNetworkFlag = false
+    }
+  }
+
+  *initAchievements() {
+    const result: AxiosResponse<IGetAchievementsResponse> = yield API.getAchievements()
+    if (Array.isArray(result?.data?.achievements)) {
+      this.achievements = result.data.achievements
+    }
+  }
+
+  *claimAchievement(achievement: IAchievement) {
+    if (!this.rootStoreRef.appStore.userInfo) return
+    if (this.claimAchievementNetworkFlag) return
+    if (achievement.status !== ACHIEVEMENT_STATUS.COMPLETED) {
+      toast.error('This achievement is claimable.')
+      return
+    }
+    try {
+      this.claimAchievementNetworkFlag = true
+      const result: AxiosResponse<IClaimAchievementResponse> = yield API.claimAchievement(
+        achievement.id,
+      )
+      if (result?.data?.success) {
+        const newUserInfo = {
+          ...this.rootStoreRef.appStore.userInfo,
+          solAmount: result.data.solAmount,
+          faithAmount: result.data.faithAmount,
+        }
+        this.rootStoreRef.appStore.updateUserInfo(newUserInfo)
+        this.achievements = this.achievements.map((ach) => {
+          if (ach.id === achievement.id) {
+            return {
+              ...ach,
+              status: ACHIEVEMENT_STATUS.REWARD_CLAIMED,
+              completedAt: dayjs().toISOString(),
+            }
+          }
+          return ach
+        })
+        return result.data
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      this.claimAchievementNetworkFlag = false
     }
   }
 }

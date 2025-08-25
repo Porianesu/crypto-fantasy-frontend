@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.contentContainer {
+    @apply flex-1 overflow-hidden flex flex-col items-stretch text-white gap-y-2;
+}
