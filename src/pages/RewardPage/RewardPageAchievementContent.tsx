@@ -71,8 +71,8 @@ const RewardPageAchievementContent: React.FC<IRewardPageAchievementContentProps>
               disabled={
                 claimAchievementNetworkFlag || achievement.status !== ACHIEVEMENT_STATUS.COMPLETED
               }
-              onClick={() => {
-                handleClaimAchievement(achievement)
+              onClick={async () => {
+                await handleClaimAchievement(achievement)
               }}
             >
               {renderAchievementStatus(achievement.status)}
