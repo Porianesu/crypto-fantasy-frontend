@@ -56,6 +56,9 @@ const ShopPage: React.FC = () => {
   )
   const [rewardResultModalVisible, setRewardResultModalVisible] = useState<boolean>(false)
   const [rewardResultModalData, setRewardResultModalData] = useState<RewardResultModalData>({})
+  const [rewardResultModalTitle, setRewardResultModalTitle] = useState<string>(
+    'Congratulations! You got rewards!',
+  )
   const shopItemsContainerRef = useRef<HTMLDivElement>(null)
   const dailyGiftRefs = useRef<Array<HTMLDivElement>>([])
   const rechargeRefs = useRef<Array<HTMLDivElement>>([])
@@ -106,6 +109,11 @@ const ShopPage: React.FC = () => {
           volume: 1,
         })
       }
+      setRewardResultModalTitle(
+        item.dailyLimit > 0
+          ? "Contratulation! You've claimed the daily gift."
+          : "Contratulation! You've bought the faithcoin successfully.",
+      )
       setRewardResultModalVisible(true)
       setRewardResultModalData({
         solAmount: item.rewardSol || 0,
@@ -180,7 +188,7 @@ const ShopPage: React.FC = () => {
         </div>
         <button
           className={classNames(styles.claimButton, {
-            button: isItemClaimable,
+            [styles.buttonAction]: isItemClaimable,
             [styles.claimButtonAvailable]: isItemClaimable,
             [styles.claimButtonDisabled]: !isItemClaimable,
           })}
@@ -227,7 +235,7 @@ const ShopPage: React.FC = () => {
           ></div>
         </div>
         <button
-          className={classNames(styles.rechargeItemButton, 'button')}
+          className={classNames(styles.rechargeItemButton, styles.buttonAction)}
           onClick={() => handleBuyItem(item)}
         >
           {item.price}
@@ -265,7 +273,7 @@ const ShopPage: React.FC = () => {
         <RewardResultModal
           open={rewardResultModalVisible}
           onOpenChange={setRewardResultModalVisible}
-          title={'Congratulations! You got rewards!'}
+          title={rewardResultModalTitle}
           reward={rewardResultModalData}
         ></RewardResultModal>
       </Suspense>
