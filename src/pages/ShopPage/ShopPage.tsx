@@ -180,7 +180,7 @@ const ShopPage: React.FC = () => {
         </div>
         <button
           className={classNames(styles.claimButton, {
-            button: isItemClaimable,
+            [styles.buttonAction]: isItemClaimable,
             [styles.claimButtonAvailable]: isItemClaimable,
             [styles.claimButtonDisabled]: !isItemClaimable,
           })}
@@ -227,7 +227,7 @@ const ShopPage: React.FC = () => {
           ></div>
         </div>
         <button
-          className={classNames(styles.rechargeItemButton, 'button')}
+          className={classNames(styles.rechargeItemButton, styles.buttonAction)}
           onClick={() => handleBuyItem(item)}
         >
           {item.price}

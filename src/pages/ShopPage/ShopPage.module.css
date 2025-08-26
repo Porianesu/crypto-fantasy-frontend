@@ -151,6 +151,10 @@
     @apply grid grid-cols-3 gap-x-10 gap-y-20 pl-13 items-center;
 }
 
+.buttonAction {
+    @apply cursor-pointer hover:opacity-80 active:scale-95 transition-all duration-100;
+}
+
 .rechargeItemContainer {
     @apply flex flex-col items-stretch justify-start w-103 h-85.5 bg-red-50 relative;
     @apply bg-[url(/src/assets/images/shop_page/recharge_item_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
