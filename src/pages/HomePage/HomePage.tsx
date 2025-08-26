@@ -283,7 +283,7 @@ function HomePage() {
         <RewardResultModal
           open={rewardResultModalVisible}
           onOpenChange={setRewardResultModalVisible}
-          title={'Congratulations! You got rewards!'}
+          title={"Contratulation! You've claimed the meeting gift."}
           reward={rewardResultModalData}
         ></RewardResultModal>
       </Suspense>
