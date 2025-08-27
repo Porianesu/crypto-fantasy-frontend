@@ -7,6 +7,8 @@ import classNames from 'classnames'
 import { toast } from 'react-toastify'
 import type { IBindInvitationResponse, IClaimInvitationRewardResponse } from '@/axios/api.ts'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { useGSAP } from '@gsap/react'
+import { gsap } from 'gsap'
 
 interface IRewardPageInviteContentProps {
   openRewardResultModal: (data: RewardResultModalData, title?: string) => void
@@ -41,6 +43,36 @@ const RewardPageInviteContent: React.FC<IRewardPageInviteContentProps> = ({
     () =>
       invitationStatus ? invitationStatus.invitationsAsInviter.filter((item) => !item.claimed) : [],
     [invitationStatus],
+  )
+  const contentContainerRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLDivElement>(null)
+  const descriptionRef = useRef<HTMLDivElement>(null)
+  const bottomPartContainerRef = useRef<HTMLDivElement>(null)
+  const rewardWrapperRef = useRef<HTMLDivElement>(null)
+  const bottomRightPartContainerRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      gsap.from(titleRef.current, { y: -40, opacity: 0, duration: 0.5 })
+    },
+    {
+      scope: contentContainerRef,
+      dependencies: [],
+    },
+  )
+
+  useGSAP(
+    () => {
+      if (!invitationStatus || !appConfig) return
+      const tl = gsap.timeline()
+      tl.from(descriptionRef.current, { y: -20, opacity: 0, duration: 0.4 }, '-=0.2')
+        .from(rewardWrapperRef.current, { x: -60, opacity: 0, duration: 0.5 }, '-=0.1')
+        .from(bottomRightPartContainerRef.current, { x: 60, opacity: 0, duration: 0.5 }, '-=0.5')
+    },
+    {
+      scope: bottomPartContainerRef,
+      dependencies: [invitationStatus, appConfig],
+    },
   )
 
   const handleCopyInviteCode = async () => {
@@ -141,10 +173,10 @@ const RewardPageInviteContent: React.FC<IRewardPageInviteContentProps> = ({
   }
 
   return (
-    <div className={styles.contentContainer}>
-      <div className={styles.title}></div>
+    <div className={styles.contentContainer} ref={contentContainerRef}>
+      <div className={styles.title} ref={titleRef}></div>
       {appConfig ? (
-        <div className={styles.description}>
+        <div className={styles.description} ref={descriptionRef}>
           Invite a friend and share{' '}
           {appConfig.ReferralReward.inviter.solAmount + appConfig.ReferralReward.invitee.solAmount}
           S-Coins &{' '}
@@ -154,8 +186,8 @@ const RewardPageInviteContent: React.FC<IRewardPageInviteContentProps> = ({
         </div>
       ) : null}
       {appConfig && invitationStatus ? (
-        <div className={styles.bottomPartContainer}>
-          <div className={styles.rewardWrapper}>
+        <div className={styles.bottomPartContainer} ref={bottomPartContainerRef}>
+          <div className={styles.rewardWrapper} ref={rewardWrapperRef}>
             <div className={styles.tabsContainer}>
               {Tabs.map((tab) => (
                 <div
@@ -186,7 +218,7 @@ const RewardPageInviteContent: React.FC<IRewardPageInviteContentProps> = ({
                 : renderInviteeRewardContent()}
             </div>
           </div>
-          <div className={styles.bottomRightPartContainer}>
+          <div className={styles.bottomRightPartContainer} ref={bottomRightPartContainerRef}>
             <div className={styles.inviteCodeLabel}>Referral code</div>
             <div className={styles.inviteCodeContainer}>
               <div>{invitationStatus.inviteCode}</div>
