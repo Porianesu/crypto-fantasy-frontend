@@ -15,3 +15,7 @@
 .bodyAchievement {
     @apply flex items-start justify-start p-4;
 }
+
+.bodyInvite {
+    @apply flex items-center justify-end pr-20;
+}

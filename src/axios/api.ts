@@ -94,6 +94,16 @@ export interface IGetConfigResponse {
     solAmount: number
     faithAmount: number
   }
+  ReferralReward: {
+    invitee: {
+      solAmount: number
+      faithAmount: number
+    }
+    inviter: {
+      solAmount: number
+      faithAmount: number
+    }
+  }
 }
 
 export interface IPatchUserInfoResponse {
@@ -182,6 +192,31 @@ export interface IClaimAchievementResponse {
   faithAmount: number
 }
 
+interface IInvitation {
+  id: number
+  claimed: boolean
+  createdAt: string
+}
+
+export interface IInvitationStatusResponse {
+  inviteCode: string
+  invitationsAsInviter: Array<IInvitation>
+  invitationsAsInvitee: IInvitation | null
+}
+
+export interface IBindInvitationResponse {
+  success: boolean
+  rewardFaithAmount: number
+  rewardSolAmount: number
+}
+
+export interface IClaimInvitationRewardResponse {
+  success: boolean
+  rewardFaithAmount: number
+  rewardSolAmount: number
+  claimedInvitationIds: Array<number>
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: { email: string; password: string }) =>
@@ -246,6 +281,11 @@ const API = {
   getAchievements: async () => request.get<IGetAchievementsResponse>('/reward/achievements'),
   claimAchievement: async (achievementId: number) =>
     request.post<IClaimAchievementResponse>('/reward/achievements', { achievementId }),
+  getInvitationStatus: async () => request.get<IInvitationStatusResponse>('/reward/invitation'),
+  bindInvitation: async (inviteCode: string) =>
+    request.post<IBindInvitationResponse>('/reward/invitation', { inviteCode }),
+  claimInvitationReward: async () =>
+    request.post<IClaimInvitationRewardResponse>('/reward/claim-invite-reward'),
 }
 
 export default API

@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+.contentContainer {
+    @apply flex flex-col items-stretch justify-end w-332 h-212.5 relative;
+    @apply bg-[url(/src/assets/images/reward_page/invite_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+
+    .title {
+        @apply w-192 h-62.5 absolute top-28 right-6 z-0;
+        @apply bg-[url(/src/assets/images/reward_page/invite_title_image.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .description {
+        @apply text-[#FFD481] text-xl leading-6 font-normal absolute right-13 top-91 z-0;
+        text-shadow: -2px -2px 0 #1D0700,
+        2px -2px 0 #1D0700,
+        -2px 2px 0 #1D0700,
+        2px 2px 0 #1D0700,
+        0 -2px 0 #1D0700,
+        0 2px 0 #1D0700,
+        -2px 0 0 #1D0700,
+        2px 0 0 #1D0700;
+    }
+
+    .bottomPartContainer {
+        @apply flex items-end justify-between pl-6 pr-8;
+    }
+}
+
+.rewardWrapper {
+    @apply flex flex-col mb-4;
+
+    .rewardContentContainer {
+        @apply min-w-117;
+        @apply bg-[url(/src/assets/images/reward_page/invite_reward_content_background.png)] bg-size-[auto_100%] bg-top-left bg-no-repeat;
+    }
+
+    .rewardContentContainerInviter {
+        @apply h-37 pl-6 flex items-center;
+    }
+
+    .rewardContentContainerInviteeUnbound {
+        @apply h-43.5 pt-5 pl-6;
+    }
+
+    .rewardContentContainerInviteeBound {
+        @apply h-26 flex items-center pl-5.5;
+    }
+}
+
+.tabsContainer {
+    @apply flex items-stretch gap-x-2 h-20;
+
+    .tabContainer {
+        @apply w-39 rounded-t-2xl flex flex-col items-center justify-center text-2xl pt-2.5 leading-7 cursor-pointer;
+    }
+
+    .tabLabel {
+        @apply w-28;
+    }
+
+    .tabContainerSelected {
+        @apply text-white bg-[#541400];
+    }
+
+    .tabContainerUnselected {
+        @apply text-[#8A1409] bg-[#410C00];
+    }
+}
+
+.bottomRightPartContainer {
+    @apply flex flex-col items-stretch mb-10;
+
+    .inviteCodeLabel {
+        @apply text-white text-3xl mb-3;
+        text-shadow: -2px -2px 0 #4E2600,
+        2px -2px 0 #4E2600,
+        -2px 2px 0 #4E2600,
+        2px 2px 0 #4E2600,
+        0 -2px 0 #4E2600,
+        0 2px 0 #4E2600,
+        -2px 0 0 #4E2600,
+        2px 0 0 #4E2600;
+    }
+
+    .inviteCodeContainer {
+        @apply rounded-xl bg-[#1D0600] w-117.5 h-19 border-6 border-[#3B1900] flex items-center justify-between pl-5 pr-4 text-white text-2xl font-[FFDin] font-black italic;
+        text-shadow: -2px -2px 0 #4E2600,
+        2px -2px 0 #4E2600,
+        -2px 2px 0 #4E2600,
+        2px 2px 0 #4E2600,
+        0 -2px 0 #4E2600,
+        0 2px 0 #4E2600,
+        -2px 0 0 #4E2600,
+        2px 0 0 #4E2600;
+    }
+}
+
+.copyButton {
+    @apply size-9;
+    @apply bg-[url(/src/assets/images/reward_page/copy_icon.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+}
+
+.rewardContainer {
+    @apply w-28 h-26 flex flex-col items-center justify-end border bg-linear-to-b mr-5;
+
+    .rewardImage {
+        @apply mb-1;
+        @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .rewardAmount {
+        @apply text-white text-3xl h-7 self-stretch bg-linear-to-r from-[#00000033] to-[#070707CC] flex items-center justify-center;
+    }
+}
+
+.rewardContainerSol {
+    @apply border-[#BCA784] from-[#89683A] to-[#B59C5C];
+
+    .rewardImage {
+        @apply w-16.5 h-15.5;
+        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)];
+    }
+}
+
+.rewardContainerFaith {
+    @apply border-[#9C7FC1] from-[#513E69] to-[#8565A9];
+
+    .rewardImage {
+        @apply size-16;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)];
+    }
+}
+
+.claimableCount {
+    @apply mr-6 text-[#FFAF04] text-5xl;
+}
+
+.claimInvitationRewardButton {
+    @apply w-39.5 h-17 text-[#2E1913] text-3xl flex items-center justify-center;
+    @apply bg-[url(/src/assets/images/reward_page/invite_cliam_button_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+}
+
+.inviteCodeInputContainer {
+    @apply flex items-center gap-x-3.5 mb-4;
+
+    & > input {
+        @apply bg-[#1D0600] border-6 border-[#3B1900] rounded-xl w-90 h-19 pl-5 pr-4 text-white text-2xl font-[FFDin] font-black italic;
+        text-shadow: -2px -2px 0 #4E2600,
+        2px -2px 0 #4E2600,
+        -2px 2px 0 #4E2600,
+        2px 2px 0 #4E2600,
+        0 -2px 0 #4E2600,
+        0 2px 0 #4E2600,
+        -2px 0 0 #4E2600,
+        2px 0 0 #4E2600;
+    }
+
+    & > button {
+        @apply w-39.5 h-17 text-[#2E1913] text-3xl flex items-center justify-center;
+        @apply bg-[url(/src/assets/images/reward_page/invite_cliam_button_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+}
+
+
+.inviteCodeInputDescription {
+    @apply text-white text-xl w-97 leading-6;
+}
+
+.invitationBoundDescription {
+    @apply text-[#00D33D] flex items-center gap-x-3;
+
+    & > svg {
+        @apply size-6.5;
+    }
+
+    & > div {
+        @apply text-xl leading-6 w-87;
+    }
+}

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { Suspense, useState } from 'react'
 import CommonPageLayout from '@/components/CommonPageLayout.tsx'
-import { CalendarDaysIcon, StarIcon } from '@heroicons/react/24/outline'
+import { CalendarDaysIcon, StarIcon, EnvelopeOpenIcon } from '@heroicons/react/24/outline'
 import styles from './RewardPage.module.css'
 import RewardModalCheckInContent from '@/pages/RewardPage/RewardPageCheckInContent.tsx'
 import classNames from 'classnames'
@@ -9,10 +9,16 @@ import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import RewardPageAchievementContent from '@/pages/RewardPage/RewardPageAchievementContent.tsx'
+import RewardPageInviteContent from '@/pages/RewardPage/RewardPageInviteContent.tsx'
 
 const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
 const Tabs = [
+  {
+    label: 'Invite',
+    key: 'invite',
+    icon: (className: string) => <EnvelopeOpenIcon className={className} />,
+  },
   {
     label: 'Achievements',
     key: 'achievements',
@@ -23,11 +29,6 @@ const Tabs = [
     key: 'check_in',
     icon: (className: string) => <CalendarDaysIcon className={className} />,
   },
-  // {
-  //   label: 'Invite',
-  //   key: 'invite',
-  //   icon: (className: string) => <EnvelopeOpenIcon className={className} />,
-  // },
 ]
 
 const RewardPage: React.FC = () => {
@@ -69,6 +70,12 @@ const RewardPage: React.FC = () => {
             openRewardResultModal={openRewardResultModal}
           ></RewardModalCheckInContent>
         )
+      case 'invite':
+        return (
+          <RewardPageInviteContent
+            openRewardResultModal={openRewardResultModal}
+          ></RewardPageInviteContent>
+        )
       default:
         return null
     }
@@ -86,6 +93,7 @@ const RewardPage: React.FC = () => {
         className={classNames(styles.body, {
           [styles.bodyCheckIn]: selectedTab === 'check_in',
           [styles.bodyAchievement]: selectedTab === 'achievements',
+          [styles.bodyInvite]: selectedTab === 'invite',
         })}
       >
         {renderContent()}

@@ -3,11 +3,14 @@ import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
 import API, {
   ACHIEVEMENT_STATUS,
   type IAchievement,
+  type IBindInvitationResponse,
   type IBuyShopItemResponse,
   type IClaimAchievementResponse,
+  type IClaimInvitationRewardResponse,
   type IClaimNewbieRewardResponse,
   type IGetAchievementsResponse,
   type IGetSignInStatusResponse,
+  type IInvitationStatusResponse,
   type ISignInResponse,
   type ShopItem,
   type SignInStatus,
@@ -33,6 +36,10 @@ export default class RewardStore {
 
   claimAchievementNetworkFlag = false
 
+  invitationStatus: IInvitationStatusResponse | null = null
+
+  claimAllInvitationRewardNetworkFlag = false
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
@@ -51,6 +58,11 @@ export default class RewardStore {
       initAchievements: flow.bound,
       claimAchievement: flow.bound,
       claimAchievementNetworkFlag: observable,
+      invitationStatus: observable,
+      initInvitationStatus: flow.bound,
+      claimAllInvitationRewardNetworkFlag: observable,
+      claimAllInvitationReward: flow.bound,
+      bindInvitation: flow.bound,
     })
   }
 
@@ -61,10 +73,15 @@ export default class RewardStore {
     this.claimNewbieRewardNetworkFlag = false
     this.achievements = []
     this.claimAchievementNetworkFlag = false
+    this.invitationStatus = null
   };
 
   *initData() {
-    yield Promise.all([this.initSignInStatus(), this.initAchievements()])
+    yield Promise.all([
+      this.initSignInStatus(),
+      this.initAchievements(),
+      this.initInvitationStatus(),
+    ])
   }
 
   *initSignInStatus() {
@@ -114,7 +131,11 @@ export default class RewardStore {
       return today.isSame(targetDate, 'day') && !status.signed
     })
     if (isSignInAvailable) return true
-    return this.achievements.some((ach) => ach.status === ACHIEVEMENT_STATUS.COMPLETED)
+    const isAchievementRewardClaimable = this.achievements.some(
+      (ach) => ach.status === ACHIEVEMENT_STATUS.COMPLETED,
+    )
+    if (isAchievementRewardClaimable) return true
+    return !!this.invitationStatus?.invitationsAsInviter.filter((item) => !item.claimed).length
   }
 
   *buyItem(item: ShopItem) {
@@ -205,6 +226,95 @@ export default class RewardStore {
       console.error(e)
     } finally {
       this.claimAchievementNetworkFlag = false
+    }
+  }
+
+  *initInvitationStatus() {
+    const result: AxiosResponse<IInvitationStatusResponse> = yield API.getInvitationStatus()
+    if (Array.isArray(result?.data?.invitationsAsInviter)) {
+      this.invitationStatus = result.data
+    }
+  }
+
+  *claimAllInvitationReward() {
+    if (!this.rootStoreRef.appStore.userInfo) return
+    if (!this.invitationStatus) return
+    const claimableCount = this.invitationStatus.invitationsAsInviter.filter(
+      (item) => !item.claimed,
+    ).length
+    if (claimableCount === 0) {
+      toast.error('No claimable invitation rewards.')
+      return
+    }
+    if (this.claimAllInvitationRewardNetworkFlag) return
+    try {
+      this.claimAllInvitationRewardNetworkFlag = true
+      const result: AxiosResponse<IClaimInvitationRewardResponse> =
+        yield API.claimInvitationReward()
+      if (result?.data?.success) {
+        const newUserInfo = {
+          ...this.rootStoreRef.appStore.userInfo,
+          solAmount:
+            (this.rootStoreRef.appStore.userInfo.solAmount || 0) + result.data.rewardSolAmount,
+          faithAmount:
+            (this.rootStoreRef.appStore.userInfo.faithAmount || 0) + result.data.rewardFaithAmount,
+        }
+        this.rootStoreRef.appStore.updateUserInfo(newUserInfo)
+        if (this.invitationStatus) {
+          this.invitationStatus = {
+            ...this.invitationStatus,
+            invitationsAsInviter: this.invitationStatus.invitationsAsInviter.map((item) => ({
+              ...item,
+              claimed: result.data.claimedInvitationIds.some((id) => id === item.id)
+                ? true
+                : item.claimed,
+            })),
+          }
+        }
+        return result.data
+      }
+    } finally {
+      this.claimAllInvitationRewardNetworkFlag = false
+    }
+  }
+
+  *bindInvitation(inviteCode: string) {
+    if (!this.rootStoreRef.appStore.userInfo) return
+    if (!this.invitationStatus) return
+    if (this.invitationStatus.inviteCode === inviteCode) {
+      toast.error('You cannot invite yourself.')
+      return
+    }
+    if (this.claimAllInvitationRewardNetworkFlag) return
+    try {
+      this.claimAllInvitationRewardNetworkFlag = true
+      const result: AxiosResponse<IBindInvitationResponse> = yield API.bindInvitation(inviteCode)
+      if (result?.data?.success) {
+        const newUserInfo = {
+          ...this.rootStoreRef.appStore.userInfo,
+          solAmount:
+            (this.rootStoreRef.appStore.userInfo.solAmount || 0) +
+            (result.data.rewardSolAmount || 0),
+          faithAmount:
+            (this.rootStoreRef.appStore.userInfo.faithAmount || 0) +
+            (result.data.rewardFaithAmount || 0),
+        }
+        this.rootStoreRef.appStore.updateUserInfo(newUserInfo)
+        this.invitationStatus = {
+          ...this.invitationStatus,
+          invitationsAsInvitee: {
+            id: 0,
+            claimed: true,
+            createdAt: dayjs().toISOString(),
+          },
+        }
+        return result.data
+      }
+    } catch (e) {
+      console.error(e)
+      toast.error('Failed to bind invitation code. Please try again later.')
+    } finally {
+      this.claimAllInvitationRewardNetworkFlag = false
     }
   }
 }
