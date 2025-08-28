@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useRef } from 'react'
 import styles from './RewardPageAchievementContent.module.css'
 import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
@@ -9,6 +9,9 @@ import {
   type IClaimAchievementResponse,
 } from '@/axios/api.ts'
 import classNames from 'classnames'
+import { Textfit } from 'react-textfit'
+import { useGSAP } from '@gsap/react'
+import { gsap } from 'gsap'
 
 interface IRewardPageAchievementContentProps {
   openRewardResultModal: (data: RewardResultModalData, title?: string) => void
@@ -20,6 +23,27 @@ const RewardPageAchievementContent: React.FC<IRewardPageAchievementContentProps>
   const {
     rewardStore: { achievements, claimAchievement, claimAchievementNetworkFlag },
   } = useMobxStore()
+  const contentContainerRef = useRef<HTMLDivElement>(null)
+  const achievementContainerRefs = useRef<Array<HTMLDivElement>>([])
+
+  useGSAP(
+    () => {
+      if (!achievements.length) return
+      if (!achievementContainerRefs.current.length) return
+      gsap.from(achievementContainerRefs.current, {
+        opacity: 0,
+        y: 40,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      })
+    },
+    {
+      scope: contentContainerRef,
+      dependencies: [achievements.length],
+    },
+  )
 
   const renderAchievementStatus = (status: ACHIEVEMENT_STATUS) => {
     switch (status) {
@@ -49,23 +73,32 @@ const RewardPageAchievementContent: React.FC<IRewardPageAchievementContentProps>
   }
 
   return (
-    <div className={styles.contentContainer}>
+    <div className={styles.contentContainer} ref={contentContainerRef}>
       {achievements.length === 0 ? (
-        <div>Loading . . .</div>
+        <div className={styles.loadingText}>Loading . . .</div>
       ) : (
-        achievements.map((achievement) => (
-          <div key={achievement.id} className={'flex items-center justify-between'}>
-            <div>
-              <div>
-                {achievement.type}-{achievement.subType}
-              </div>
-              <div>{achievement.description}</div>
+        achievements.map((achievement, index) => (
+          <div
+            key={achievement.id}
+            className={styles.achievementContainer}
+            ref={(el) => {
+              if (el) {
+                achievementContainerRefs.current[index] = el
+              }
+            }}
+          >
+            <div className={styles.descriptionContainer}>
+              <Textfit>
+                {achievement.description}
+                {achievement.description}
+                {achievement.description}
+              </Textfit>
             </div>
-            <div>
+            <div className={styles.progressContainer}>
               {achievement.progress}/{achievement.target}
             </div>
             <button
-              className={classNames({
+              className={classNames(styles.claimButton, {
                 button: achievement.status === ACHIEVEMENT_STATUS.COMPLETED,
               })}
               disabled={

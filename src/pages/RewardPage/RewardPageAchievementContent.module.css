@@ -1,5 +1,23 @@
 @import "tailwindcss";
+@import "tailwind-scrollbar-hide/v4";
 
 .contentContainer {
-    @apply flex-1 overflow-hidden flex flex-col items-stretch text-white gap-y-2;
+    @apply flex-1 overflow-x-hidden overflow-y-auto flex flex-col items-stretch text-white gap-y-2 scrollbar-hide;
+}
+
+
+.achievementContainer {
+    @apply flex items-center justify-between h-20 border border-red-500 rounded-lg px-4 bg-black gap-x-2;
+
+    .descriptionContainer {
+        @apply flex-1 overflow-hidden;
+    }
+
+    .progressContainer {
+        @apply basis-30 shrink-0;
+    }
+
+    .claimButton {
+        @apply basis-40 shrink-0;
+    }
 }
