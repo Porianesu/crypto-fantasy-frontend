@@ -259,7 +259,7 @@ export default class StoresStore {
     this.isAppLoading = true
     try {
       this.initNetworkBeforeLogin()
-      preloadPages().then(() => {
+      preloadPages().finally(() => {
         this.rootStoreRef.preloadStore.updatePreloadResult({
           pagesPreloadProgress: 1,
         })

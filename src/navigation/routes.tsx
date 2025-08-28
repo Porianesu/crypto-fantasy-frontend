@@ -64,10 +64,15 @@ export const commonPageLoader = () => {
 
 export const preloadPages = async () => {
   try {
-    await import('@/pages/GalleryPage/GalleryPage.tsx')
-    await import('@/pages/HomePage/HomePage.tsx')
-    await import('@/pages/IntroductionPage/IntroductionPage.tsx')
-    await import('@/pages/TournamentPage/TournamentPage.tsx')
+    await Promise.all([
+      import('@/pages/HomePage/HomePage.tsx'),
+      import('@/pages/FusionPage/FusionPage.tsx'),
+      import('@/pages/GalleryPage/GalleryPage.tsx'),
+      import('@/pages/IntroductionPage/IntroductionPage.tsx'),
+      import('@/pages/RewardPage/RewardPage.tsx'),
+      import('@/pages/ShopPage/ShopPage.tsx'),
+      import('@/pages/TournamentPage/TournamentPage.tsx'),
+    ])
   } catch (e) {
     console.error('Error preloading CardPage:', e)
   }
