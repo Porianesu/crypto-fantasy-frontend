@@ -230,7 +230,7 @@ const RewardPageInviteContent: React.FC<IRewardPageInviteContentProps> = ({
           </div>
         </div>
       ) : (
-        <div>Loading . . .</div>
+        <div className={styles.loadingText}>Loading . . .</div>
       )}
     </div>
   )

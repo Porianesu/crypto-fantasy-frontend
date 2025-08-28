@@ -4,6 +4,10 @@
     @apply flex flex-col items-stretch justify-end w-332 h-212.5 relative;
     @apply bg-[url(/src/assets/images/reward_page/invite_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
 
+    .loadingText {
+        @apply flex items-center justify-center h-110 text-3xl text-[#FFD481];
+    }
+
     .title {
         @apply w-192 h-62.5 absolute top-28 right-6 z-0;
         @apply bg-[url(/src/assets/images/reward_page/invite_title_image.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
