@@ -16,6 +16,10 @@
     cursor: url('/src/assets/images/entrance_page/cursor.png'), auto;
 }
 
+.normalStyle button {
+    cursor: url('/src/assets/images/entrance_page/cursor.png'), auto;
+}
+
 .globalLoadingStyle {
     cursor: progress;
 }

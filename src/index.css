@@ -27,7 +27,7 @@
     }
 
     .button {
-        @apply hover:scale-105 active:scale-95 transition-transform cursor-pointer;
+        @apply hover:scale-105 active:scale-95 transition-transform cursor-pointer disabled:cursor-not-allowed;
     }
 
     .no-scrollbar {
