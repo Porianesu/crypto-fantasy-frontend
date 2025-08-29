@@ -22,7 +22,7 @@ const RewardPageCheckInContent: React.FC<IRewardPageCheckInContentProps> = ({
   const [buttonLoading, setButtonLoading] = useState(false)
   const today = useMemo(() => dayjs(), [])
   const contentContainerRef = useRef<HTMLDivElement>(null)
-  const signInItemRefs = useRef<Array<HTMLDivElement>>([])
+  const signInItemRefs = useRef<Array<HTMLButtonElement>>([])
 
   useGSAP(
     () => {
@@ -80,9 +80,10 @@ const RewardPageCheckInContent: React.FC<IRewardPageCheckInContentProps> = ({
             const displayDay = dayOfWeek === '0' ? '7' : dayOfWeek // Convert Sunday (0) to 7 for display
             const isAfterToday = targetDate.isAfter(today, 'day')
             return (
-              <div
+              <button
                 key={item.date}
                 className={classNames(styles.checkInItemContainer, {
+                  [styles.checkInButton]: todayUnsigned,
                   [styles.checkInItemContainerToday]: isToday,
                   [styles.checkInItemContainerNotToday]: !isToday,
                 })}
@@ -91,6 +92,8 @@ const RewardPageCheckInContent: React.FC<IRewardPageCheckInContentProps> = ({
                     signInItemRefs.current[index] = el
                   }
                 }}
+                disabled={!todayUnsigned || buttonLoading}
+                onClick={todayUnsigned ? handleSignIn : undefined}
               >
                 <div className={styles.checkInItemDate}>
                   0{displayDay}
@@ -115,19 +118,16 @@ const RewardPageCheckInContent: React.FC<IRewardPageCheckInContentProps> = ({
                   <div className={styles.checkInItemRewardAmount}>{item.reward.faithAmount}</div>
                 </div>
                 {isAfterToday ? null : (
-                  <button
+                  <div
                     className={classNames(styles.claimText, {
-                      button: todayUnsigned,
                       [styles.claimTextClaimable]: todayUnsigned,
                       [styles.claimTextNotClaimable]: !todayUnsigned,
                     })}
-                    disabled={!todayUnsigned || buttonLoading}
-                    onClick={todayUnsigned ? handleSignIn : undefined}
                   >
-                    {item.signed ? 'Claimed' : 'Claim'}
-                  </button>
+                    {item.signed ? 'Claimed' : isToday ? 'Claim' : 'Expired'}
+                  </div>
                 )}
-              </div>
+              </button>
             )
           })}
         </div>
