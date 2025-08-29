@@ -177,12 +177,12 @@ const RewardPageInviteContent: React.FC<IRewardPageInviteContentProps> = ({
       <div className={styles.title} ref={titleRef}></div>
       {appConfig ? (
         <div className={styles.description} ref={descriptionRef}>
-          Invite a friend and share{' '}
+          Invite a friend and share
           {appConfig.ReferralReward.inviter.solAmount + appConfig.ReferralReward.invitee.solAmount}
-          S-Coins &{' '}
+          SOL and
           {appConfig.ReferralReward.inviter.faithAmount +
             appConfig.ReferralReward.invitee.faithAmount}
-          F-Coins with them
+          Faithcoin with them.
         </div>
       ) : null}
       {appConfig && invitationStatus ? (
