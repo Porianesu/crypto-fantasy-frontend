@@ -57,7 +57,6 @@ export default class RewardStore {
       achievements: observable,
       initAchievements: flow.bound,
       claimAchievement: flow.bound,
-      claimAchievementNetworkFlag: observable,
       invitationStatus: observable,
       initInvitationStatus: flow.bound,
       claimAllInvitationRewardNetworkFlag: observable,

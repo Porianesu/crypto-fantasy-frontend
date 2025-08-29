@@ -13,7 +13,7 @@
 }
 
 .bodyAchievement {
-    @apply flex items-start justify-start p-4;
+    @apply flex items-stretch justify-start pl-17 pt-7.5 pb-24 pr-20;
 }
 
 .bodyInvite {
