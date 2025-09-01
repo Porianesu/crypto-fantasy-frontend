@@ -34,6 +34,8 @@ export default class RewardStore {
 
   achievements: Array<IAchievement> = []
 
+  updateAchievementsInterval: ReturnType<typeof setInterval> | null = null
+
   claimAchievementNetworkFlag = false
 
   invitationStatus: IInvitationStatusResponse | null = null
@@ -188,6 +190,12 @@ export default class RewardStore {
     if (Array.isArray(result?.data?.achievements)) {
       this.achievements = result.data.achievements
     }
+    if (this.updateAchievementsInterval) {
+      clearInterval(this.updateAchievementsInterval)
+    }
+    this.updateAchievementsInterval = setInterval(() => {
+      this.initAchievements()
+    }, 30 * 1000) // 每5分钟更新一次
   }
 
   *claimAchievement(achievement: IAchievement) {

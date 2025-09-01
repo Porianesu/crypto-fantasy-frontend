@@ -43,6 +43,11 @@ const AchievementItem: React.FC<IAchievementItemProps> = ({
           ></button>
         )
       case ACHIEVEMENT_STATUS.UNCOMPLETED:
+        return (
+          <div>
+            {achievement.progress}/{achievement.target}
+          </div>
+        )
       default:
         return null
     }
