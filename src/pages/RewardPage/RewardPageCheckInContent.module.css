@@ -42,7 +42,7 @@
     @apply flex flex-col items-center w-40.5 h-97 rounded-xl border-3  bg-linear-to-b ;
 
     .checkInItemDate {
-        @apply text-[#ACA591] font-[FFDin]  font-black italic text-5xl leading-17.5 mb-4;
+        @apply text-[#ACA591] font-[FFDin]  font-black italic text-5xl leading-17.5 mb-4 shrink-0;
 
         & > span {
             @apply text-[#A2461A] text-2xl;
@@ -63,7 +63,7 @@
 }
 
 .checkInItemRewardContainer {
-    @apply w-28 h-26 flex flex-col items-center justify-end border bg-linear-to-b;
+    @apply w-28 h-26 flex flex-col items-center justify-end border bg-linear-to-b shrink-0;
 
     .checkInItemRewardImage {
         @apply mb-1;

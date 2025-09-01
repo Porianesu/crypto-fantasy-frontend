@@ -330,7 +330,6 @@ export default class RewardStore {
 
   *autoBindInvitation() {
     const inviteCode = this.rootStoreRef.appStore.initURLSearchParams?.get(URL_PARAMS.INVITE_CODE)
-    console.log('autoBindInvitation inviteCode:', inviteCode)
     if (inviteCode) {
       const result: IBindInvitationResponse =
         yield this.rootStoreRef.rewardStore.bindInvitation(inviteCode)
