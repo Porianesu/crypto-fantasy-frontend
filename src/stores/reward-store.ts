@@ -18,6 +18,7 @@ import API, {
 import type { AxiosResponse } from 'axios'
 import dayjs from 'dayjs'
 import { toast } from 'react-toastify'
+import { URL_PARAMS } from '@/navigation/routes.tsx'
 
 export default class RewardStore {
   rootStoreRef: Store
@@ -64,6 +65,7 @@ export default class RewardStore {
       claimAllInvitationRewardNetworkFlag: observable,
       claimAllInvitationReward: flow.bound,
       bindInvitation: flow.bound,
+      autoBindInvitation: flow.bound,
     })
   }
 
@@ -83,6 +85,7 @@ export default class RewardStore {
       this.initAchievements(),
       this.initInvitationStatus(),
     ])
+    this.autoBindInvitation()
   }
 
   *initSignInStatus() {
@@ -322,6 +325,18 @@ export default class RewardStore {
       toast.error('Failed to bind invitation code. Please try again later.')
     } finally {
       this.claimAllInvitationRewardNetworkFlag = false
+    }
+  }
+
+  *autoBindInvitation() {
+    const inviteCode = this.rootStoreRef.appStore.initURLSearchParams?.get(URL_PARAMS.INVITE_CODE)
+    console.log('autoBindInvitation inviteCode:', inviteCode)
+    if (inviteCode) {
+      const result: IBindInvitationResponse =
+        yield this.rootStoreRef.rewardStore.bindInvitation(inviteCode)
+      if (result.success) {
+        toast.success('Invitation accepted successfully.')
+      }
     }
   }
 }

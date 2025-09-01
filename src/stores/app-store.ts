@@ -195,11 +195,9 @@ export default class StoresStore {
   *loginAndRegister(email: string, password: string) {
     if (!email) return toast.warn('Please enter your email.')
     if (!password) return toast.warn('Please enter your password.')
-    const inviteCode = this.initURLSearchParams?.get(URL_PARAMS.INVITE_CODE)
     const result: AxiosResponse<ILoginAndRegisterResponse> = yield API.loginAndRegister({
       email,
       password,
-      inviteCode,
     })
     if (result?.data?.type) {
       if (result.data.type === 'register') {
@@ -227,13 +225,15 @@ export default class StoresStore {
   *loginWithAccessToken() {
     const accessToken = getAccessToken()
     if (!accessToken) return
-    const inviteCode = this.initURLSearchParams?.get(URL_PARAMS.INVITE_CODE)
-    const result: AxiosResponse<ILoginWithAccessTokenResponse> =
-      yield API.loginWithAccessToken(inviteCode)
+    const result: AxiosResponse<ILoginWithAccessTokenResponse> = yield API.loginWithAccessToken()
     if (result.data.user) {
       toast.success('Welcome back! Adventure awaits!')
       this.updateUserInfo(result.data.user)
       yield this.updateUserCardsBag()
+      const inviteCode = this.initURLSearchParams?.get(URL_PARAMS.INVITE_CODE)
+      if (inviteCode) {
+        this.rootStoreRef.rewardStore.bindInvitation(inviteCode)
+      }
     }
   }
 
