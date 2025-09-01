@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { StoreProvider } from '@/stores/StoreProvider.tsx'
-import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import {
   commonPageLoader,
   GALLERY_PATH,
@@ -13,6 +13,7 @@ import {
   FUSION_PATH,
   SHOP_PATH,
   REWARD_PATH,
+  RedirectWithQuery,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
@@ -46,7 +47,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to={ENTRANCE_PATH}></Navigate>,
+        element: <RedirectWithQuery></RedirectWithQuery>,
       },
       {
         path: ENTRANCE_PATH,
@@ -117,7 +118,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '*', // 捕获所有未匹配的路由
-        element: <Navigate to={ENTRANCE_PATH} replace />,
+        element: <RedirectWithQuery></RedirectWithQuery>,
       },
     ],
   },

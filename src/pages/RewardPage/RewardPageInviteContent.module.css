@@ -87,6 +87,10 @@
     }
 
     .inviteCodeContainer {
+        @apply mb-2;
+    }
+
+    .inviteLinkContainer {
         @apply rounded-xl bg-[#1D0600] w-117.5 h-19 border-6 border-[#3B1900] flex items-center justify-between pl-5 pr-4 text-white text-2xl font-[FFDin] font-black italic;
         text-shadow: -2px -2px 0 #4E2600,
         2px -2px 0 #4E2600,
@@ -96,11 +100,15 @@
         0 2px 0 #4E2600,
         -2px 0 0 #4E2600,
         2px 0 0 #4E2600;
+
+        & > div {
+            @apply whitespace-pre flex-1 overflow-hidden text-ellipsis;
+        }
     }
 }
 
 .copyButton {
-    @apply size-9;
+    @apply size-9 shrink-0;
     @apply bg-[url(/src/assets/images/reward_page/copy_icon.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
 }
 

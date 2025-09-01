@@ -1,4 +1,4 @@
-import { generatePath, redirect } from 'react-router-dom'
+import { generatePath, Navigate, redirect, useLocation } from 'react-router-dom'
 import { getStoreRef } from '@/stores/StoreProvider.tsx'
 import type { ICardData } from '@/components/Card.tsx'
 
@@ -18,6 +18,15 @@ export type FusionPathState = {
 export const FUSION_PATH = '/fusion'
 export const SHOP_PATH = '/shop'
 export const REWARD_PATH = '/reward'
+
+export enum URL_PARAMS {
+  INVITE_CODE = 'ic',
+}
+
+export const RedirectWithQuery = () => {
+  const location = useLocation()
+  return <Navigate to={{ pathname: ENTRANCE_PATH, search: location.search }} replace />
+}
 
 export const getHomePath = () => {
   return generatePath(HOME_PATH)

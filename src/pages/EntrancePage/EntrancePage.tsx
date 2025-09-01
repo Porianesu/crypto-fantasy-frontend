@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getHomePath } from '@/navigation/routes.tsx'
 const LoginModal = React.lazy(() => import('@/pages/EntrancePage/LoginModal.tsx'))
 
@@ -16,6 +16,7 @@ const EntrancePage: React.FC = () => {
     appStore: { initData, userInfo },
     modalStore: { changeLoginModalVisible },
   } = useMobxStore()
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -24,7 +25,8 @@ const EntrancePage: React.FC = () => {
   const startButtonRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    initData()
+    initData(searchParams)
+    setSearchParams(undefined)
   }, [])
 
   useGSAP(

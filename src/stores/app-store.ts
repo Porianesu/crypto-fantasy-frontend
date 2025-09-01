@@ -1,6 +1,6 @@
 import type { Store } from '@/stores/index.ts'
 import { action, computed, flow, makeAutoObservable, observable } from 'mobx'
-import { getHomePath, getIntroductionPath, preloadPages } from '@/navigation/routes.tsx'
+import { getHomePath, getIntroductionPath, preloadPages, URL_PARAMS } from '@/navigation/routes.tsx'
 import {
   CARD_DATA_BASE_REQUEST_KEY,
   myQueryClient,
@@ -72,6 +72,8 @@ export default class StoresStore {
   _cardsBag: Array<ICardDataInBag> = []
 
   _setDeckAbortController?: AbortController
+
+  initURLSearchParams?: URLSearchParams
 
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
@@ -193,9 +195,11 @@ export default class StoresStore {
   *loginAndRegister(email: string, password: string) {
     if (!email) return toast.warn('Please enter your email.')
     if (!password) return toast.warn('Please enter your password.')
+    const inviteCode = this.initURLSearchParams?.get(URL_PARAMS.INVITE_CODE)
     const result: AxiosResponse<ILoginAndRegisterResponse> = yield API.loginAndRegister({
       email,
       password,
+      inviteCode,
     })
     if (result?.data?.type) {
       if (result.data.type === 'register') {
@@ -223,7 +227,9 @@ export default class StoresStore {
   *loginWithAccessToken() {
     const accessToken = getAccessToken()
     if (!accessToken) return
-    const result: AxiosResponse<ILoginWithAccessTokenResponse> = yield API.loginWithAccessToken()
+    const inviteCode = this.initURLSearchParams?.get(URL_PARAMS.INVITE_CODE)
+    const result: AxiosResponse<ILoginWithAccessTokenResponse> =
+      yield API.loginWithAccessToken(inviteCode)
     if (result.data.user) {
       toast.success('Welcome back! Adventure awaits!')
       this.updateUserInfo(result.data.user)
@@ -254,9 +260,10 @@ export default class StoresStore {
     }
   }
 
-  initData = () => {
+  initData = (urlSearchParams: URLSearchParams) => {
     if (!this.isAppLoading) return
     this.isAppLoading = true
+    this.initURLSearchParams = urlSearchParams
     try {
       this.initNetworkBeforeLogin()
       preloadPages().finally(() => {

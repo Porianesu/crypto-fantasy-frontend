@@ -219,11 +219,14 @@ export interface IClaimInvitationRewardResponse {
 
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
-  loginAndRegister: async (data: { email: string; password: string }) =>
+  loginAndRegister: async (data: { email: string; password: string; inviteCode?: string | null }) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
   patchUserInfo: async (data: { nickname?: string; avatar?: string }) =>
     request.patch<IPatchUserInfoResponse>('/users', data),
-  loginWithAccessToken: async () => request.get<ILoginWithAccessTokenResponse>('/auth-me'),
+  loginWithAccessToken: async (inviteCode?: string | null) =>
+    request.get<ILoginWithAccessTokenResponse>('/auth-me', {
+      params: inviteCode ? { inviteCode } : {},
+    }),
   fetchCard: async (cardId: number) => request.get<ICardData>('/cards', { params: { id: cardId } }),
   fetchCards: async (cardId: Array<number>) =>
     request.get<Array<ICardData>>('/cards', { params: { ids: cardId.join(',') } }),

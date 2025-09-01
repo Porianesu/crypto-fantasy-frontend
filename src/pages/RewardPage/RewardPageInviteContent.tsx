@@ -9,6 +9,7 @@ import type { IBindInvitationResponse, IClaimInvitationRewardResponse } from '@/
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
+import { URL_PARAMS } from '@/navigation/routes.tsx'
 
 interface IRewardPageInviteContentProps {
   openRewardResultModal: (data: RewardResultModalData, title?: string) => void
@@ -77,8 +78,23 @@ const RewardPageInviteContent: React.FC<IRewardPageInviteContentProps> = ({
 
   const handleCopyInviteCode = async () => {
     if (!invitationStatus?.inviteCode) return
-    await navigator.clipboard.writeText(invitationStatus.inviteCode)
-    toast.success('Invitation copied to clipboard')
+    try {
+      await navigator.clipboard.writeText(invitationStatus.inviteCode)
+      toast.success('Invitation copied to clipboard')
+    } catch {
+      toast.error('Failed to copy invitation code')
+    }
+  }
+
+  const handleCopyInviteLink = async () => {
+    if (!invitationStatus?.inviteCode) return
+    try {
+      const inviteLink = `${window.location.origin}?${URL_PARAMS.INVITE_CODE}=${invitationStatus.inviteCode}`
+      await navigator.clipboard.writeText(inviteLink)
+      toast.success('Invitation link copied to clipboard')
+    } catch {
+      toast.error('Failed to copy invitation link')
+    }
   }
 
   const handleClaimInvitationReward = async () => {
@@ -220,11 +236,18 @@ const RewardPageInviteContent: React.FC<IRewardPageInviteContentProps> = ({
           </div>
           <div className={styles.bottomRightPartContainer} ref={bottomRightPartContainerRef}>
             <div className={styles.inviteCodeLabel}>Referral code</div>
-            <div className={styles.inviteCodeContainer}>
+            <div className={classNames(styles.inviteLinkContainer, styles.inviteCodeContainer)}>
               <div>{invitationStatus.inviteCode}</div>
               <button
                 className={classNames(styles.copyButton, 'button')}
                 onClick={handleCopyInviteCode}
+              ></button>
+            </div>
+            <div className={styles.inviteLinkContainer}>
+              <div>{`${window.location.origin}?${URL_PARAMS.INVITE_CODE}=${invitationStatus.inviteCode}`}</div>
+              <button
+                className={classNames(styles.copyButton, 'button')}
+                onClick={handleCopyInviteLink}
               ></button>
             </div>
           </div>
