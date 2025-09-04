@@ -74,7 +74,7 @@ const EntrancePage: React.FC = () => {
         volume: 0.3,
       })
     }
-    if (userInfo?.email) {
+    if (userInfo?.email || userInfo?.address) {
       navigate(getHomePath())
     } else {
       changeLoginModalVisible(true)

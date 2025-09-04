@@ -217,9 +217,24 @@ export interface IClaimInvitationRewardResponse {
   claimedInvitationIds: Array<number>
 }
 
+export interface EmailLoginData {
+  email: string
+  password: string
+}
+
+export interface WalletLoginData {
+  address: string
+  signature: string
+  nonce: string
+}
+
+export interface IGetNonceResponse {
+  nonce: string
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
-  loginAndRegister: async (data: { email: string; password: string }) =>
+  loginAndRegister: async (data: EmailLoginData | WalletLoginData) =>
     request.post<ILoginAndRegisterResponse>('/users', data),
   patchUserInfo: async (data: { nickname?: string; avatar?: string }) =>
     request.patch<IPatchUserInfoResponse>('/users', data),
@@ -286,6 +301,8 @@ const API = {
     request.post<IBindInvitationResponse>('/reward/invitation', { inviteCode }),
   claimInvitationReward: async () =>
     request.post<IClaimInvitationRewardResponse>('/reward/claim-invite-reward'),
+  getNonce: async (address: string) =>
+    request.get<IGetNonceResponse>('/nonce', { params: { address } }),
 }
 
 export default API

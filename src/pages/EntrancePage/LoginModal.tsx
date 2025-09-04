@@ -7,6 +7,9 @@ import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover'
+import { ethers } from 'ethers'
+import { toast } from 'react-toastify'
+import api from '@/axios/api.ts'
 
 const LoginModal: React.FC = () => {
   const {
@@ -22,11 +25,50 @@ const LoginModal: React.FC = () => {
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
-    const result = await loginAndRegister(email, password)
+    const result = await loginAndRegister('email', { email, password })
     setLoginButtonLoading(false)
     if (result) {
       changeLoginModalVisible(false)
       navigate(result as unknown as string)
+    }
+  }
+
+  async function handleMetaMaskLogin() {
+    if (!window.ethereum) {
+      toast.error('MetaMask not installed')
+      return
+    }
+    try {
+      // 请求账户授权
+      const accounts = await window.ethereum.request<string>({ method: 'eth_requestAccounts' })
+      if (!accounts || accounts.length === 0) {
+        toast.error('No accounts found.')
+        return
+      }
+      const address = accounts[0]
+      if (!address) {
+        toast.error('Failed to get the account address.')
+        return
+      }
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      // 后端返回 nonce，前端用钱包签名
+      const [signer, nonceResult] = await Promise.all([provider.getSigner(), api.getNonce(address)])
+      if (!nonceResult?.data?.nonce)
+        return toast.error('Failed to get nonce from server. Please try again.')
+      const signature = await signer.signMessage(nonceResult.data.nonce) // 这里的 '123456' 应该替换为后端返回的 nonce
+      const result = await loginAndRegister('wallet', {
+        address,
+        signature,
+        nonce: nonceResult.data.nonce,
+      })
+      setLoginButtonLoading(false)
+      if (result) {
+        changeLoginModalVisible(false)
+        navigate(result as unknown as string)
+      }
+    } catch (err) {
+      toast.error((err as any)?.message ? (err as any).message : 'Failed to login with MetaMask.')
+      console.error(err)
     }
   }
 
@@ -55,9 +97,16 @@ const LoginModal: React.FC = () => {
             <form
               onSubmit={handleSubmit}
               className={
-                'grow shrink basis-0 overflow-hidden flex flex-col items-stretch self-stretch '
+                'relative grow shrink basis-0 overflow-hidden flex flex-col items-stretch self-stretch '
               }
             >
+              <button
+                type={'button'}
+                onClick={handleMetaMaskLogin}
+                className={'button absolute top-0 right-0'}
+              >
+                Login With MetaMask
+              </button>
               <div className={classNames(styles.inputGroup, 'mb-7.5')}>
                 <label htmlFor="email">Email</label>
                 <input

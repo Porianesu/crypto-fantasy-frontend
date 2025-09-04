@@ -15,6 +15,7 @@ import {
 import { type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
 import API, {
+  type EmailLoginData,
   type ICraftCardResponse,
   type IDrawCardsResponse,
   type IFetchCardsPageData,
@@ -25,13 +26,16 @@ import API, {
   type IMeltCardResponse,
   type IRedeemCodeResponse,
   type ISetDeckResponse,
+  type WalletLoginData,
 } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 
 export interface UserInfo extends UserStorageInfo {
   avatar: string
   createdAt: string
-  email: string
+  email?: string
+  address?: string
+  nonce?: string
   nickname: string
   expPercent: number
   faithAmount: number
@@ -192,13 +196,22 @@ export default class StoresStore {
     }
   }
 
-  *loginAndRegister(email: string, password: string) {
-    if (!email) return toast.warn('Please enter your email.')
-    if (!password) return toast.warn('Please enter your password.')
-    const result: AxiosResponse<ILoginAndRegisterResponse> = yield API.loginAndRegister({
-      email,
-      password,
-    })
+  *loginAndRegister(type: 'wallet' | 'email', loginParams: EmailLoginData | WalletLoginData) {
+    if (type === 'wallet') {
+      if (
+        !('address' in loginParams) ||
+        !('signature' in loginParams) ||
+        !('nonce' in loginParams)
+      ) {
+        return toast.warn('Invalid wallet login parameters.')
+      }
+    }
+    if (type === 'email') {
+      if (!('email' in loginParams) || !('password' in loginParams)) {
+        return toast.warn('Invalid email login parameters.')
+      }
+    }
+    const result: AxiosResponse<ILoginAndRegisterResponse> = yield API.loginAndRegister(loginParams)
     if (result?.data?.type) {
       if (result.data.type === 'register') {
         toast.success('Registration successful!')
@@ -206,7 +219,17 @@ export default class StoresStore {
         toast.success('Login successful!')
       }
     }
-    if (result?.data?.user?.email === email) {
+    let correctUserFlag = false
+    if (type === 'email' && result?.data?.user?.email === (loginParams as EmailLoginData).email) {
+      correctUserFlag = true
+    }
+    if (
+      type === 'wallet' &&
+      result?.data?.user?.address === (loginParams as WalletLoginData).address
+    ) {
+      correctUserFlag = true
+    }
+    if (correctUserFlag) {
       if (result.data.token) {
         setAccessToken(result.data.token)
       }
