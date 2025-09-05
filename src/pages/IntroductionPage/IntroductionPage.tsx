@@ -17,7 +17,7 @@ const IntroductionPage: React.FC = () => {
   const textRef = useRef<ITextHandle>(null)
   const bgmSound = audioInstanceMap.get(AudioInstanceId.BGM)
   const introductionSound = audioInstanceMap.get(AudioInstanceId.IntroductionSound)
-  const playIntroductionSoundTimer = useRef<number>(null)
+  const playIntroductionSoundTimer = useRef<ReturnType<typeof setTimeout>>(null)
 
   const handleStartButtonClick = () => {
     navigate(getHomePath())
