@@ -51,3 +51,20 @@
     @apply w-101.5 h-25 ;
     @apply bg-[url('/src/assets/images/entrance_page/login_modal_confirm_button_background.png')] bg-contain bg-center bg-no-repeat;
 }
+
+.divider {
+    @apply flex items-center justify-center h-0.5 bg-[#3A2400] mb-7;
+
+    & > span {
+        @apply bg-[#ddb267] px-1 py-0.5 text-sm text-[#3A2400];
+    }
+}
+
+
+.metamaskLoginButton {
+    @apply self-center underline mb-auto flex items-center gap-x-2 text-sm text-[#3A2400];
+
+    & > img {
+        @apply size-5;
+    }
+}

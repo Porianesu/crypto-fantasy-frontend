@@ -10,6 +10,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover
 import { ethers } from 'ethers'
 import { toast } from 'react-toastify'
 import api from '@/axios/api.ts'
+import MetamaskIcon from '../../../src/assets/images/common/MetaMask-icon-fox.svg'
 
 const LoginModal: React.FC = () => {
   const {
@@ -20,6 +21,7 @@ const LoginModal: React.FC = () => {
   const [loginButtonLoading, setLoginButtonLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (loginButtonLoading) return
     e.preventDefault()
     setLoginButtonLoading(true)
     const formData = new FormData(e.currentTarget)
@@ -34,11 +36,13 @@ const LoginModal: React.FC = () => {
   }
 
   async function handleMetaMaskLogin() {
+    if (loginButtonLoading) return
     if (!window.ethereum) {
       toast.error('MetaMask not installed')
       return
     }
     try {
+      setLoginButtonLoading(true)
       // 请求账户授权
       const accounts = await window.ethereum.request<string>({ method: 'eth_requestAccounts' })
       if (!accounts || accounts.length === 0) {
@@ -69,6 +73,8 @@ const LoginModal: React.FC = () => {
     } catch (err) {
       toast.error((err as any)?.message ? (err as any).message : 'Failed to login with MetaMask.')
       console.error(err)
+    } finally {
+      setLoginButtonLoading(false)
     }
   }
 
@@ -100,13 +106,6 @@ const LoginModal: React.FC = () => {
                 'relative grow shrink basis-0 overflow-hidden flex flex-col items-stretch self-stretch '
               }
             >
-              <button
-                type={'button'}
-                onClick={handleMetaMaskLogin}
-                className={'button absolute top-0 right-0'}
-              >
-                Login With MetaMask
-              </button>
               <div className={classNames(styles.inputGroup, 'mb-7.5')}>
                 <label htmlFor="email">Email</label>
                 <input
@@ -117,7 +116,7 @@ const LoginModal: React.FC = () => {
                   placeholder={'Please enter your account.'}
                 />
               </div>
-              <div className={classNames(styles.inputGroup, 'mb-auto')}>
+              <div className={classNames(styles.inputGroup, 'mb-4')}>
                 <label htmlFor="password">Password</label>
                 <input
                   className={styles.input}
@@ -127,6 +126,19 @@ const LoginModal: React.FC = () => {
                   placeholder={'Please enter your Password'}
                 />
               </div>
+              <div className={styles.divider}>
+                <span>or</span>
+              </div>
+              <button
+                type={'button'}
+                onClick={handleMetaMaskLogin}
+                className={classNames(styles.metamaskLoginButton, {
+                  button: !loginButtonLoading,
+                })}
+              >
+                <div>Continue with MetaMask</div>
+                <img src={MetamaskIcon} alt={'Metamask-Icon'}></img>
+              </button>
               <button
                 className={classNames(styles.submitButton, {
                   button: !loginButtonLoading,
