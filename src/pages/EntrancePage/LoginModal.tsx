@@ -10,7 +10,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover
 import { ethers } from 'ethers'
 import { toast } from 'react-toastify'
 import api from '@/axios/api.ts'
-import MetamaskIcon from '../../../src/assets/images/common/MetaMask-icon-fox.svg'
+import MetamaskIcon from '../../assets/images/common/MetaMask-icon-fox.svg'
 
 const LoginModal: React.FC = () => {
   const {
@@ -65,7 +65,6 @@ const LoginModal: React.FC = () => {
         signature,
         nonce: nonceResult.data.nonce,
       })
-      setLoginButtonLoading(false)
       if (result) {
         changeLoginModalVisible(false)
         navigate(result as unknown as string)
