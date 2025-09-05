@@ -59,8 +59,12 @@
     @apply flex flex-col items-start gap-y-6.5 mt-16 mr-11 shrink-0;
 
     .tabContainer {
-        @apply w-81 h-25 flex items-center gap-x-6 pl-11.5 text-2xl font-normal leading-10;
+        @apply w-81 h-25 flex items-center gap-x-6 pl-11.5 text-2xl font-normal leading-10 relative;
         @apply bg-contain bg-top-left bg-no-repeat;
+    }
+
+    .redDot {
+        @apply size-3 rounded-full bg-[#FF3B30] absolute top-1/2 -translate-y-1/2 right-6;
     }
 
     .tabContainerSelected {

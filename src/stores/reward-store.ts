@@ -53,6 +53,9 @@ export default class RewardStore {
       signInStatus: observable,
       initSignInStatus: flow.bound,
       signIn: flow.bound,
+      isCheckInRewardAvailable: computed,
+      isAchievementRewardAvailable: computed,
+      isReferralRewardAvailable: computed,
       showRedDot: computed,
       buyItem: flow.bound,
       claimNewbieRewardNetworkFlag: observable,
@@ -128,18 +131,28 @@ export default class RewardStore {
     }
   }
 
-  get showRedDot() {
+  get isCheckInRewardAvailable() {
     const today = dayjs()
-    const isSignInAvailable = this.signInStatus.some((status) => {
+    return this.signInStatus.some((status) => {
       const targetDate = dayjs(status.date)
       return today.isSame(targetDate, 'day') && !status.signed
     })
-    if (isSignInAvailable) return true
-    const isAchievementRewardClaimable = this.achievements.some(
-      (ach) => ach.status === ACHIEVEMENT_STATUS.COMPLETED,
-    )
-    if (isAchievementRewardClaimable) return true
+  }
+
+  get isAchievementRewardAvailable() {
+    return this.achievements.some((ach) => ach.status === ACHIEVEMENT_STATUS.COMPLETED)
+  }
+
+  get isReferralRewardAvailable() {
     return !!this.invitationStatus?.invitationsAsInviter.filter((item) => !item.claimed).length
+  }
+
+  get showRedDot() {
+    return (
+      this.isCheckInRewardAvailable ||
+      this.isAchievementRewardAvailable ||
+      this.isReferralRewardAvailable
+    )
   }
 
   *buyItem(item: ShopItem) {

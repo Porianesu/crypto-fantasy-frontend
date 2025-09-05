@@ -6,13 +6,16 @@ import { getHomePath } from '@/navigation/routes.tsx'
 import { useNavigate } from 'react-router-dom'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 
+export type CommonPageLayoutTab = {
+  label: string
+  key: string
+  icon: (className: string) => JSX.Element
+  showRedDot?: boolean
+}
+
 interface ICommonPageLayoutProps {
   title: string
-  Tabs: {
-    label: string
-    key: string
-    icon: (className: string) => JSX.Element
-  }[]
+  Tabs: CommonPageLayoutTab[]
   selectedTab: string
   setSelectedTab: Dispatch<SetStateAction<string>>
   containerClassName?: string
@@ -68,6 +71,7 @@ const CommonPageLayout: React.FC<PropsWithChildren<ICommonPageLayoutProps>> = ({
               })}
               onClick={() => setSelectedTab(tab.key)}
             >
+              {tab.showRedDot ? <div className={styles.redDot}></div> : null}
               {tab.icon(classNames(styles.tabIcon))}
               {tab.label}
             </div>
