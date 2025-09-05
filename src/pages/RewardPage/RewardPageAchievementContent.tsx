@@ -12,6 +12,7 @@ import classNames from 'classnames'
 import { Textfit } from 'react-textfit'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
 
 interface IAchievementItemProps {
   index: number
@@ -100,11 +101,12 @@ const RewardPageAchievementContent: React.FC<IRewardPageAchievementContentProps>
   openRewardResultModal,
 }) => {
   const {
-    rewardStore: { achievements, claimAchievement },
+    rewardStore: { achievements, claimAchievement, initAchievements },
   } = useMobxStore()
   const contentContainerRef = useRef<HTMLDivElement>(null)
   const achievementContainerRefs = useRef<Array<HTMLDivElement>>([])
   const [showOnlyAchieved, setShowOnlyAchieved] = useState<boolean>(false)
+  const [refreshButtonLoading, setRefreshButtonLoading] = useState<boolean>(false)
   const formattedAchievements = useMemo(() => {
     const filteredAchievements = showOnlyAchieved
       ? achievements.filter(
@@ -153,10 +155,31 @@ const RewardPageAchievementContent: React.FC<IRewardPageAchievementContentProps>
     setShowOnlyAchieved((prevState) => !prevState)
   }
 
+  const handleRefreshButtonClick = async () => {
+    if (refreshButtonLoading) return
+    setRefreshButtonLoading(true)
+    try {
+      await Promise.all([initAchievements(), new Promise((resolve) => setTimeout(resolve, 2000))])
+    } finally {
+      setRefreshButtonLoading(false)
+    }
+  }
+
   return (
     <div className={styles.contentContainer} ref={contentContainerRef}>
       <div className={styles.header}>
-        <div className={styles.title}>Achievement List</div>
+        <div className={styles.title}>
+          Achievement List
+          <button
+            className={classNames(styles.refreshButton, {
+              button: !refreshButtonLoading,
+              'animate-spin': refreshButtonLoading,
+            })}
+            onClick={handleRefreshButtonClick}
+          >
+            <ArrowPathIcon></ArrowPathIcon>
+          </button>
+        </div>
         <div className={styles.headerRightPart}>
           <button
             className={classNames(styles.radioButtonOutside, 'button')}

@@ -10,7 +10,15 @@
     }
 
     .title {
-        @apply text-3xl;
+        @apply text-3xl flex items-center gap-x-4;
+    }
+
+    .refreshButton {
+        @apply text-amber-300;
+
+        & > svg {
+            @apply size-8 stroke-3;
+        }
     }
 
     .headerRightPart {
