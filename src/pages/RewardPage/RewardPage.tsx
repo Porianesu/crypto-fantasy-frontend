@@ -15,9 +15,9 @@ const RewardResultModal = React.lazy(() => import('@/components/RewardResultModa
 
 const Tabs = [
   {
-    label: 'Invite',
-    key: 'invite',
-    icon: (className: string) => <EnvelopeOpenIcon className={className} />,
+    label: 'Check in',
+    key: 'check_in',
+    icon: (className: string) => <CalendarDaysIcon className={className} />,
   },
   {
     label: 'Achievements',
@@ -25,9 +25,9 @@ const Tabs = [
     icon: (className: string) => <StarIcon className={className} />,
   },
   {
-    label: 'Check in',
-    key: 'check_in',
-    icon: (className: string) => <CalendarDaysIcon className={className} />,
+    label: 'Referral',
+    key: 'invite',
+    icon: (className: string) => <EnvelopeOpenIcon className={className} />,
   },
 ]
 
