@@ -8,8 +8,7 @@ import CardsFormation from '@/pages/HomePage/CardsFormation.tsx'
 import { useNavigate } from 'react-router-dom'
 import { getFusionPath, getGalleryPath, getRewardPath, getShopPath } from '@/navigation/routes.tsx'
 import classNames from 'classnames'
-import { toast } from 'react-toastify'
-import fusionIcon from '../../..../../../src/assets/images/home_page/footer_button_fusion.png'
+import fusionIcon from '../../../src/assets/images/home_page/footer_button_fusion.png'
 import galleryIcon from '../../../src/assets/images/home_page/footer_button_achs.png'
 import bagIcon from '../../../src/assets/images/home_page/footer_button_bag.png'
 import battleIcon from '../../../src/assets/images/home_page/footer_button_battle.png'
@@ -85,10 +84,6 @@ function HomePage() {
       const newCardsFormation = [...cardsFormation, card]
       changeCardsFormation(newCardsFormation)
     }
-  }
-
-  const comingSoon = () => {
-    toast.info('Coming Soon!')
   }
 
   const handleOpenPack = async () => {
@@ -194,10 +189,6 @@ function HomePage() {
                 <div className={styles.expBarFill} style={{ width: `${userInfo.expPercent}%` }} />
               </div>
               <div className={styles.iconBtnRow}>
-                <div
-                  className={classNames(styles.iconBtn, styles.notificationBtn)}
-                  onClick={comingSoon}
-                ></div>
                 <div
                   className={classNames(styles.iconBtn, styles.settingBtn)}
                   onClick={openProfileModal}
