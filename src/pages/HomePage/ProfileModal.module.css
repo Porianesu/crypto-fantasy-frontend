@@ -60,3 +60,15 @@
 .avatarContainerUnselected {
     @apply border-gray-300 opacity-80;
 }
+
+.logoutButton {
+    @apply flex items-center gap-x-2 underline font-bold text-orange-500 cursor-pointer transition-all duration-200;
+
+    & > svg {
+        @apply size-4;
+    }
+}
+
+.logoutButton:hover {
+    @apply text-yellow-200 underline-offset-4;
+}

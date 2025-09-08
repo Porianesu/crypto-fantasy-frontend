@@ -153,6 +153,14 @@ export const getAccessToken = () => {
   return getStorageItem(ACCESS_TOKEN_STORAGE_KEY)
 }
 
+export const clearAccessToken = () => {
+  try {
+    window.localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY)
+  } catch (e) {
+    console.log('Error removing localStorage item:', e)
+  }
+}
+
 export const setStorageUserInfo = (params: Partial<UserStorageInfo>) => {
   const storageUserInfo = window.localStorage.getItem(USER_INFO_STORAGE_KEY)
   if (storageUserInfo) {

@@ -7,6 +7,9 @@ import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import API from '@/axios/api.ts'
 import { toast } from 'react-toastify'
+import { PowerIcon } from '@heroicons/react/24/outline'
+import { clearAccessToken } from '@/utils/common.ts'
+import { ENTRANCE_PATH } from '@/navigation/routes.tsx'
 
 interface IProfileModalProps {
   open: boolean
@@ -52,6 +55,11 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
   }
 
   const onSubmit = handleSubmit(onValid)
+
+  const handleLogout = () => {
+    clearAccessToken()
+    window.location.replace(ENTRANCE_PATH)
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -120,6 +128,14 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
                 disabled={confirmButtonLoading}
               >
                 Save
+              </button>
+              <button
+                type={'button'}
+                className={classNames(styles.logoutButton)}
+                onClick={handleLogout}
+              >
+                Login out
+                <PowerIcon></PowerIcon>
               </button>
             </form>
           </Content>
