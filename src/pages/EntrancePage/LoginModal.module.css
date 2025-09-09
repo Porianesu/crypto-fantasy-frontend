@@ -5,7 +5,7 @@
 }
 
 .modalContent {
-    @apply w-176 h-154 flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-6.5 px-25 leading-10 focus-visible:outline-none;
+    @apply w-176 flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-6.5 px-25 leading-10 focus-visible:outline-none;
     @apply bg-[url('/src/assets/images/entrance_page/login_modal_background.png')] bg-contain bg-left-top bg-no-repeat;
 
     .hintIcon {
@@ -26,7 +26,7 @@
 }
 
 .modalTitle {
-    @apply shrink-0 text-4xl font-normal text-center mb-15.5;
+    @apply shrink-0 text-4xl font-normal text-center mb-8.5;
     background: linear-gradient(to bottom, #FEB109, #F2C661);
     color: transparent;
     background-clip: text;
@@ -35,11 +35,25 @@
 }
 
 .inputGroup {
-    @apply shrink-0 flex flex-col items-stretch;
+    @apply shrink-0 flex flex-col items-stretch mb-3.5 relative;
 
     & > label {
         @apply text-[#3A2400] text-3xl font-normal mb-2.5;
     }
+
+    .error {
+        @apply absolute right-0 top-2 text-sm text-red-600;
+    }
+}
+
+.inputWrapper {
+    @apply flex flex-col items-stretch relative;
+}
+
+.verificationCodeButton {
+    @apply absolute right-4 top-1/2 -translate-y-1/2 px-2 py-1 rounded-full text-xl font-medium cursor-pointer transition-colors duration-200;
+    @apply bg-gradient-to-b from-[#FEB109] to-[#F2C661] text-[#3A2400] shadow-md border border-[#ddb267];
+    @apply hover:brightness-110 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed;
 }
 
 .input {
@@ -47,13 +61,13 @@
 }
 
 .submitButton {
-    @apply self-center shrink-0 cursor-pointer flex items-center justify-center text-white text-3xl font-normal leading-10 mb-4;
+    @apply self-center shrink-0 cursor-pointer flex items-center justify-center text-white text-3xl font-normal leading-10;
     @apply w-101.5 h-25 ;
     @apply bg-[url('/src/assets/images/entrance_page/login_modal_confirm_button_background.png')] bg-contain bg-center bg-no-repeat;
 }
 
 .divider {
-    @apply flex items-center justify-center h-0.5 bg-[#3A2400] mb-7;
+    @apply flex items-center justify-center h-0.5 bg-[#3A2400] mb-3;
 
     & > span {
         @apply bg-[#ddb267] px-1 py-0.5 text-sm text-[#3A2400];
@@ -62,7 +76,7 @@
 
 
 .metamaskLoginButton {
-    @apply self-center underline mb-auto flex items-center gap-x-2 text-sm text-[#3A2400];
+    @apply self-center underline flex items-center gap-x-2 text-sm text-[#3A2400] mb-7;
 
     & > img {
         @apply size-5;

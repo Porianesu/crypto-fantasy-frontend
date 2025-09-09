@@ -220,6 +220,7 @@ export interface IClaimInvitationRewardResponse {
 export interface EmailLoginData {
   email: string
   password: string
+  code: string
 }
 
 export interface WalletLoginData {
@@ -230,6 +231,10 @@ export interface WalletLoginData {
 
 export interface IGetNonceResponse {
   nonce: string
+}
+
+export interface IGetVerificationCodeResponse {
+  success: boolean
 }
 
 const API = {
@@ -303,6 +308,8 @@ const API = {
     request.post<IClaimInvitationRewardResponse>('/reward/claim-invite-reward'),
   getNonce: async (address: string) =>
     request.get<IGetNonceResponse>('/nonce', { params: { address } }),
+  getVerificationCode: async (email: string) =>
+    request.post<IGetVerificationCodeResponse>('/verification-code', { email }),
 }
 
 export default API

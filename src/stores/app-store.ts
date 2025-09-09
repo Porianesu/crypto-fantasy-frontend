@@ -207,7 +207,7 @@ export default class StoresStore {
       }
     }
     if (type === 'email') {
-      if (!('email' in loginParams) || !('password' in loginParams)) {
+      if (!('email' in loginParams) || !('password' in loginParams) || !('code' in loginParams)) {
         return toast.warn('Invalid email login parameters.')
       }
     }

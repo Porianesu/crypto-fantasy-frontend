@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { Content, Description, Dialog, Portal, Title, DialogOverlay } from '@radix-ui/react-dialog'
 import styles from './LoginModal.module.css'
@@ -11,7 +11,15 @@ import { ethers } from 'ethers'
 import { toast } from 'react-toastify'
 import api from '@/axios/api.ts'
 import MetamaskIcon from '../../assets/images/common/MetaMask-icon-fox.svg'
+import validator from 'validator'
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
+import API from '@/axios/api.ts'
 
+interface FormValues {
+  email: string
+  password: string
+  verificationCode: string
+}
 const LoginModal: React.FC = () => {
   const {
     appStore: { loginAndRegister },
@@ -19,19 +27,56 @@ const LoginModal: React.FC = () => {
   } = useMobxStore()
   const navigate = useNavigate()
   const [loginButtonLoading, setLoginButtonLoading] = useState(false)
+  const [countdown, setCountdown] = useState(0)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const { control, handleSubmit, watch } = useForm<FormValues>({
+    defaultValues: {
+      email: '',
+      password: '',
+      verificationCode: '',
+    },
+  })
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onValid: SubmitHandler<FormValues> = async (data) => {
     if (loginButtonLoading) return
-    e.preventDefault()
     setLoginButtonLoading(true)
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const result = await loginAndRegister('email', { email, password })
+    if (!data.email || !validator.isEmail(data.email)) return toast.error('Wrong email format')
+    const result = await loginAndRegister('email', {
+      email: data.email,
+      password: data.password,
+      code: data.verificationCode,
+    })
     setLoginButtonLoading(false)
     if (result) {
       changeLoginModalVisible(false)
       navigate(result as unknown as string)
+    }
+  }
+
+  const onSubmit = handleSubmit(onValid)
+
+  const handleGetVerificationCode = async () => {
+    const email = watch('email')
+    if (!email || !validator.isEmail(email)) return toast.error('Wrong email format')
+    if (countdown > 0) return // 倒计时期间禁止重复点击
+    setCountdown(60)
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          if (timerRef.current) clearInterval(timerRef.current)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    const result = await API.getVerificationCode(email)
+    if (result?.data?.success) {
+      toast.success('Verification code sent!')
+    } else {
+      toast.error('Failed to send verification code. Please try again.')
+      setCountdown(0)
+      if (timerRef.current) clearInterval(timerRef.current)
     }
   }
 
@@ -100,31 +145,82 @@ const LoginModal: React.FC = () => {
             <Title className={styles.modalTitle}>Login/Register</Title>
             <Description></Description>
             <form
-              onSubmit={handleSubmit}
-              className={
-                'relative grow shrink basis-0 overflow-hidden flex flex-col items-stretch self-stretch '
-              }
+              onSubmit={onSubmit}
+              className={'relative shrink-0 flex flex-col items-stretch self-stretch '}
             >
-              <div className={classNames(styles.inputGroup, 'mb-7.5')}>
-                <label htmlFor="email">Email</label>
-                <input
-                  className={styles.input}
-                  type="text"
-                  id="email"
-                  name="email"
-                  placeholder={'Please enter your account.'}
-                />
-              </div>
-              <div className={classNames(styles.inputGroup, 'mb-4')}>
-                <label htmlFor="password">Password</label>
-                <input
-                  className={styles.input}
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder={'Please enter your Password'}
-                />
-              </div>
+              <Controller
+                name="email"
+                control={control}
+                rules={{
+                  required: { value: true, message: 'Email is required.' },
+                  validate: (value) => validator.isEmail(value) || 'Wrong email format.',
+                }}
+                render={({ field, fieldState }) => (
+                  <div className={classNames(styles.inputGroup)}>
+                    <label htmlFor="email">Email</label>
+                    <input
+                      className={styles.input}
+                      placeholder={'Please enter your account.'}
+                      {...field}
+                    />
+                    {fieldState.error ? (
+                      <div className={styles.error}>{fieldState.error.message}</div>
+                    ) : null}
+                  </div>
+                )}
+              />
+              <Controller
+                name="password"
+                control={control}
+                rules={{
+                  required: { value: true, message: 'Password is required.' },
+                }}
+                render={({ field, fieldState }) => (
+                  <div className={classNames(styles.inputGroup)}>
+                    <label htmlFor="password">Password</label>
+                    <input
+                      className={styles.input}
+                      placeholder={'Please enter your password'}
+                      type={'password'}
+                      {...field}
+                    />
+                    {fieldState.error ? (
+                      <div className={styles.error}>{fieldState.error.message}</div>
+                    ) : null}
+                  </div>
+                )}
+              />
+              <Controller
+                name="verificationCode"
+                control={control}
+                rules={{
+                  required: { value: true, message: 'Verification code is required.' },
+                  maxLength: { value: 6, message: 'Wrong verification code format.' },
+                }}
+                render={({ field, fieldState }) => (
+                  <div className={classNames(styles.inputGroup)}>
+                    <label htmlFor="password">Verification</label>
+                    <div className={styles.inputWrapper}>
+                      <button
+                        className={styles.verificationCodeButton}
+                        type="button"
+                        onClick={handleGetVerificationCode}
+                        disabled={countdown > 0}
+                      >
+                        {countdown > 0 ? `Resend (${countdown}s)` : 'Get code'}
+                      </button>
+                      <input
+                        className={styles.input}
+                        placeholder={'Please enter code'}
+                        {...field}
+                      />
+                    </div>
+                    {fieldState.error ? (
+                      <div className={styles.error}>{fieldState.error.message}</div>
+                    ) : null}
+                  </div>
+                )}
+              />
               <div className={styles.divider}>
                 <span>or</span>
               </div>
