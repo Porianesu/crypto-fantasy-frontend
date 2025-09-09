@@ -139,7 +139,8 @@ const LoginModal: React.FC = () => {
                 </div>
               </PopoverTrigger>
               <PopoverContent side="top" align="center" className={styles.tooltipContent}>
-                Please join the waitlist to get a demo account.
+                Please enter the 6-characters verification code that was sent to your email. The code
+                is valid for 5 minutes.
               </PopoverContent>
             </Popover>
             <Title className={styles.modalTitle}>Login/Register</Title>

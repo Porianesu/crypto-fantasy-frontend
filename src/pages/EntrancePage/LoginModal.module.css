@@ -18,7 +18,7 @@
 }
 
 .tooltipContent {
-    @apply px-4 py-2 rounded-lg shadow-lg bg-[#fffbe8] text-[#3A2400] text-base font-medium z-50 border border-[#f2c661] min-w-45 text-center pointer-events-none;
+    @apply max-w-100 px-4 py-2 rounded-lg shadow-lg bg-[#fffbe8] text-[#3A2400] text-base font-medium z-50 border border-[#f2c661] min-w-45 text-center pointer-events-none;
 }
 
 .modalHeader {
