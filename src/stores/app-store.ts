@@ -433,7 +433,7 @@ export default class StoresStore {
       return 'fail'
     }
     this.changeGlobalLoading(true)
-    const result: AxiosResponse<IMeltCardResponse> = yield API.meltCard(targetCard.userCardId)
+    const result: AxiosResponse<IMeltCardResponse> = yield API.meltCard([targetCard.userCardId])
     if (result?.data?.user?.email !== this.userInfo.email) {
       this.changeGlobalLoading(false)
       return 'fail'

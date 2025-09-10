@@ -276,8 +276,8 @@ const API = {
     } while (allData.length < total)
     return allData
   },
-  meltCard: async (userCardId: number) =>
-    request.post<IMeltCardResponse>('/melt-card', { userCardId }),
+  meltCard: async (userCardIds: Array<number>) =>
+    request.post<IMeltCardResponse>('/melt-card', { userCardIds }),
   craftCard: async (data: {
     craftCardId: number
     requiredUserCardIds: Array<number>
