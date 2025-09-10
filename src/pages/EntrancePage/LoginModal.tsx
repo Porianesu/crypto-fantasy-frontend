@@ -41,6 +41,12 @@ const LoginModal: React.FC = () => {
     if (loginButtonLoading) return
     setLoginButtonLoading(true)
     if (!data.email || !validator.isEmail(data.email)) return toast.error('Wrong email format')
+    // Reset timer and form data
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+    }
+    setCountdown(0)
     const result = await loginAndRegister('email', {
       email: data.email,
       password: data.password,
@@ -139,8 +145,8 @@ const LoginModal: React.FC = () => {
                 </div>
               </PopoverTrigger>
               <PopoverContent side="top" align="center" className={styles.tooltipContent}>
-                Please enter the 6-characters verification code that was sent to your email. The code
-                is valid for 5 minutes.
+                Please enter the 6-characters verification code that was sent to your email. The
+                code is valid for 5 minutes.
               </PopoverContent>
             </Popover>
             <Title className={styles.modalTitle}>Login/Register</Title>
