@@ -157,11 +157,36 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
       </div>
       <div className={styles.meltContainer}>
         {meltTargetCards.length ? (
-          <StaticCard
-            card={meltTargetCards[0]}
-            className={styles.meltCard}
-            width={166}
-          ></StaticCard>
+          <div
+            className={classNames(styles.meltCardsContainer, {
+              'mb-37': meltTargetCards.length < 3,
+              'mb-27': meltTargetCards.length === 3,
+              'mb-17': meltTargetCards.length > 3,
+            })}
+          >
+            <div className={styles.meltCardsRowContainer}>
+              {meltTargetCards.slice(0, 3).map((meltTargetCard) => {
+                return (
+                  <StaticCard
+                    key={meltTargetCard.userCardId}
+                    card={meltTargetCard}
+                    width={meltTargetCards.length >= 3 ? 120 : 166}
+                  ></StaticCard>
+                )
+              })}
+            </div>
+            <div className={styles.meltCardsRowContainer}>
+              {meltTargetCards.slice(3, meltTargetCards.length).map((meltTargetCard) => {
+                return (
+                  <StaticCard
+                    key={meltTargetCard.userCardId}
+                    card={meltTargetCard}
+                    width={meltTargetCards.length >= 3 ? 120 : 166}
+                  ></StaticCard>
+                )
+              })}
+            </div>
+          </div>
         ) : (
           <div className={styles.meltCardEmpty}></div>
         )}

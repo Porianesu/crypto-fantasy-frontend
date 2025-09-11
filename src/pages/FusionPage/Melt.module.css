@@ -10,8 +10,12 @@
     .meltContainer {
         @apply flex flex-col items-center mb-17.5 self-end;
 
-        .meltCard {
-            @apply mb-37;
+        .meltCardsContainer {
+            @apply flex flex-col items-center min-h-61 max-w-102;
+        }
+
+        .meltCardsRowContainer {
+            @apply flex items-center gap-x-1;
         }
 
         .meltCardEmpty {
