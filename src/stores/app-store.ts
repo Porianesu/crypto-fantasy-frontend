@@ -368,7 +368,7 @@ export default class StoresStore {
   *drawCards() {
     if (!this.userInfo) return
     const result: AxiosResponse<IDrawCardsResponse> = yield API.drawCards()
-    if (result?.data?.user?.email !== this.userInfo.email) return
+    if (result?.data?.user?.id !== this.userInfo.id) return
     this.updateUserInfo(result.data.user)
     // 本地直接更新，避免重复请求
     this._cardsBag = this._cardsBag.concat(result.data.cards)
@@ -411,7 +411,7 @@ export default class StoresStore {
       requiredUserCardIds: requiredCards.map((card) => card.userCardId),
       additiveUserCardIds: additiveCards.map((card) => card.userCardId),
     })
-    if (result?.data?.user?.email !== this.userInfo.email) return
+    if (result?.data?.user?.id !== this.userInfo.id) return
     const totalCostCardUserIds = requiredCards.concat(additiveCards).map((item) => item.userCardId)
     this._cardsBag = this._cardsBag.filter(
       (card) => !totalCostCardUserIds.includes(card.userCardId),
@@ -426,21 +426,24 @@ export default class StoresStore {
     }
   }
 
-  *meltCard(targetCard: ICardDataInBag) {
+  *meltCard(targetCards: ICardDataInBag[]) {
     if (!this.userInfo) return 'fail'
     if (this.userInfo.meltCurrent <= 0) {
       toast.warn('No melt opportunities left!')
       return 'fail'
     }
     this.changeGlobalLoading(true)
-    const result: AxiosResponse<IMeltCardResponse> = yield API.meltCard([targetCard.userCardId])
-    if (result?.data?.user?.email !== this.userInfo.email) {
+    const meltTargetCardsUserIds = targetCards.map((card) => card.userCardId)
+    const result: AxiosResponse<IMeltCardResponse> = yield API.meltCard(meltTargetCardsUserIds)
+    if (result?.data?.user?.id !== this.userInfo.id) {
       this.changeGlobalLoading(false)
       return 'fail'
     }
     this.updateUserInfo(result.data.user)
-    this._cardsBag = this._cardsBag.filter((card) => card.userCardId !== targetCard.userCardId)
-    toast.success(`Melted ${targetCard.name} successfully!`)
+    this._cardsBag = this._cardsBag.filter((card) => {
+      return !meltTargetCardsUserIds.includes(card.userCardId)
+    })
+    toast.success(`Melted ${targetCards.length} cards successfully!`)
     this.changeGlobalLoading(false)
     return 'success'
   }

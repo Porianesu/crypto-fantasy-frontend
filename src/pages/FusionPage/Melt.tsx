@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styles from './Melt.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import classNames from 'classnames'
@@ -9,14 +9,13 @@ import MeltResultModal from '@/pages/FusionPage/MeltResultModal.tsx'
 import type { ICardDataInBag } from '@/stores/app-store.ts'
 import { toast } from 'react-toastify'
 
+const MAX_MELT_CARDS = 5 // 最多同时熔炼的卡牌数量
 const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCardVideo }) => {
   const {
     appStore: { appConfig, cardsBag, userInfo, meltCard },
   } = useMobxStore()
   const [meltButtonLoading, setMeltButtonLoading] = useState(false)
-  const [meltTargetCard, setMeltTargetCard] = useState<ICardDataInBag>()
-  const bodyContainerRef = useRef<HTMLDivElement>(null)
-  const meltTargetCardRef = useRef<HTMLDivElement>(null)
+  const [meltTargetCards, setMeltTargetCards] = useState<Array<ICardDataInBag>>([])
   const [rarityFilter, setRarityFilter] = useState<RARITY_SELECT_VALUE>('all')
   const [meltResultModalData, setMeltResultModalData] = useState<{
     open: boolean
@@ -37,40 +36,69 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
       (card) => card.rarity === rarityFilter && !deckUserCardIds.includes(card.userCardId),
     )
   }, [cardsBag, deckUserCardIds, rarityFilter])
-  const currentRule = useMemo(
-    () => appConfig?.MeltRule?.find((item) => item.rarity === meltTargetCard?.rarity),
-    [appConfig?.MeltRule, meltTargetCard?.rarity],
-  )
+  const totalFaithCoinCost = useMemo(() => {
+    return meltTargetCards.reduce((total, card) => {
+      const rule = appConfig?.MeltRule?.find((item) => item.rarity === card.rarity)
+      if (rule) {
+        return total + rule.faithCoin
+      }
+      return total
+    }, 0)
+  }, [appConfig?.MeltRule, meltTargetCards])
 
   const handleMeltButtonClick = async () => {
-    if (!currentRule || !meltTargetCard || !meltTargetCardRef.current) return
-    if (deckUserCardIds.includes(meltTargetCard.userCardId)) {
+    if (!totalFaithCoinCost || !meltTargetCards) return
+    if (
+      deckUserCardIds.some((userCardId) =>
+        meltTargetCards.find((card) => card.userCardId === userCardId),
+      )
+    ) {
       toast.warning('You cannot melt a card that is in your deck.')
       return
     }
     setMeltButtonLoading(true)
-    const meltResult = await meltCard(meltTargetCard)
+    const meltResult = await meltCard(meltTargetCards)
     if ((meltResult as unknown as string) === 'success') {
-      setMeltTargetCard(undefined)
+      setMeltTargetCards([])
       await playMeltCardVideo()
       setMeltResultModalData({
         open: true,
-        faithCoin: currentRule.faithCoin,
+        faithCoin: totalFaithCoinCost,
       })
     }
     setMeltButtonLoading(false)
   }
 
   const handleCardClick = (card: ICardDataInBag) => {
+    if (!userInfo) return
     if (deckUserCardIds.includes(card.userCardId)) {
       toast.warning('This card is in your deck, please remove it first.')
       return
     }
-    setMeltTargetCard(card)
+    setMeltTargetCards((prevState) => {
+      const existIndex = prevState.findIndex((item) => item.userCardId === card.userCardId)
+      if (existIndex > -1) {
+        // 如果已经存在，则移除该卡牌
+        const newState = [...prevState]
+        newState.splice(existIndex, 1)
+        return newState
+      } else {
+        // 如果不存在，则添加该卡牌（限制最多添加5张）
+        if (prevState.length >= MAX_MELT_CARDS) {
+          toast.warning('You can melt up to 5 cards at a time.')
+          return prevState
+        }
+        if (prevState.length >= userInfo.meltCurrent) {
+          toast.warning('You have reached your melt limit.')
+          return prevState
+        }
+        return [...prevState, card]
+      }
+    })
   }
 
   return (
-    <div className={styles.bodyContainer} ref={bodyContainerRef}>
+    <div className={styles.bodyContainer}>
       <div className={styles.selectContainer}>
         <div className={styles.selectHeader}>
           <div className={styles.selectHeaderTitle}>Select a card</div>
@@ -128,21 +156,20 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
         </div>
       </div>
       <div className={styles.meltContainer}>
-        {meltTargetCard ? (
+        {meltTargetCards.length ? (
           <StaticCard
-            card={meltTargetCard}
+            card={meltTargetCards[0]}
             className={styles.meltCard}
             width={166}
-            ref={meltTargetCardRef}
           ></StaticCard>
         ) : (
           <div className={styles.meltCardEmpty}></div>
         )}
         <div className={styles.meltDescriptionContainer}>
-          {meltTargetCard ? "You'll get" : 'Please place the card'}
-          {currentRule ? (
+          {meltTargetCards?.length ? "You'll get" : 'Please place the card'}
+          {totalFaithCoinCost ? (
             <div className={styles.faithCoinContainer}>
-              {currentRule.faithCoin}
+              {totalFaithCoinCost}
               <div className={styles.faithCoin}></div>
             </div>
           ) : null}
