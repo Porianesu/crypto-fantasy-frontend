@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
-import React, { useRef } from 'react'
+import React, { useImperativeHandle, useRef } from 'react'
 import { Content, Description, Dialog, DialogOverlay, Portal, Title } from '@radix-ui/react-dialog'
 import classNames from 'classnames'
 import styles from './DrawCardsModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import Card, { type ICardData } from '@/components/Card.tsx'
+import Card, { type ICardData, type ICardHandle } from '@/components/Card.tsx'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 
@@ -12,20 +12,39 @@ interface IDrawCardsModalProps {
   cards: Array<ICardData>
 }
 
-const CardsPart: React.FC<IDrawCardsModalProps> = ({ cards }) => {
-  const cardsRef = useRef<Array<HTMLDivElement | null>>([])
+interface ICardsPartHandle {
+  flipAllCards: () => void
+}
+
+const CardsPart = React.forwardRef<ICardsPartHandle, IDrawCardsModalProps>(({ cards }, ref) => {
+  const cardWrappersRef = useRef<Array<HTMLDivElement | null>>([])
+  const cardsRef = useRef<Array<ICardHandle>>([])
   const cardsContainerRef = useRef<HTMLDivElement>(null)
-  const addCard = (ref: HTMLDivElement | null, index: number) => {
+  const addCardWrapper = (ref: HTMLDivElement | null, index: number) => {
     if (ref) {
-      cardsRef.current[index] = ref
+      cardWrappersRef.current[index] = ref
     }
   }
+
+  const flipAllCards = () => {
+    cardsRef.current.forEach((card) => {
+      card.flipCard()
+    })
+  }
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      flipAllCards,
+    }),
+    [],
+  )
 
   useGSAP(
     () => {
       const getYOffset = (index: number) => (index % 2 === 0 ? '-15%' : '15%')
       gsap.fromTo(
-        cardsRef.current,
+        cardWrappersRef.current,
         {
           autoAlpha: 0,
           y: '100%',
@@ -49,23 +68,35 @@ const CardsPart: React.FC<IDrawCardsModalProps> = ({ cards }) => {
         {cards.map((card, index) => (
           <div
             className={'will-change-transform'}
-            ref={(node) => addCard(node, index)}
+            ref={(node) => addCardWrapper(node, index)}
             key={`${card.id}-${index}`}
           >
-            <Card card={card}></Card>
+            <Card
+              card={card}
+              ref={(el) => {
+                if (el) {
+                  cardsRef.current[index] = el
+                }
+              }}
+            ></Card>
           </div>
         ))}
       </div>
     </div>
   )
-}
+})
 const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
   const {
     modalStore: { drawCardsModalVisible, changeDrawCardsModalVisible },
   } = useMobxStore()
+  const cardsPartRef = useRef<ICardsPartHandle>(null)
 
   const handleClose = () => {
     changeDrawCardsModalVisible(false)
+  }
+
+  const handleFlipAll = () => {
+    cardsPartRef.current?.flipAllCards()
   }
 
   return (
@@ -74,11 +105,18 @@ const DrawCardsModal: React.FC<IDrawCardsModalProps> = ({ cards }) => {
         <DialogOverlay
           className={classNames('data-[state=closed]:animate-fade-out', styles.overlay)}
         >
-          <Title></Title>
           <Description></Description>
           <Content className={styles.modalContent} onInteractOutside={(e) => e.preventDefault()}>
-            <div className={styles.description}>Click to flip your card</div>
-            <CardsPart cards={cards}></CardsPart>
+            <div className={styles.titleWrapper}>
+              <Title className={styles.title}>Click to flip your card</Title>
+              <button
+                className={classNames(styles.flipAllButton, 'button')}
+                onClick={handleFlipAll}
+              >
+                Flip All
+              </button>
+            </div>
+            <CardsPart cards={cards} ref={cardsPartRef}></CardsPart>
             <div className={styles.closeBtn} onClick={handleClose}></div>
           </Content>
         </DialogOverlay>

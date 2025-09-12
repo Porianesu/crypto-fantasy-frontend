@@ -20,8 +20,16 @@
     @apply max-w-full top-1/2 left-1/2 absolute flex flex-col items-center justify-center focus-visible:outline-none;
     transform: translate(-50%, -50%);
 
-    .description {
-        @apply text-[#FFFFE4] text-4xl font-normal mb-36.5;
+    .titleWrapper {
+        @apply flex items-center justify-center self-stretch mb-36.5 relative;
+    }
+
+    .title {
+        @apply text-[#FFFFE4] text-4xl font-normal;
+    }
+
+    .flipAllButton {
+        @apply text-[#FFFFE4] text-base absolute right-0 underline hover:text-[#FFD700];
     }
 
     .closeBtn {
