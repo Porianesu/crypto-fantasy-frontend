@@ -16,7 +16,10 @@ const CARD_DESIGN_WIDTH = 286
 const CARD_DESIGN_HEIGHT = 413
 
 const StaticCard = React.forwardRef<HTMLDivElement, IStaticCardProps>(
-  ({ card, width, className, style, undetected = false, disable = false, ...otherProps }, ref) => {
+  (
+    { card, width, className, style, undetected = false, disable = false, children, ...otherProps },
+    ref,
+  ) => {
     const {
       systemStore: { fontSizeScaleRate },
     } = useMobxStore()
@@ -41,6 +44,7 @@ const StaticCard = React.forwardRef<HTMLDivElement, IStaticCardProps>(
         {...otherProps}
       >
         <Card type={'static'} card={card} scale={scale} undetected={undetected}></Card>
+        {children}
       </div>
     )
   },

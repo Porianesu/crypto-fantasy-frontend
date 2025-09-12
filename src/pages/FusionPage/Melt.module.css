@@ -81,6 +81,14 @@
     .cardsList {
         @apply grid grid-cols-5 gap-x-12 gap-y-8;
     }
+
+    .card {
+        @apply relative;
+    }
+
+    .selectedCardSuffix {
+        @apply flex items-center justify-center size-7 absolute right-3 top-3 z-10 rounded-full bg-[#41FF57] border-2 border-white text-white;
+    }
 }
 
 

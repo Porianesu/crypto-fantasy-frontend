@@ -142,16 +142,26 @@ const Melt: React.FC<{ playMeltCardVideo: () => Promise<void> }> = ({ playMeltCa
         </div>
         <div className={classNames(styles.cardsListWrapper, 'no-scrollbar')}>
           <div className={styles.cardsList}>
-            {filteredCards.map((card) => (
-              <StaticCard
-                key={`${card.id}-${card.userCardId}`}
-                card={card}
-                width={178}
-                onClick={() => {
-                  handleCardClick(card)
-                }}
-              ></StaticCard>
-            ))}
+            {filteredCards.map((card) => {
+              const selectedIndex = meltTargetCards.findIndex(
+                (item) => item.userCardId === card.userCardId,
+              )
+              return (
+                <StaticCard
+                  key={`${card.id}-${card.userCardId}`}
+                  card={card}
+                  width={178}
+                  onClick={() => {
+                    handleCardClick(card)
+                  }}
+                  className={styles.card}
+                >
+                  {selectedIndex > -1 ? (
+                    <div className={styles.selectedCardSuffix}>{selectedIndex + 1}</div>
+                  ) : null}
+                </StaticCard>
+              )
+            })}
           </div>
         </div>
       </div>
