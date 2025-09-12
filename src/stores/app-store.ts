@@ -50,6 +50,7 @@ export interface UserInfo extends UserStorageInfo {
   }>
   deckPower: number
   newbieRewardClaimed: boolean
+  drawCountSinceLastLegendary: number
 }
 
 export interface ICardDataInBag extends ICardData {

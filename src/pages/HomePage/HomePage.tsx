@@ -176,6 +176,12 @@ function HomePage() {
         >
           Open Pack 1<div></div>
         </button>
+        {userInfo && appConfig ? (
+          <div className={styles.legendaryGuaranteeText}>
+            Guaranteed Legendary: <span>{userInfo.drawCountSinceLastLegendary}</span> packs/
+            {appConfig.LegendaryDrawCardGuarantee} packs
+          </div>
+        ) : null}
       </div>
       {userInfo ? (
         <div className={styles.header}>

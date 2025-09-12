@@ -39,6 +39,14 @@
     }
 }
 
+.legendaryGuaranteeText {
+    @apply mt-4 text-base text-white font-normal;
+
+    & > span {
+        @apply text-green-500;
+    }
+}
+
 .header {
     @apply w-full h-40 flex items-center justify-between pt-1.5 pb-1 px-5 shrink-0;
     @apply bg-[url('/src/assets/images/home_page/header_background.png')] bg-contain bg-top-left bg-no-repeat;

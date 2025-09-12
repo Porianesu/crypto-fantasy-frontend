@@ -104,6 +104,7 @@ export interface IGetConfigResponse {
       faithAmount: number
     }
   }
+  LegendaryDrawCardGuarantee: number
 }
 
 export interface IPatchUserInfoResponse {
