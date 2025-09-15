@@ -105,6 +105,7 @@ export interface IGetConfigResponse {
     }
   }
   LegendaryDrawCardGuarantee: number
+  CraftCardGuarantee: Record<CARD_RARITY, number>
 }
 
 export interface IPatchUserInfoResponse {

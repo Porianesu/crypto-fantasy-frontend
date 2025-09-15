@@ -51,6 +51,9 @@ export interface UserInfo extends UserStorageInfo {
   deckPower: number
   newbieRewardClaimed: boolean
   drawCountSinceLastLegendary: number
+  craftCountSinceLastLegendary: number
+  craftCountSinceLastEpic: number
+  craftCountSinceLastRare: number
 }
 
 export interface ICardDataInBag extends ICardData {

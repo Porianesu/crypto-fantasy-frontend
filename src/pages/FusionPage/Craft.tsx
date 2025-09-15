@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './Craft.module.css'
 import classNames from 'classnames'
-import { type ICardData } from '@/components/Card.tsx'
+import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import CountUp from 'react-countup'
 import StaticCard from '@/components/StaticCard.tsx'
@@ -74,7 +74,26 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     [appConfig?.CraftRule, craftTargetCard?.rarity],
   )
   const successRate = useMemo(() => {
-    if (!currentCraftRule || !craftTargetCard) return new BigNumber(0)
+    if (!currentCraftRule || !craftTargetCard || !appConfig || !userInfo) return new BigNumber(0)
+    let guaranteeSuccess = false
+    switch (craftTargetCard.rarity) {
+      case CARD_RARITY.RARE:
+        guaranteeSuccess =
+          userInfo.craftCountSinceLastRare + 1 >= appConfig.CraftCardGuarantee[CARD_RARITY.RARE]
+        break
+      case CARD_RARITY.EPIC:
+        guaranteeSuccess =
+          userInfo.craftCountSinceLastEpic + 1 >= appConfig.CraftCardGuarantee[CARD_RARITY.EPIC]
+        break
+      case CARD_RARITY.LEGENDARY:
+        guaranteeSuccess =
+          userInfo.craftCountSinceLastLegendary + 1 >=
+          appConfig.CraftCardGuarantee[CARD_RARITY.LEGENDARY]
+        break
+      default:
+        break
+    }
+    if (guaranteeSuccess) return new BigNumber(1)
     const baseSuccessRate = new BigNumber(currentCraftRule.baseSuccessRate)
     const maxSuccessRate = new BigNumber(currentCraftRule.maxSuccessRate)
     const additiveSuccessRate = additiveCards.reduce((previousValue, currentValue) => {
@@ -86,7 +105,7 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     } else {
       return finalSuccessRate
     }
-  }, [additiveCards, craftTargetCard, currentCraftRule])
+  }, [additiveCards, appConfig, craftTargetCard, currentCraftRule, userInfo])
   const userFaithAmountCheck = useMemo(() => {
     if (!userInfo?.faithAmount || !currentCraftRule?.requiredFaithCoin) return false
     return userInfo?.faithAmount >= currentCraftRule?.requiredFaithCoin
@@ -238,6 +257,45 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     setCraftResultModalData((prevState) => ({ ...prevState, open }))
   }
 
+  const renderGuaranteedPart = () => {
+    if (!craftTargetCard || !appConfig || !userInfo) return null
+    if (craftTargetCard.rarity === CARD_RARITY.NORMAL) return null
+    let rarityText: string
+    let failCount: number
+    const guaranteedCount = appConfig.CraftCardGuarantee[craftTargetCard.rarity] || 0
+    switch (craftTargetCard.rarity) {
+      case CARD_RARITY.RARE:
+        rarityText = 'Rare'
+        failCount = userInfo.craftCountSinceLastRare
+        break
+      case CARD_RARITY.EPIC:
+        rarityText = 'Epic'
+        failCount = userInfo.craftCountSinceLastEpic
+        break
+      case CARD_RARITY.LEGENDARY:
+        rarityText = 'Legendary'
+        failCount = userInfo.craftCountSinceLastLegendary
+        break
+      default:
+        rarityText = ''
+        failCount = 0
+    }
+    return (
+      <div className={styles.guaranteeContainer}>
+        Guaranteed{' '}
+        <span
+          className={classNames(
+            styles.guaranteeContainerRarityText,
+            styles[`guaranteeContainerRarityText_${craftTargetCard.rarity}`],
+          )}
+        >
+          {rarityText}
+        </span>
+        :<span className={styles.guaranteeCount}>{failCount}</span>/{guaranteedCount} times
+      </div>
+    )
+  }
+
   useEffect(() => {
     if (!userInfo) return
     if (craftTargetCard && currentCraftRule) {
@@ -318,6 +376,7 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
           <div>Optional</div>
           <div className={styles.optionalCount}>{`(${additiveCards.length}/4)`}</div>
         </div>
+        {renderGuaranteedPart()}
       </div>
       <div className={styles.middleContainer}>
         <div className={styles.magicContainer}>

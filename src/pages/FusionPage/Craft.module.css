@@ -18,6 +18,30 @@
     }
 }
 
+.guaranteeContainer {
+    @apply flex items-center text-base py-2;
+
+    .guaranteeCount {
+        @apply text-green-500 ml-2;
+    }
+}
+
+.guaranteeContainerRarityText {
+    @apply mx-2;
+}
+
+.guaranteeContainerRarityText_1 {
+    @apply text-blue-500;
+}
+
+.guaranteeContainerRarityText_2 {
+    @apply text-purple-500;
+}
+
+.guaranteeContainerRarityText_3 {
+    @apply text-orange-400;
+}
+
 .bodyContainer {
     @apply flex-1 overflow-hidden flex items-end justify-between px-22 text-white;
 
