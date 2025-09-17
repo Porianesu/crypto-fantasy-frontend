@@ -1,6 +1,7 @@
 import request from '@/axios/request.ts'
 import type { ICardDataInBag, UserInfo } from '@/stores/app-store.ts'
 import { CARD_RARITY, type ICardData } from '@/components/Card.tsx'
+import type { IXAccount } from '@/stores/third-part-app-store.ts'
 
 export interface ILoginAndRegisterResponse {
   type: 'login' | 'register'
@@ -239,6 +240,20 @@ export interface IGetVerificationCodeResponse {
   success: boolean
 }
 
+export interface IGetXRequestTokenResponse {
+  oauth_token: string
+  oauth_token_secret: string
+}
+
+export interface IGetXCallbackResponse {
+  success: boolean
+  twitterAccount: IXAccount
+}
+
+export interface IGetXAccountResponse {
+  twitterAccount: IXAccount | null
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: EmailLoginData | WalletLoginData) =>
@@ -312,6 +327,16 @@ const API = {
     request.get<IGetNonceResponse>('/nonce', { params: { address } }),
   getVerificationCode: async (email: string) =>
     request.post<IGetVerificationCodeResponse>('/verification-code', { email }),
+  getXRequestToken: async () => request.get<IGetXRequestTokenResponse>('/x-auth/request-token'),
+  getXCallback: async (oauth_token: string, oauth_verifier: string) =>
+    request.get<IGetXCallbackResponse>('x-auth/callback', {
+      params: { oauth_token, oauth_verifier },
+    }),
+  getXAccount: async () => request.get('/x-auth/account'),
+  getXFollowing: async (pagination_token?: string, max_results?: number) =>
+    request.get('/x-auth/is-user-follow', {
+      params: { pagination_token, max_results },
+    }),
 }
 
 export default API

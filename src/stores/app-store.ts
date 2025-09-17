@@ -283,7 +283,10 @@ export default class StoresStore {
   *initNetworkAfterLogin() {
     if (getAccessToken()) {
       // Not necessary to wait for this to complete
-      yield this.rootStoreRef.rewardStore.initData()
+      yield Promise.all([
+        this.rootStoreRef.rewardStore.initData(),
+        this.rootStoreRef.thirdPartAppStore.initData(),
+      ])
     }
   }
 

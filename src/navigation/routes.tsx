@@ -21,6 +21,8 @@ export const REWARD_PATH = '/reward'
 
 export enum URL_PARAMS {
   INVITE_CODE = 'ic',
+  OAUTH_TOKEN = 'oauth_token',
+  OAUTH_VERIFIER = 'oauth_verifier',
 }
 
 export const RedirectWithQuery = () => {
