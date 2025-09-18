@@ -71,7 +71,7 @@ export default class ThirdPartAppStore {
     if (result.data.success) {
       this.twitterAccount = result.data.twitterAccount
       toast.success(
-        `Twitter account${result.data.twitterAccount.screenName || result.data.twitterAccount.twitterUserId} linked successfully`,
+        `X account-(${result.data.twitterAccount.screenName || result.data.twitterAccount.twitterUserId}) linked successfully`,
       )
     }
   }

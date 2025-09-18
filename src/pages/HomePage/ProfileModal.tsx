@@ -22,11 +22,15 @@ interface FormValues {
 }
 
 const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
-  const { appStore } = useMobxStore()
+  const {
+    appStore,
+    thirdPartAppStore: { twitterAccount, getXRequestToken },
+  } = useMobxStore()
   const { updateUserInfo } = appStore
   const userInfo = appStore.userInfo!
   const appConfig = appStore.appConfig!
   const [confirmButtonLoading, setConfirmButtonLoading] = useState(false)
+  const [bindXLoading, setBindXLoading] = useState(false)
 
   const { control, handleSubmit, setValue } = useForm<FormValues>({
     defaultValues: {
@@ -59,6 +63,38 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
   const handleLogout = () => {
     clearAccessToken()
     window.location.replace(ENTRANCE_PATH)
+  }
+
+  const handleBindXAccount = async () => {
+    if (bindXLoading) return
+    setBindXLoading(true)
+    await getXRequestToken()
+    setBindXLoading(false)
+  }
+
+  const renderXAccount = () => {
+    return (
+      <div className={styles.XAccountContainer}>
+        XAccount:
+        {twitterAccount ? (
+          <a
+            href={`https://x.com/i/user/${twitterAccount.twitterUserId}`}
+            target={`_blank`}
+            rel="noreferrer"
+          >
+            {twitterAccount.screenName || twitterAccount.twitterUserId}
+          </a>
+        ) : (
+          <button
+            className={classNames({ button: !bindXLoading })}
+            onClick={handleBindXAccount}
+            disabled={bindXLoading}
+          >
+            Bind
+          </button>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -120,6 +156,7 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
                   </div>
                 )}
               />
+              {renderXAccount()}
               <button
                 type="submit"
                 className={classNames(styles.saveButton, {

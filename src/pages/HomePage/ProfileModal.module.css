@@ -72,3 +72,16 @@
 .logoutButton:hover {
     @apply text-yellow-200 underline-offset-4;
 }
+
+
+.XAccountContainer {
+    @apply flex items-center font-bold text-yellow-100;
+
+    & > a {
+        @apply ml-4 underline text-blue-500 hover:text-yellow-200 transition;
+    }
+
+    & > button {
+        @apply ml-4 underline text-blue-500 hover:text-yellow-200 transition;
+    }
+}
