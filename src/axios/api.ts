@@ -254,6 +254,14 @@ export interface IGetXAccountResponse {
   twitterAccount: IXAccount | null
 }
 
+export interface ITask {
+  id: number
+}
+
+export interface IGetTasksResponse {
+  tasks: Array<ITask>
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: EmailLoginData | WalletLoginData) =>
@@ -332,11 +340,8 @@ const API = {
     request.get<IGetXCallbackResponse>('x-auth/callback', {
       params: { oauth_token, oauth_verifier },
     }),
-  getXAccount: async () => request.get('/x-auth/account'),
-  getXFollowing: async (pagination_token?: string, max_results?: number) =>
-    request.get('/x-auth/is-user-follow', {
-      params: { pagination_token, max_results },
-    }),
+  getXAccount: async () => request.get<IGetXAccountResponse>('/x-auth/account'),
+  getTasks: async () => request.get<IGetTasksResponse>('/reward/tasks'),
 }
 
 export default API

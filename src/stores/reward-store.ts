@@ -10,8 +10,10 @@ import API, {
   type IClaimNewbieRewardResponse,
   type IGetAchievementsResponse,
   type IGetSignInStatusResponse,
+  type IGetTasksResponse,
   type IInvitationStatusResponse,
   type ISignInResponse,
+  type ITask,
   type ShopItem,
   type SignInStatus,
 } from '@/axios/api.ts'
@@ -43,6 +45,8 @@ export default class RewardStore {
 
   claimAllInvitationRewardNetworkFlag = false
 
+  tasks: Array<ITask> = []
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
@@ -69,6 +73,7 @@ export default class RewardStore {
       claimAllInvitationReward: flow.bound,
       bindInvitation: flow.bound,
       autoBindInvitation: flow.bound,
+      initTasks: flow.bound,
     })
   }
 
@@ -80,15 +85,18 @@ export default class RewardStore {
     this.achievements = []
     this.claimAchievementNetworkFlag = false
     this.invitationStatus = null
+    this.claimAllInvitationRewardNetworkFlag = false
+    this.tasks = []
   };
 
   *initData() {
+    yield this.initInvitationStatus()
     yield Promise.all([
       this.initSignInStatus(),
       this.initAchievements(),
-      this.initInvitationStatus(),
+      this.autoBindInvitation(),
+      this.initTasks(),
     ])
-    this.autoBindInvitation()
   }
 
   *initSignInStatus() {
@@ -349,6 +357,13 @@ export default class RewardStore {
       if (result.success) {
         toast.success('Invitation accepted successfully.')
       }
+    }
+  }
+
+  *initTasks() {
+    const result: AxiosResponse<IGetTasksResponse> = yield API.getTasks()
+    if (result?.data?.tasks?.length) {
+      this.tasks = result.data.tasks
     }
   }
 }
