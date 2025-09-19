@@ -58,13 +58,15 @@ const TaskItem: React.FC<ITaskItemProps> = ({
       <div className={styles.descriptionWrapper}>
         <Textfit className={styles.descriptionContainer}>
           {task.description}
-          <button
-            className={classNames(styles.goCompleteTaskButton, { button: !buttonLoading })}
-            disabled={buttonLoading}
-            onClick={onGoCompleteTaskButtonClick}
-          >
-            Go
-          </button>
+          {task.status !== TASK_STATUS.REWARD_CLAIMED ? (
+            <button
+              className={classNames(styles.goCompleteTaskButton, { button: !buttonLoading })}
+              disabled={buttonLoading}
+              onClick={onGoCompleteTaskButtonClick}
+            >
+              Go
+            </button>
+          ) : null}
         </Textfit>
       </div>
       <div className={styles.rewardWrapper}>
@@ -84,13 +86,15 @@ const TaskItem: React.FC<ITaskItemProps> = ({
         </div>
       </div>
       <div className={styles.buttonWrapper}>
-        <button
-          className={classNames(styles.claimButton, {
-            button: !buttonLoading,
-          })}
-          disabled={buttonLoading}
-          onClick={onClaimTaskButtonClick}
-        ></button>
+        {task.status !== TASK_STATUS.REWARD_CLAIMED ? (
+          <button
+            className={classNames(styles.claimButton, {
+              button: !buttonLoading,
+            })}
+            disabled={buttonLoading}
+            onClick={onClaimTaskButtonClick}
+          ></button>
+        ) : null}
       </div>
     </div>
   )
