@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import React, { type RefObject, useMemo, useRef, useState } from 'react'
-import styles from './RewardPageAchievementContent.module.css'
+import styles from './RewardPageAchievementsContent.module.css'
 import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import {
@@ -87,7 +87,7 @@ const AchievementItem: React.FC<IAchievementItemProps> = ({
   )
 }
 
-interface IRewardPageAchievementContentProps {
+interface IRewardPageAchievementsContentProps {
   openRewardResultModal: (data: RewardResultModalData, title?: string) => void
 }
 
@@ -97,7 +97,7 @@ const AchievementStatusSortPriority = {
   [ACHIEVEMENT_STATUS.REWARD_CLAIMED]: 2,
 }
 
-const RewardPageAchievementContent: React.FC<IRewardPageAchievementContentProps> = ({
+const RewardPageAchievementsContent: React.FC<IRewardPageAchievementsContentProps> = ({
   openRewardResultModal,
 }) => {
   const {
@@ -210,4 +210,4 @@ const RewardPageAchievementContent: React.FC<IRewardPageAchievementContentProps>
     </div>
   )
 }
-export default observer(RewardPageAchievementContent)
+export default observer(RewardPageAchievementsContent)

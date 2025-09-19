@@ -254,12 +254,33 @@ export interface IGetXAccountResponse {
   twitterAccount: IXAccount | null
 }
 
+export enum TASK_STATUS {
+  UNCOMPLETED = 0,
+  COMPLETED = 1,
+  REWARD_CLAIMED = 2,
+}
+
 export interface ITask {
+  completedAt: string | null
+  createdAt: string
+  description: string
   id: number
+  rewardFaithAmount: number
+  rewardSolAmount: number
+  status: TASK_STATUS
+  subType: string
+  target: null
+  type: string
 }
 
 export interface IGetTasksResponse {
   tasks: Array<ITask>
+}
+
+export interface IClaimTaskResponse {
+  success: boolean
+  solAmount: number
+  faithAmount: number
 }
 
 const API = {
@@ -342,6 +363,8 @@ const API = {
     }),
   getXAccount: async () => request.get<IGetXAccountResponse>('/x-auth/account'),
   getTasks: async () => request.get<IGetTasksResponse>('/reward/tasks'),
+  claimTask: async (taskId: number) =>
+    request.post<IClaimTaskResponse>('/reward/tasks', { taskId }),
 }
 
 export default API

@@ -8,6 +8,7 @@ import API, {
   type IClaimAchievementResponse,
   type IClaimInvitationRewardResponse,
   type IClaimNewbieRewardResponse,
+  type IClaimTaskResponse,
   type IGetAchievementsResponse,
   type IGetSignInStatusResponse,
   type IGetTasksResponse,
@@ -16,6 +17,7 @@ import API, {
   type ITask,
   type ShopItem,
   type SignInStatus,
+  TASK_STATUS,
 } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 import dayjs from 'dayjs'
@@ -47,6 +49,8 @@ export default class RewardStore {
 
   tasks: Array<ITask> = []
 
+  claimTaskNetworkFlag = false
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
@@ -74,6 +78,7 @@ export default class RewardStore {
       bindInvitation: flow.bound,
       autoBindInvitation: flow.bound,
       initTasks: flow.bound,
+      claimTask: flow.bound,
     })
   }
 
@@ -87,6 +92,7 @@ export default class RewardStore {
     this.invitationStatus = null
     this.claimAllInvitationRewardNetworkFlag = false
     this.tasks = []
+    this.claimTaskNetworkFlag = false
   };
 
   *initData() {
@@ -226,7 +232,7 @@ export default class RewardStore {
     if (!this.rootStoreRef.appStore.userInfo) return
     if (this.claimAchievementNetworkFlag) return
     if (achievement.status !== ACHIEVEMENT_STATUS.COMPLETED) {
-      toast.error('This achievement is claimable.')
+      toast.error('This achievement is unclaimable.')
       return
     }
     try {
@@ -364,6 +370,42 @@ export default class RewardStore {
     const result: AxiosResponse<IGetTasksResponse> = yield API.getTasks()
     if (result?.data?.tasks?.length) {
       this.tasks = result.data.tasks
+    }
+  }
+
+  *claimTask(task: ITask) {
+    if (!this.rootStoreRef.appStore.userInfo) return
+    if (this.claimTaskNetworkFlag) return
+    if (task.status === TASK_STATUS.REWARD_CLAIMED) {
+      toast.error('This task is already claimed.')
+      return
+    }
+    try {
+      this.claimTaskNetworkFlag = true
+      const result: AxiosResponse<IClaimTaskResponse> = yield API.claimTask(task.id)
+      if (result?.data?.success) {
+        const newUserInfo = {
+          ...this.rootStoreRef.appStore.userInfo,
+          solAmount: result.data.solAmount,
+          faithAmount: result.data.faithAmount,
+        }
+        this.rootStoreRef.appStore.updateUserInfo(newUserInfo)
+        this.tasks = this.tasks.map((tk) => {
+          if (tk.id === task.id) {
+            return {
+              ...tk,
+              status: TASK_STATUS.REWARD_CLAIMED,
+              completedAt: dayjs().toISOString(),
+            }
+          }
+          return tk
+        })
+        return result.data
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      this.claimTaskNetworkFlag = false
     }
   }
 }

@@ -1,0 +1,126 @@
+@import "tailwindcss";
+@import "tailwind-scrollbar-hide/v4";
+
+.contentContainer {
+    @apply flex-1 overflow-hidden flex flex-col items-stretch text-white;
+    @apply bg-[url(/src/assets/images/reward_page/achievement_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+
+    .header {
+        @apply flex items-center justify-between h-19.5 px-7 shrink-0;
+    }
+
+    .title {
+        @apply text-3xl flex items-center gap-x-4;
+    }
+
+    .refreshButton {
+        @apply text-amber-300;
+
+        & > svg {
+            @apply size-8 stroke-3;
+        }
+    }
+
+    .headerRightPart {
+        @apply flex items-center gap-x-2 text-xl;
+    }
+
+    .radioButtonOutside {
+        @apply size-8.5 flex items-center justify-center;
+        @apply bg-[url(/src/assets/images/reward_page/achievement_radio_button_outside.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .radioButtonInside {
+        @apply size-5;
+        @apply bg-[url(/src/assets/images/reward_page/achievement_radio_button_inside.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .bodyContainer {
+        @apply flex-1 overflow-hidden flex flex-col items-stretch pt-11 pb-12 pl-13 pr-12;
+    }
+
+    .loadingText {
+        @apply self-center justify-self-center;
+    }
+
+    .body {
+        @apply overflow-x-hidden overflow-y-auto flex flex-col gap-y-4 scrollbar-hide;
+    }
+}
+
+.claimButton {
+    @apply size-25;
+    @apply bg-[url(/src/assets/images/reward_page/achievement_claim_button_background.png)] bg-size-[100%_100%] bg-top-left bg-no-repeat;
+}
+
+.taskContainer {
+    @apply flex items-center justify-between h-35 shrink-0;
+    @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+
+    .descriptionWrapper {
+        @apply h-full flex items-center justify-start flex-1 overflow-hidden px-9.5 py-5 text-[#241800] text-3xl;
+    }
+
+    .descriptionContainer {
+        @apply max-h-full flex-1 overflow-hidden;
+    }
+
+    .goCompleteTaskButton {
+        @apply inline-flex underline text-blue-500 ml-4;
+    }
+
+    .rewardWrapper {
+        @apply basis-30 shrink-0 flex items-center gap-x-5;
+    }
+
+    .buttonWrapper {
+        @apply w-87.5 self-stretch flex items-center justify-center;
+    }
+}
+
+.taskContainerClaimed {
+    @apply bg-[url(/src/assets/images/reward_page/achievement_item_background_claimed.png)];
+}
+
+.taskContainerCompleted {
+    @apply bg-[url(/src/assets/images/reward_page/achievement_item_background.png)];
+}
+
+.taskContainerUncompleted {
+    @apply bg-[url(/src/assets/images/reward_page/achievement_item_background.png)];
+}
+
+.rewardContainer {
+    @apply w-28 h-26 flex flex-col items-center justify-end border bg-linear-to-b relative;
+
+    .rewardClaimedMask {
+        @apply absolute size-full inset-0 z-10 bg-[#000000B2] flex items-center justify-center text-white text-base;
+    }
+
+    .rewardImage {
+        @apply mb-1;
+        @apply bg-size-[100%_100%] bg-top-left bg-no-repeat;
+    }
+
+    .rewardAmount {
+        @apply text-white text-3xl h-7 self-stretch bg-linear-to-r from-[#00000033] to-[#070707CC] flex items-center justify-center;
+    }
+}
+
+.rewardContainerSol {
+    @apply border-[#BCA784] from-[#89683A] to-[#B59C5C];
+
+    .rewardImage {
+        @apply w-16.5 h-15.5;
+        @apply bg-[url(/src/assets/images/common/asset_icon_sol.png)];
+    }
+}
+
+.rewardContainerFaith {
+    @apply border-[#9C7FC1] from-[#513E69] to-[#8565A9];
+
+    .rewardImage {
+        @apply size-16;
+        @apply bg-[url(/src/assets/images/common/asset_icon_faith.png)];
+    }
+}

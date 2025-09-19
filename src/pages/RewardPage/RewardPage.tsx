@@ -1,15 +1,21 @@
 import { observer } from 'mobx-react-lite'
 import React, { Suspense, useMemo, useState } from 'react'
 import CommonPageLayout, { type CommonPageLayoutTab } from '@/components/CommonPageLayout.tsx'
-import { CalendarDaysIcon, EnvelopeOpenIcon, StarIcon } from '@heroicons/react/24/outline'
+import {
+  CalendarDaysIcon,
+  EnvelopeOpenIcon,
+  StarIcon,
+  ClipboardDocumentCheckIcon,
+} from '@heroicons/react/24/outline'
 import styles from './RewardPage.module.css'
 import RewardModalCheckInContent from '@/pages/RewardPage/RewardPageCheckInContent.tsx'
 import classNames from 'classnames'
 import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import RewardPageAchievementContent from '@/pages/RewardPage/RewardPageAchievementContent.tsx'
+import RewardPageAchievementsContent from '@/pages/RewardPage/RewardPageAchievementsContent.tsx'
 import RewardPageInviteContent from '@/pages/RewardPage/RewardPageInviteContent.tsx'
+import RewardPageTasksContent from '@/pages/RewardPage/RewardPageTasksContent.tsx'
 
 const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
@@ -42,6 +48,12 @@ const RewardPage: React.FC = () => {
         icon: (className: string) => <EnvelopeOpenIcon className={className} />,
         showRedDot: isReferralRewardAvailable,
       },
+      {
+        label: 'Tasks',
+        key: 'tasks',
+        icon: (className: string) => <ClipboardDocumentCheckIcon className={className} />,
+        showRedDot: false,
+      },
     ],
     [isAchievementRewardAvailable, isCheckInRewardAvailable, isReferralRewardAvailable],
   )
@@ -70,9 +82,9 @@ const RewardPage: React.FC = () => {
     switch (selectedTab) {
       case 'achievements':
         return (
-          <RewardPageAchievementContent
+          <RewardPageAchievementsContent
             openRewardResultModal={openRewardResultModal}
-          ></RewardPageAchievementContent>
+          ></RewardPageAchievementsContent>
         )
       case 'check_in':
         return (
@@ -85,6 +97,12 @@ const RewardPage: React.FC = () => {
           <RewardPageInviteContent
             openRewardResultModal={openRewardResultModal}
           ></RewardPageInviteContent>
+        )
+      case 'tasks':
+        return (
+          <RewardPageTasksContent
+            openRewardResultModal={openRewardResultModal}
+          ></RewardPageTasksContent>
         )
       default:
         return null
@@ -102,7 +120,7 @@ const RewardPage: React.FC = () => {
       <div
         className={classNames(styles.body, {
           [styles.bodyCheckIn]: selectedTab === 'check_in',
-          [styles.bodyAchievement]: selectedTab === 'achievements',
+          [styles.bodyAchievement]: selectedTab === 'achievements' || selectedTab === 'tasks',
           [styles.bodyInvite]: selectedTab === 'invite',
         })}
       >
