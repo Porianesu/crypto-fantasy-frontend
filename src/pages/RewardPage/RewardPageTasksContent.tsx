@@ -30,16 +30,22 @@ const TaskItem: React.FC<ITaskItemProps> = ({
 
   const onClaimTaskButtonClick = async () => {
     if (buttonLoading) return
-    setButtonLoading(true)
-    await handleClaimTask(task)
-    setButtonLoading(false)
+    try {
+      setButtonLoading(true)
+      await handleClaimTask(task)
+    } finally {
+      setButtonLoading(false)
+    }
   }
 
   const onGoCompleteTaskButtonClick = async () => {
     if (buttonLoading) return
-    setButtonLoading(true)
-    await handleCompleteTask(task)
-    setButtonLoading(false)
+    try {
+      setButtonLoading(true)
+      await handleCompleteTask(task)
+    } finally {
+      setButtonLoading(false)
+    }
   }
 
   return (
@@ -177,8 +183,12 @@ const RewardPageTasksContent: React.FC<IRewardPageTasksContentProps> = ({
       }
       switch (task.subType) {
         case 'follow':
-          break
+        case 'retweet':
+        case 'like':
         default:
+          if (task.target) {
+            window.open(task.target, '_blank')
+          }
           break
       }
     }
