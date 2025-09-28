@@ -77,14 +77,6 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     if (!currentCraftRule || !craftTargetCard || !appConfig || !userInfo) return new BigNumber(0)
     let guaranteeSuccess = false
     switch (craftTargetCard.rarity) {
-      case CARD_RARITY.RARE:
-        guaranteeSuccess =
-          userInfo.craftCountSinceLastRare + 1 >= appConfig.CraftCardGuarantee[CARD_RARITY.RARE]
-        break
-      case CARD_RARITY.EPIC:
-        guaranteeSuccess =
-          userInfo.craftCountSinceLastEpic + 1 >= appConfig.CraftCardGuarantee[CARD_RARITY.EPIC]
-        break
       case CARD_RARITY.LEGENDARY:
         guaranteeSuccess =
           userInfo.craftCountSinceLastLegendary + 1 >=
@@ -259,19 +251,11 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
 
   const renderGuaranteedPart = () => {
     if (!craftTargetCard || !appConfig || !userInfo) return null
-    if (craftTargetCard.rarity === CARD_RARITY.NORMAL) return null
+    if (craftTargetCard.rarity !== CARD_RARITY.LEGENDARY) return null
     let rarityText: string
     let failCount: number
     const guaranteedCount = appConfig.CraftCardGuarantee[craftTargetCard.rarity] || 0
     switch (craftTargetCard.rarity) {
-      case CARD_RARITY.RARE:
-        rarityText = 'Rare'
-        failCount = userInfo.craftCountSinceLastRare
-        break
-      case CARD_RARITY.EPIC:
-        rarityText = 'Epic'
-        failCount = userInfo.craftCountSinceLastEpic
-        break
       case CARD_RARITY.LEGENDARY:
         rarityText = 'Legendary'
         failCount = userInfo.craftCountSinceLastLegendary
@@ -282,7 +266,7 @@ const Craft: React.FC<{ playCraftCardVideo: () => Promise<void> }> = ({ playCraf
     }
     return (
       <div className={styles.guaranteeContainer}>
-        Guaranteed{' '}
+        Guaranteed
         <span
           className={classNames(
             styles.guaranteeContainerRarityText,
