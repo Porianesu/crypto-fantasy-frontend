@@ -21,7 +21,7 @@ import type { IClaimNewbieRewardResponse } from '@/axios/api.ts'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
 
 const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
-const CardsBagModal = React.lazy(() => import('@/pages/HomePage/CardsBagModal.tsx'))
+const CardsBagModal = React.lazy(() => import('@/pages/HomePage/BagModal.tsx'))
 const BattleModal = React.lazy(() => import('@/pages/HomePage/BattleModal.tsx'))
 const CardSelectModal = React.lazy(() => import('@/components/CardSelectModal.tsx'))
 const RedeemCodeModal = React.lazy(() => import('@/components/RedeemCodeModal.tsx'))
@@ -32,7 +32,7 @@ const RewardResultModal = React.lazy(() => import('@/components/RewardResultModa
 function HomePage() {
   const {
     appStore: { userInfo, appConfig, cardsFormation, changeCardsFormation },
-    modalStore: { changeCardsBagModalData, changeBattleModalVisible },
+    modalStore: { changeBagModalData, changeBattleModalVisible },
     rewardStore: { showRedDot, claimNewbieReward },
     preloadStore: { audioInstanceMap },
   } = useMobxStore()
@@ -114,7 +114,7 @@ function HomePage() {
         icon: bagIcon,
         className: 'w-43.5 h-43.5',
         onClick: () =>
-          changeCardsBagModalData({
+          changeBagModalData({
             visible: true,
             type: ICardsBagModalType.VIEW,
           }),
@@ -139,7 +139,7 @@ function HomePage() {
         onClick: () => navigate(getShopPath()),
       },
     ],
-    [changeBattleModalVisible, changeCardsBagModalData, navigate, showRedDot],
+    [changeBattleModalVisible, changeBagModalData, navigate, showRedDot],
   )
 
   const openRedeemCodeModal = () => {

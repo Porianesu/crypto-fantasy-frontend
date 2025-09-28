@@ -4,17 +4,21 @@ import API, {
   ACHIEVEMENT_STATUS,
   type IAchievement,
   type IBindInvitationResponse,
+  type IBuyMagicItemResponse,
   type IBuyShopItemResponse,
   type IClaimAchievementResponse,
   type IClaimInvitationRewardResponse,
   type IClaimNewbieRewardResponse,
   type IClaimTaskResponse,
   type IGetAchievementsResponse,
+  type IGetItemsResponse,
   type IGetSignInStatusResponse,
   type IGetTasksResponse,
   type IInvitationStatusResponse,
+  type IMagicItem,
   type ISignInResponse,
   type ITask,
+  type MyMagicItem,
   type ShopItem,
   type SignInStatus,
   TASK_STATUS,
@@ -51,6 +55,8 @@ export default class RewardStore {
 
   claimTaskNetworkFlag = false
 
+  magicItems: Array<MyMagicItem> = []
+
   constructor(rootStore: Store) {
     this.rootStoreRef = rootStore
     makeAutoObservable(this, {
@@ -65,7 +71,7 @@ export default class RewardStore {
       isAchievementRewardAvailable: computed,
       isReferralRewardAvailable: computed,
       showRedDot: computed,
-      buyItem: flow.bound,
+      buyShopItem: flow.bound,
       claimNewbieRewardNetworkFlag: observable,
       claimNewbieReward: flow.bound,
       achievements: observable,
@@ -79,6 +85,9 @@ export default class RewardStore {
       autoBindInvitation: flow.bound,
       initTasks: flow.bound,
       claimTask: flow.bound,
+      magicItems: observable,
+      initMagicItems: flow.bound,
+      buyMagicItem: flow.bound,
     })
   }
 
@@ -93,6 +102,7 @@ export default class RewardStore {
     this.claimAllInvitationRewardNetworkFlag = false
     this.tasks = []
     this.claimTaskNetworkFlag = false
+    this.magicItems = []
   };
 
   *initData() {
@@ -102,6 +112,7 @@ export default class RewardStore {
       this.initAchievements(),
       this.autoBindInvitation(),
       this.initTasks(),
+      this.initMagicItems(),
     ])
   }
 
@@ -169,7 +180,7 @@ export default class RewardStore {
     )
   }
 
-  *buyItem(item: ShopItem) {
+  *buyShopItem(item: ShopItem) {
     if (!this.rootStoreRef.appStore.userInfo) return
     if (this.rootStoreRef.appStore.userInfo.solAmount < item.price) {
       return toast.error('Insufficient balance to buy this item.')
@@ -181,7 +192,7 @@ export default class RewardStore {
     try {
       this.buyItemNetworkFlag = true
       const result: AxiosResponse<IBuyShopItemResponse> = yield API.buyShopItem(item.id)
-      if (result?.data?.user?.email === this.rootStoreRef.appStore.userInfo!.email) {
+      if (result?.data?.user?.id === this.rootStoreRef.appStore.userInfo!.id) {
         this.rootStoreRef.appStore.updateUserInfo(result.data.user)
         return 'success'
       }
@@ -406,6 +417,43 @@ export default class RewardStore {
       console.error(e)
     } finally {
       this.claimTaskNetworkFlag = false
+    }
+  }
+
+  *initMagicItems() {
+    const result: AxiosResponse<IGetItemsResponse> = yield API.getMagicItems()
+    if (result?.data?.items?.length) {
+      this.magicItems = result.data.items
+    }
+  }
+
+  *buyMagicItem(item: IMagicItem, quantity = 1) {
+    if (!this.rootStoreRef.appStore.userInfo || quantity < 1) return
+    if (
+      this.rootStoreRef.appStore.userInfo.solAmount < item.solPrice ||
+      this.rootStoreRef.appStore.userInfo.faithAmount < item.faithPrice
+    ) {
+      return toast.error('Insufficient balance to buy this item.')
+    }
+    if (this.buyItemNetworkFlag) return
+    try {
+      this.buyItemNetworkFlag = true
+      const result: AxiosResponse<IBuyMagicItemResponse> = yield API.buyMagicItem(item.id, quantity)
+      if (result?.data?.user?.id === this.rootStoreRef.appStore.userInfo!.id) {
+        this.rootStoreRef.appStore.updateUserInfo(result.data.user)
+        this.magicItems = this.magicItems.map((magicItem) => {
+          if (magicItem.id === item.id) {
+            return {
+              ...magicItem,
+              owned: magicItem.owned + quantity,
+            }
+          }
+          return magicItem
+        })
+        return 'success'
+      }
+    } finally {
+      this.buyItemNetworkFlag = false
     }
   }
 }

@@ -4,18 +4,20 @@ import styles from './ShopPage.module.css'
 import classNames from 'classnames'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { useQuery } from '@tanstack/react-query'
-import API, { type ShopItem } from '@/axios/api.ts'
-import { GiftIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import API, { type IMagicItem, type ShopItem } from '@/axios/api.ts'
+import { GiftIcon, CurrencyDollarIcon, StarIcon } from '@heroicons/react/24/outline'
 import { BigNumber } from 'bignumber.js'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
-import CommonPageLayout from '@/components/CommonPageLayout.tsx'
+import CommonPageLayout, { type CommonPageLayoutTab } from '@/components/CommonPageLayout.tsx'
+import { toast } from 'react-toastify'
 
 const RewardResultModal = React.lazy(() => import('@/components/RewardResultModal.tsx'))
 
-const Tabs = [
+type ShopPageTabKey = 'daily_gift' | 'recharge' | 'items'
+const Tabs: Array<CommonPageLayoutTab<ShopPageTabKey>> = [
   {
     label: 'Daily Gift',
     key: 'daily_gift',
@@ -26,33 +28,38 @@ const Tabs = [
     key: 'recharge',
     icon: (className: string) => <CurrencyDollarIcon className={className} />,
   },
+  {
+    label: 'Items',
+    key: 'items',
+    icon: (className: string) => <StarIcon className={className} />,
+  },
 ]
 
 const ShopPage: React.FC = () => {
   const {
-    rewardStore: { buyItem },
+    rewardStore: { magicItems, buyMagicItem, buyShopItem },
     preloadStore: { audioInstanceMap },
   } = useMobxStore()
   const { data, isLoading } = useQuery({
     queryKey: ['shopItems'],
     queryFn: API.getShopItems,
+    staleTime: 2 * 60 * 1000, // 数据2分钟内不被认为过时
     refetchInterval: 5 * 60 * 1000, // 每5分钟刷新一次
     refetchOnWindowFocus: false,
   })
   const successSound = audioInstanceMap.get(AudioInstanceId.CraftSuccessSound)
-  const [selectedTab, setSelectedTab] = useState<string>(Tabs[0].key)
+  const [selectedTab, setSelectedTab] = useState<ShopPageTabKey>(Tabs[0].key)
   const [shopItems, setShopItems] = useState<Array<ShopItem>>([])
-  const isDailyGiftTab = useMemo(() => selectedTab === 'daily_gift', [selectedTab])
   const filteredShopItems = useMemo(
     () =>
       shopItems.filter((item) => {
-        if (isDailyGiftTab) {
+        if (selectedTab === 'daily_gift') {
           return item.dailyLimit > 0
         } else {
           return item.dailyLimit <= 0
         }
       }),
-    [isDailyGiftTab, shopItems],
+    [selectedTab, shopItems],
   )
   const [rewardResultModalVisible, setRewardResultModalVisible] = useState<boolean>(false)
   const [rewardResultModalData, setRewardResultModalData] = useState<RewardResultModalData>({})
@@ -62,6 +69,7 @@ const ShopPage: React.FC = () => {
   const shopItemsContainerRef = useRef<HTMLDivElement>(null)
   const dailyGiftRefs = useRef<Array<HTMLDivElement>>([])
   const rechargeRefs = useRef<Array<HTMLDivElement>>([])
+  const itemsRefs = useRef<Array<HTMLDivElement>>([])
 
   useEffect(() => {
     if (!isLoading && data?.data?.items && Array.isArray(data.data.items)) {
@@ -75,18 +83,30 @@ const ShopPage: React.FC = () => {
 
   useGSAP(
     () => {
-      if (selectedTab === 'daily_gift') {
-        gsap.fromTo(
-          dailyGiftRefs.current,
-          { x: (i) => (i === 0 ? '-100%' : '100%'), opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out' },
-        )
-      } else {
-        gsap.fromTo(
-          rechargeRefs.current,
-          { y: 100, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'back.out(1.7)' },
-        )
+      switch (selectedTab) {
+        case 'daily_gift':
+          gsap.fromTo(
+            dailyGiftRefs.current,
+            { x: (i) => (i === 0 ? '-100%' : '100%'), opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out' },
+          )
+          break
+        case 'recharge':
+          gsap.fromTo(
+            rechargeRefs.current,
+            { y: 100, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'back.out(1.7)' },
+          )
+          break
+        case 'items':
+          gsap.fromTo(
+            itemsRefs.current,
+            { y: 100, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'back.out(1.7)' },
+          )
+          break
+        default:
+          break
       }
     },
     {
@@ -95,9 +115,9 @@ const ShopPage: React.FC = () => {
     },
   )
 
-  const handleBuyItem = async (item: ShopItem) => {
-    const result = await buyItem(item)
-    if ((result as unknown as string) === 'success') {
+  const handleBuyShopItem = async (item: ShopItem) => {
+    const result = (await buyShopItem(item)) as unknown as string
+    if (result === 'success') {
       // 更新今日已购买数量
       setShopItems((prevItems) =>
         prevItems.map((i) =>
@@ -120,6 +140,13 @@ const ShopPage: React.FC = () => {
         faithAmount: item.rewardFaith || 0,
         melt: item.rewardMeltTimes || 0,
       })
+    }
+  }
+
+  const handleBuyMagicItem = async (item: IMagicItem) => {
+    const result = (await buyMagicItem(item, 1)) as unknown as string
+    if (result === 'success') {
+      toast.success(`You have purchased the ${item.name} successfully!`)
     }
   }
 
@@ -193,7 +220,7 @@ const ShopPage: React.FC = () => {
             [styles.claimButtonDisabled]: !isItemClaimable,
           })}
           disabled={!isItemClaimable}
-          onClick={() => handleBuyItem(item)}
+          onClick={() => handleBuyShopItem(item)}
         >
           {isItemClaimable ? 'Get it now' : 'Claimed'}
         </button>
@@ -236,13 +263,57 @@ const ShopPage: React.FC = () => {
         </div>
         <button
           className={classNames(styles.rechargeItemButton, styles.buttonAction)}
-          onClick={() => handleBuyItem(item)}
+          onClick={() => handleBuyShopItem(item)}
         >
           {item.price}
           <div className={styles.rechargeItemButtonIcon}></div>
         </button>
       </div>
     )
+  }
+
+  const renderMagicItem = (item: IMagicItem, index: number) => {
+    return (
+      <div
+        key={item.id}
+        ref={(el) => {
+          if (el) {
+            itemsRefs.current[index] = el
+          }
+        }}
+      >
+        <div>{item.name}</div>
+        <div>{item.description}</div>
+        <div>{`Sol price: ${item.solPrice}`}</div>
+        <div>{`Faith price: ${item.faithPrice}`}</div>
+        <button className={classNames('button')} onClick={() => handleBuyMagicItem(item)}>
+          Buy One
+        </button>
+      </div>
+    )
+  }
+
+  const renderBody = () => {
+    let shouldShowLoading = true
+    if (selectedTab === 'recharge' || selectedTab === 'daily_gift') {
+      shouldShowLoading = !filteredShopItems.length
+    } else if (selectedTab === 'items') {
+      shouldShowLoading = !magicItems?.length
+    }
+    if (shouldShowLoading) {
+      return <div className={styles.loadingText}>Loading . . .</div>
+    }
+
+    switch (selectedTab) {
+      case 'daily_gift':
+        return filteredShopItems.map(renderDailyGiftItem)
+      case 'recharge':
+        return filteredShopItems.map(renderRechargeItem)
+      case 'items':
+        return magicItems?.map(renderMagicItem)
+      default:
+        return null
+    }
   }
 
   return (
@@ -256,18 +327,13 @@ const ShopPage: React.FC = () => {
       <div
         className={classNames(styles.shopItemsContainer, {
           [styles.shopItemsContainerLoading]: !filteredShopItems?.length,
-          [styles.shopItemsContainerDailyGift]: isDailyGiftTab,
-          [styles.shopItemsContainerRecharge]: !isDailyGiftTab,
+          [styles.shopItemsContainerDailyGift]: selectedTab === 'daily_gift',
+          [styles.shopItemsContainerRecharge]: selectedTab === 'recharge',
+          [styles.shopItemsContainerItems]: selectedTab === 'items',
         })}
         ref={shopItemsContainerRef}
       >
-        {filteredShopItems.length ? (
-          filteredShopItems.map((item, index) =>
-            isDailyGiftTab ? renderDailyGiftItem(item, index) : renderRechargeItem(item, index),
-          )
-        ) : (
-          <div className={styles.loadingText}>Loading . . .</div>
-        )}
+        {renderBody()}
       </div>
       <Suspense fallback={null}>
         <RewardResultModal

@@ -10,7 +10,7 @@ import {
   Close,
 } from '@radix-ui/react-dialog'
 import classNames from 'classnames'
-import styles from './CardsBagModal.module.css'
+import styles from './BagModal.module.css'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import { ICardsBagModalType } from '@/stores/modal-store.ts'
 import StaticCard from '@/components/StaticCard.tsx'
@@ -22,7 +22,7 @@ import type { ICardDataWithCount } from '@/stores/app-store.ts'
 const CardsBagContent: React.FC = observer(() => {
   const {
     appStore: { formattedCardsBag, cardsFormation, changeCardsFormation },
-    modalStore: { changeCardsBagModalData, cardsBagModalData },
+    modalStore: { changeBagModalData, bagModalData },
   } = useMobxStore()
   const navigate = useNavigate()
   const cardsListRef = useRef<HTMLDivElement>(null)
@@ -30,10 +30,7 @@ const CardsBagContent: React.FC = observer(() => {
   const [search, setSearch] = useState('')
   const [rarity, setRarity] = useState<RARITY_SELECT_VALUE>('all')
   const [selectedIds, setSelectedIds] = useState<number[]>(cardsFormation.map((card) => card.id))
-  const isEdit = useMemo(
-    () => cardsBagModalData.type === ICardsBagModalType.EDIT,
-    [cardsBagModalData.type],
-  )
+  const isEdit = useMemo(() => bagModalData.type === ICardsBagModalType.EDIT, [bagModalData.type])
 
   const handleSelect = (id: number) => {
     if (!isEdit) return
@@ -62,7 +59,7 @@ const CardsBagContent: React.FC = observer(() => {
       }
       handleSelect(card.id)
     } else {
-      changeCardsBagModalData({ visible: false, type: ICardsBagModalType.VIEW })
+      changeBagModalData({ visible: false, type: ICardsBagModalType.VIEW })
       navigate(getGalleryPath(card.id))
     }
   }
@@ -73,7 +70,7 @@ const CardsBagContent: React.FC = observer(() => {
       const selectedCards = formattedCardsBag.filter((card) => selectedIds.includes(card.id))
       changeCardsFormation(selectedCards)
     }
-    changeCardsBagModalData({ visible: false, type: ICardsBagModalType.VIEW })
+    changeBagModalData({ visible: false, type: ICardsBagModalType.VIEW })
   }
 
   return (
@@ -150,15 +147,15 @@ const CardsBagContent: React.FC = observer(() => {
   )
 })
 
-const CardsBagModal = () => {
+const BagModal = () => {
   const {
-    modalStore: { cardsBagModalData, changeCardsBagModalData },
+    modalStore: { bagModalData, changeBagModalData },
   } = useMobxStore()
   return (
     <Dialog
-      open={cardsBagModalData.visible}
+      open={bagModalData.visible}
       onOpenChange={(visible) => {
-        changeCardsBagModalData({
+        changeBagModalData({
           visible,
           type: ICardsBagModalType.VIEW, // 关闭时重置为查看模式
         })
@@ -178,4 +175,4 @@ const CardsBagModal = () => {
     </Dialog>
   )
 }
-export default observer(CardsBagModal)
+export default observer(BagModal)

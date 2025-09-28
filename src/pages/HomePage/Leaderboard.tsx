@@ -15,6 +15,7 @@ const Leaderboard: React.FC = () => {
   const { data, isLoading: leaderboardLoading } = useQuery({
     queryKey: ['leaderboard'],
     queryFn: API.deckLeaderboard,
+    staleTime: 10000,
     refetchInterval: 10000,
     refetchOnWindowFocus: false,
   })

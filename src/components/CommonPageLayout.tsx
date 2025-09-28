@@ -6,29 +6,29 @@ import { getHomePath } from '@/navigation/routes.tsx'
 import { useNavigate } from 'react-router-dom'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 
-export type CommonPageLayoutTab = {
+export type CommonPageLayoutTab<K extends React.Key = string> = {
   label: string
-  key: string
+  key: K
   icon: (className: string) => JSX.Element
   showRedDot?: boolean
 }
 
-interface ICommonPageLayoutProps {
+interface ICommonPageLayoutProps<TK extends React.Key = string> {
   title: string
-  Tabs: CommonPageLayoutTab[]
-  selectedTab: string
-  setSelectedTab: Dispatch<SetStateAction<string>>
+  Tabs: CommonPageLayoutTab<TK>[]
+  selectedTab: TK
+  setSelectedTab: Dispatch<SetStateAction<TK>>
   containerClassName?: string
 }
 
-const CommonPageLayout: React.FC<PropsWithChildren<ICommonPageLayoutProps>> = ({
+const CommonPageLayout = <TK extends React.Key = string>({
   children,
   title,
   Tabs,
   selectedTab,
   setSelectedTab,
   containerClassName,
-}) => {
+}: PropsWithChildren<ICommonPageLayoutProps<TK>>) => {
   const navigate = useNavigate()
   const {
     appStore: { userInfo },

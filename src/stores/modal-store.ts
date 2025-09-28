@@ -6,7 +6,7 @@ export enum ICardsBagModalType {
   EDIT = 'edit',
   VIEW = 'view',
 }
-interface ICardsBagModalData {
+interface IBagModalData {
   visible: boolean
   type: ICardsBagModalType
 }
@@ -18,7 +18,7 @@ export default class ModalStore {
 
   drawCardsModalVisible = false
 
-  cardsBagModalData: ICardsBagModalData = {
+  bagModalData: IBagModalData = {
     visible: false,
     type: ICardsBagModalType.VIEW,
   }
@@ -37,8 +37,8 @@ export default class ModalStore {
       changeLoginModalVisible: action,
       drawCardsModalVisible: observable,
       changeDrawCardsModalVisible: action,
-      cardsBagModalData: observable,
-      changeCardsBagModalData: action,
+      bagModalData: observable,
+      changeBagModalData: action,
       viewDetailModalData: observable,
       changeViewDetailModalData: action,
       viewDetailModalVisible: observable,
@@ -51,7 +51,7 @@ export default class ModalStore {
   resetStore = () => {
     this.loginModalVisible = false
     this.drawCardsModalVisible = false
-    this.cardsBagModalData = {
+    this.bagModalData = {
       visible: false,
       type: ICardsBagModalType.VIEW,
     }
@@ -67,9 +67,9 @@ export default class ModalStore {
     this.drawCardsModalVisible = newValue
   }
 
-  changeCardsBagModalData = (newData: Partial<ICardsBagModalData>) => {
-    this.cardsBagModalData = {
-      ...this.cardsBagModalData,
+  changeBagModalData = (newData: Partial<IBagModalData>) => {
+    this.bagModalData = {
+      ...this.bagModalData,
       ...newData,
     }
   }

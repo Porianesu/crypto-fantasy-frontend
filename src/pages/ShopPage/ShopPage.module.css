@@ -151,6 +151,10 @@
     @apply grid grid-cols-3 gap-x-10 gap-y-20 pl-13 items-center;
 }
 
+.shopItemsContainerItems {
+    @apply grid grid-cols-3 gap-x-10 gap-y-20 pl-13 items-center;
+}
+
 .buttonAction {
     @apply cursor-pointer hover:opacity-80 active:scale-95 transition-all duration-100;
 }

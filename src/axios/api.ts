@@ -283,6 +283,29 @@ export interface IClaimTaskResponse {
   faithAmount: number
 }
 
+export interface IMagicItem {
+  id: number
+  name: string
+  description: string
+  type: string
+  solPrice: number
+  faithPrice: number
+  image?: string
+}
+
+export interface MyMagicItem extends IMagicItem {
+  owned: number
+}
+
+export interface IGetItemsResponse {
+  items: Array<MyMagicItem>
+}
+
+export interface IBuyMagicItemResponse {
+  success: boolean
+  user: UserInfo
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: EmailLoginData | WalletLoginData) =>
@@ -365,6 +388,9 @@ const API = {
   getTasks: async () => request.get<IGetTasksResponse>('/reward/tasks'),
   claimTask: async (taskId: number) =>
     request.post<IClaimTaskResponse>('/reward/tasks', { taskId }),
+  getMagicItems: async () => request.get<IGetItemsResponse>('/item'),
+  buyMagicItem: async (itemId: number, quantity: number) =>
+    request.post<IBuyMagicItemResponse>('/item', { itemId, quantity }),
 }
 
 export default API
