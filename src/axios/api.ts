@@ -306,6 +306,11 @@ export interface IBuyMagicItemResponse {
   user: UserInfo
 }
 
+export interface IConsumeMagicItemResponse {
+  success: boolean
+  user: UserInfo
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: EmailLoginData | WalletLoginData) =>
@@ -391,6 +396,8 @@ const API = {
   getMagicItems: async () => request.get<IGetItemsResponse>('/item'),
   buyMagicItem: async (itemId: number, quantity: number) =>
     request.post<IBuyMagicItemResponse>('/item', { itemId, quantity }),
+  consumeMagicItem: async (itemId: number, quantity: number) =>
+    request.put<IConsumeMagicItemResponse>('/item', { itemId, quantity }),
 }
 
 export default API

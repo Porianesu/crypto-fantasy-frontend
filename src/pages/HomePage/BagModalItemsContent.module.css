@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+.content {
+    @apply grow shrink basis-0 overflow-x-hidden overflow-y-auto flex flex-col items-stretch py-8 pr-5 pl-11 pr-6;
+    /* 自定义滚动条样式 */
+    scrollbar-width: thin;
+    scrollbar-color: #8B5640 transparent;
+
+    &::-webkit-scrollbar {
+        width: 11px;
+        height: 262px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #8B5640;
+        border-radius: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-button {
+        display: none;
+        height: 0;
+        width: 0;
+    }
+
+    .itemsList {
+        @apply grid grid-cols-5 gap-x-11.5 gap-y-12.5;
+    }
+
+    .noData {
+        @apply flex-1 overflow-hidden flex items-center justify-center text-amber-400 text-2xl;
+    }
+}

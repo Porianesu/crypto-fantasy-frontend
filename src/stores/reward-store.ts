@@ -10,6 +10,7 @@ import API, {
   type IClaimInvitationRewardResponse,
   type IClaimNewbieRewardResponse,
   type IClaimTaskResponse,
+  type IConsumeMagicItemResponse,
   type IGetAchievementsResponse,
   type IGetItemsResponse,
   type IGetSignInStatusResponse,
@@ -88,6 +89,7 @@ export default class RewardStore {
       magicItems: observable,
       initMagicItems: flow.bound,
       buyMagicItem: flow.bound,
+      consumeMagicItem: flow.bound,
     })
   }
 
@@ -451,6 +453,36 @@ export default class RewardStore {
           return magicItem
         })
         return 'success'
+      }
+    } finally {
+      this.buyItemNetworkFlag = false
+    }
+  }
+
+  *consumeMagicItem(item: MyMagicItem, quantity = 1) {
+    if (!this.rootStoreRef.appStore.userInfo || quantity < 1) return
+    if (item.owned < quantity) {
+      return toast.error('You do not have enough of this item to use.')
+    }
+    if (this.buyItemNetworkFlag) return
+    try {
+      this.buyItemNetworkFlag = true
+      const result: AxiosResponse<IConsumeMagicItemResponse> = yield API.consumeMagicItem(
+        item.id,
+        quantity,
+      )
+      if (result?.data?.success && result.data.user.id === this.rootStoreRef.appStore.userInfo.id) {
+        toast.success(`${item.name} x${quantity} used successfully.`)
+        this.rootStoreRef.appStore.updateUserInfo(result.data.user)
+        this.magicItems = this.magicItems.map((magicItem) => {
+          if (magicItem.id === item.id) {
+            return {
+              ...magicItem,
+              owned: magicItem.owned - quantity,
+            }
+          }
+          return magicItem
+        })
       }
     } finally {
       this.buyItemNetworkFlag = false
