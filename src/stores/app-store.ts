@@ -54,6 +54,8 @@ export interface UserInfo extends UserStorageInfo {
   craftCountSinceLastLegendary: number
   craftCountSinceLastEpic: number
   craftCountSinceLastRare: number
+  epicCoinBoostRoundsLeft: number
+  legendaryCoinBoostRoundsLeft: number
 }
 
 export interface ICardDataInBag extends ICardData {

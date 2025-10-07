@@ -177,10 +177,18 @@ function HomePage() {
           Open Pack 1<div></div>
         </button>
         {userInfo && appConfig ? (
-          <div className={styles.legendaryGuaranteeText}>
-            Guaranteed Legendary: <span>{userInfo.drawCountSinceLastLegendary}</span> packs/
-            {appConfig.LegendaryDrawCardGuarantee} packs
-          </div>
+          <>
+            <div className={styles.legendaryGuaranteeText}>
+              Guaranteed Legendary: <span>{userInfo.drawCountSinceLastLegendary}</span> packs/
+              {appConfig.LegendaryDrawCardGuarantee} packs
+            </div>
+            {userInfo.legendaryCoinBoostRoundsLeft ? (
+              <div>{`LegendaryCoinBoostRoundsLeft ${userInfo.legendaryCoinBoostRoundsLeft} times remain`}</div>
+            ) : null}
+            {userInfo.epicCoinBoostRoundsLeft ? (
+              <div>{`EpicCoinBoostRoundsLeft ${userInfo.epicCoinBoostRoundsLeft} times remain`}</div>
+            ) : null}
+          </>
         ) : null}
       </div>
       {userInfo ? (
