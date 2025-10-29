@@ -14,7 +14,6 @@ import {
 } from '@/utils/common.ts'
 import { type ICardData } from '@/components/Card.tsx'
 import { toast } from 'react-toastify'
-//123
 import API, {
   type EmailLoginData,
   type ICraftCardResponse,
