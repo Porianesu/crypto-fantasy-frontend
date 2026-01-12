@@ -14,6 +14,7 @@ import {
   SHOP_PATH,
   REWARD_PATH,
   RedirectWithQuery,
+  CARD_GENERATE_PATH,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
@@ -22,6 +23,7 @@ import EntrancePage from '@/pages/EntrancePage/EntrancePage.tsx'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer } from 'react-toastify'
 import { myQueryClient } from '@/utils/constant.ts'
+import CardGeneratePage from '@/pages/CardGeneratePage/CardGeneratePage.tsx'
 
 const HomePage = React.lazy(() => import('@/pages/HomePage/HomePage.tsx'))
 const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx'))
@@ -113,6 +115,14 @@ export const router = createBrowserRouter([
         element: (
           <CommonPageSuspense>
             <RewardPage></RewardPage>
+          </CommonPageSuspense>
+        ),
+      },
+      {
+        path: CARD_GENERATE_PATH,
+        element: (
+          <CommonPageSuspense>
+            <CardGeneratePage></CardGeneratePage>
           </CommonPageSuspense>
         ),
       },

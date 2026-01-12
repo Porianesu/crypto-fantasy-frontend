@@ -9,12 +9,12 @@ import prettierConfig from 'eslint-config-prettier'
 export default tsEslint.config(
   { ignores: ['dist'] },
   {
+    files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
       ...tsEslint.configs.recommended,
       prettierConfig,
     ],
-    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,

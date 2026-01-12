@@ -18,6 +18,7 @@ export type FusionPathState = {
 export const FUSION_PATH = '/fusion'
 export const SHOP_PATH = '/shop'
 export const REWARD_PATH = '/reward'
+export const CARD_GENERATE_PATH = '/card-generate'
 
 export enum URL_PARAMS {
   INVITE_CODE = 'ic',
