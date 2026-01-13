@@ -3,18 +3,26 @@ import React, { useRef, useState } from 'react'
 import styles from './CardGeneratePage.module.css'
 import classNames from 'classnames'
 import { useMutation } from '@tanstack/react-query'
-import API, { type IGenerateCardImageRequest } from '@/axios/api.ts'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
+import DifyApi, { type DifySendMessageParams } from '@/axios/difyApi.ts'
+
+interface IFromData {
+  name: string
+  description: string
+  style: string
+}
+
+const OpenRouterKey = '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'
 
 const CardGeneratePage: React.FC = () => {
   const pageRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
-  const { register, handleSubmit, watch, formState } = useForm<IGenerateCardImageRequest>({
+  const { register, handleSubmit, watch, formState } = useForm<IFromData>({
     mode: 'onChange',
     defaultValues: { name: '', description: '', style: '' },
   })
@@ -42,21 +50,63 @@ const CardGeneratePage: React.FC = () => {
     { scope: pageRef, dependencies: [] },
   )
 
+  async function generateImage(prompt: string) {
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${OpenRouterKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-3-pro-image-preview',
+        stream: false,
+        messages: [
+          {
+            role: 'system',
+            content:
+              'You are Nano Banana Pro (Gemini 3 Pro Image Preview), a large language model from google.\\n\\nFormatting Rules:\\n- Use Markdown for lists, tables, and styling.\\n- Use ```code fences``` for all code blocks.\\n- Format file names, paths, and function names with `inline code` backticks.\\n- **For all mathematical expressions, you must use dollar-sign delimiters. Use $...$ for inline math and $$...$$ for block math. Do not use (...) or [...] delimiters.**\\n- For responses with many sections where some are more important than others, use collapsible sections (HTML details/summary tags) to highlight key information while allowing users to expand less critical details.',
+          },
+          { role: 'user', content: prompt },
+        ],
+      }),
+    })
+    const data = await res.json()
+    console.log('generateImage res', data)
+    if (!data?.choices?.[0]?.message?.images?.[0]?.image_url?.url) {
+      return toast.error('Failed to generate image')
+    }
+    const url = data.choices[0].message.images[0].image_url.url
+    setImageUrl(url)
+    if (imageRef.current) {
+      gsap.fromTo(
+        imageRef.current,
+        { scale: 0.98, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' },
+      )
+    }
+  }
+
   const generateMutation = useMutation({
-    mutationFn: (payload: IGenerateCardImageRequest) => API.generateCardImage(payload),
-    onSuccess: (res) => {
-      const url = res?.data?.imageUrl
-      if (!url) {
-        toast.error('No image returned')
-        return
+    mutationFn: (payload: IFromData) => {
+      const requestBody: DifySendMessageParams = {
+        files: [],
+        inputs: {
+          Card_Name: payload.name,
+          Card_Description: payload.description,
+          Art_Style: payload.style,
+        },
+        query: '开始吧',
+        response_mode: 'blocking',
+        user: '111',
       }
-      setImageUrl(url)
-      if (imageRef.current) {
-        gsap.fromTo(
-          imageRef.current,
-          { scale: 0.98, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' },
-        )
+      return DifyApi.sendMessageBlock(requestBody)
+    },
+    onSuccess: async (res) => {
+      if (res.data.answer) {
+        const resultData = JSON.parse(res.data.answer) as { prompt: string }
+        if (resultData.prompt) {
+          await generateImage(resultData.prompt)
+        }
       }
     },
     onError: () => {
@@ -64,7 +114,7 @@ const CardGeneratePage: React.FC = () => {
     },
   })
 
-  const onSubmit = (values: IGenerateCardImageRequest) => {
+  const onSubmit = (values: IFromData) => {
     if (generateMutation.isPending) return
     if (previewRef.current) {
       gsap.fromTo(
@@ -166,15 +216,8 @@ const CardGeneratePage: React.FC = () => {
           </div>
           {imageUrl ? (
             <div className={styles.outputBar}>
-              <div className={styles.outputMeta}>
-                <div className={styles.outputLabel}>Last result</div>
-                <div className={styles.outputValue} title={imageUrl}>
-                  {imageUrl}
-                </div>
-              </div>
-              <a className={styles.linkButton} href={imageUrl} target={'_blank'} rel={'noreferrer'}>
-                Open
-              </a>
+              <div className={styles.outputMeta}></div>
+              <button className={styles.downloadButton}>Download</button>
             </div>
           ) : null}
         </div>

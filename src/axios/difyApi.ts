@@ -1,4 +1,8 @@
-import type { ChunkChatCompletionResponse, PingEvent } from '@/types/DifyTypes.ts'
+import type {
+  ChunkChatCompletionResponse,
+  DifyChatCompletionResponse,
+  PingEvent,
+} from '@/types/DifyTypes.ts'
 import axios from 'axios'
 
 const request = axios.create({
@@ -23,12 +27,21 @@ export interface DifySendMessageParams {
   }>
   auto_generate_name?: boolean
   parent_message_id?: string
-  lawcase_id: string
-  ws_case_id: string
-  order_id: string
 }
 
 const DifyApi = {
+  sendMessageBlock: async (params: DifySendMessageParams) => {
+    const authorization = `Bearer ${Dify_API_Key}`
+    // Always send JSON as request body so server can parse it; when expecting a streaming response,
+    // include Accept: 'text/event-stream' to tell the server we'd like streamed events back.
+    const reqHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+      Authorization: authorization, // 添加 Bearer Token
+    }
+    return request.post<DifyChatCompletionResponse>('/chat-messages', params, {
+      headers: reqHeaders,
+    })
+  },
   // New: stream-aware send method using fetch so we can process ReadableStream on the client
   // - onEvent: called for each parsed event object
   // - signal: optional AbortSignal to cancel the streaming request

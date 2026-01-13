@@ -29,7 +29,7 @@
 }
 
 .panelTitle {
-    @apply text-lg font-bold text-yellow-200 mb-3;
+    @apply text-lg font-bold text-yellow-200 mb-3 shrink-0;
 }
 
 .field {
@@ -69,11 +69,11 @@
 }
 
 .previewFrame {
-    @apply relative rounded-md bg-[#071522] border border-[#2d4b66] aspect-[3/4] flex items-center justify-center overflow-hidden;
+    @apply relative rounded-md bg-[#071522] border border-[#2d4b66] flex-1 overflow-hidden flex items-center justify-center;
 }
 
 .placeholder {
-    @apply text-center px-6;
+    @apply text-center px-6 shrink-0;
 }
 
 .placeholderTitle {
@@ -85,7 +85,7 @@
 }
 
 .previewImage {
-    @apply w-full h-full object-cover;
+    @apply w-full h-full object-contain;
 }
 
 .loaderBlock {
@@ -108,14 +108,6 @@
     @apply flex-1 min-w-0;
 }
 
-.outputLabel {
-    @apply text-xs text-blue-300;
-}
-
-.outputValue {
-    @apply text-xs text-yellow-200 truncate;
-}
-
-.linkButton {
+.downloadButton {
     @apply inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold bg-[#18354f] text-blue-100 hover:bg-[#1d4160] border border-[#2d4b66];
 }
