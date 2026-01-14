@@ -145,6 +145,16 @@ const CardGeneratePage: React.FC = () => {
     await generateImage(currentPrompt)
   }
 
+  const handleDownload = () => {
+    if (!imageUrl) return
+    const link = document.createElement('a')
+    link.href = imageUrl
+    link.download = `${watchedName || 'card-illustration'}.png`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className={styles.page} ref={pageRef}>
       <div className={styles.header}>
@@ -228,7 +238,13 @@ const CardGeneratePage: React.FC = () => {
           {imageUrl ? (
             <div className={styles.outputBar}>
               <div className={styles.outputMeta}></div>
-              <button className={styles.downloadButton}>Download</button>
+              <button
+                className={styles.downloadButton}
+                onClick={handleDownload}
+                disabled={!imageUrl}
+              >
+                Download
+              </button>
             </div>
           ) : null}
         </div>
