@@ -120,6 +120,7 @@ export const router = createBrowserRouter([
       },
       {
         path: CARD_GENERATE_PATH,
+        loader: commonPageLoader,
         element: (
           <CommonPageSuspense>
             <CardGeneratePage></CardGeneratePage>
