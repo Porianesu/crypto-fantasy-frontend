@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './CardGeneratePage.module.css'
 import classNames from 'classnames'
 import { useMutation } from '@tanstack/react-query'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { toast } from 'react-toastify'
-import { useForm } from 'react-hook-form'
+import { type SubmitHandler, useForm } from 'react-hook-form'
 import DifyApi, { type DifySendMessageParams } from '@/axios/difyApi.ts'
 
 interface IFromData {
@@ -22,6 +22,7 @@ const CardGeneratePage: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
+  const [currentPrompt, setCurrentPrompt] = useState('')
   const { register, handleSubmit, watch, formState } = useForm<IFromData>({
     mode: 'onChange',
     defaultValues: { name: '', description: '', style: '' },
@@ -29,6 +30,14 @@ const CardGeneratePage: React.FC = () => {
   const { isValid } = formState
   const [imageUrl, setImageUrl] = useState<string>('')
   const watchedName = watch('name')
+
+  // 在 useForm 后添加
+  useEffect(() => {
+    const subscription = watch(() => {
+      setCurrentPrompt('') // 任意字段变化都清空
+    })
+    return () => subscription.unsubscribe()
+  }, [watch, setCurrentPrompt])
 
   useGSAP(
     () => {
@@ -105,6 +114,7 @@ const CardGeneratePage: React.FC = () => {
       if (res.data.answer) {
         const resultData = JSON.parse(res.data.answer) as { prompt: string }
         if (resultData.prompt) {
+          setCurrentPrompt(resultData.prompt)
           await generateImage(resultData.prompt)
         }
       }
@@ -114,7 +124,7 @@ const CardGeneratePage: React.FC = () => {
     },
   })
 
-  const onSubmit = (values: IFromData) => {
+  const onSubmit: SubmitHandler<IFromData> = (values) => {
     if (generateMutation.isPending) return
     if (previewRef.current) {
       gsap.fromTo(
@@ -130,8 +140,9 @@ const CardGeneratePage: React.FC = () => {
     })
   }
 
-  const handleRegenerate = () => {
-    handleSubmit(onSubmit)()
+  const handleRegenerate = async () => {
+    if (!currentPrompt) return
+    await generateImage(currentPrompt)
   }
 
   return (
@@ -149,8 +160,8 @@ const CardGeneratePage: React.FC = () => {
             <div className={styles.label}>Card Name</div>
             <input
               className={styles.input}
-              {...register('name', { required: true, maxLength: 60 })}
-              maxLength={60}
+              {...register('name', { required: true, maxLength: 256 })}
+              maxLength={256}
               placeholder={"e.g. 'Arcane Blacksmith'"}
             />
           </label>
@@ -158,8 +169,8 @@ const CardGeneratePage: React.FC = () => {
             <div className={styles.label}>Card Description</div>
             <textarea
               className={classNames(styles.input, styles.textarea)}
-              {...register('description', { required: true, maxLength: 220 })}
-              maxLength={220}
+              {...register('description', { required: true, maxLength: 256 })}
+              maxLength={256}
               placeholder={"Describe the card's story and mood..."}
             />
           </label>
@@ -167,8 +178,8 @@ const CardGeneratePage: React.FC = () => {
             <div className={styles.label}>Art Style Details</div>
             <textarea
               className={classNames(styles.input, styles.textarea)}
-              {...register('style', { required: true, maxLength: 220 })}
-              maxLength={220}
+              {...register('style', { required: true, maxLength: 256 })}
+              maxLength={256}
               placeholder={'Lighting, composition, colors, painterly style...'}
             />
           </label>
@@ -182,7 +193,7 @@ const CardGeneratePage: React.FC = () => {
             </button>
             <button
               className={classNames(styles.button, styles.secondaryButton)}
-              disabled={!isValid || generateMutation.isPending}
+              disabled={!currentPrompt || generateMutation.isPending}
               onClick={handleRegenerate}
             >
               Regenerate
