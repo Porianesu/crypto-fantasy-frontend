@@ -7,7 +7,8 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { toast } from 'react-toastify'
 import { type SubmitHandler, useForm } from 'react-hook-form'
-import DifyApi, { type DifySendMessageParams } from '@/axios/difyApi.ts'
+import { useMobxStore } from '@/stores/StoreProvider.tsx'
+import API from '@/axios/api.ts'
 
 interface IFromData {
   name: string
@@ -15,9 +16,10 @@ interface IFromData {
   style: string
 }
 
-const OpenRouterKey = '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'
-
 const CardGeneratePage: React.FC = () => {
+  const {
+    appStore: { userInfo },
+  } = useMobxStore()
   const pageRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
@@ -59,65 +61,17 @@ const CardGeneratePage: React.FC = () => {
     { scope: pageRef, dependencies: [] },
   )
 
-  async function generateImage(prompt: string) {
-    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${OpenRouterKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-3-pro-image-preview',
-        stream: false,
-        messages: [
-          {
-            role: 'system',
-            content:
-              'You are Nano Banana Pro (Gemini 3 Pro Image Preview), a large language model from google.\\n\\nFormatting Rules:\\n- Use Markdown for lists, tables, and styling.\\n- Use ```code fences``` for all code blocks.\\n- Format file names, paths, and function names with `inline code` backticks.\\n- **For all mathematical expressions, you must use dollar-sign delimiters. Use $...$ for inline math and $$...$$ for block math. Do not use (...) or [...] delimiters.**\\n- For responses with many sections where some are more important than others, use collapsible sections (HTML details/summary tags) to highlight key information while allowing users to expand less critical details.',
-          },
-          { role: 'user', content: prompt },
-        ],
-      }),
-    })
-    const data = await res.json()
-    console.log('generateImage res', data)
-    if (!data?.choices?.[0]?.message?.images?.[0]?.image_url?.url) {
-      return toast.error('Failed to generate image')
-    }
-    const url = data.choices[0].message.images[0].image_url.url
-    setImageUrl(url)
-    if (imageRef.current) {
-      gsap.fromTo(
-        imageRef.current,
-        { scale: 0.98, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' },
-      )
-    }
-  }
-
   const generateMutation = useMutation({
-    mutationFn: (payload: IFromData) => {
-      const requestBody: DifySendMessageParams = {
-        files: [],
-        inputs: {
-          Card_Name: payload.name,
-          Card_Description: payload.description,
-          Art_Style: payload.style,
-        },
-        query: '开始吧',
-        response_mode: 'blocking',
-        user: '111',
-      }
-      return DifyApi.sendMessageBlock(requestBody)
-    },
+    mutationFn: (payload: IFromData) =>
+      API.generateImage({
+        cardName: payload.name,
+        cardType: '法术牌',
+        cardEffect: '对一个随从造成3点伤害。',
+        cardDescription: payload.description,
+        artStyle: payload.style,
+      }),
     onSuccess: async (res) => {
-      if (res.data.answer) {
-        const resultData = JSON.parse(res.data.answer) as { prompt: string }
-        if (resultData.prompt) {
-          setCurrentPrompt(resultData.prompt)
-          await generateImage(resultData.prompt)
-        }
-      }
+      debugger
     },
     onError: () => {
       toast.error('Failed to generate image')
@@ -125,6 +79,7 @@ const CardGeneratePage: React.FC = () => {
   })
 
   const onSubmit: SubmitHandler<IFromData> = (values) => {
+    if (!userInfo?.id) return
     if (generateMutation.isPending) return
     if (previewRef.current) {
       gsap.fromTo(

@@ -311,6 +311,14 @@ export interface IConsumeMagicItemResponse {
   user: UserInfo
 }
 
+export interface IGenerateImageParams {
+  cardName: string
+  cardType: string
+  cardEffect: string
+  cardDescription?: string
+  artStyle?: string
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: EmailLoginData | WalletLoginData) =>
@@ -398,6 +406,7 @@ const API = {
     request.post<IBuyMagicItemResponse>('/item', { itemId, quantity }),
   consumeMagicItem: async (itemId: number, quantity: number) =>
     request.put<IConsumeMagicItemResponse>('/item', { itemId, quantity }),
+  generateImage: async (payload: IGenerateImageParams) => request.post('/card-generate', payload),
 }
 
 export default API
