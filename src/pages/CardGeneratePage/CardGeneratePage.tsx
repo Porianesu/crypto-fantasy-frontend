@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './CardGeneratePage.module.css'
 import classNames from 'classnames'
 import { useMutation } from '@tanstack/react-query'
@@ -8,12 +8,16 @@ import { gsap } from 'gsap'
 import { toast } from 'react-toastify'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import API from '@/axios/api.ts'
+import API, { type IGenerateImageResponse } from '@/axios/api.ts'
+import type { AxiosResponse } from 'axios'
 
+// 新表单类型：cardName/cardType/cardEffect 必填，cardDescription/artStyle 可选
 interface IFromData {
-  name: string
-  description: string
-  style: string
+  cardName: string
+  cardType: string
+  cardEffect: string
+  cardDescription?: string
+  artStyle?: string
 }
 
 const CardGeneratePage: React.FC = () => {
@@ -24,22 +28,20 @@ const CardGeneratePage: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
-  const [currentPrompt, setCurrentPrompt] = useState('')
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const lastPayloadRef = useRef<IFromData | null>(null)
   const { register, handleSubmit, watch, formState } = useForm<IFromData>({
     mode: 'onChange',
-    defaultValues: { name: '', description: '', style: '' },
+    defaultValues: {
+      cardName: '',
+      cardType: '',
+      cardEffect: '',
+      cardDescription: '',
+      artStyle: '',
+    },
   })
+  const watchedName = watch('cardName')
   const { isValid } = formState
-  const [imageUrl, setImageUrl] = useState<string>('')
-  const watchedName = watch('name')
-
-  // 在 useForm 后添加
-  useEffect(() => {
-    const subscription = watch(() => {
-      setCurrentPrompt('') // 任意字段变化都清空
-    })
-    return () => subscription.unsubscribe()
-  }, [watch, setCurrentPrompt])
 
   useGSAP(
     () => {
@@ -61,17 +63,29 @@ const CardGeneratePage: React.FC = () => {
     { scope: pageRef, dependencies: [] },
   )
 
-  const generateMutation = useMutation({
+  // 保留网络调用实现，但使用新的字段映射。泛型 any 用于宽松接收后端返回
+  const generateMutation = useMutation<any, any, IFromData>({
     mutationFn: (payload: IFromData) =>
       API.generateImage({
-        cardName: payload.name,
-        cardType: '法术牌',
-        cardEffect: '对一个随从造成3点伤害。',
-        cardDescription: payload.description,
-        artStyle: payload.style,
+        cardName: payload.cardName,
+        cardType: payload.cardType,
+        cardEffect: payload.cardEffect,
+        cardDescription: payload.cardDescription,
+        artStyle: payload.artStyle,
       }),
-    onSuccess: async (res) => {
-      debugger
+    onSuccess: async (res: AxiosResponse<IGenerateImageResponse>) => {
+      // 如果后端返回 imageUrl 或 url，则设置预览；这里容错处理
+      const maybeUrl = res?.data?.image?.url
+      if (maybeUrl) {
+        setImageUrl(maybeUrl)
+        if (imageRef.current) {
+          gsap.fromTo(
+            imageRef.current,
+            { scale: 0.98, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' },
+          )
+        }
+      }
     },
     onError: () => {
       toast.error('Failed to generate image')
@@ -88,16 +102,23 @@ const CardGeneratePage: React.FC = () => {
         { boxShadow: '0 0 20px rgba(255,215,128,0.35)', duration: 0.35 },
       )
     }
-    generateMutation.mutate({
-      name: values.name.trim(),
-      description: values.description.trim(),
-      style: values.style.trim(),
-    })
+    // 将表单值按新的字段结构提交，并保存为 lastPayload 以便 Regenerate 使用
+    const payload = {
+      cardName: values.cardName.trim(),
+      cardType: values.cardType.trim(),
+      cardEffect: values.cardEffect.trim(),
+      cardDescription: values.cardDescription?.trim(),
+      artStyle: values.artStyle?.trim(),
+    }
+    lastPayloadRef.current = payload
+    generateMutation.mutate(payload)
   }
 
   const handleRegenerate = async () => {
-    if (!currentPrompt) return
-    await generateImage(currentPrompt)
+    // 使用上一次提交的 payload 重新触发生成
+    if (!lastPayloadRef.current) return
+    if (generateMutation.isPending) return
+    generateMutation.mutate(lastPayloadRef.current)
   }
 
   const handleDownload = () => {
@@ -125,25 +146,43 @@ const CardGeneratePage: React.FC = () => {
             <div className={styles.label}>Card Name</div>
             <input
               className={styles.input}
-              {...register('name', { required: true, maxLength: 256 })}
+              {...register('cardName', { required: true, maxLength: 256 })}
               maxLength={256}
               placeholder={"e.g. 'Arcane Blacksmith'"}
             />
           </label>
           <label className={styles.field}>
-            <div className={styles.label}>Card Description</div>
+            <div className={styles.label}>Card Type</div>
+            <input
+              className={styles.input}
+              {...register('cardType', { required: true, maxLength: 128 })}
+              maxLength={128}
+              placeholder={'e.g. Spell / Minion / Weapon'}
+            />
+          </label>
+          <label className={styles.field}>
+            <div className={styles.label}>Card Effect</div>
             <textarea
               className={classNames(styles.input, styles.textarea)}
-              {...register('description', { required: true, maxLength: 256 })}
+              {...register('cardEffect', { required: true, maxLength: 256 })}
+              maxLength={256}
+              placeholder={'e.g. Deal 3 damage to a minion.'}
+            />
+          </label>
+          <label className={styles.field}>
+            <div className={styles.label}>Card Description (optional)</div>
+            <textarea
+              className={classNames(styles.input, styles.textarea)}
+              {...register('cardDescription', { maxLength: 256 })}
               maxLength={256}
               placeholder={"Describe the card's story and mood..."}
             />
           </label>
           <label className={styles.field}>
-            <div className={styles.label}>Art Style Details</div>
+            <div className={styles.label}>Art Style Details (optional)</div>
             <textarea
               className={classNames(styles.input, styles.textarea)}
-              {...register('style', { required: true, maxLength: 256 })}
+              {...register('artStyle', { maxLength: 256 })}
               maxLength={256}
               placeholder={'Lighting, composition, colors, painterly style...'}
             />
@@ -158,7 +197,7 @@ const CardGeneratePage: React.FC = () => {
             </button>
             <button
               className={classNames(styles.button, styles.secondaryButton)}
-              disabled={!currentPrompt || generateMutation.isPending}
+              disabled={!lastPayloadRef.current || generateMutation.isPending}
               onClick={handleRegenerate}
             >
               Regenerate

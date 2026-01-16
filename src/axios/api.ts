@@ -319,6 +319,13 @@ export interface IGenerateImageParams {
   artStyle?: string
 }
 
+export interface IGenerateImageResponse {
+  success: boolean
+  image: {
+    url: string
+  }
+}
+
 const API = {
   getConfig: async () => request.get<IGetConfigResponse>('/config'),
   loginAndRegister: async (data: EmailLoginData | WalletLoginData) =>
@@ -406,7 +413,8 @@ const API = {
     request.post<IBuyMagicItemResponse>('/item', { itemId, quantity }),
   consumeMagicItem: async (itemId: number, quantity: number) =>
     request.put<IConsumeMagicItemResponse>('/item', { itemId, quantity }),
-  generateImage: async (payload: IGenerateImageParams) => request.post('/card-generate', payload),
+  generateImage: async (payload: IGenerateImageParams) =>
+    request.post<IGenerateImageResponse>('/card-generate', payload),
 }
 
 export default API
