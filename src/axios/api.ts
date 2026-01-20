@@ -311,7 +311,7 @@ export interface IConsumeMagicItemResponse {
   user: UserInfo
 }
 
-export interface IGenerateImageParams {
+export interface IPostGenerateImageParams {
   cardName: string
   cardType: string
   cardEffect: string
@@ -319,11 +319,44 @@ export interface IGenerateImageParams {
   artStyle?: string
 }
 
-export interface IGenerateImageResponse {
+export interface IPostGenerateImageResponse {
   success: boolean
   image: {
     url: string
   }
+}
+
+export interface IGetGenerateImageSingleParams {
+  id: number
+}
+
+export interface IGetGenerateImagePageParams {
+  page: number
+  limit: number
+  includeBytes?: boolean
+}
+
+export interface IGenerateImage {
+  id: number
+  userId: number
+  imageBytes?: Uint8Array<ArrayBufferLike>
+  cardName: string
+  cardType: string
+  cardEffect: string
+  cardDescription: string | null
+  artStyle: string | null
+  createdAt: Date
+}
+
+export interface IGetGenerateImageSingleResponse {
+  image: IGenerateImage
+}
+
+export interface IGetGenerateImagePageResponse {
+  images: Array<IGenerateImage>
+  total: number
+  page: number
+  limit: number
 }
 
 const API = {
@@ -413,8 +446,12 @@ const API = {
     request.post<IBuyMagicItemResponse>('/item', { itemId, quantity }),
   consumeMagicItem: async (itemId: number, quantity: number) =>
     request.put<IConsumeMagicItemResponse>('/item', { itemId, quantity }),
-  generateImage: async (payload: IGenerateImageParams) =>
-    request.post<IGenerateImageResponse>('/card-generate', payload),
+  postGenerateImage: async (payload: IPostGenerateImageParams) =>
+    request.post<IPostGenerateImageResponse>('/card-generate', payload),
+  getGenerateImage: async (params: IGetGenerateImageSingleParams | IGetGenerateImagePageParams) =>
+    request.get<IGetGenerateImageSingleResponse | IGetGenerateImagePageResponse>('/card-generate', {
+      params,
+    }),
 }
 
 export default API

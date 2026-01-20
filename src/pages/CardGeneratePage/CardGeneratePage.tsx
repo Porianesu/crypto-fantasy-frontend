@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './CardGeneratePage.module.css'
 import classNames from 'classnames'
 import { useMutation } from '@tanstack/react-query'
@@ -8,7 +8,7 @@ import { gsap } from 'gsap'
 import { toast } from 'react-toastify'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import API, { type IGenerateImageResponse } from '@/axios/api.ts'
+import API, { type IPostGenerateImageResponse } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 
 // 新表单类型：cardName/cardType/cardEffect 必填，cardDescription/artStyle 可选
@@ -23,6 +23,7 @@ interface IFromData {
 const CardGeneratePage: React.FC = () => {
   const {
     appStore: { userInfo },
+    cardGenerateStore: { initUserGallery },
   } = useMobxStore()
   const pageRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
@@ -42,6 +43,10 @@ const CardGeneratePage: React.FC = () => {
   })
   const watchedName = watch('cardName')
   const { isValid } = formState
+
+  useEffect(() => {
+    initUserGallery()
+  }, [])
 
   useGSAP(
     () => {
@@ -66,14 +71,14 @@ const CardGeneratePage: React.FC = () => {
   // 保留网络调用实现，但使用新的字段映射。泛型 any 用于宽松接收后端返回
   const generateMutation = useMutation<any, any, IFromData>({
     mutationFn: (payload: IFromData) =>
-      API.generateImage({
+      API.postGenerateImage({
         cardName: payload.cardName,
         cardType: payload.cardType,
         cardEffect: payload.cardEffect,
         cardDescription: payload.cardDescription,
         artStyle: payload.artStyle,
       }),
-    onSuccess: async (res: AxiosResponse<IGenerateImageResponse>) => {
+    onSuccess: async (res: AxiosResponse<IPostGenerateImageResponse>) => {
       // 如果后端返回 imageUrl 或 url，则设置预览；这里容错处理
       const maybeUrl = res?.data?.image?.url
       if (maybeUrl) {

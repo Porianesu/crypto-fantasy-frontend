@@ -6,6 +6,7 @@ import PreloadStore from '@/stores/preload-store.ts'
 import SystemStore from '@/stores/system-store.ts'
 import RewardStore from '@/stores/reward-store.ts'
 import ThirdPartAppStore from '@/stores/third-part-app-store.ts'
+import CardGenerateStore from '@/stores/card-generate-store.ts'
 
 enableStaticRendering(typeof window === 'undefined')
 
@@ -24,6 +25,8 @@ export class Store {
 
   thirdPartAppStore: ThirdPartAppStore
 
+  cardGenerateStore: CardGenerateStore
+
   constructor() {
     this.systemStore = new SystemStore(this)
     this.appStore = new AppStore(this)
@@ -31,6 +34,7 @@ export class Store {
     this.preloadStore = new PreloadStore(this)
     this.rewardStore = new RewardStore(this)
     this.thirdPartAppStore = new ThirdPartAppStore(this)
+    this.cardGenerateStore = new CardGenerateStore(this)
     makeObservable(this, {
       hydrate: action,
       systemStore: observable,
@@ -39,6 +43,7 @@ export class Store {
       preloadStore: observable,
       rewardStore: observable,
       thirdPartAppStore: observable,
+      cardGenerateStore: observable,
     })
   }
 
