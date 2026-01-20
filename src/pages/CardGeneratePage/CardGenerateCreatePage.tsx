@@ -13,12 +13,30 @@ import type { AxiosResponse } from 'axios'
 import { ArrowRightIcon, PhotoIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
 
-// 新表单类型：prompt 必填，images 为 base64 字符串数组
+// 新表单类型：prompt 必填，images 为 base64 字符串数组，同时增加aspectRatio和resolution
 interface IFromData {
   prompt: string
+  aspectRatio: string
+  resolution: string
 }
 // 限制最大图片数以避免过大负载
 const MAX_IMAGES = 6
+
+// aspect & resolution options
+const ASPECT_OPTIONS = [
+  'auto',
+  '1:1',
+  '2:3',
+  '3:2',
+  '3:4',
+  '4:3',
+  '4:5',
+  '5:4',
+  '16:9',
+  '9:16',
+  '21:9',
+]
+const RESOLUTION_OPTIONS = ['1K', '2K', '4K']
 
 const CardGenerateCreatePage: React.FC = () => {
   const {
@@ -32,13 +50,19 @@ const CardGenerateCreatePage: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imagesBase64, setImagesBase64] = useState<string[]>([])
   const lastPayloadRef = useRef<{ prompt: string; images: string[] } | null>(null)
-  const { register, handleSubmit, formState } = useForm<IFromData>({
+  const { register, handleSubmit, formState, setValue, watch } = useForm<IFromData>({
     mode: 'onChange',
     defaultValues: {
       prompt: '',
+      aspectRatio: 'auto',
+      resolution: '1K',
     },
   })
   const { isValid } = formState
+
+  // keep local watched values for UI
+  const watchedAspect = watch('aspectRatio')
+  const watchedResolution = watch('resolution')
 
   useEffect(() => {
     initUserGallery()
@@ -129,8 +153,11 @@ const CardGenerateCreatePage: React.FC = () => {
         { boxShadow: '0 0 20px rgba(255,215,128,0.35)', duration: 0.35 },
       )
     }
+    // append selected options into prompt so backend receives them
+    const finalPrompt =
+      `${values.prompt.trim()} ${values.aspectRatio ? `[Aspect Ratio: ${values.aspectRatio}]` : ''} ${values.resolution ? `[Resolution: ${values.resolution}]` : ''}`.trim()
     const payload = {
-      prompt: values.prompt.trim(),
+      prompt: finalPrompt,
       images: imagesBase64,
     }
     lastPayloadRef.current = payload
@@ -234,6 +261,45 @@ const CardGenerateCreatePage: React.FC = () => {
               placeholder={'Describe the scene, style and details for the AI to paint...'}
               rows={8}
             />
+          </div>
+
+          {/* New options: Aspect Ratio & Resolution */}
+          <div className={styles.field}>
+            <div className={styles.label}>Aspect Ratio</div>
+            <div className={styles.optionGroup} role="list">
+              {ASPECT_OPTIONS.map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  className={classNames(styles.optionButton, {
+                    [styles.optionButtonUnSelected]: watchedAspect !== opt,
+                    [styles.optionButtonSelected]: watchedAspect == opt,
+                  })}
+                  onClick={() => setValue('aspectRatio', opt, { shouldDirty: true })}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.field}>
+            <div className={styles.label}>Resolution</div>
+            <div className={styles.optionGroup} role="list">
+              {RESOLUTION_OPTIONS.map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  className={classNames(styles.optionButton, {
+                    [styles.optionButtonSelected]: watchedResolution === opt,
+                    [styles.optionButtonUnSelected]: watchedResolution !== opt,
+                  })}
+                  onClick={() => setValue('resolution', opt, { shouldDirty: true })}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className={styles.actions}>
