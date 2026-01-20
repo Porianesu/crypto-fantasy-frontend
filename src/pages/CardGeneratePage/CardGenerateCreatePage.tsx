@@ -10,12 +10,15 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import API, { type IPostGenerateImageResponse } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
-import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon, PhotoIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import dayjs from 'dayjs'
 
 // 新表单类型：prompt 必填，images 为 base64 字符串数组
 interface IFromData {
   prompt: string
 }
+// 限制最大图片数以避免过大负载
+const MAX_IMAGES = 6
 
 const CardGenerateCreatePage: React.FC = () => {
   const {
@@ -29,13 +32,12 @@ const CardGenerateCreatePage: React.FC = () => {
   const [imageUrl, setImageUrl] = useState<string>('')
   const [imagesBase64, setImagesBase64] = useState<string[]>([])
   const lastPayloadRef = useRef<{ prompt: string; images: string[] } | null>(null)
-  const { register, handleSubmit, watch, formState } = useForm<IFromData>({
+  const { register, handleSubmit, formState } = useForm<IFromData>({
     mode: 'onChange',
     defaultValues: {
       prompt: '',
     },
   })
-  const watchedPrompt = watch('prompt')
   const { isValid } = formState
 
   useEffect(() => {
@@ -73,9 +75,6 @@ const CardGenerateCreatePage: React.FC = () => {
       reader.onerror = (err) => reject(err)
       reader.readAsDataURL(file)
     })
-
-  // 限制最大图片数以避免过大负载
-  const MAX_IMAGES = 6
 
   const onFilesSelected = async (files: FileList | null) => {
     if (!files || files.length === 0) return
@@ -148,7 +147,7 @@ const CardGenerateCreatePage: React.FC = () => {
     if (!imageUrl) return
     const link = document.createElement('a')
     link.href = imageUrl
-    link.download = `${(watchedPrompt || 'generated-image').slice(0, 60)}.png`
+    link.download = `${dayjs().format('YYYY-MM-DD HH:mm:ss')}.png`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -177,7 +176,6 @@ const CardGenerateCreatePage: React.FC = () => {
       <div className={styles.contentGrid}>
         <div className={styles.panel} ref={formRef}>
           <div className={styles.panelTitle}>Prompt</div>
-
           {/* References: moved above prompt */}
           <div className={styles.field}>
             <div className={styles.label}>References (optional)</div>
@@ -202,7 +200,7 @@ const CardGenerateCreatePage: React.FC = () => {
                           onClick={() => removeImageAt(idx)}
                           aria-label={`Remove image ${idx + 1}`}
                         >
-                          ×
+                          <XCircleIcon></XCircleIcon>
                         </button>
                       </div>
                     ))}
@@ -215,29 +213,7 @@ const CardGenerateCreatePage: React.FC = () => {
                   onClick={triggerFileInput}
                 >
                   <div className={styles.addIcon} aria-hidden>
-                    {/* simple icon + label */}
-                    <svg
-                      width="28"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14"
-                        stroke="#9fc0d8"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M7 15l3-3 2 2 3-3 4 4"
-                        stroke="#9fc0d8"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <PhotoIcon className={styles.addIconSvg} />
                   </div>
                   <div className={styles.addText}>Add</div>
                 </button>
@@ -290,10 +266,10 @@ const CardGenerateCreatePage: React.FC = () => {
               </div>
             ) : imageUrl ? (
               <img
+                alt={'generated-image'}
                 ref={imageRef}
                 className={styles.previewImage}
                 src={imageUrl}
-                alt={watchedPrompt}
               />
             ) : (
               <div className={styles.placeholder}>
