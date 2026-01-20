@@ -19,6 +19,10 @@ export const FUSION_PATH = '/fusion'
 export const SHOP_PATH = '/shop'
 export const REWARD_PATH = '/reward'
 export const CARD_GENERATE_PATH = '/card-generate'
+export const CARD_GENERATE__CREATE_PATH = `create`
+export const CARD_GENERATE_CREATE_PATH = `${CARD_GENERATE_PATH}/${CARD_GENERATE__CREATE_PATH}`
+export const CARD_GENERATE__HISTORY_PATH = `history`
+export const CARD_GENERATE_HISTORY_PATH = `${CARD_GENERATE_PATH}/${CARD_GENERATE__HISTORY_PATH}`
 
 export enum URL_PARAMS {
   INVITE_CODE = 'ic',

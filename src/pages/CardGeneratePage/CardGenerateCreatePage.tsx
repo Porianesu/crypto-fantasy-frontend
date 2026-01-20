@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './CardGeneratePage.module.css'
+import styles from './CardGenerateCreatePage.module.css'
 import classNames from 'classnames'
 import { useMutation } from '@tanstack/react-query'
 import { useGSAP } from '@gsap/react'
@@ -20,7 +20,7 @@ interface IFromData {
   artStyle?: string
 }
 
-const CardGeneratePage: React.FC = () => {
+const CardGenerateCreatePage: React.FC = () => {
   const {
     appStore: { userInfo },
     cardGenerateStore: { initUserGallery },
@@ -251,4 +251,4 @@ const CardGeneratePage: React.FC = () => {
     </div>
   )
 }
-export default observer(CardGeneratePage)
+export default observer(CardGenerateCreatePage)

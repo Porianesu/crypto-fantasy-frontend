@@ -15,6 +15,7 @@ import {
   REWARD_PATH,
   RedirectWithQuery,
   CARD_GENERATE_PATH,
+  CARD_GENERATE__CREATE_PATH,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
@@ -23,7 +24,6 @@ import EntrancePage from '@/pages/EntrancePage/EntrancePage.tsx'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer } from 'react-toastify'
 import { myQueryClient } from '@/utils/constant.ts'
-import CardGeneratePage from '@/pages/CardGeneratePage/CardGeneratePage.tsx'
 
 const HomePage = React.lazy(() => import('@/pages/HomePage/HomePage.tsx'))
 const GalleryPage = React.lazy(() => import('@/pages/GalleryPage/GalleryPage.tsx'))
@@ -32,6 +32,9 @@ const TournamentPage = React.lazy(() => import('@/pages/TournamentPage/Tournamen
 const FusionPage = React.lazy(() => import('@/pages/FusionPage/FusionPage.tsx'))
 const ShopPage = React.lazy(() => import('@/pages/ShopPage/ShopPage.tsx'))
 const RewardPage = React.lazy(() => import('@/pages/RewardPage/RewardPage.tsx'))
+const CardGenerateCreatePage = React.lazy(
+  () => import('@/pages/CardGeneratePage/CardGenerateCreatePage.tsx'),
+)
 
 const CommonPageSuspense: React.FC<PropsWithChildren> = ({ children }) => {
   return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
@@ -121,11 +124,12 @@ export const router = createBrowserRouter([
       {
         path: CARD_GENERATE_PATH,
         loader: commonPageLoader,
-        element: (
-          <CommonPageSuspense>
-            <CardGeneratePage></CardGeneratePage>
-          </CommonPageSuspense>
-        ),
+        children: [
+          {
+            path: CARD_GENERATE__CREATE_PATH,
+            element: <CardGenerateCreatePage></CardGenerateCreatePage>,
+          },
+        ],
       },
       {
         path: '*', // 捕获所有未匹配的路由

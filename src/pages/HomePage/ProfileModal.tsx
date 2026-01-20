@@ -9,7 +9,7 @@ import API from '@/axios/api.ts'
 import { toast } from 'react-toastify'
 import { PowerIcon } from '@heroicons/react/24/outline'
 import { clearAccessToken } from '@/utils/common.ts'
-import { CARD_GENERATE_PATH, ENTRANCE_PATH } from '@/navigation/routes.tsx'
+import { CARD_GENERATE_CREATE_PATH, ENTRANCE_PATH } from '@/navigation/routes.tsx'
 import { Link } from 'react-router-dom'
 
 interface IProfileModalProps {
@@ -176,7 +176,7 @@ const ProfileModal: React.FC<IProfileModalProps> = ({ open, onOpenChange }) => {
                   Login out
                   <PowerIcon></PowerIcon>
                 </button>
-                <Link to={CARD_GENERATE_PATH}>Card Forge</Link>
+                <Link to={CARD_GENERATE_CREATE_PATH}>Card Forge</Link>
               </div>
             </form>
           </Content>
