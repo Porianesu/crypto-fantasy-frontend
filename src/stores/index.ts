@@ -64,5 +64,6 @@ export class Store {
     this.modalStore.resetStore()
     this.rewardStore.resetStore()
     this.thirdPartAppStore.resetStore()
+    this.cardGenerateStore.resetStore()
   }
 }

@@ -5,14 +5,31 @@
 }
 
 .header {
-    @apply shrink-0;
+    @apply shrink-0 flex items-center justify-between;
 
-    .title {
-        @apply text-2xl md:text-3xl font-extrabold tracking-wide text-yellow-300 drop-shadow;
+    .headerLeft {
+        .title {
+            @apply text-2xl md:text-3xl font-extrabold tracking-wide text-yellow-300 drop-shadow;
+        }
+
+        .subtitle {
+            @apply mt-1 text-sm md:text-base text-blue-200;
+        }
     }
 
-    .subtitle {
-        @apply mt-1 text-sm md:text-base text-blue-200;
+    .headerRight {
+    }
+}
+
+
+.historyButton {
+    /* button wrapper */
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#18354f] text-blue-100 border border-[#2d4b66] shadow-sm hover:bg-[#1d4160] hover:text-white transition-colors duration-150;
+
+    /* optional small icon inside button */
+
+    .icon {
+        @apply w-4 h-4 flex-none text-yellow-300;
     }
 }
 

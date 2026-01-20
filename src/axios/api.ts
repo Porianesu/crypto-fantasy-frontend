@@ -345,7 +345,7 @@ export interface IGenerateImage {
   cardEffect: string
   cardDescription: string | null
   artStyle: string | null
-  createdAt: Date
+  createdAt: string
 }
 
 export interface IGetGenerateImageSingleResponse {

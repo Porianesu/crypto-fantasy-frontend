@@ -10,6 +10,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import API, { type IPostGenerateImageResponse } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 // 新表单类型：cardName/cardType/cardEffect 必填，cardDescription/artStyle 可选
 interface IFromData {
@@ -139,9 +140,17 @@ const CardGenerateCreatePage: React.FC = () => {
   return (
     <div className={styles.page} ref={pageRef}>
       <div className={styles.header}>
-        <div className={styles.title}>Card Forge</div>
-        <div className={styles.subtitle}>
-          Craft a Hearthstone-style card illustration from your prompts.
+        <div className={styles.headerLeft}>
+          <div className={styles.title}>Card Forge</div>
+          <div className={styles.subtitle}>
+            Craft a Hearthstone-style card illustration from your prompts.
+          </div>
+        </div>
+        <div className={styles.headerRight}>
+          <button className={styles.historyButton}>
+            History
+            <ArrowRightIcon className={styles.icon}></ArrowRightIcon>
+          </button>
         </div>
       </div>
       <div className={styles.contentGrid}>
