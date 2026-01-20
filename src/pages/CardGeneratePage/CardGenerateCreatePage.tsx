@@ -12,13 +12,9 @@ import API, { type IPostGenerateImageResponse } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
-// 新表单类型：cardName/cardType/cardEffect 必填，cardDescription/artStyle 可选
+// 新表单类型：prompt 必填，images 为 base64 字符串数组
 interface IFromData {
-  cardName: string
-  cardType: string
-  cardEffect: string
-  cardDescription?: string
-  artStyle?: string
+  prompt: string
 }
 
 const CardGenerateCreatePage: React.FC = () => {
@@ -31,23 +27,20 @@ const CardGenerateCreatePage: React.FC = () => {
   const previewRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
   const [imageUrl, setImageUrl] = useState<string>('')
-  const lastPayloadRef = useRef<IFromData | null>(null)
+  const [imagesBase64, setImagesBase64] = useState<string[]>([])
+  const lastPayloadRef = useRef<{ prompt: string; images: string[] } | null>(null)
   const { register, handleSubmit, watch, formState } = useForm<IFromData>({
     mode: 'onChange',
     defaultValues: {
-      cardName: '',
-      cardType: '',
-      cardEffect: '',
-      cardDescription: '',
-      artStyle: '',
+      prompt: '',
     },
   })
-  const watchedName = watch('cardName')
+  const watchedPrompt = watch('prompt')
   const { isValid } = formState
 
   useEffect(() => {
     initUserGallery()
-  }, [])
+  }, [initUserGallery])
 
   useGSAP(
     () => {
@@ -69,18 +62,47 @@ const CardGenerateCreatePage: React.FC = () => {
     { scope: pageRef, dependencies: [] },
   )
 
-  // 保留网络调用实现，但使用新的字段映射。泛型 any 用于宽松接收后端返回
-  const generateMutation = useMutation<any, any, IFromData>({
-    mutationFn: (payload: IFromData) =>
+  // helper: read File -> base64
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const result = reader.result as string
+        resolve(result)
+      }
+      reader.onerror = (err) => reject(err)
+      reader.readAsDataURL(file)
+    })
+
+  // 限制最大图片数以避免过大负载
+  const MAX_IMAGES = 6
+
+  const onFilesSelected = async (files: FileList | null) => {
+    if (!files || files.length === 0) return
+    const arr = Array.from(files)
+    const toProcess = arr.slice(0, MAX_IMAGES - imagesBase64.length)
+    try {
+      const promises = toProcess.map((f) => fileToBase64(f))
+      const results = await Promise.all(promises)
+      setImagesBase64((prev) => [...prev, ...results])
+    } catch (e) {
+      console.error(e)
+      toast.error('Failed to read some images')
+    }
+  }
+
+  const removeImageAt = (index: number) => {
+    setImagesBase64((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  // 使用新的 payload 结构：{ prompt, images }
+  const generateMutation = useMutation<any, any, { prompt: string; images: string[] }>({
+    mutationFn: (payload) =>
       API.postGenerateImage({
-        cardName: payload.cardName,
-        cardType: payload.cardType,
-        cardEffect: payload.cardEffect,
-        cardDescription: payload.cardDescription,
-        artStyle: payload.artStyle,
+        prompt: payload.prompt,
+        images: payload.images,
       }),
     onSuccess: async (res: AxiosResponse<IPostGenerateImageResponse>) => {
-      // 如果后端返回 imageUrl 或 url，则设置预览；这里容错处理
       const maybeUrl = res?.data?.image?.url
       if (maybeUrl) {
         setImageUrl(maybeUrl)
@@ -108,20 +130,15 @@ const CardGenerateCreatePage: React.FC = () => {
         { boxShadow: '0 0 20px rgba(255,215,128,0.35)', duration: 0.35 },
       )
     }
-    // 将表单值按新的字段结构提交，并保存为 lastPayload 以便 Regenerate 使用
     const payload = {
-      cardName: values.cardName.trim(),
-      cardType: values.cardType.trim(),
-      cardEffect: values.cardEffect.trim(),
-      cardDescription: values.cardDescription?.trim(),
-      artStyle: values.artStyle?.trim(),
+      prompt: values.prompt.trim(),
+      images: imagesBase64,
     }
     lastPayloadRef.current = payload
     generateMutation.mutate(payload)
   }
 
   const handleRegenerate = async () => {
-    // 使用上一次提交的 payload 重新触发生成
     if (!lastPayloadRef.current) return
     if (generateMutation.isPending) return
     generateMutation.mutate(lastPayloadRef.current)
@@ -131,11 +148,15 @@ const CardGenerateCreatePage: React.FC = () => {
     if (!imageUrl) return
     const link = document.createElement('a')
     link.href = imageUrl
-    link.download = `${watchedName || 'card-illustration'}.png`
+    link.download = `${(watchedPrompt || 'generated-image').slice(0, 60)}.png`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
   }
+
+  // file input ref to trigger from a styled button
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const triggerFileInput = () => fileInputRef.current?.click()
 
   return (
     <div className={styles.page} ref={pageRef}>
@@ -156,51 +177,89 @@ const CardGenerateCreatePage: React.FC = () => {
       <div className={styles.contentGrid}>
         <div className={styles.panel} ref={formRef}>
           <div className={styles.panelTitle}>Prompt</div>
-          <label className={styles.field}>
-            <div className={styles.label}>Card Name</div>
-            <input
-              className={styles.input}
-              {...register('cardName', { required: true, maxLength: 256 })}
-              maxLength={256}
-              placeholder={"e.g. 'Arcane Blacksmith'"}
-            />
-          </label>
-          <label className={styles.field}>
-            <div className={styles.label}>Card Type</div>
-            <input
-              className={styles.input}
-              {...register('cardType', { required: true, maxLength: 128 })}
-              maxLength={128}
-              placeholder={'e.g. Spell / Minion / Weapon'}
-            />
-          </label>
-          <label className={styles.field}>
-            <div className={styles.label}>Card Effect</div>
+
+          {/* References: moved above prompt */}
+          <div className={styles.field}>
+            <div className={styles.label}>References (optional)</div>
+            <div className={styles.referencesBox}>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => onFilesSelected(e.target.files)}
+                style={{ display: 'none' }}
+              />
+              <div className={styles.referencesInner}>
+                {imagesBase64.length > 0 && (
+                  <div className={styles.imagePreviewGrid}>
+                    {imagesBase64.map((b64, idx) => (
+                      <div key={idx} className={styles.imagePreviewItem}>
+                        <img src={b64} alt={`ref-${idx}`} className={styles.previewThumb} />
+                        <button
+                          type="button"
+                          className={styles.removeImageButton}
+                          onClick={() => removeImageAt(idx)}
+                          aria-label={`Remove image ${idx + 1}`}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <button
+                  type="button"
+                  className={styles.addButton}
+                  title="Add reference images"
+                  onClick={triggerFileInput}
+                >
+                  <div className={styles.addIcon} aria-hidden>
+                    {/* simple icon + label */}
+                    <svg
+                      width="28"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14"
+                        stroke="#9fc0d8"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M7 15l3-3 2 2 3-3 4 4"
+                        stroke="#9fc0d8"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div className={styles.addText}>Add</div>
+                </button>
+              </div>
+              <div className={styles.countBadge}>
+                {imagesBase64.length}/{MAX_IMAGES}
+              </div>
+            </div>
+          </div>
+
+          {/* Prompt textarea */}
+          <div className={styles.field}>
+            <div className={styles.label}>Prompt</div>
             <textarea
-              className={classNames(styles.input, styles.textarea)}
-              {...register('cardEffect', { required: true, maxLength: 256 })}
-              maxLength={256}
-              placeholder={'e.g. Deal 3 damage to a minion.'}
+              className={classNames(styles.input, styles.textarea, styles.bigTextarea)}
+              {...register('prompt', { required: true, maxLength: 2000 })}
+              maxLength={2000}
+              placeholder={'Describe the scene, style and details for the AI to paint...'}
+              rows={8}
             />
-          </label>
-          <label className={styles.field}>
-            <div className={styles.label}>Card Description (optional)</div>
-            <textarea
-              className={classNames(styles.input, styles.textarea)}
-              {...register('cardDescription', { maxLength: 256 })}
-              maxLength={256}
-              placeholder={"Describe the card's story and mood..."}
-            />
-          </label>
-          <label className={styles.field}>
-            <div className={styles.label}>Art Style Details (optional)</div>
-            <textarea
-              className={classNames(styles.input, styles.textarea)}
-              {...register('artStyle', { maxLength: 256 })}
-              maxLength={256}
-              placeholder={'Lighting, composition, colors, painterly style...'}
-            />
-          </label>
+          </div>
+
           <div className={styles.actions}>
             <button
               className={classNames(styles.button, styles.primaryButton)}
@@ -217,7 +276,9 @@ const CardGenerateCreatePage: React.FC = () => {
               Regenerate
             </button>
           </div>
-          <div className={styles.hint}>Tip: richer style details usually yield better results.</div>
+          <div className={styles.hint}>
+            Tip: richer prompts and reference images usually yield better results.
+          </div>
         </div>
         <div className={classNames(styles.panel, styles.previewContainer)} ref={previewRef}>
           <div className={styles.panelTitle}>Preview</div>
@@ -232,14 +293,12 @@ const CardGenerateCreatePage: React.FC = () => {
                 ref={imageRef}
                 className={styles.previewImage}
                 src={imageUrl}
-                alt={watchedName}
+                alt={watchedPrompt}
               />
             ) : (
               <div className={styles.placeholder}>
                 <div className={styles.placeholderTitle}>No image yet</div>
-                <div className={styles.placeholderText}>
-                  Fill in the prompts and click Generate.
-                </div>
+                <div className={styles.placeholderText}>Fill in the prompt and click Generate.</div>
               </div>
             )}
           </div>

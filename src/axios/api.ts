@@ -312,11 +312,8 @@ export interface IConsumeMagicItemResponse {
 }
 
 export interface IPostGenerateImageParams {
-  cardName: string
-  cardType: string
-  cardEffect: string
-  cardDescription?: string
-  artStyle?: string
+  prompt: string
+  images: Array<string>
 }
 
 export interface IPostGenerateImageResponse {

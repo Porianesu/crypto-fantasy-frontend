@@ -128,3 +128,50 @@
 .downloadButton {
     @apply inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold bg-[#18354f] text-blue-100 hover:bg-[#1d4160] border border-[#2d4b66];
 }
+
+/* ===== References area styles ===== */
+.referencesBox {
+    @apply relative rounded-md border-2 border-dashed border-[#2d4b66] bg-[#071722]/40 p-3 mb-3 min-h-[84px] flex items-start;
+}
+
+.referencesInner {
+    @apply flex items-start gap-3 w-full;
+}
+
+/* Add button square (same size as preview thumbnails) */
+.addButton {
+    @apply flex flex-col items-center justify-center gap-1 w-20 h-20 md:w-24 md:h-24 rounded-lg bg-[#0b1f33] border border-[#284a69] text-blue-100 text-xs cursor-pointer;
+}
+
+.addIcon {
+    @apply flex items-center justify-center text-blue-100;
+}
+
+.addText {
+    @apply text-xs text-blue-100;
+}
+
+.imagePreviewGrid {
+    @apply flex items-start gap-2 flex-wrap;
+}
+
+.imagePreviewItem {
+    @apply relative w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden bg-[#071522] border border-[#2d4b66];
+}
+
+.previewThumb {
+    @apply w-full h-full object-cover;
+}
+
+.removeImageButton {
+    @apply absolute -top-2 -right-2 w-6 h-6 md:w-7 md:h-7 flex items-center justify-center rounded-full bg-[#18354f] text-white text-xs border border-[#2d4b66] cursor-pointer;
+}
+
+.countBadge {
+    @apply absolute right-2 bottom-2 bg-[#071522]/90 text-blue-100 text-xs px-2 py-0.5 rounded-md border border-[#2d4b66];
+}
+
+/* ensure spacing for the rest */
+.referencesBox :global(button) {
+    @apply outline-none;
+}
