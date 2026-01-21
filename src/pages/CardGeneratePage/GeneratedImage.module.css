@@ -1,7 +1,25 @@
 @import "tailwindcss";
 
 .card {
-    @apply bg-[#071522] border border-[#223d54] rounded-md overflow-hidden flex flex-col;
+    @apply relative bg-[#071522] border border-[#223d54] rounded-md overflow-hidden flex flex-col;
+}
+
+/* Tools container: hidden by default, visible on card hover */
+.toolsContainer {
+    @apply absolute top-2 right-2 opacity-0 transform scale-90 transition-all duration-150 ease-out pointer-events-none;
+}
+
+.card:hover .toolsContainer {
+    @apply opacity-100 transform scale-100 pointer-events-auto;
+}
+
+.editButton {
+    @apply flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-[#0ea5b7] to-[#0369a1] shadow-md border border-[#083047] hover:scale-105 transition-transform duration-150;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[#38bdf8];
+}
+
+.editButtonIcon {
+    @apply w-4 h-4 text-white;
 }
 
 .thumbWrap {

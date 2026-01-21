@@ -4,7 +4,7 @@ import styles from './GeneratedImage.module.css'
 import type { IGenerateImage } from '@/axios/api.ts'
 import dayjs from 'dayjs'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import { PhotoIcon } from '@heroicons/react/24/outline'
+import { PhotoIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 
 interface IGeneratedImageProps {
   image: IGenerateImage
@@ -22,6 +22,13 @@ const GeneratedImage: React.FC<IGeneratedImageProps> = ({ image }) => {
 
   return (
     <div className={styles.card} role="button" tabIndex={0}>
+      {cachedImageUrl ? (
+        <div className={styles.toolsContainer}>
+          <button type="button" aria-label="Edit image" title="Edit" className={styles.editButton}>
+            <PencilSquareIcon className={styles.editButtonIcon} aria-hidden="true" />
+          </button>
+        </div>
+      ) : null}
       <div className={styles.thumbWrap}>
         {cachedImageUrl ? (
           <img
