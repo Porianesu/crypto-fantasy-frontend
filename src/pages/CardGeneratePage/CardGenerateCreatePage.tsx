@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './CardGenerateCreatePage.module.css'
 import classNames from 'classnames'
 import { useMutation } from '@tanstack/react-query'
@@ -43,7 +43,6 @@ const RESOLUTION_OPTIONS = ['1K', '2K', '4K']
 const CardGenerateCreatePage: React.FC = () => {
   const {
     appStore: { userInfo },
-    cardGenerateStore: { initUserGallery },
   } = useMobxStore()
   const navigate = useNavigate()
   const pageRef = useRef<HTMLDivElement>(null)
@@ -66,10 +65,6 @@ const CardGenerateCreatePage: React.FC = () => {
   // keep local watched values for UI
   const watchedAspect = watch('aspectRatio')
   const watchedResolution = watch('resolution')
-
-  useEffect(() => {
-    initUserGallery()
-  }, [initUserGallery])
 
   useGSAP(
     () => {

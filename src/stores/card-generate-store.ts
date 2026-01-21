@@ -1,5 +1,5 @@
 import type { Store } from '@/stores/index.ts'
-import { action, flow, makeAutoObservable, observable } from 'mobx'
+import { action, makeAutoObservable, observable } from 'mobx'
 import API, {
   type IGenerateImage,
   type IGetGenerateImagePageParams,
@@ -7,12 +7,12 @@ import API, {
   type IGetGenerateImageSingleParams,
   type IGetGenerateImageSingleResponse,
 } from '@/axios/api.ts'
-import type { AxiosResponse } from 'axios'
+import { type AxiosResponse } from 'axios'
 import { convertBytesToObjectUrl } from '@/utils/common.ts'
 
 const DEFAULT_PAGINATION = {
   page: 1,
-  limit: 20,
+  limit: 5,
   total: 0,
 }
 
@@ -25,6 +25,11 @@ export default class CardGenerateStore {
 
   generatedImageCache = observable.map<number, string>()
 
+  private _userGalleryUpdaterInFlight = new Map<
+    string,
+    Promise<AxiosResponse<IGetGenerateImageSingleResponse | IGetGenerateImagePageResponse>>
+  >()
+
   // 内部队列与状态（非 observable）
   private _queue: number[] = []
   private _processing = false
@@ -36,7 +41,9 @@ export default class CardGenerateStore {
     makeAutoObservable(this, {
       resetStore: action,
       userGallery: observable,
-      initUserGallery: flow.bound,
+      initUserGallery: action,
+      updateUserGallery: action,
+      dealWithUpdateUserGalleryResult: action,
       galleryPagination: observable,
       changeGalleryPagination: action,
       fetchSingleImageById: action,
@@ -46,23 +53,64 @@ export default class CardGenerateStore {
 
   resetStore = () => {
     this.galleryPagination = DEFAULT_PAGINATION
-  };
+  }
 
-  *initUserGallery() {
+  dealWithUpdateUserGalleryResult = (
+    page: number,
+    limit: number,
+    result: AxiosResponse<IGetGenerateImagePageResponse>,
+  ) => {
+    this.galleryPagination.total = result.data.total
+    const newImages = result?.data?.images
+    if (!newImages || newImages.length === 0) return
+    // 计算目标插入起始索引
+    const start = (page - 1) * limit
+    // 采用按索引赋值的方式，确保分页结果放到对应位置（可能产生稀疏数组）
+    const newGallery = [...this.userGallery]
+    for (let i = 0; i < newImages.length; i++) {
+      newGallery[start + i] = newImages[i]
+    }
+    // 赋回 observable
+    this.userGallery = newGallery
+  }
+
+  initUserGallery = () => {
     if (this.userGallery.length) return
+    this.updateUserGallery(DEFAULT_PAGINATION.page, DEFAULT_PAGINATION.limit)
+  }
+
+  updateUserGallery = (page: number, limit: number) => {
+    if (!page || !limit) return Promise.resolve()
+    const key = `${page}_${limit}`
+    if (this._userGalleryUpdaterInFlight.has(key)) return this._userGalleryUpdaterInFlight.get(key)!
     const params: IGetGenerateImagePageParams = {
-      page: DEFAULT_PAGINATION.page,
-      limit: DEFAULT_PAGINATION.limit,
+      page,
+      limit,
       includeBytes: false,
     }
-    const result: AxiosResponse<IGetGenerateImagePageResponse> = yield API.getGenerateImage(params)
-    if (result?.data?.images?.length) {
-      this.galleryPagination.total = result.data.total
-      this.userGallery = result.data.images
-    }
+    const p = API.getGenerateImage(params)
+    this._userGalleryUpdaterInFlight.set(key, p)
+    p.then((res) =>
+      this.dealWithUpdateUserGalleryResult(
+        page,
+        limit,
+        res as AxiosResponse<IGetGenerateImagePageResponse>,
+      ),
+    ).finally(() => {
+      this._userGalleryUpdaterInFlight.delete(key)
+    })
+    return p
   }
 
   changeGalleryPagination = (params: Partial<typeof DEFAULT_PAGINATION>) => {
+    if (params.page && params.page !== this.galleryPagination.page) {
+      const start = (params.page - 1) * this.galleryPagination.limit
+      const targetGalleryItems = this.userGallery.slice(start, start + this.galleryPagination.limit)
+      if (targetGalleryItems.length === 0) {
+        // 需要重新拉取
+        this.updateUserGallery(params.page, this.galleryPagination.limit)
+      }
+    }
     this.galleryPagination = {
       ...this.galleryPagination,
       ...params,
