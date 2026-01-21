@@ -16,6 +16,7 @@ import {
   RedirectWithQuery,
   CARD_GENERATE_PATH,
   CARD_GENERATE__CREATE_PATH,
+  CARD_GENERATE__HISTORY_PATH,
 } from '@/navigation/routes.tsx'
 import { TransitionProvider } from '@/context/TransitionContext.tsx'
 import React, { type PropsWithChildren, Suspense } from 'react'
@@ -34,6 +35,9 @@ const ShopPage = React.lazy(() => import('@/pages/ShopPage/ShopPage.tsx'))
 const RewardPage = React.lazy(() => import('@/pages/RewardPage/RewardPage.tsx'))
 const CardGenerateCreatePage = React.lazy(
   () => import('@/pages/CardGeneratePage/CardGenerateCreatePage.tsx'),
+)
+const CardGenerateHistoryPage = React.lazy(
+  () => import('@/pages/CardGeneratePage/CardGenerateHistoryPage.tsx'),
 )
 
 const CommonPageSuspense: React.FC<PropsWithChildren> = ({ children }) => {
@@ -123,11 +127,23 @@ export const router = createBrowserRouter([
       },
       {
         path: CARD_GENERATE_PATH,
-        loader: commonPageLoader,
+        // loader: commonPageLoader,
         children: [
           {
             path: CARD_GENERATE__CREATE_PATH,
-            element: <CardGenerateCreatePage></CardGenerateCreatePage>,
+            element: (
+              <CommonPageSuspense>
+                <CardGenerateCreatePage></CardGenerateCreatePage>
+              </CommonPageSuspense>
+            ),
+          },
+          {
+            path: CARD_GENERATE__HISTORY_PATH,
+            element: (
+              <CommonPageSuspense>
+                <CardGenerateHistoryPage></CardGenerateHistoryPage>
+              </CommonPageSuspense>
+            ),
           },
         ],
       },

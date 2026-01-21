@@ -181,3 +181,26 @@ export const checkHasAlreadyReadGuide = () => {
 export const isCardsSameChain = (card1: ICardData, card2: ICardData) => {
   return Math.floor(card1.id / 4) === Math.floor(card2.id / 4)
 }
+
+// Client / shared: bytes( base64 string | ArrayBuffer | Uint8Array | Buffer ) -> object URL
+export function convertBytesToObjectUrl(
+  bytes: Uint8Array<ArrayBufferLike>,
+  mime = 'image/jpeg',
+): string | null {
+  if (!bytes || typeof bytes !== 'object') return null
+
+  const obj = bytes
+  const numericKeys = Object.keys(obj).filter((k) => /^\d+$/.test(k))
+  if (numericKeys.length === 0) return null
+
+  const maxIndex = numericKeys.reduce((m, k) => Math.max(m, Number(k)), -1)
+  const len = obj.length > 0 ? obj.length : maxIndex + 1
+
+  const arr = new Uint8Array(len)
+  for (let i = 0; i < len; i++) {
+    arr[i] = obj[i] ?? obj[String(i) as keyof typeof obj]
+  }
+
+  const blob = new Blob([arr], { type: mime })
+  return URL.createObjectURL(blob)
+}

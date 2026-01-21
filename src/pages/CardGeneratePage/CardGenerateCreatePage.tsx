@@ -12,6 +12,8 @@ import API, { type IPostGenerateImageResponse } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 import { ArrowRightIcon, PhotoIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
+import { getCardGenerateHistoryPath } from '@/navigation/routes.tsx'
 
 // 新表单类型：prompt 必填，images 为 base64 字符串数组，同时增加aspectRatio和resolution
 interface IFromData {
@@ -43,6 +45,7 @@ const CardGenerateCreatePage: React.FC = () => {
     appStore: { userInfo },
     cardGenerateStore: { initUserGallery },
   } = useMobxStore()
+  const navigate = useNavigate()
   const pageRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
@@ -184,6 +187,10 @@ const CardGenerateCreatePage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const triggerFileInput = () => fileInputRef.current?.click()
 
+  const handleHistoryClick = () => {
+    navigate(getCardGenerateHistoryPath())
+  }
+
   return (
     <div className={styles.page} ref={pageRef}>
       <div className={styles.header}>
@@ -194,7 +201,7 @@ const CardGenerateCreatePage: React.FC = () => {
           </div>
         </div>
         <div className={styles.headerRight}>
-          <button className={styles.historyButton}>
+          <button className={styles.historyButton} onClick={handleHistoryClick}>
             History
             <ArrowRightIcon className={styles.icon}></ArrowRightIcon>
           </button>

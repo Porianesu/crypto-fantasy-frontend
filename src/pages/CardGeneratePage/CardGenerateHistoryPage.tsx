@@ -2,19 +2,20 @@ import { observer } from 'mobx-react-lite'
 import React, { useEffect, useMemo } from 'react'
 import styles from './CardGenerateHistoryPage.module.css'
 import { useMobxStore } from '@/stores/StoreProvider'
+import GeneratedImage from '@/pages/CardGeneratePage/GeneratedImage.tsx'
 
 const CardGenerateHistoryPage: React.FC = () => {
   const {
     cardGenerateStore: { userGallery, initUserGallery, galleryPagination, changeGalleryPagination },
   } = useMobxStore()
-  const totalPages = Math.max(1, Math.ceil(galleryPagination.total / galleryPagination.page))
+  const totalPages = Math.max(1, Math.ceil(galleryPagination.total / galleryPagination.limit))
   // clamp page when items change
   const currentPage = Math.min(Math.max(1, galleryPagination.page), totalPages)
 
   const pagedItems = useMemo(() => {
-    const start = (currentPage - 1) * galleryPagination.page
-    return userGallery.slice(start, start + galleryPagination.page)
-  }, [currentPage, galleryPagination.page, userGallery])
+    const start = (currentPage - 1) * galleryPagination.limit
+    return userGallery.slice(start, start + galleryPagination.limit)
+  }, [currentPage, galleryPagination.limit, userGallery])
 
   useEffect(() => {
     initUserGallery()
@@ -43,27 +44,12 @@ const CardGenerateHistoryPage: React.FC = () => {
               </div>
             ) : (
               <div className={styles.grid}>
-                {pagedItems.map(
-                  () => null,
-                  // <div key={it.id ?? it.url} className={styles.card} role="button" tabIndex={0}>
-                  //   <div className={styles.thumbWrap}>
-                  //     <img
-                  //       src={it.url}
-                  //       alt={it.name ?? 'image'}
-                  //       className={styles.thumb}
-                  //       loading="lazy"
-                  //     />
-                  //   </div>
-                  //   <div className={styles.cardMeta}>
-                  //     <div className={styles.cardTitle}>{it.name ?? 'Untitled'}</div>
-                  //     <div className={styles.cardSub}>{it.createdAt ?? ''}</div>
-                  //   </div>
-                  // </div>
-                )}
+                {pagedItems.map((it) => (
+                  <GeneratedImage key={it.id} image={it}></GeneratedImage>
+                ))}
               </div>
             )}
           </div>
-
           {/* paginator */}
           <div className={styles.paginator}>
             <button

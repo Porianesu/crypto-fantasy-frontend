@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+.card {
+    @apply bg-[#071522] border border-[#223d54] rounded-md overflow-hidden flex flex-col;
+}
+
+.thumbWrap {
+    @apply w-full aspect-[4/3] overflow-hidden bg-[#0a1b2a];
+}
+
+.thumb {
+    @apply w-full h-full object-contain;
+}
+
+.cardMeta {
+    @apply p-2 flex flex-col gap-1;
+}
+
+.cardTitle {
+    @apply text-sm font-semibold text-yellow-200 truncate;
+}
+
+.cardSub {
+    @apply text-xs text-blue-200 truncate;
+}
+
+/* Image loading / placeholder styles */
+.imageLoading {
+    @apply w-full h-full flex items-center justify-center;
+}
+
+.imageLoadingBox {
+    /* square placeholder box (same visual size as preview) */
+    @apply w-24 h-24 rounded-md border-2 border-dashed border-[#1f4860] flex items-center justify-center bg-gradient-to-b from-[#08202b] to-[#071522];
+}
+
+.placeholderIcon {
+    @apply w-10 h-10 text-[#5fb3e6];
+}

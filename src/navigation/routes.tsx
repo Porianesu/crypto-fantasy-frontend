@@ -67,6 +67,10 @@ export const getRewardPath = () => {
   return generatePath(REWARD_PATH)
 }
 
+export const getCardGenerateHistoryPath = () => {
+  return generatePath(CARD_GENERATE_HISTORY_PATH)
+}
+
 const checkIsAppLoading = () => {
   return getStoreRef()?.appStore?.isAppLoading ?? true
 }

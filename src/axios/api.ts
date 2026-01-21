@@ -325,6 +325,7 @@ export interface IPostGenerateImageResponse {
 
 export interface IGetGenerateImageSingleParams {
   id: number
+  includeBytes?: boolean
 }
 
 export interface IGetGenerateImagePageParams {
@@ -337,11 +338,6 @@ export interface IGenerateImage {
   id: number
   userId: number
   imageBytes?: Uint8Array<ArrayBufferLike>
-  cardName: string
-  cardType: string
-  cardEffect: string
-  cardDescription: string | null
-  artStyle: string | null
   createdAt: string
 }
 
