@@ -2,61 +2,75 @@
 @import "tailwind-scrollbar-hide/v4";
 
 .page {
-  @apply h-full px-6 py-6 md:px-10 md:py-8 bg-[#0b1a2a] text-white flex flex-col items-stretch gap-y-6;
+    @apply h-full px-6 py-6 md:px-10 md:py-8 bg-[#0b1a2a] text-white flex flex-col items-stretch gap-y-6;
 }
 
 .header {
-  @apply shrink-0;
+    @apply shrink-0 flex items-center justify-between gap-4; /* make header layout horizontal */
+}
+
+/* Back button styles */
+.backButton {
+    /* button wrapper */
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#18354f] text-blue-100 border border-[#2d4b66] shadow-sm hover:bg-[#1d4160] hover:text-white transition-colors duration-150;
+
+    /* optional small icon inside button */
+
+    .backButtonIcon {
+        @apply w-4 h-4 flex-none text-yellow-300;
+    }
 }
 
 .title {
-  @apply text-2xl md:text-3xl font-extrabold tracking-wide text-yellow-300 drop-shadow;
-}
-
-.subtitle {
-  @apply mt-1 text-sm md:text-base text-blue-200;
+    @apply text-2xl md:text-3xl font-extrabold tracking-wide text-yellow-300 drop-shadow;
 }
 
 .content {
-  @apply flex-1 overflow-hidden flex items-stretch gap-x-2;
+    @apply flex-1 overflow-hidden flex items-stretch gap-x-2;
 }
 
 .panel {
-  @apply w-full rounded-xl bg-[#0e2438]/80 backdrop-blur-sm border border-[#2d4b66] shadow-xl p-4 md:p-5 flex flex-col;
+    @apply w-full rounded-xl bg-[#0e2438]/80 backdrop-blur-sm border border-[#2d4b66] shadow-xl p-4 md:p-5 flex flex-col;
 }
 
 .panelTitle {
-  @apply text-lg font-bold text-yellow-200 mb-3;
+    @apply text-lg font-bold text-yellow-200 mb-3;
 }
 
 .gridWrap {
-  @apply flex-1 overflow-auto scrollbar-hide; /* make this area scrollable */
+    @apply flex-1 overflow-auto scrollbar-hide;
+    /* make this area scrollable */
+}
+
+.gridWrapNotData {
+    @apply flex items-center justify-center;
 }
 
 .grid {
-  @apply grid gap-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-5; /* responsive columns */
+    @apply grid gap-3 grid-cols-2 md:grid-cols-4 lg:grid-cols-5;
+    /* responsive columns */
 }
 
 .placeholder {
-  @apply text-center px-6 py-12;
+    @apply text-center px-6 py-12;
 }
 
 .placeholderTitle {
-  @apply text-base font-bold text-yellow-200;
+    @apply text-base font-bold text-yellow-200;
 }
 
 .placeholderText {
-  @apply text-sm text-blue-300;
+    @apply text-sm text-blue-300;
 }
 
 .paginator {
-  @apply mt-3 flex items-center justify-between gap-3;
+    @apply mt-3 flex items-center justify-between gap-3;
 }
 
 .pageButton {
-  @apply inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold bg-[#18354f] text-blue-100 hover:bg-[#1d4160] border border-[#2d4b66] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold bg-[#18354f] text-blue-100 hover:bg-[#1d4160] border border-[#2d4b66] disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 .pageInfo {
-  @apply text-sm text-blue-200;
+    @apply text-sm text-blue-200;
 }

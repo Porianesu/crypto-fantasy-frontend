@@ -3,11 +3,15 @@ import React, { useEffect, useMemo } from 'react'
 import styles from './CardGenerateHistoryPage.module.css'
 import { useMobxStore } from '@/stores/StoreProvider'
 import GeneratedImage from '@/pages/CardGeneratePage/GeneratedImage.tsx'
+import classNames from 'classnames'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
 
 const CardGenerateHistoryPage: React.FC = () => {
   const {
     cardGenerateStore: { userGallery, initUserGallery, galleryPagination, changeGalleryPagination },
   } = useMobxStore()
+  const navigate = useNavigate()
   const totalPages = Math.max(1, Math.ceil(galleryPagination.total / galleryPagination.limit))
   // clamp page when items change
   const currentPage = Math.min(Math.max(1, galleryPagination.page), totalPages)
@@ -17,6 +21,8 @@ const CardGenerateHistoryPage: React.FC = () => {
     return userGallery.slice(start, start + galleryPagination.limit)
   }, [currentPage, galleryPagination.limit, userGallery])
 
+  const handleBack = () => navigate(-1)
+
   useEffect(() => {
     initUserGallery()
   }, [])
@@ -24,17 +30,28 @@ const CardGenerateHistoryPage: React.FC = () => {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
+        <button
+          type="button"
+          aria-label="Go back"
+          title="Go back"
+          className={styles.backButton}
+          onClick={handleBack}
+        >
+          Back
+          <ArrowLeftIcon className={styles.backButtonIcon}></ArrowLeftIcon>
+        </button>
         <div className={styles.title}>Gallery History</div>
-        <div className={styles.subtitle}>
-          Browse the images you have created. Click any thumbnail to preview in the generator.
-        </div>
       </div>
 
       <div className={styles.content}>
         <div className={styles.panel}>
           <div className={styles.panelTitle}>Your creations</div>
           {/*scrollable grid area */}
-          <div className={styles.gridWrap}>
+          <div
+            className={classNames(styles.gridWrap, {
+              [styles.gridWrapNotData]: pagedItems.length === 0,
+            })}
+          >
             {pagedItems.length === 0 ? (
               <div className={styles.placeholder}>
                 <div className={styles.placeholderTitle}>No images yet</div>

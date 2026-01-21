@@ -12,7 +12,7 @@ import { convertBytesToObjectUrl } from '@/utils/common.ts'
 
 const DEFAULT_PAGINATION = {
   page: 1,
-  limit: 5,
+  limit: 15,
   total: 0,
 }
 

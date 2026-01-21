@@ -191,9 +191,7 @@ const CardGenerateCreatePage: React.FC = () => {
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <div className={styles.title}>Card Forge</div>
-          <div className={styles.subtitle}>
-            Craft a Hearthstone-style card illustration from your prompts.
-          </div>
+          <div className={styles.subtitle}>Craft a image from your prompts.</div>
         </div>
         <div className={styles.headerRight}>
           <button className={styles.historyButton} onClick={handleHistoryClick}>
