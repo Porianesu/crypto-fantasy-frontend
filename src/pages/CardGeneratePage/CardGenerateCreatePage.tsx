@@ -44,7 +44,7 @@ const RESOLUTION_OPTIONS = ['1K', '2K', '4K']
 const CardGenerateCreatePage: React.FC = () => {
   const {
     appStore: { userInfo },
-    cardGenerateStore: { generatedImageCache },
+    cardGenerateStore: { generatedImageCache, addImageToUserGallery },
   } = useMobxStore()
   const location = useLocation()
   const navigate = useNavigate()
@@ -149,15 +149,20 @@ const CardGenerateCreatePage: React.FC = () => {
         images: payload.images,
       }),
     onSuccess: async (res: AxiosResponse<IPostGenerateImageResponse>) => {
-      const maybeUrl = res?.data?.image?.url
-      if (maybeUrl) {
-        setImageUrl(maybeUrl)
-        if (imageRef.current) {
-          gsap.fromTo(
-            imageRef.current,
-            { scale: 0.98, opacity: 0 },
-            { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' },
-          )
+      if (res?.data?.image) {
+        const { url: maybeUrl, ...generatedImage } = res.data.image
+        if (generatedImage.id) {
+          addImageToUserGallery(generatedImage)
+        }
+        if (maybeUrl) {
+          setImageUrl(maybeUrl)
+          if (imageRef.current) {
+            gsap.fromTo(
+              imageRef.current,
+              { scale: 0.98, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' },
+            )
+          }
         }
       }
     },
