@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './CardGenerateCreatePage.module.css'
 import classNames from 'classnames'
 import { useMutation } from '@tanstack/react-query'
@@ -12,8 +12,9 @@ import API, { type IPostGenerateImageResponse } from '@/axios/api.ts'
 import type { AxiosResponse } from 'axios'
 import { ArrowRightIcon, PhotoIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom'
-import { getCardGenerateHistoryPath } from '@/navigation/routes.tsx'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { CARD_GENERATE_HISTORY_PATH, getCardGenerateHistoryPath } from '@/navigation/routes.tsx'
+import { objectUrlToBase64 } from '@/utils/common.ts'
 
 // 新表单类型：prompt 必填，images 为 base64 字符串数组，同时增加aspectRatio和resolution
 interface IFromData {
@@ -43,7 +44,9 @@ const RESOLUTION_OPTIONS = ['1K', '2K', '4K']
 const CardGenerateCreatePage: React.FC = () => {
   const {
     appStore: { userInfo },
+    cardGenerateStore: { generatedImageCache },
   } = useMobxStore()
+  const location = useLocation()
   const navigate = useNavigate()
   const pageRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
@@ -65,6 +68,28 @@ const CardGenerateCreatePage: React.FC = () => {
   // keep local watched values for UI
   const watchedAspect = watch('aspectRatio')
   const watchedResolution = watch('resolution')
+
+  useEffect(() => {
+    // location.state 可能为 undefined
+    const state = location.state as { imageId?: number; from: string } | null
+    if (state?.from === CARD_GENERATE_HISTORY_PATH && state.imageId) {
+      // 处理参数
+      if (generatedImageCache.has(state.imageId)) {
+        const cachedObjectUrl = generatedImageCache.get(state.imageId)!
+        objectUrlToBase64(cachedObjectUrl).then((res) => {
+          setImageUrl(res)
+          lastPayloadRef.current = {
+            prompt: '',
+            images: [res],
+          }
+          setImagesBase64([res])
+        })
+      }
+      // 处理完后清除 state，使用 replace 避免新增历史记录
+      navigate(location.pathname, { replace: true, state: undefined })
+    }
+    // 仅在 location.state 变化时触发
+  }, [location.state, location.pathname, navigate])
 
   useGSAP(
     () => {

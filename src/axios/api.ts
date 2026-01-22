@@ -318,9 +318,7 @@ export interface IPostGenerateImageParams {
 
 export interface IPostGenerateImageResponse {
   success: boolean
-  image: {
-    url: string
-  }
+  image: IGenerateImage & { url: string }
 }
 
 export interface IGetGenerateImageSingleParams {

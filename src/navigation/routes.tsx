@@ -67,6 +67,10 @@ export const getRewardPath = () => {
   return generatePath(REWARD_PATH)
 }
 
+export const getCardGenerateCreatePath = () => {
+  return generatePath(CARD_GENERATE_CREATE_PATH)
+}
+
 export const getCardGenerateHistoryPath = () => {
   return generatePath(CARD_GENERATE_HISTORY_PATH)
 }

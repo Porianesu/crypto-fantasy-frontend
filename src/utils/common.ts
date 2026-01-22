@@ -204,3 +204,15 @@ export function convertBytesToObjectUrl(
   const blob = new Blob([arr], { type: mime })
   return URL.createObjectURL(blob)
 }
+
+export async function objectUrlToBase64(url: string): Promise<string> {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Fetch failed: ${res.status}`)
+  const blob = await res.blob()
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result as string)
+    reader.onerror = reject
+    reader.readAsDataURL(blob)
+  })
+}

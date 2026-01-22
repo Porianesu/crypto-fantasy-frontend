@@ -75,7 +75,6 @@ export default class CardGenerateStore {
   }
 
   initUserGallery = () => {
-    if (this.userGallery.length) return
     this.updateUserGallery(DEFAULT_PAGINATION.page, DEFAULT_PAGINATION.limit)
   }
 
