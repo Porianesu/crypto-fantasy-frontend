@@ -127,7 +127,7 @@ export const router = createBrowserRouter([
       },
       {
         path: CARD_GENERATE_PATH,
-        // loader: commonPageLoader,
+        loader: commonPageLoader,
         children: [
           {
             path: CARD_GENERATE__CREATE_PATH,
