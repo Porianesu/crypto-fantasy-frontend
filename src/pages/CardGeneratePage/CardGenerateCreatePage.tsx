@@ -280,7 +280,6 @@ const CardGenerateCreatePage: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* Prompt textarea */}
           <div className={styles.field}>
             <div className={styles.label}>Prompt</div>
@@ -292,7 +291,6 @@ const CardGenerateCreatePage: React.FC = () => {
               rows={8}
             />
           </div>
-
           {/* New options: Aspect Ratio & Resolution */}
           <div className={styles.field}>
             <div className={styles.label}>Aspect Ratio</div>
@@ -312,7 +310,6 @@ const CardGenerateCreatePage: React.FC = () => {
               ))}
             </div>
           </div>
-
           <div className={styles.field}>
             <div className={styles.label}>Resolution</div>
             <div className={styles.optionGroup} role="list">
@@ -331,7 +328,6 @@ const CardGenerateCreatePage: React.FC = () => {
               ))}
             </div>
           </div>
-
           <div className={styles.actions}>
             <button
               className={classNames(styles.button, styles.primaryButton)}
