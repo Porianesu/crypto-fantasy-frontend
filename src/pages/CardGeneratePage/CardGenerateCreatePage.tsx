@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styles from './CardGenerateCreatePage.module.css'
 import classNames from 'classnames'
 import { useMutation } from '@tanstack/react-query'
@@ -8,9 +8,8 @@ import { gsap } from 'gsap'
 import { toast } from 'react-toastify'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
-import API, { type IPostGenerateImageResponse } from '@/axios/api.ts'
-import type { AxiosResponse } from 'axios'
-import { ArrowRightIcon, PhotoIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import API from '@/axios/api.ts'
+import { ArrowRightIcon, PhotoIcon, XCircleIcon, PlusIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { CARD_GENERATE_HISTORY_PATH, getCardGenerateHistoryPath } from '@/navigation/routes.tsx'
@@ -41,6 +40,30 @@ const ASPECT_OPTIONS = [
 ]
 const RESOLUTION_OPTIONS = ['1K', '2K', '4K']
 
+type Session = {
+  id: number
+  label: string
+  prompt: string
+  aspectRatio: string
+  resolution: string
+  imagesBase64: string[]
+  imageUrl: string
+  lastPayload?: { prompt: string; images: string[] }
+  isPending?: boolean
+}
+
+const createEmptySession = (id: number, index = 1): Session => ({
+  id,
+  label: `Session ${index}`,
+  prompt: '',
+  aspectRatio: 'auto',
+  resolution: '1K',
+  imagesBase64: [],
+  imageUrl: '',
+  lastPayload: undefined,
+  isPending: false,
+})
+
 const CardGenerateCreatePage: React.FC = () => {
   const {
     appStore: { userInfo },
@@ -52,10 +75,17 @@ const CardGenerateCreatePage: React.FC = () => {
   const formRef = useRef<HTMLDivElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
-  const [imageUrl, setImageUrl] = useState<string>('')
-  const [imagesBase64, setImagesBase64] = useState<string[]>([])
-  const lastPayloadRef = useRef<{ prompt: string; images: string[] } | null>(null)
-  const { register, handleSubmit, formState, setValue, watch } = useForm<IFromData>({
+  // multi-session state
+  const [sessions, setSessions] = useState<Session[]>(() => [createEmptySession(Date.now(), 1)])
+  const [activeSessionId, setActiveSessionId] = useState<number>(sessions[0].id)
+  // local UI states synced with active session
+  const [imagesBase64, setImagesBase64] = useState<string[]>(sessions[0].imagesBase64)
+  const imageUrl = useMemo(
+    () => sessions.find((se) => se.id === activeSessionId)?.imageUrl || '',
+    [activeSessionId, sessions],
+  )
+
+  const { register, handleSubmit, formState, setValue, watch, getValues } = useForm<IFromData>({
     mode: 'onChange',
     defaultValues: {
       prompt: '',
@@ -70,26 +100,30 @@ const CardGenerateCreatePage: React.FC = () => {
   const watchedResolution = watch('resolution')
 
   useEffect(() => {
-    // location.state 可能为 undefined
+    // if location.state carries an imageId from history, use it for the active session
     const state = location.state as { imageId?: number; from: string } | null
     if (state?.from === CARD_GENERATE_HISTORY_PATH && state.imageId) {
-      // 处理参数
+      const idx = sessions.findIndex((s) => s.id === activeSessionId)
+      // don't create unused 'existing' variable
       if (generatedImageCache.has(state.imageId)) {
         const cachedObjectUrl = generatedImageCache.get(state.imageId)!
         objectUrlToBase64(cachedObjectUrl).then((res) => {
-          setImageUrl(res)
-          lastPayloadRef.current = {
-            prompt: '',
-            images: [res],
-          }
+          // set on active session
           setImagesBase64([res])
+          setValue('prompt', '')
+          // persist to sessions
+          setSessions((prev) => {
+            const copy = [...prev]
+            copy[idx] = { ...copy[idx], imageUrl: res, imagesBase64: [res], prompt: '' }
+            return copy
+          })
         })
       }
-      // 处理完后清除 state，使用 replace 避免新增历史记录
       navigate(location.pathname, { replace: true, state: undefined })
     }
-    // 仅在 location.state 变化时触发
-  }, [location.state, location.pathname, navigate])
+    // We only want to run this when location.state changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state])
 
   useGSAP(
     () => {
@@ -123,6 +157,66 @@ const CardGenerateCreatePage: React.FC = () => {
       reader.readAsDataURL(file)
     })
 
+  // mutation hook (we'll call mutateAsync and manage per-session pending flags)
+  const generateMutation = useMutation<any, any, { prompt: string; images: string[] }>({
+    mutationFn: (payload) =>
+      API.postGenerateImage({
+        prompt: payload.prompt,
+        images: payload.images,
+      }),
+  })
+
+  // helpers to read/update active session
+  const getActiveSessionIndex = () => sessions.findIndex((s) => s.id === activeSessionId)
+  const getActiveSession = () => sessions.find((s) => s.id === activeSessionId)!
+
+  const persistCurrentFormToSession = () => {
+    const idx = getActiveSessionIndex()
+    if (idx === -1) return
+    const vals = getValues()
+    setSessions((prev) => {
+      const copy = [...prev]
+      copy[idx] = {
+        ...copy[idx],
+        prompt: vals.prompt || '',
+        aspectRatio: vals.aspectRatio || 'auto',
+        resolution: vals.resolution || '1K',
+        imagesBase64,
+        imageUrl,
+      }
+      return copy
+    })
+  }
+
+  const switchToSession = (id: number) => {
+    // persist current
+    persistCurrentFormToSession()
+    // find target
+    const target = sessions.find((s) => s.id === id)
+    if (!target) return
+    setActiveSessionId(id)
+    // load into local form and states
+    setValue('prompt', target.prompt)
+    setValue('aspectRatio', target.aspectRatio)
+    setValue('resolution', target.resolution)
+    setImagesBase64(target.imagesBase64 || [])
+  }
+
+  const addSession = () => {
+    persistCurrentFormToSession()
+    const id = Date.now()
+    setSessions((prev) => {
+      const newSession = createEmptySession(id, prev.length + 1)
+      return [...prev, newSession]
+    })
+    // immediately activate the new session locally
+    setActiveSessionId(id)
+    setValue('prompt', '')
+    setValue('aspectRatio', 'auto')
+    setValue('resolution', '1K')
+    setImagesBase64([])
+  }
+
   const onFilesSelected = async (files: FileList | null) => {
     if (!files || files.length === 0) return
     const arr = Array.from(files)
@@ -131,8 +225,8 @@ const CardGenerateCreatePage: React.FC = () => {
       const promises = toProcess.map((f) => fileToBase64(f))
       const results = await Promise.all(promises)
       setImagesBase64((prev) => [...prev, ...results])
-    } catch (e) {
-      console.error(e)
+    } catch (err) {
+      console.error(err)
       toast.error('Failed to read some images')
     }
   }
@@ -141,21 +235,35 @@ const CardGenerateCreatePage: React.FC = () => {
     setImagesBase64((prev) => prev.filter((_, i) => i !== index))
   }
 
-  // 使用新的 payload 结构：{ prompt, images }
-  const generateMutation = useMutation<any, any, { prompt: string; images: string[] }>({
-    mutationFn: (payload) =>
-      API.postGenerateImage({
-        prompt: payload.prompt,
-        images: payload.images,
-      }),
-    onSuccess: async (res: AxiosResponse<IPostGenerateImageResponse>) => {
+  // per-session generate
+  const generateForActiveSession = async (payload: { prompt: string; images: string[] }) => {
+    const idx = getActiveSessionIndex()
+    if (idx === -1) return
+    // mark pending for this session
+    setSessions((prev) => {
+      const copy = [...prev]
+      copy[idx] = { ...copy[idx], isPending: true }
+      return copy
+    })
+    try {
+      const res = await generateMutation.mutateAsync(payload)
       if (res?.data?.image) {
         const { url: maybeUrl, ...generatedImage } = res.data.image
         if (generatedImage.id) {
           addImageToUserGallery(generatedImage)
+          // also cache maybe generate cache - not changed here
         }
         if (maybeUrl) {
-          setImageUrl(maybeUrl)
+          setSessions((prev) => {
+            const copy = [...prev]
+            copy[idx] = {
+              ...copy[idx],
+              imageUrl: maybeUrl,
+              lastPayload: payload,
+              imagesBase64: payload.images,
+            }
+            return copy
+          })
           if (imageRef.current) {
             gsap.fromTo(
               imageRef.current,
@@ -165,15 +273,22 @@ const CardGenerateCreatePage: React.FC = () => {
           }
         }
       }
-    },
-    onError: () => {
+    } catch (err) {
+      console.error(err)
       toast.error('Failed to generate image')
-    },
-  })
+    } finally {
+      setSessions((prev) => {
+        const copy = [...prev]
+        copy[idx] = { ...copy[idx], isPending: false }
+        return copy
+      })
+    }
+  }
 
   const onSubmit: SubmitHandler<IFromData> = (values) => {
     if (!userInfo?.id) return
-    if (generateMutation.isPending) return
+    const activeIdx = getActiveSessionIndex()
+    if (sessions[activeIdx]?.isPending) return
     if (previewRef.current) {
       gsap.fromTo(
         previewRef.current,
@@ -188,14 +303,22 @@ const CardGenerateCreatePage: React.FC = () => {
       prompt: finalPrompt,
       images: imagesBase64,
     }
-    lastPayloadRef.current = payload
-    generateMutation.mutate(payload)
+    // persist last payload for session
+    setSessions((prev) => {
+      const copy = [...prev]
+      const idx = getActiveSessionIndex()
+      copy[idx] = { ...copy[idx], lastPayload: payload }
+      return copy
+    })
+    generateForActiveSession(payload)
   }
 
   const handleRegenerate = async () => {
-    if (!lastPayloadRef.current) return
-    if (generateMutation.isPending) return
-    generateMutation.mutate(lastPayloadRef.current)
+    const idx = getActiveSessionIndex()
+    const session = sessions[idx]
+    if (!session?.lastPayload) return
+    if (session.isPending) return
+    await generateForActiveSession(session.lastPayload)
   }
 
   const handleDownload = () => {
@@ -216,6 +339,29 @@ const CardGenerateCreatePage: React.FC = () => {
     navigate(getCardGenerateHistoryPath())
   }
 
+  // persist session when navigating away/unmount
+  useEffect(() => {
+    return () => {
+      persistCurrentFormToSession()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // when sessions change and activeSessionId not found, switch to first
+  useEffect(() => {
+    if (!sessions.find((s) => s.id === activeSessionId) && sessions.length) {
+      setActiveSessionId(sessions[0].id)
+      setValue('prompt', sessions[0].prompt)
+      setValue('aspectRatio', sessions[0].aspectRatio)
+      setValue('resolution', sessions[0].resolution)
+      setImagesBase64(sessions[0].imagesBase64 || [])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessions])
+
+  // UI helpers
+  const activeSession = getActiveSession()
+
   return (
     <div className={styles.page} ref={pageRef}>
       <div className={styles.header}>
@@ -231,6 +377,30 @@ const CardGenerateCreatePage: React.FC = () => {
         </div>
       </div>
       <div className={styles.contentGrid}>
+        {/* Sidebar for sessions */}
+        <div className={styles.sidebar}>
+          <div className={styles.sideHeader}>Sessions</div>
+          <div className={styles.sessionList}>
+            {sessions.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className={classNames(styles.sessionItem, {
+                  [styles.sessionActive]: s.id === activeSessionId,
+                  [styles.sessionDeActive]: s.id !== activeSessionId,
+                })}
+                onClick={() => switchToSession(s.id)}
+              >
+                <div className={styles.sessionLabel}>{s.label}</div>
+                {s.isPending ? <div className={styles.sessionDot} /> : null}
+              </button>
+            ))}
+          </div>
+          <button className={styles.addSessionButton} onClick={addSession} title="Add session">
+            <PlusIcon className={styles.addSessionIcon} />
+          </button>
+        </div>
+
         <div className={styles.panel} ref={formRef}>
           <div className={styles.panelTitle}>Prompt</div>
           {/* References: moved above prompt */}
@@ -331,14 +501,14 @@ const CardGenerateCreatePage: React.FC = () => {
           <div className={styles.actions}>
             <button
               className={classNames(styles.button, styles.primaryButton)}
-              disabled={!isValid || generateMutation.isPending}
+              disabled={!isValid || activeSession.isPending}
               onClick={handleSubmit(onSubmit)}
             >
-              {generateMutation.isPending ? 'Forging...' : 'Generate'}
+              {activeSession.isPending ? 'Forging...' : 'Generate'}
             </button>
             <button
               className={classNames(styles.button, styles.secondaryButton)}
-              disabled={!lastPayloadRef.current || generateMutation.isPending}
+              disabled={!activeSession.lastPayload || activeSession.isPending}
               onClick={handleRegenerate}
             >
               Regenerate
@@ -351,7 +521,7 @@ const CardGenerateCreatePage: React.FC = () => {
         <div className={classNames(styles.panel, styles.previewContainer)} ref={previewRef}>
           <div className={styles.panelTitle}>Preview</div>
           <div className={styles.previewFrame}>
-            {generateMutation.isPending ? (
+            {activeSession.isPending ? (
               <div className={styles.loaderBlock}>
                 <div className={styles.spinner} />
                 <div className={styles.loaderText}>Summoning pixels...</div>

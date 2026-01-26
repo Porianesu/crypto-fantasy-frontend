@@ -45,6 +45,38 @@
     }
 }
 
+/* Sidebar for sessions */
+.sidebar {
+    @apply w-56 rounded-xl bg-[#0e2438]/80 backdrop-blur-sm border border-[#2d4b66] shadow-xl p-3 flex flex-col gap-y-3 flex-none;
+}
+.sideHeader {
+    @apply text-sm text-blue-200 font-semibold;
+}
+.sessionList {
+    @apply flex-1 overflow-auto flex flex-col gap-2;
+}
+.sessionItem {
+    @apply w-full text-left px-3 py-2 rounded-md bg-[#071722] border border-[#213847] text-blue-100 flex items-center justify-between cursor-pointer ;
+}
+.sessionDeActive {
+    @apply hover:bg-[#0c2a3f];
+}
+.sessionActive {
+    @apply bg-yellow-400 text-black border-yellow-400 font-semibold shadow-sm;
+}
+.sessionLabel {
+    @apply truncate text-sm;
+}
+.sessionDot {
+    @apply w-2 h-2 rounded-full bg-yellow-300;
+}
+.addSessionButton {
+    @apply mt-2 inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-semibold bg-[#18354f] text-blue-100 hover:bg-[#1d4160] border border-[#2d4b66];
+}
+.addSessionIcon {
+    @apply w-4 h-4 text-blue-100;
+}
+
 .panelTitle {
     @apply text-lg font-bold text-yellow-200 mb-3 shrink-0;
 }
