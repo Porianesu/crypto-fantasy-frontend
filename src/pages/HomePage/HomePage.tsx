@@ -19,6 +19,7 @@ import type { ICardDataInBag } from '@/stores/app-store.ts'
 import type { RewardResultModalData } from '@/components/RewardResultModal.tsx'
 import type { IClaimNewbieRewardResponse } from '@/axios/api.ts'
 import { AudioInstanceId } from '@/stores/preload-store.ts'
+import { UserCircleIcon } from '@heroicons/react/24/outline'
 
 const OpenPack = React.lazy(() => import('@/components/OpenPack.tsx'))
 const CardsBagModal = React.lazy(() => import('@/pages/HomePage/BagModal.tsx'))
@@ -174,7 +175,7 @@ function HomePage() {
           })}
           onClick={handleOpenPack}
         >
-          Open Pack 1<div></div>
+          Open Pack<div></div>
         </button>
         {userInfo && appConfig ? (
           <>
@@ -195,7 +196,8 @@ function HomePage() {
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             <div className={styles.avatarContainer}>
-              <img src={userInfo.avatar} alt="avatar" className={styles.avatar} />
+              {/*<img src={userInfo.avatar} alt="avatar" className={styles.avatar} />*/}
+              <UserCircleIcon className={styles.avatar}></UserCircleIcon>
             </div>
             <div className={styles.userInfoContainer}>
               <div className={styles.username}>{userInfo?.nickname}</div>

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { useMemo } from 'react'
 import styles from '@/pages/HomePage/Leaderboard.module.css'
-import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import { useQuery } from '@tanstack/react-query'
 import { useMobxStore } from '@/stores/StoreProvider.tsx'
 import classNames from 'classnames'
@@ -43,7 +43,8 @@ const Leaderboard: React.FC = () => {
       <div className={classNames(styles.leaderboardCurrentUserBar)}>
         <div className={styles.leaderboardRankContainer}>{rankContent}</div>
         <div className={styles.leaderboardInfo}>
-          <img alt={'user_avatar'} src={userInfo.avatar} className={styles.leaderboardAvatar}></img>
+          {/*<img alt={'user_avatar'} src={userInfo.avatar} className={styles.leaderboardAvatar}></img>*/}
+          <UserCircleIcon className={styles.leaderboardAvatar}></UserCircleIcon>
           <div className={styles.leaderboardUserInfo}>
             <div className={styles.leaderboardUserName}>{userInfo.nickname}</div>
             <div className={styles.leaderboardUserScore}>
@@ -80,11 +81,12 @@ const Leaderboard: React.FC = () => {
                 <div key={rank} className={styles.leaderboardItem}>
                   <div className={styles.leaderboardRankContainer}>{rankContent}</div>
                   <div className={styles.leaderboardInfo}>
-                    <img
-                      alt={'user_avatar'}
-                      src={item.avatar}
-                      className={styles.leaderboardAvatar}
-                    ></img>
+                    {/*<img*/}
+                    {/*  alt={'user_avatar'}*/}
+                    {/*  src={item.avatar}*/}
+                    {/*  className={styles.leaderboardAvatar}*/}
+                    {/*></img>*/}
+                    <UserCircleIcon className={styles.leaderboardAvatar}></UserCircleIcon>
                     <div className={styles.leaderboardUserInfo}>
                       <div className={styles.leaderboardUserName}>{item.nickname}</div>
                       <div className={styles.leaderboardUserScore}>
